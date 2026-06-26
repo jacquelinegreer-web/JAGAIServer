@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jacqueline's Wellness Tracker</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f0eb;
+      color: #2d2d2d;
+      padding: 24px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; color: #3b2a6e; }
+    .subtitle { font-size: 0.9rem; color: #777; margin-bottom: 24px; }
+    .date-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .date-nav button {
+      background: #e8e2f7; border: none; border-radius: 6px;
+      padding: 6px 14px; cursor: pointer; font-size: 0.95rem; color: #3b2a6e;
+    }
+    .date-nav button:hover { background: #d5cdf0; }
+    #current-date { font-weight: 600; font-size: 1.05rem; }
+    .card {
+      background: white; border-radius: 14px; padding: 20px;
+      margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+    .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 14px; color: #3b2a6e; }
+    .emoji-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+    .emoji-btn {
+      font-size: 1.6rem; background: #f5f0eb; border: 2px solid transparent;
+      border-radius: 10px; padding: 6px 10px; cursor: pointer; transition: all 0.15s;
+    }
+    .emoji-btn:hover { transform: scale(1.1); }
+    .emoji-btn.selected { border-color: #7c5cbf; background: #ede8f7; }
+    .label-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .label-row label { font-size: 0.85rem; color: #555; width: 130px; flex-shrink: 0; }
+    input[type="number"], input[type="text"], textarea, select {
+      border: 1.5px solid #e0dae8; border-radius: 8px; padding: 7px 10px;
+      font-size: 0.9rem; font-family: inherit; color: #2d2d2d;
+      width: 100%; background: #fafafa;
+    }
+    input[type="number"] { width: 80px; }
+    textarea { resize: vertical; min-height: 70px; }
+    .checkbox-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+    .checkbox-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: #7c5cbf; }
+    .checkbox-row label { font-size: 0.9rem; cursor: pointer; }
+    .save-btn {
+      background: #7c5cbf; color: white; border: none; border-radius: 10px;
+      padding: 12px 28px; font-size: 1rem; font-weight: 600; cursor: pointer;
+      margin-top: 8px; width: 100%;
+    }
+    .save-btn:hover { background: #6a4aab; }
+    .log-section { margin-top: 28px; }
+    .log-section h2 { font-size: 1rem; font-weight: 600; color: #3b2a6e; margin-bottom: 12px; }
+    .log-entry {
+      background: white; border-radius: 10px; padding: 14px 16px;
+      margin-bottom: 10px; border-left: 4px solid #7c5cbf;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .log-date { font-weight: 600; font-size: 0.9rem; color: #3b2a6e; margin-bottom: 6px; }
+    .log-line { font-size: 0.85rem; color: #555; margin: 2px 0; }
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: #3b2a6e; color: white; padding: 10px 24px;
+      border-radius: 20px; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+    .clear-btn {
+      background: none; border: none; color: #aaa; font-size: 0.8rem;
+      cursor: pointer; margin-left: auto; display: block; margin-top: 8px;
+    }
+    .clear-btn:hover { color: #e74c3c; }
+  </style>
+</head>
+<body>
+
+<h1>Jacqueline's Wellness Tracker</h1>
+<p class="subtitle">Daily exercise & mental health log</p>
+
+<div class="date-nav">
+  <button onclick="changeDate(-1)">&#8592;</button>
+  <span id="current-date"></span>
+  <button onclick="changeDate(1)">&#8594;</button>
+  <button onclick="goToday()">Today</button>
+</div>
+
+<!-- Mood -->
+<div class="card">
+  <h2>Mood</h2>
+  <div class="emoji-row" id="mood-row">
+    <button class="emoji-btn" data-val="1" onclick="selectEmoji('mood', this)" title="Rough">😔</button>
+    <button class="emoji-btn" data-val="2" onclick="selectEmoji('mood', this)" title="Low">😕</button>
+    <button class="emoji-btn" data-val="3" onclick="selectEmoji('mood', this)" title="Okay">😐</button>
+    <button class="emoji-btn" data-val="4" onclick="selectEmoji('mood', this)" title="Good">🙂</button>
+    <button class="emoji-btn" data-val="5" onclick="selectEmoji('mood', this)" title="Great">😄</button>
+  </div>
+</div>
+
+<!-- Energy -->
+<div class="card">
+  <h2>Energy Level</h2>
+  <div class="emoji-row" id="energy-row">
+    <button class="emoji-btn" data-val="1" onclick="selectEmoji('energy', this)" title="Depleted">🪫</button>
+    <button class="emoji-btn" data-val="2" onclick="selectEmoji('energy', this)" title="Low">😴</button>
+    <button class="emoji-btn" data-val="3" onclick="selectEmoji('energy', this)" title="Medium">⚡</button>
+    <button class="emoji-btn" data-val="4" onclick="selectEmoji('energy', this)" title="Good">💪</button>
+    <button class="emoji-btn" data-val="5" onclick="selectEmoji('energy', this)" title="High">🔥</button>
+  </div>
+</div>
+
+<!-- Exercise -->
+<div class="card">
+  <h2>Exercise</h2>
+  <div class="checkbox-row">
+    <input type="checkbox" id="moved" />
+    <label for="moved">I moved my body today</label>
+  </div>
+  <div class="label-row" style="margin-top:10px;">
+    <label>Activity type</label>
+    <select id="activity-type">
+      <option value="">-- select --</option>
+      <option>Walk</option>
+      <option>Strength training</option>
+      <option>Yoga / stretching</option>
+      <option>Cycling</option>
+      <option>Swimming</option>
+      <option>Dancing</option>
+      <option>Physical therapy</option>
+      <option>Other</option>
+    </select>
+  </div>
+  <div class="label-row">
+    <label>Duration (min)</label>
+    <input type="number" id="duration" min="0" max="300" placeholder="30" />
+  </div>
+  <div class="label-row">
+    <label>How did it feel?</label>
+    <input type="text" id="exercise-note" placeholder="e.g., tired but glad I did it" />
+  </div>
+</div>
+
+<!-- Mental health -->
+<div class="card">
+  <h2>Mental Health</h2>
+  <div class="checkbox-row">
+    <input type="checkbox" id="anxiety" />
+    <label for="anxiety">Anxiety was noticeable today</label>
+  </div>
+  <div class="checkbox-row">
+    <input type="checkbox" id="brain-fog" />
+    <label for="brain-fog">Brain fog / chemo brain present</label>
+  </div>
+  <div class="checkbox-row">
+    <input type="checkbox" id="focus-win" />
+    <label for="focus-win">Had a focus win today</label>
+  </div>
+  <div class="checkbox-row">
+    <input type="checkbox" id="rest" />
+    <label for="rest">Got meaningful rest / downtime</label>
+  </div>
+  <div class="label-row" style="margin-top:10px;">
+    <label>Notes</label>
+    <textarea id="mh-notes" placeholder="How are you feeling mentally? What helped or didn't?"></textarea>
+  </div>
+</div>
+
+<!-- Sleep -->
+<div class="card">
+  <h2>Sleep</h2>
+  <div class="label-row">
+    <label>Hours slept</label>
+    <input type="number" id="sleep-hours" min="0" max="24" step="0.5" placeholder="7.5" />
+  </div>
+  <div class="label-row">
+    <label>Sleep quality</label>
+    <select id="sleep-quality">
+      <option value="">-- select --</option>
+      <option>Poor</option>
+      <option>Fair</option>
+      <option>Good</option>
+      <option>Great</option>
+    </select>
+  </div>
+</div>
+
+<!-- Gratitude / intention -->
+<div class="card">
+  <h2>Today's Win or Gratitude</h2>
+  <textarea id="gratitude" placeholder="One thing that went well, or one thing you're grateful for..."></textarea>
+</div>
+
+<button class="save-btn" onclick="saveEntry()">Save Today's Entry</button>
+
+<!-- Log -->
+<div class="log-section">
+  <h2>Your Log</h2>
+  <div id="log-container"></div>
+  <button class="clear-btn" onclick="clearLog()">Clear all log entries</button>
+</div>
+
+<div class="toast" id="toast">Saved!</div>
+
+<script>
+  let currentDateStr = getTodayStr();
+  const selections = { mood: null, energy: null };
+
+  function getTodayStr() {
+    return new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+  }
+
+  function formatDisplayDate(str) {
+    const [y, m, d] = str.split('-');
+    const dt = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
+    return dt.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+  }
+
+  function changeDate(delta) {
+    const [y,m,d] = currentDateStr.split('-').map(Number);
+    const dt = new Date(y, m-1, d);
+    dt.setDate(dt.getDate() + delta);
+    currentDateStr = dt.toLocaleDateString('en-CA');
+    loadEntry();
+  }
+
+  function goToday() {
+    currentDateStr = getTodayStr();
+    loadEntry();
+  }
+
+  function selectEmoji(type, btn) {
+    document.querySelectorAll(`#${type}-row .emoji-btn`).forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selections[type] = btn.dataset.val;
+  }
+
+  function saveEntry() {
+    const entry = {
+      mood: selections.mood,
+      energy: selections.energy,
+      moved: document.getElementById('moved').checked,
+      activityType: document.getElementById('activity-type').value,
+      duration: document.getElementById('duration').value,
+      exerciseNote: document.getElementById('exercise-note').value,
+      anxiety: document.getElementById('anxiety').checked,
+      brainFog: document.getElementById('brain-fog').checked,
+      focusWin: document.getElementById('focus-win').checked,
+      rest: document.getElementById('rest').checked,
+      mhNotes: document.getElementById('mh-notes').value,
+      sleepHours: document.getElementById('sleep-hours').value,
+      sleepQuality: document.getElementById('sleep-quality').value,
+      gratitude: document.getElementById('gratitude').value,
+    };
+
+    const data = getLog();
+    data[currentDateStr] = entry;
+    localStorage.setItem('wellness_log', JSON.stringify(data));
+    renderLog();
+    showToast('Saved!');
+  }
+
+  function loadEntry() {
+    document.getElementById('current-date').textContent = formatDisplayDate(currentDateStr);
+    const data = getLog();
+    const e = data[currentDateStr] || {};
+
+    // reset emojis
+    selections.mood = e.mood || null;
+    selections.energy = e.energy || null;
+    ['mood','energy'].forEach(type => {
+      document.querySelectorAll(`#${type}-row .emoji-btn`).forEach(b => {
+        b.classList.toggle('selected', b.dataset.val === (type === 'mood' ? e.mood : e.energy));
+      });
+    });
+
+    document.getElementById('moved').checked = !!e.moved;
+    document.getElementById('activity-type').value = e.activityType || '';
+    document.getElementById('duration').value = e.duration || '';
+    document.getElementById('exercise-note').value = e.exerciseNote || '';
+    document.getElementById('anxiety').checked = !!e.anxiety;
+    document.getElementById('brain-fog').checked = !!e.brainFog;
+    document.getElementById('focus-win').checked = !!e.focusWin;
+    document.getElementById('rest').checked = !!e.rest;
+    document.getElementById('mh-notes').value = e.mhNotes || '';
+    document.getElementById('sleep-hours').value = e.sleepHours || '';
+    document.getElementById('sleep-quality').value = e.sleepQuality || '';
+    document.getElementById('gratitude').value = e.gratitude || '';
+  }
+
+  function getLog() {
+    try { return JSON.parse(localStorage.getItem('wellness_log') || '{}'); } catch { return {}; }
+  }
+
+  function moodEmoji(val) {
+    return ['','😔','😕','😐','🙂','😄'][parseInt(val)] || '';
+  }
+  function energyEmoji(val) {
+    return ['','🪫','😴','⚡','💪','🔥'][parseInt(val)] || '';
+  }
+
+  function renderLog() {
+    const data = getLog();
+    const container = document.getElementById('log-container');
+    const sorted = Object.keys(data).sort((a,b) => b.localeCompare(a));
+    if (!sorted.length) { container.innerHTML = '<p style="color:#aaa;font-size:0.85rem;">No entries yet.</p>'; return; }
+    container.innerHTML = sorted.map(date => {
+      const e = data[date];
+      const lines = [];
+      if (e.mood) lines.push(`Mood: ${moodEmoji(e.mood)}`);
+      if (e.energy) lines.push(`Energy: ${energyEmoji(e.energy)}`);
+      if (e.moved) lines.push(`Moved: ${e.activityType || 'yes'}${e.duration ? ' (' + e.duration + ' min)' : ''}`);
+      if (e.sleepHours) lines.push(`Sleep: ${e.sleepHours}h${e.sleepQuality ? ' — ' + e.sleepQuality : ''}`);
+      const flags = [];
+      if (e.anxiety) flags.push('Anxiety');
+      if (e.brainFog) flags.push('Brain fog');
+      if (e.focusWin) flags.push('Focus win');
+      if (e.rest) flags.push('Rested');
+      if (flags.length) lines.push(`Mental: ${flags.join(', ')}`);
+      if (e.gratitude) lines.push(`Gratitude: "${e.gratitude}"`);
+      return `<div class="log-entry">
+        <div class="log-date">${formatDisplayDate(date)}</div>
+        ${lines.map(l => `<div class="log-line">${l}</div>`).join('')}
+      </div>`;
+    }).join('');
+  }
+
+  function clearLog() {
+    if (confirm('Clear all log entries?')) {
+      localStorage.removeItem('wellness_log');
+      renderLog();
+    }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  // Init
+  loadEntry();
+  renderLog();
+</script>
+</body>
+</html>

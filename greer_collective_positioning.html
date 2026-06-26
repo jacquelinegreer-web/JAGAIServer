@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greer Collective — Positioning & Coaching Offer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #4A2C6E;
+    --purple-deep: #2E1A47;
+    --purple-mid: #6B4A8E;
+    --cream: #F5F0E8;
+    --cream-dark: #EDE6D6;
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --text-dark: #1A1018;
+    --text-mid: #4A3F55;
+    --text-light: #8A7D96;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+    line-height: 1.7;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--purple-deep);
+    padding: 4rem 3rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .header-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+
+  .header h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .header-sub {
+    font-size: 0.9rem;
+    color: rgba(245,240,232,0.6);
+    font-weight: 300;
+    margin-top: 1.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* DIVIDER */
+  .gold-rule {
+    height: 1px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    margin: 0;
+  }
+
+  /* SECTIONS */
+  .section {
+    padding: 3.5rem 3rem;
+    border-bottom: 1px solid var(--cream-dark);
+  }
+
+  .section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--cream-dark);
+  }
+
+  /* POSITIONING STATEMENT */
+  .positioning-block {
+    background: var(--purple-deep);
+    border-radius: 2px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .positioning-block::before {
+    content: '\201C';
+    position: absolute;
+    top: -1rem; left: 1.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 8rem;
+    color: rgba(201,168,76,0.1);
+    line-height: 1;
+  }
+
+  .positioning-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+  }
+
+  .positioning-text strong {
+    font-weight: 600;
+    color: var(--gold-light);
+  }
+
+  /* SHORT FORM */
+  .short-form {
+    margin-top: 2rem;
+    padding: 1.5rem 2rem;
+    border-left: 2px solid var(--gold);
+    background: var(--cream-dark);
+  }
+
+  .short-form p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--purple-deep);
+    line-height: 1.6;
+  }
+
+  /* CREDENTIALS STRIP */
+  .credentials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .credential-tag {
+    background: var(--purple);
+    color: var(--cream);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.9rem;
+    border-radius: 1px;
+  }
+
+  /* OFFER CARDS */
+  .offer-intro {
+    font-size: 1rem;
+    color: var(--text-mid);
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+  }
+
+  .offer-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .offer-card {
+    border: 1px solid var(--cream-dark);
+    border-top: 3px solid var(--purple);
+    padding: 2rem;
+    background: #fff;
+    position: relative;
+  }
+
+  .offer-card.featured {
+    border-top-color: var(--gold);
+    background: var(--purple-deep);
+  }
+
+  .offer-tier {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--purple-mid);
+    margin-bottom: 0.5rem;
+  }
+
+  .offer-card.featured .offer-tier {
+    color: var(--gold);
+  }
+
+  .offer-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--purple-deep);
+    margin-bottom: 0.25rem;
+  }
+
+  .offer-card.featured .offer-name {
+    color: var(--cream);
+  }
+
+  .offer-price {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--gold);
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.05em;
+  }
+
+  .offer-desc {
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    margin-bottom: 1.25rem;
+    line-height: 1.75;
+  }
+
+  .offer-card.featured .offer-desc {
+    color: rgba(245,240,232,0.75);
+  }
+
+  .offer-includes {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .offer-includes li {
+    font-size: 0.82rem;
+    color: var(--text-mid);
+    padding-left: 1.25rem;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .offer-card.featured .offer-includes li {
+    color: rgba(245,240,232,0.8);
+  }
+
+  .offer-includes li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: 300;
+  }
+
+  /* WHO YOU SERVE */
+  .audience-grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .audience-item {
+    padding: 1.5rem;
+    background: var(--cream-dark);
+    border-left: 2px solid var(--purple-mid);
+  }
+
+  .audience-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--purple-deep);
+    margin-bottom: 0.4rem;
+  }
+
+  .audience-desc {
+    font-size: 0.83rem;
+    color: var(--text-mid);
+    line-height: 1.65;
+  }
+
+  /* DIFFERENTIATORS */
+  .diff-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+  }
+
+  .diff-item {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .diff-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    padding-top: 0.1rem;
+  }
+
+  .diff-text strong {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--purple-deep);
+    margin-bottom: 0.2rem;
+  }
+
+  .diff-text span {
+    font-size: 0.82rem;
+    color: var(--text-mid);
+    line-height: 1.65;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: var(--purple-deep);
+    padding: 2.5rem 3rem;
+    text-align: center;
+  }
+
+  .footer-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--cream);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.4rem;
+  }
+
+  .footer-tagline {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  @media (min-width: 600px) {
+    .offer-grid { grid-template-columns: 1fr 1fr; }
+    .audience-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-eyebrow">Greer Collective · Brand Positioning</div>
+  <h1>Jacqueline Greer<br><em>Executive Coach &amp; Leadership Consultant</em></h1>
+  <div class="header-sub">Consulting · Coaching · Creative</div>
+</div>
+<div class="gold-rule"></div>
+
+<!-- POSITIONING STATEMENT -->
+<div class="section">
+  <div class="section-label">Positioning Statement</div>
+
+  <div class="positioning-block">
+    <p class="positioning-text">
+      Jacqueline Greer is an <strong>executive coach and leadership consultant</strong> with 20+ years building and leading high-performing teams inside national education equity organizations. She has served as a <strong>Founding Executive Director, Chief Program Officer, and VP of Programs</strong> — raising millions in federal and philanthropic funding, leading large departments through organizational complexity, and delivering results even in the most dysfunctional environments. She holds a <strong>B.A. from the University of Chicago</strong> and a <strong>Master's degree from Harvard</strong>. Today, through Greer Collective, she brings that hard-won expertise directly to the leaders who need it most.
+    </p>
+  </div>
+
+  <div class="short-form">
+    <p>"I don't just teach leadership — I've lived it at every level. I know what it costs to lead well in rooms that weren't built for you, and I know how to help you do it anyway."</p>
+  </div>
+
+  <div class="credentials">
+    <span class="credential-tag">Harvard Graduate</span>
+    <span class="credential-tag">University of Chicago</span>
+    <span class="credential-tag">Founding Executive Director</span>
+    <span class="credential-tag">Chief Program Officer</span>
+    <span class="credential-tag">VP of Programs</span>
+    <span class="credential-tag">$4.1M+ Revenue Generated</span>
+    <span class="credential-tag">Federal Grant Management</span>
+    <span class="credential-tag">IAF CPF Candidate</span>
+    <span class="credential-tag">ICF Coaching (In Progress)</span>
+  </div>
+</div>
+
+<!-- WHO YOU SERVE -->
+<div class="section">
+  <div class="section-label">Who You Serve</div>
+
+  <div class="audience-grid">
+    <div class="audience-item">
+      <div class="audience-title">New Managers &amp; First-Time Leaders</div>
+      <div class="audience-desc">Professionals stepping into their first leadership roles who need real guidance — not theory — on how to build trust, navigate dynamics, and lead with authority from day one.</div>
+    </div>
+    <div class="audience-item">
+      <div class="audience-title">Senior Leaders &amp; Directors</div>
+      <div class="audience-desc">Mid-career leaders navigating organizational politics, double standards, and the particular challenges of leading in spaces that weren't designed with them in mind.</div>
+    </div>
+    <div class="audience-item">
+      <div class="audience-title">Women of Color in Leadership</div>
+      <div class="audience-desc">Leaders who are delivering exceptional results while managing uneven expectations, visibility challenges, and the emotional weight of leading in predominantly white or dysfunctional institutions.</div>
+    </div>
+    <div class="audience-item">
+      <div class="audience-title">C-Suite &amp; Executive Leaders</div>
+      <div class="audience-desc">Senior executives who need a thought partner with real operational experience — someone who has sat at the table, managed complexity, and built teams that outlasted the chaos around them.</div>
+    </div>
+  </div>
+</div>
+
+<!-- COACHING OFFER -->
+<div class="section">
+  <div class="section-label">Coaching Offer</div>
+
+  <p class="offer-intro">Three engagement models designed around where you are and what you need — from foundational leadership development to deep executive partnership.</p>
+
+  <div class="offer-grid">
+
+    <div class="offer-card">
+      <div class="offer-tier">Tier 1</div>
+      <div class="offer-name">Lead With Clarity</div>
+      <div class="offer-price">$1,500 · 3-Month Engagement</div>
+      <div class="offer-desc">For new and emerging managers ready to lead with confidence. A structured foundation for those stepping into leadership for the first time.</div>
+      <ul class="offer-includes">
+        <li>6 one-on-one coaching sessions (60 min each)</li>
+        <li>Leadership style and values assessment</li>
+        <li>Communication and boundaries framework</li>
+        <li>Accountability check-ins between sessions</li>
+        <li>Resource toolkit and session notes</li>
+      </ul>
+    </div>
+
+    <div class="offer-card featured">
+      <div class="offer-tier">Tier 2 · Most Popular</div>
+      <div class="offer-name">Lead Through Complexity</div>
+      <div class="offer-price">$3,500 · 6-Month Engagement</div>
+      <div class="offer-desc">For senior leaders navigating organizational dynamics, managing up, and building their executive presence. The real work of leadership in imperfect systems.</div>
+      <ul class="offer-includes">
+        <li>12 one-on-one coaching sessions (60 min each)</li>
+        <li>360-degree leadership reflection process</li>
+        <li>Navigating politics, bias &amp; double standards</li>
+        <li>Strategic career positioning and narrative</li>
+        <li>Crisis and conflict coaching as needed</li>
+        <li>Email access between sessions</li>
+      </ul>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-tier">Tier 3</div>
+      <div class="offer-name">Executive Partnership</div>
+      <div class="offer-price">$6,500 · 12-Month Engagement</div>
+      <div class="offer-desc">A full-year thought partnership for C-suite executives and senior leaders ready to lead at the highest level — with someone who has been there.</div>
+      <ul class="offer-includes">
+        <li>Bi-weekly coaching sessions (75 min each)</li>
+        <li>Unlimited email and voice note access</li>
+        <li>Executive presence and influence strategy</li>
+        <li>Board and stakeholder navigation support</li>
+        <li>Team and organizational dynamics consulting</li>
+        <li>Annual leadership review and positioning</li>
+      </ul>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-tier">Add-On</div>
+      <div class="offer-name">Group Cohort</div>
+      <div class="offer-price">$750/person · 4–6 Women Leaders</div>
+      <div class="offer-desc">A peer cohort experience for women leaders navigating similar terrain — building community, shared language, and collective momentum.</div>
+      <ul class="offer-includes">
+        <li>8 facilitated group sessions (90 min each)</li>
+        <li>Curated cohort of 4–6 participants</li>
+        <li>Shared frameworks and resources</li>
+        <li>Optional individual check-in sessions</li>
+        <li>Community access between sessions</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- WHY YOU -->
+<div class="section">
+  <div class="section-label">Why Jacqueline</div>
+
+  <div class="diff-list">
+    <div class="diff-item">
+      <div class="diff-num">01</div>
+      <div class="diff-text">
+        <strong>She has lived the case studies.</strong>
+        <span>Jacqueline hasn't just read about hostile work environments, double standards, and the political complexity of nonprofit leadership — she navigated all of it at the VP and CPO level, delivered results anyway, and built something of her own on the other side.</span>
+      </div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-num">02</div>
+      <div class="diff-text">
+        <strong>She understands the mission-culture gap.</strong>
+        <span>Many education equity organizations espouse liberation externally while reproducing the same power dynamics internally. Jacqueline names this clearly and helps leaders protect their integrity without sacrificing their impact.</span>
+      </div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-num">03</div>
+      <div class="diff-text">
+        <strong>She leads with results, not feelings.</strong>
+        <span>$4.1M raised. Federal grant relationships maintained. Culture scores elevated. Department built from the ground up. Her coaching is grounded in what actually moves the needle — not theory alone.</span>
+      </div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-num">04</div>
+      <div class="diff-text">
+        <strong>She knows when to stay and when to go.</strong>
+        <span>"No one person can fix a broken organization." That hard-won wisdom is one of the most valuable things a coach can offer — helping leaders discern when to push through and when to move on without losing themselves in the process.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-name">Greer Collective</div>
+  <div class="footer-tagline">Consulting · Coaching · Creative · greerstrategic.com</div>
+</div>
+
+</body>
+</html>

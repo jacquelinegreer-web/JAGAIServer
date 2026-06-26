@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Meeting Notes Tracker",
+  "schemaVersion": 1,
+  "description": "Live meeting notes tracker for Greer Collective. Reads from and updates the Google Sheet (ID: 1gAW9LO5fBJ8HdJ6R5ds9H2CUUM8H4FSiC-phpCywph8). Supports pasting raw notes or Zoom transcripts, AI extracts Person/Email/Affiliation/Recommendations/Next Steps, and sends rows to Claude to append to the sheet.",
+  "mcpTools": [
+    "mcp__f847dc0f-1256-4aed-a92b-68357d7d5ec5__read_file_content"
+  ],
+  "mcpServerNames": [
+    "Google Drive"
+  ]
+}
+</script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meeting Notes Tracker</title>
+<link href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #faf9f7;
+    color: #1a1a1a;
+    font-size: 14px;
+    min-height: 100vh;
+  }
+  .header {
+    background: #1a1a1a;
+    color: #fff;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .header-left { display: flex; align-items: center; gap: 10px; }
+  .header h1 { font-size: 15px; font-weight: 600; letter-spacing: 0.01em; }
+  .header-sub { font-size: 11px; color: #aaa; margin-top: 1px; }
+  .open-sheet-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; text-decoration: none; border-radius: 5px;
+    padding: 5px 10px; font-size: 11px; font-weight: 500; white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .open-sheet-btn:hover { background: rgba(255,255,255,0.2); }
+  .tabs {
+    display: flex; border-bottom: 1px solid #e5e3df;
+    background: #fff; padding: 0 20px;
+  }
+  .tab {
+    padding: 11px 16px; font-size: 13px; font-weight: 500; cursor: pointer;
+    border-bottom: 2px solid transparent; color: #777; transition: all 0.15s;
+    background: none; border-top: none; border-left: none; border-right: none;
+  }
+  .tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+  .tab:hover:not(.active) { color: #333; }
+  .panel { display: none; padding: 20px; }
+  .panel.active { display: block; }
+
+  /* All Entries panel */
+  .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .panel-title { font-size: 13px; font-weight: 600; color: #333; }
+  .reload-btn {
+    background: #f0ede8; border: none; border-radius: 5px;
+    padding: 5px 10px; font-size: 12px; cursor: pointer; color: #444;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .reload-btn:hover { background: #e8e4de; }
+  .loading-state {
+    text-align: center; padding: 40px 20px; color: #888;
+    font-size: 13px;
+  }
+  .loading-spinner {
+    width: 20px; height: 20px; border: 2px solid #e0ddd8;
+    border-top-color: #666; border-radius: 50%;
+    animation: spin 0.7s linear infinite; margin: 0 auto 10px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .empty-state {
+    text-align: center; padding: 40px 20px;
+    color: #888; font-size: 13px; border: 1px dashed #ddd;
+    border-radius: 8px; background: #fafafa;
+  }
+  .empty-state strong { display: block; margin-bottom: 4px; color: #555; font-size: 14px; }
+
+  /* Grid.js overrides */
+  .gridjs-wrapper { border-radius: 7px; border: 1px solid #e5e3df; overflow: hidden; }
+  .gridjs-table { width: 100%; }
+  th.gridjs-th { background: #f5f3ef; font-size: 12px; font-weight: 600; color: #444; }
+  td.gridjs-td { font-size: 12px; color: #222; }
+  .gridjs-search input { font-size: 12px; border-radius: 5px; }
+
+  /* Add from Notes panel */
+  .source-toggle {
+    display: flex; gap: 8px; margin-bottom: 16px;
+  }
+  .source-btn {
+    flex: 1; padding: 9px; border: 1px solid #ddd; border-radius: 6px;
+    background: #fff; cursor: pointer; font-size: 12px; font-weight: 500;
+    color: #555; transition: all 0.15s; display: flex; align-items: center;
+    justify-content: center; gap: 6px;
+  }
+  .source-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .source-btn:hover:not(.active) { background: #f5f3ef; }
+  .input-label { font-size: 12px; font-weight: 600; color: #333; margin-bottom: 6px; display: block; }
+  .input-hint { font-size: 11px; color: #888; margin-bottom: 8px; }
+  textarea {
+    width: 100%; border: 1px solid #ddd; border-radius: 6px;
+    padding: 10px 12px; font-size: 12px; resize: vertical; min-height: 140px;
+    font-family: inherit; color: #222; background: #fff; line-height: 1.5;
+  }
+  textarea:focus { outline: none; border-color: #999; }
+  .zoom-info {
+    background: #f5f3ef; border-radius: 6px; padding: 12px 14px;
+    font-size: 12px; color: #555; line-height: 1.6; margin-bottom: 14px;
+  }
+  .zoom-info strong { color: #333; }
+  .action-row {
+    display: flex; gap: 8px; margin-top: 12px; align-items: center;
+    flex-wrap: wrap;
+  }
+  .extract-btn {
+    background: #1a1a1a; color: #fff; border: none; border-radius: 6px;
+    padding: 9px 18px; font-size: 13px; font-weight: 500; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .extract-btn:hover { background: #333; }
+  .extract-btn:disabled { background: #999; cursor: not-allowed; }
+  .status-msg { font-size: 11px; color: #777; }
+
+  /* Preview table */
+  .preview-section { margin-top: 20px; }
+  .preview-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .preview-title { font-size: 12px; font-weight: 600; color: #333; }
+  .preview-count {
+    font-size: 11px; background: #f0ede8; color: #555;
+    padding: 2px 8px; border-radius: 10px;
+  }
+  .preview-table-wrap { overflow-x: auto; }
+  table.preview-table {
+    width: 100%; border-collapse: collapse; font-size: 12px;
+    border: 1px solid #e5e3df; border-radius: 6px; overflow: hidden;
+  }
+  table.preview-table th {
+    background: #f5f3ef; padding: 8px 10px; text-align: left;
+    font-weight: 600; color: #444; border-bottom: 1px solid #e5e3df;
+    white-space: nowrap;
+  }
+  table.preview-table td {
+    padding: 8px 10px; border-bottom: 1px solid #f0ede8; color: #222;
+    vertical-align: top; line-height: 1.4;
+  }
+  table.preview-table tr:last-child td { border-bottom: none; }
+  table.preview-table tr:hover td { background: #faf9f7; }
+  .add-sheet-btn {
+    background: #2d6a4f; color: #fff; border: none; border-radius: 6px;
+    padding: 9px 18px; font-size: 13px; font-weight: 500; cursor: pointer;
+    transition: background 0.15s; display: flex; align-items: center; gap: 6px;
+  }
+  .add-sheet-btn:hover { background: #255a42; }
+  .error-msg { color: #c0392b; font-size: 12px; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div>
+      <div class="header h1" style="font-size:15px;font-weight:600;">Meeting Notes Tracker</div>
+      <div class="header-sub">Greer Collective</div>
+    </div>
+  </div>
+  <a class="open-sheet-btn" href="https://docs.google.com/spreadsheets/d/1gAW9LO5fBJ8HdJ6R5ds9H2CUUM8H4FSiC-phpCywph8/edit" target="_blank">
+    ↗ Open in Google Sheets
+  </a>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('view')">All Entries</button>
+  <button class="tab" onclick="switchTab('add')">Add from Notes</button>
+</div>
+
+<div id="panel-view" class="panel active">
+  <div class="panel-header">
+    <div class="panel-title">Current entries in the sheet</div>
+    <button class="reload-btn" onclick="loadSheet()">↺ Reload</button>
+  </div>
+  <div id="sheet-content">
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      Loading sheet data...
+    </div>
+  </div>
+</div>
+
+<div id="panel-add" class="panel">
+  <div class="source-toggle">
+    <button class="source-btn active" id="btn-paste" onclick="setSource('paste')">📋 Paste notes or transcript</button>
+    <button class="source-btn" id="btn-zoom" onclick="setSource('zoom')">🎥 From Zoom recording</button>
+  </div>
+
+  <div id="source-paste">
+    <label class="input-label">Paste your meeting notes, transcript, or scan text below</label>
+    <div class="input-hint">Include any context you have — names, emails, affiliations, key takeaways, follow-ups.</div>
+    <textarea id="notes-input" placeholder="e.g. 'Met with Sarah Chen (sarah@acme.com) from Acme Corp. She recommended we look at their enterprise plan. Follow up: send proposal by Friday.'"></textarea>
+  </div>
+
+  <div id="source-zoom" style="display:none;">
+    <div class="zoom-info">
+      <strong>To use a Zoom transcript:</strong><br>
+      Go to the <em>Add from Notes</em> tab, paste the transcript text from your Zoom recording below, or ask Claude: <em>"Pull the transcript from my latest Zoom call and add it to the tracker."</em>
+    </div>
+    <label class="input-label">Paste Zoom transcript text here</label>
+    <textarea id="zoom-input" placeholder="Paste the Zoom auto-generated transcript or meeting summary here..."></textarea>
+  </div>
+
+  <div class="action-row">
+    <button class="extract-btn" id="extract-btn" onclick="extractAndPreview()">Extract &amp; Preview</button>
+    <span class="status-msg" id="extract-status"></span>
+  </div>
+  <div id="error-area"></div>
+
+  <div id="preview-section" class="preview-section" style="display:none;">
+    <div class="preview-header">
+      <span class="preview-title">Extracted entries — review before adding</span>
+      <span class="preview-count" id="preview-count"></span>
+    </div>
+    <div class="preview-table-wrap">
+      <table class="preview-table" id="preview-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Meeting / Source</th>
+            <th>Person</th>
+            <th>Email</th>
+            <th>Affiliation</th>
+            <th>Recommendations</th>
+            <th>Next Steps</th>
+          </tr>
+        </thead>
+        <tbody id="preview-body"></tbody>
+      </table>
+    </div>
+    <div class="action-row" style="margin-top:14px;">
+      <button class="add-sheet-btn" onclick="addToSheet()">✓ Add to Google Sheet</button>
+      <span class="status-msg" id="add-status"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+const SHEET_ID = '1gAW9LO5fBJ8HdJ6R5ds9H2CUUM8H4FSiC-phpCywph8';
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
+let extractedRows = [];
+let gridInstance = null;
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.querySelectorAll('.tab')[tab === 'view' ? 0 : 1].classList.add('active');
+  if (tab === 'view') loadSheet();
+}
+
+function setSource(src) {
+  document.getElementById('btn-paste').classList.toggle('active', src === 'paste');
+  document.getElementById('btn-zoom').classList.toggle('active', src === 'zoom');
+  document.getElementById('source-paste').style.display = src === 'paste' ? '' : 'none';
+  document.getElementById('source-zoom').style.display = src === 'zoom' ? '' : 'none';
+}
+
+async function loadSheet() {
+  const container = document.getElementById('sheet-content');
+  container.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div>Loading sheet data...</div>';
+  if (gridInstance) { gridInstance.destroy(); gridInstance = null; }
+
+  try {
+    const result = await window.cowork.callMcpTool(
+      'mcp__f847dc0f-1256-4aed-a92b-68357d7d5ec5__read_file_content',
+      { fileId: SHEET_ID }
+    );
+
+    const raw = result.structuredContent?.content
+      ?? (result.content?.[0]?.text ?? '');
+    const rows = parseSheetContent(raw);
+
+    if (!rows || rows.length === 0) {
+      container.innerHTML = `<div class="empty-state">
+        <strong>No entries yet</strong>
+        Use the "Add from Notes" tab to add your first meeting entry.
+      </div>`;
+      return;
+    }
+
+    container.innerHTML = '<div id="grid-target"></div>';
+    const cols = ['Date','Meeting / Source','Person','Email','Affiliation','Recommendations','Next Steps'];
+    gridInstance = new gridjs.Grid({
+      columns: cols,
+      data: rows,
+      search: true,
+      sort: true,
+      pagination: { limit: 20 },
+      style: { table: { 'font-size': '12px' } }
+    }).render(document.getElementById('grid-target'));
+  } catch (e) {
+    container.innerHTML = `<div class="empty-state">
+      <strong>Could not load sheet</strong>
+      <a href="${SHEET_URL}" target="_blank" style="color:#2d6a4f;font-size:12px;">Open directly in Google Sheets ↗</a>
+    </div>`;
+  }
+}
+
+function parseSheetContent(raw) {
+  if (!raw) return [];
+  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+  const dataLines = lines.filter(l =>
+    !l.startsWith('Sheet') && !l.startsWith('---') && l.length > 0
+  );
+  if (dataLines.length <= 1) return [];
+
+  // skip header row, parse remaining
+  const rows = [];
+  for (let i = 1; i < dataLines.length; i++) {
+    const line = dataLines[i];
+    // Try tab-separated first, then pipe-separated
+    let cells = line.includes('\t') ? line.split('\t') : line.split('|').map(c => c.trim());
+    while (cells.length < 7) cells.push('');
+    rows.push(cells.slice(0, 7).map(c => c.replace(/^\||\|$/g, '').trim()));
+  }
+  return rows.filter(r => r.some(c => c.length > 0));
+}
+
+async function extractAndPreview() {
+  const activeSource = document.getElementById('source-paste').style.display !== 'none' ? 'paste' : 'zoom';
+  const text = activeSource === 'paste'
+    ? document.getElementById('notes-input').value.trim()
+    : document.getElementById('zoom-input').value.trim();
+
+  if (!text) {
+    document.getElementById('error-area').innerHTML = '<div class="error-msg">Please paste some meeting notes first.</div>';
+    return;
+  }
+
+  document.getElementById('error-area').innerHTML = '';
+  const btn = document.getElementById('extract-btn');
+  btn.disabled = true;
+  btn.textContent = 'Extracting...';
+  document.getElementById('extract-status').textContent = 'Reading meeting notes...';
+  document.getElementById('preview-section').style.display = 'none';
+
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const prompt = `You are extracting structured contact and action data from meeting notes.
+
+From the text below, extract ALL people mentioned. For each person return a JSON array of objects with these exact fields:
+- date: meeting date if mentioned, otherwise "${today}"
+- source: meeting name or source type (e.g. "Zoom call", "Coffee meeting", "Conference", etc.)
+- person: full name
+- email: email address (or "" if not found)
+- affiliation: organization, company, or role (or "" if not found)
+- recommendations: any recommendations, suggestions, or advice they gave or were given (brief, 1-2 sentences)
+- next_steps: specific action items or follow-ups involving this person (brief, 1-2 sentences)
+
+Return ONLY a valid JSON array. No explanation. No markdown. Example:
+[{"date":"2025-01-15","source":"Zoom call","person":"Jane Smith","email":"jane@co.com","affiliation":"Acme Corp","recommendations":"Explore enterprise tier","next_steps":"Send proposal by Friday"}]
+
+MEETING NOTES:
+${text}`;
+
+    const response = await window.cowork.askClaude(prompt, []);
+    let parsed;
+    try {
+      const jsonMatch = response.match(/\[[\s\S]*\]/);
+      if (!jsonMatch) throw new Error('No JSON array found');
+      parsed = JSON.parse(jsonMatch[0]);
+    } catch {
+      throw new Error('Could not parse extracted data. Try rephrasing your notes.');
+    }
+
+    if (!parsed.length) {
+      document.getElementById('error-area').innerHTML = '<div class="error-msg">No people found in these notes. Make sure names are clearly mentioned.</div>';
+      btn.disabled = false;
+      btn.textContent = 'Extract & Preview';
+      document.getElementById('extract-status').textContent = '';
+      return;
+    }
+
+    extractedRows = parsed;
+    renderPreview(parsed);
+    document.getElementById('extract-status').textContent = `Found ${parsed.length} ${parsed.length === 1 ? 'entry' : 'entries'}`;
+  } catch (e) {
+    document.getElementById('error-area').innerHTML = `<div class="error-msg">${e.message}</div>`;
+    document.getElementById('extract-status').textContent = '';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Extract & Preview';
+  }
+}
+
+function renderPreview(rows) {
+  const tbody = document.getElementById('preview-body');
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.date || ''}</td>
+      <td>${r.source || ''}</td>
+      <td>${r.person || ''}</td>
+      <td>${r.email || ''}</td>
+      <td>${r.affiliation || ''}</td>
+      <td>${r.recommendations || ''}</td>
+      <td>${r.next_steps || ''}</td>
+    </tr>
+  `).join('');
+  document.getElementById('preview-count').textContent = `${rows.length} ${rows.length === 1 ? 'entry' : 'entries'}`;
+  document.getElementById('preview-section').style.display = '';
+}
+
+function addToSheet() {
+  if (!extractedRows.length) return;
+  document.getElementById('add-status').textContent = 'Sending to Claude...';
+
+  const formatted = extractedRows.map(r =>
+    `- ${r.date} | ${r.source} | ${r.person} | ${r.email} | ${r.affiliation} | ${r.recommendations} | ${r.next_steps}`
+  ).join('\n');
+
+  const prompt = `Please add these entries to the Greer Collective Meeting Notes Tracker Google Sheet (ID: ${SHEET_ID}). Each line is a row in the format: Date | Meeting/Source | Person | Email | Affiliation | Recommendations | Next Steps.\n\n${formatted}`;
+
+  window.sendPrompt(prompt);
+  document.getElementById('add-status').textContent = 'Sent to Claude — check the chat to confirm.';
+}
+
+// Load on start
+loadSheet();
+</script>
+</body>
+</html>

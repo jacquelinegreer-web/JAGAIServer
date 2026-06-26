@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greer Collective | App Dashboard</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #faf8f5;
+  color: #1a1a1a;
+  padding: 2rem 1.5rem 3rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.header { margin-bottom: 2rem; }
+.wordmark {
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  color: #9b8bcc; font-weight: 600; margin-bottom: 6px;
+}
+.title { font-size: 26px; font-weight: 500; color: #2c1a6e; margin-bottom: 4px; }
+.subtitle { font-size: 14px; color: #777; }
+.section-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: #aaa;
+  margin: 2rem 0 0.75rem;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+.card {
+  background: white;
+  border: 1px solid #ede8f7;
+  border-radius: 12px;
+  padding: 1.2rem 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.card:hover {
+  border-color: #a98cd6;
+  box-shadow: 0 2px 12px rgba(124, 92, 191, 0.1);
+}
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px; flex-shrink: 0;
+}
+.icon.purple { background: #ede8f7; }
+.icon.teal   { background: #e0f5ee; }
+.icon.amber  { background: #faeeda; }
+.icon.coral  { background: #faeae7; }
+.icon.blue   { background: #e6f1fb; }
+.icon.green  { background: #eaf3de; }
+.card-arrow { color: #ccc; font-size: 13px; margin-top: 2px; }
+.card-name { font-size: 14px; font-weight: 600; color: #2c1a6e; }
+.card-desc { font-size: 12px; color: #777; line-height: 1.55; }
+.tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.tag {
+  font-size: 10px; padding: 2px 8px; border-radius: 20px;
+  border: 1px solid #ede8f7; color: #9b8bcc; background: #faf8fd;
+  font-weight: 500;
+}
+footer {
+  margin-top: 2.5rem; font-size: 11px; color: #ccc;
+  text-align: center; letter-spacing: 0.5px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="wordmark">Greer Collective</div>
+  <h1 class="title">Your mini-apps</h1>
+  <p class="subtitle">All your tools, one place. Click any card to open.</p>
+</div>
+
+<!-- Command & Visibility -->
+<div class="section-label">Command &amp; Visibility</div>
+<div class="grid">
+  <a class="card" href="ommand_index.html">
+    <div class="card-top">
+      <div class="icon purple">🧭</div>
+      <span class="card-arrow">↗</span>
+    </div>
+    <div class="card-name">Greer Command Center</div>
+    <div class="card-desc">Live overview of your week: calendar, priority tasks, unread inbox, and HubSpot pipeline contacts at a glance.</div>
+    <div class="tags">
+      <span class="tag">Google Calendar</span>
+      <span class="tag">Gmail</span>
+      <span class="tag">ClickUp</span>
+      <span class="tag">HubSpot</span>
+    </div>
+  </a>
+</div>
+
+<!-- Consulting & Networking -->
+<div class="section-label">Consulting &amp; Networking</div>
+<div class="grid">
+  <a class="card" href="meeting-notes-tracker.html">
+    <div class="card-top">
+      <div class="icon teal">📋</div>
+      <span class="card-arrow">↗</span>
+    </div>
+    <div class="card-name">Meeting Notes Tracker</div>
+    <div class="card-desc">Paste raw notes or a Zoom transcript and AI extracts every contact, next step, and recommendation into your Google Sheet.</div>
+    <div class="tags">
+      <span class="tag">Google Sheets</span>
+      <span class="tag">Zoom</span>
+      <span class="tag">AI extraction</span>
+    </div>
+  </a>
+
+  <a class="card" href="cpf-portfolio-tracker.html">
+    <div class="card-top">
+      <div class="icon blue">🎓</div>
+      <span class="card-arrow">↗</span>
+    </div>
+    <div class="card-name">CPF Portfolio Tracker</div>
+    <div class="card-desc">Tracks your facilitation sessions against all six IAF core competencies toward your Stage 2 certification assessment.</div>
+    <div class="tags">
+      <span class="tag">IAF CPF</span>
+      <span class="tag">Certification</span>
+      <span class="tag">Sessions</span>
+    </div>
+  </a>
+
+  <a class="card" href="roadmap.html">
+    <div class="card-top">
+      <div class="icon purple">🗺️</div>
+      <span class="card-arrow">↗</span>
+    </div>
+    <div class="card-name">12-Month Roadmap</div>
+    <div class="card-desc">Greer Collective pillar-by-pillar roadmap covering April 2026 through March 2027, with milestones and quarterly themes.</div>
+    <div class="tags">
+      <span class="tag">Strategy</span>
+      <span class="tag">Consulting</span>
+      <span class="tag">JacquieVoice</span>
+    </div>
+  </a>
+</div>
+
+<!-- Finance -->
+<div class="section-label">Finance</div>
+<div class="grid">
+  <a class="card" href="expense-tracker.html">
+    <div class="card-top">
+      <div class="icon amber">🧾</div>
+      <span class="card-arrow">↗</span>
+    </div>
+    <div class="card-name">Expense Tracker</div>
+    <div class="card-desc">Persistent Schedule C tracker with manual entry, CSV upload, category totals, and real-time tax impact estimates.</div>
+    <div class="tags">
+      <span class="tag">Schedule C</span>
+      <span class="tag">Medical</span>
+      <span class="tag">Tax impact</span>
+    </div>
+  </a>
+
+  <a class="card" href="credit-card-payoff.html">
+    <div class="card-top">
+      <div class="icon amber">💳</div>
+      <span class="card-arrow">↗</span>
+    </div>
+    <div class="card-name">Credit Card Payoff Tracker</div>
+    <div class="card-desc">Avalanche-method payoff planner tracking balances, interest, and monthly payment progress across your cards.</div>
+    <div class="tags">
+      <span class="tag">Debt payoff</span>
+      <span class="tag">Avalanche</span>
+    </div>
+  </a>
+</div>
+
+<!-- Planning -->
+<div class="section-label">Planning</div>
+<div class="grid">
+  <a class="card" href="july-calendar.html">
+    <div class="card-top">
+      <div class="icon green">📅</div>
+      <span class="card-arrow">↗</span>
+    </div>
+    <div class="card-name">July 2026 Strategic Calendar</div>
+    <div class="card-desc">Color-coded weekly calendar with CPF work, pipeline development, coaching outreach, and protected rest blocks built in.</div>
+    <div class="tags">
+      <span class="tag">CPF</span>
+      <span class="tag">Pipeline</span>
+      <span class="tag">Rest</span>
+    </div>
+  </a>
+</div>
+
+<!-- Wellness -->
+<div class="section-label">Wellness</div>
+<div class="grid">
+  <a class="card" href="wellness-tracker.html">
+    <div class="card-top">
+      <div class="icon coral">💜</div>
+      <span class="card-arrow">↗</span>
+    </div>
+    <div class="card-name">Wellness Tracker</div>
+    <div class="card-desc">Daily log for mood, energy, exercise, sleep, mental health check-ins, and a gratitude or win of the day.</div>
+    <div class="tags">
+      <span class="tag">Daily log</span>
+      <span class="tag">Mental health</span>
+      <span class="tag">Exercise</span>
+    </div>
+  </a>
+</div>
+
+<footer>Greer Collective &middot; Consilium &middot; Ducere &middot; Creare</footer>
+
+</body>
+</html>

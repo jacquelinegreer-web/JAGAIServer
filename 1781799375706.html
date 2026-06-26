@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Meeting Notes Tracker",
+  "schemaVersion": 1,
+  "description": "Live meeting notes tracker for Greer Collective. Reads from and updates the Google Sheet (ID: 1gAW9LO5fBJ8HdJ6R5ds9H2CUUM8H4FSiC-phpCywph8). Supports pasting raw notes or Zoom transcripts, AI extracts Person/Email/Affiliation/Recommendations/Next Steps, and sends rows to Claude to append to the sheet.",
+  "mcpTools": [
+    "mcp__f847dc0f-1256-4aed-a92b-68357d7d5ec5__read_file_content"
+  ],
+  "mcpServerNames": [
+    "Google Drive"
+  ]
+}
+</script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meeting Notes Tracker</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css" integrity="sha384-jZvDSsmGB9oGGT/4l9bHXGoAv1OxvG/cFmSo0dZaSqmBgvQTKDBFAMftlXTmMbNW" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #faf9f7; color: #1a1a1a; font-size: 14px; min-height: 100vh;
+  }
+  .header {
+    background: #1a1a1a; color: #fff; padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header-title { font-size: 14px; font-weight: 600; }
+  .header-sub { font-size: 11px; color: #aaa; margin-top: 1px; }
+  .open-btn {
+    font-size: 11px; font-weight: 500; color: #fff; text-decoration: none;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 5px; padding: 5px 10px; white-space: nowrap;
+  }
+  .open-btn:hover { background: rgba(255,255,255,0.22); }
+  .tabs { display: flex; background: #fff; border-bottom: 1px solid #e5e3df; padding: 0 18px; }
+  .tab {
+    padding: 10px 14px; font-size: 13px; font-weight: 500; cursor: pointer;
+    border: none; border-bottom: 2px solid transparent; background: none;
+    color: #888; transition: all 0.15s;
+  }
+  .tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+  .panel { display: none; padding: 18px; }
+  .panel.active { display: block; }
+
+  .row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .label-sm { font-size: 12px; font-weight: 600; color: #333; }
+  .btn-ghost {
+    background: #f0ede8; border: none; border-radius: 5px;
+    padding: 5px 10px; font-size: 12px; cursor: pointer; color: #444;
+  }
+  .btn-ghost:hover { background: #e8e4de; }
+
+  .state-box {
+    text-align: center; padding: 36px 20px; border: 1px dashed #ddd;
+    border-radius: 8px; background: #fafafa; color: #888; font-size: 13px;
+  }
+  .state-box strong { display: block; color: #555; margin-bottom: 4px; }
+  .spinner {
+    width: 18px; height: 18px; border: 2px solid #e0ddd8;
+    border-top-color: #666; border-radius: 50%;
+    animation: spin 0.7s linear infinite; margin: 0 auto 10px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Grid overrides */
+  .gridjs-wrapper { border-radius: 7px; border: 1px solid #e5e3df; overflow: hidden; }
+  th.gridjs-th { background: #f5f3ef; font-size: 11px; font-weight: 600; color: #444; padding: 8px 10px; }
+  td.gridjs-td { font-size: 12px; padding: 8px 10px; }
+  .gridjs-search { margin-bottom: 10px; }
+  .gridjs-search-input { font-size: 12px !important; border-radius: 5px !important; }
+
+  /* Add tab */
+  .toggle-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .toggle-btn {
+    flex: 1; padding: 9px; border: 1px solid #ddd; border-radius: 6px;
+    background: #fff; cursor: pointer; font-size: 12px; font-weight: 500;
+    color: #666; transition: all 0.15s;
+  }
+  .toggle-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .field-label { font-size: 12px; font-weight: 600; color: #333; margin-bottom: 5px; display: block; }
+  .field-hint { font-size: 11px; color: #999; margin-bottom: 7px; }
+  textarea {
+    width: 100%; border: 1px solid #ddd; border-radius: 6px;
+    padding: 10px 12px; font-size: 12px; resize: vertical; min-height: 130px;
+    font-family: inherit; line-height: 1.5; color: #222; background: #fff;
+  }
+  textarea:focus { outline: none; border-color: #999; }
+  .zoom-note {
+    background: #f5f3ef; border-radius: 6px; padding: 11px 13px;
+    font-size: 12px; color: #555; line-height: 1.6; margin-bottom: 12px;
+  }
+  .action-row { display: flex; align-items: center; gap: 10px; margin-top: 11px; flex-wrap: wrap; }
+  .btn-primary {
+    background: #1a1a1a; color: #fff; border: none; border-radius: 6px;
+    padding: 9px 18px; font-size: 13px; font-weight: 500; cursor: pointer;
+  }
+  .btn-primary:hover { background: #333; }
+  .btn-primary:disabled { background: #aaa; cursor: not-allowed; }
+  .btn-add {
+    background: #2d6a4f; color: #fff; border: none; border-radius: 6px;
+    padding: 9px 18px; font-size: 13px; font-weight: 500; cursor: pointer;
+  }
+  .btn-add:hover { background: #255a42; }
+  .status-text { font-size: 11px; color: #777; }
+  .error-text { font-size: 12px; color: #c0392b; margin-top: 8px; }
+
+  /* Preview */
+  .preview-wrap { margin-top: 18px; }
+  .preview-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .badge { font-size: 11px; background: #f0ede8; color: #555; padding: 2px 8px; border-radius: 10px; }
+  .tbl-wrap { overflow-x: auto; }
+  table.ptbl { width: 100%; border-collapse: collapse; font-size: 12px; border: 1px solid #e5e3df; border-radius: 6px; overflow: hidden; }
+  table.ptbl th { background: #f5f3ef; padding: 7px 9px; text-align: left; font-weight: 600; color: #444; border-bottom: 1px solid #e5e3df; white-space: nowrap; }
+  table.ptbl td { padding: 7px 9px; border-bottom: 1px solid #f0ede8; color: #222; vertical-align: top; line-height: 1.4; }
+  table.ptbl tr:last-child td { border-bottom: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Meeting Notes Tracker</div>
+    <div class="header-sub">Greer Collective</div>
+  </div>
+  <a class="open-btn" href="https://docs.google.com/spreadsheets/d/1gAW9LO5fBJ8HdJ6R5ds9H2CUUM8H4FSiC-phpCywph8/edit" target="_blank">↗ Open in Google Sheets</a>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('view')">All Entries</button>
+  <button class="tab" onclick="switchTab('add')">Add from Notes</button>
+</div>
+
+<!-- VIEW PANEL -->
+<div id="panel-view" class="panel active">
+  <div class="row-between">
+    <span class="label-sm">Current entries</span>
+    <button class="btn-ghost" onclick="loadSheet()">↺ Reload</button>
+  </div>
+  <div id="sheet-area">
+    <div class="state-box"><div class="spinner"></div>Loading…</div>
+  </div>
+</div>
+
+<!-- ADD PANEL -->
+<div id="panel-add" class="panel">
+  <div class="toggle-row">
+    <button class="toggle-btn active" id="btn-paste" onclick="setSource('paste')">📋 Paste notes / transcript</button>
+    <button class="toggle-btn" id="btn-zoom" onclick="setSource('zoom')">🎥 Zoom recording</button>
+  </div>
+
+  <div id="src-paste">
+    <label class="field-label">Paste meeting notes, transcript, or scan text</label>
+    <div class="field-hint">Names, emails, affiliations, key takeaways, follow-ups — include whatever you have.</div>
+    <textarea id="notes-input" placeholder="e.g. Met with Sarah Chen (sarah@acme.com) from Acme Corp. She recommended we look at their enterprise plan. Follow up: send proposal by Friday."></textarea>
+  </div>
+
+  <div id="src-zoom" style="display:none;">
+    <div class="zoom-note"><strong>Zoom transcript:</strong> Paste the auto-generated transcript below, or close this and ask Claude: <em>"Pull my latest Zoom transcript and add it to the meeting tracker."</em></div>
+    <label class="field-label">Paste Zoom transcript</label>
+    <textarea id="zoom-input" placeholder="Paste the Zoom transcript here…"></textarea>
+  </div>
+
+  <div class="action-row">
+    <button class="btn-primary" id="extract-btn" onclick="extractAndPreview()">Extract &amp; Preview</button>
+    <span class="status-text" id="extract-status"></span>
+  </div>
+  <div id="error-area"></div>
+
+  <div id="preview-wrap" class="preview-wrap" style="display:none;">
+    <div class="preview-hdr">
+      <span class="label-sm">Review before adding</span>
+      <span class="badge" id="preview-count"></span>
+    </div>
+    <div class="tbl-wrap">
+      <table class="ptbl">
+        <thead><tr>
+          <th>Date</th><th>Meeting / Source</th><th>Person</th>
+          <th>Email</th><th>Affiliation</th><th>Recommendations</th><th>Next Steps</th>
+        </tr></thead>
+        <tbody id="preview-body"></tbody>
+      </table>
+    </div>
+    <div class="action-row" style="margin-top:12px;">
+      <button class="btn-add" onclick="addToSheet()">✓ Add to Google Sheet</button>
+      <span class="status-text" id="add-status"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+const SHEET_ID = '1gAW9LO5fBJ8HdJ6R5ds9H2CUUM8H4FSiC-phpCywph8';
+let extractedRows = [];
+let grid = null;
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (tab==='view'&&i===0)||(tab==='add'&&i===1)));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  if (tab === 'view') loadSheet();
+}
+
+function setSource(src) {
+  ['paste','zoom'].forEach(s => {
+    document.getElementById('btn-' + s).classList.toggle('active', s === src);
+    document.getElementById('src-' + s).style.display = s === src ? '' : 'none';
+  });
+}
+
+async function loadSheet() {
+  const area = document.getElementById('sheet-area');
+  area.innerHTML = '<div class="state-box"><div class="spinner"></div>Loading sheet…</div>';
+  if (grid) { try { grid.destroy(); } catch(e){} grid = null; }
+
+  try {
+    const r = await window.cowork.callMcpTool(
+      'mcp__f847dc0f-1256-4aed-a92b-68357d7d5ec5__read_file_content',
+      { fileId: SHEET_ID }
+    );
+
+    // The tool returns { fileContent: "..." } in structuredContent
+    let structured = r.structuredContent;
+    if (!structured && r.content && r.content[0] && r.content[0].text) {
+      try { structured = JSON.parse(r.content[0].text); } catch(e) { structured = {}; }
+    }
+    const raw = structured?.fileContent || '';
+    const rows = parseMarkdownTable(raw);
+
+    if (!rows.length) {
+      area.innerHTML = '<div class="state-box"><strong>No entries yet</strong>Use the "Add from Notes" tab to add your first entry.</div>';
+      return;
+    }
+
+    area.innerHTML = '<div id="grid-target"></div>';
+    const cols = ['Date','Meeting / Source','Person','Email','Affiliation','Recommendations','Next Steps'];
+    grid = new gridjs.Grid({
+      columns: cols,
+      data: rows,
+      search: true,
+      sort: true,
+      pagination: { limit: 25 },
+    }).render(document.getElementById('grid-target'));
+  } catch(e) {
+    console.error('Sheet load error:', e);
+    area.innerHTML = `<div class="state-box"><strong>Could not load sheet</strong><a href="https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit" target="_blank" style="color:#2d6a4f;font-size:12px;">Open in Google Sheets ↗</a></div>`;
+  }
+}
+
+function parseMarkdownTable(raw) {
+  // Format: | col1 | col2 | ... |
+  // Skip separator rows like | :-: | :-: |
+  const lines = raw.split('\n')
+    .map(l => l.trim())
+    .filter(l => l.startsWith('|') && !l.match(/^\|[\s:\-|]+\|$/));
+
+  // First line is header, rest are data
+  const dataLines = lines.slice(1);
+  return dataLines
+    .map(line => {
+      const cells = line.split('|').map(c => c.trim()).filter((c, i, arr) => i > 0 && i < arr.length - 1);
+      while (cells.length < 7) cells.push('');
+      return cells.slice(0, 7);
+    })
+    .filter(row => row.some(c => c.length > 0));
+}
+
+async function extractAndPreview() {
+  const isPaste = document.getElementById('src-paste').style.display !== 'none';
+  const text = (isPaste
+    ? document.getElementById('notes-input').value
+    : document.getElementById('zoom-input').value
+  ).trim();
+
+  document.getElementById('error-area').innerHTML = '';
+  if (!text) {
+    document.getElementById('error-area').innerHTML = '<div class="error-text">Please paste some notes first.</div>';
+    return;
+  }
+
+  const btn = document.getElementById('extract-btn');
+  const status = document.getElementById('extract-status');
+  btn.disabled = true; btn.textContent = 'Extracting…';
+  status.textContent = 'Reading your notes…';
+  document.getElementById('preview-wrap').style.display = 'none';
+
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const prompt = `Extract ALL people mentioned in the meeting notes below. Return ONLY a valid JSON array — no markdown, no explanation, no code fences.
+
+Each object must have exactly these keys:
+  date        (meeting date if mentioned, else "${today}")
+  source      (meeting name or type, e.g. "Zoom call", "Coffee meeting", "Conference")
+  person      (full name)
+  email       (email address, or empty string)
+  affiliation (organization or role, or empty string)
+  recommendations  (brief 1-2 sentence summary of suggestions or advice)
+  next_steps  (brief 1-2 sentence summary of action items)
+
+Example output:
+[{"date":"2025-01-15","source":"Zoom call","person":"Jane Smith","email":"jane@co.com","affiliation":"Acme Corp","recommendations":"Consider the enterprise tier for volume pricing.","next_steps":"Send pricing proposal by Friday."}]
+
+MEETING NOTES:
+${text}`;
+
+    const response = await window.cowork.askClaude(prompt, [text]);
+    console.log('askClaude raw response:', response);
+
+    // Try to extract JSON array from the response
+    let parsed;
+    const jsonMatch = response.match(/\[[\s\S]*?\]/);
+    if (jsonMatch) {
+      try { parsed = JSON.parse(jsonMatch[0]); } catch(e) { console.error('JSON parse error:', e, jsonMatch[0]); }
+    }
+    if (!parsed) {
+      // Try the whole response as JSON
+      try { parsed = JSON.parse(response.trim()); } catch(e) {}
+    }
+
+    if (!parsed || !Array.isArray(parsed) || parsed.length === 0) {
+      document.getElementById('error-area').innerHTML = '<div class="error-text">Could not find people in these notes. Make sure names are clearly mentioned, or try adding more context.</div>';
+      status.textContent = '';
+      return;
+    }
+
+    extractedRows = parsed;
+    const tbody = document.getElementById('preview-body');
+    tbody.innerHTML = parsed.map(r => `<tr>
+      <td>${esc(r.date||'')}</td>
+      <td>${esc(r.source||'')}</td>
+      <td>${esc(r.person||'')}</td>
+      <td>${esc(r.email||'')}</td>
+      <td>${esc(r.affiliation||'')}</td>
+      <td>${esc(r.recommendations||'')}</td>
+      <td>${esc(r.next_steps||'')}</td>
+    </tr>`).join('');
+    document.getElementById('preview-count').textContent = `${parsed.length} ${parsed.length===1?'entry':'entries'}`;
+    document.getElementById('preview-wrap').style.display = '';
+    status.textContent = `Found ${parsed.length} ${parsed.length===1?'person':'people'}.`;
+  } catch(e) {
+    console.error('Extract error:', e);
+    document.getElementById('error-area').innerHTML = `<div class="error-text">Something went wrong: ${e.message}. Try again or simplify your notes.</div>`;
+    status.textContent = '';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Extract & Preview';
+  }
+}
+
+function addToSheet() {
+  if (!extractedRows.length) return;
+  document.getElementById('add-status').textContent = 'Sending to Claude…';
+  const lines = extractedRows.map(r =>
+    `${r.date||''} | ${r.source||''} | ${r.person||''} | ${r.email||''} | ${r.affiliation||''} | ${r.recommendations||''} | ${r.next_steps||''}`
+  ).join('\n');
+  window.sendPrompt(`Please add the following rows to the Greer Collective Meeting Notes Tracker Google Sheet (ID: ${SHEET_ID}). Each line is a new row: Date | Meeting/Source | Person | Email | Affiliation | Recommendations | Next Steps\n\n${lines}`);
+  document.getElementById('add-status').textContent = 'Sent — check the chat below to confirm.';
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+loadSheet();
+</script>
+</body>
+</html>

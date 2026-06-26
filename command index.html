@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Greer Command Center",
+  "schemaVersion": 1,
+  "description": "Live command center dashboard pulling from Google Calendar (this week's events), Gmail (unread inbox), ClickUp (open priority tasks), and HubSpot (contact pipeline). Refreshes on each open.",
+  "mcpTools": [
+    "mcp__904c7984-f3ef-4b29-b8e6-41d4869bd7c0__list_events",
+    "mcp__44db0556-6d06-496d-9632-0e38105abefe__search_threads",
+    "mcp__071ff1e4-0397-47e5-b6d2-a190f34ac554__clickup_filter_tasks",
+    "mcp__7c0956dc-f161-4934-983b-5c9cb3e553ea__search_crm_objects"
+  ],
+  "mcpServerNames": [
+    "Google Calendar",
+    "Gmail",
+    "ClickUp",
+    "HubSpot"
+  ]
+}
+</script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greer Collective Command Center</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Arial, sans-serif;
+  background: #FAF6EF;
+  color: #2C1A2E;
+  min-height: 100vh;
+}
+
+.header {
+  background: #2C1A2E;
+  color: #FAF6EF;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.header-left h1 {
+  font-size: 15px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.header-left .tagline {
+  font-size: 11px;
+  color: #B8922A;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+.header-date {
+  font-size: 12px;
+  color: #D4B870;
+  text-align: right;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 14px;
+}
+
+.card {
+  background: white;
+  border-radius: 5px;
+  border-top: 3px solid #B8922A;
+  padding: 14px;
+  box-shadow: 0 1px 6px rgba(44,26,46,0.07);
+  min-height: 200px;
+}
+
+.card-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #2C1A2E;
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #F3EDE3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-count {
+  font-weight: normal;
+  color: #B8922A;
+  font-size: 10px;
+  letter-spacing: 0;
+}
+
+.loading { color: #bbb; font-size: 12px; font-style: italic; padding: 8px 0; }
+.error-msg { color: #c0392b; font-size: 12px; padding: 8px 0; }
+.empty { color: #ccc; font-size: 12px; font-style: italic; text-align: center; padding: 20px 0; }
+
+/* CALENDAR */
+.event-row {
+  display: flex;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid #F3EDE3;
+  align-items: flex-start;
+}
+.event-row:last-child { border-bottom: none; }
+.event-when {
+  min-width: 60px;
+  flex-shrink: 0;
+}
+.event-day { font-size: 10px; color: #B8922A; font-weight: bold; text-transform: uppercase; }
+.event-time { font-size: 11px; color: #888; margin-top: 1px; }
+.event-title { font-size: 13px; color: #2C1A2E; line-height: 1.35; padding-top: 1px; }
+.event-has-meeting { font-size: 10px; color: #999; margin-top: 2px; }
+
+/* TASKS */
+.task-row {
+  display: flex;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid #F3EDE3;
+  align-items: flex-start;
+}
+.task-row:last-child { border-bottom: none; }
+.p-badge {
+  font-size: 9px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 2px 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+  margin-top: 2px;
+  min-width: 46px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.p-urgent { background: #fdecea; color: #c0392b; }
+.p-high { background: #fef3df; color: #B8922A; }
+.p-normal { background: #F3EDE3; color: #555; }
+.task-name {
+  font-size: 12px;
+  color: #2C1A2E;
+  line-height: 1.4;
+}
+.task-name a { color: inherit; text-decoration: none; }
+.task-name a:hover { text-decoration: underline; }
+.task-meta { font-size: 10px; color: #aaa; margin-top: 2px; }
+.task-overdue { color: #c0392b; }
+
+/* EMAIL */
+.email-row {
+  padding: 7px 0;
+  border-bottom: 1px solid #F3EDE3;
+}
+.email-row:last-child { border-bottom: none; }
+.email-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+}
+.email-sender { font-size: 12px; font-weight: bold; color: #2C1A2E; flex-shrink: 0; }
+.email-date { font-size: 10px; color: #bbb; white-space: nowrap; }
+.email-subject {
+  font-size: 11px;
+  color: #666;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.star { color: #B8922A; margin-right: 2px; }
+
+/* HUBSPOT */
+.hs-stat-row {
+  display: flex;
+  gap: 20px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #F3EDE3;
+}
+.hs-stat .n { font-size: 26px; font-weight: bold; color: #2C1A2E; line-height: 1; }
+.hs-stat .l { font-size: 9px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+
+.contact-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #F3EDE3;
+  gap: 8px;
+}
+.contact-row:last-child { border-bottom: none; }
+.contact-name { font-size: 12px; color: #2C1A2E; }
+.contact-email { font-size: 10px; color: #aaa; margin-top: 1px; }
+.stage-pill {
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: #F3EDE3;
+  color: #2C1A2E;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.footer {
+  text-align: center;
+  font-size: 10px;
+  color: #ccc;
+  padding: 10px;
+  letter-spacing: 0.5px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>The Greer Collective</h1>
+    <div class="tagline">Command Center</div>
+  </div>
+  <div class="header-date" id="header-date"></div>
+</div>
+
+<div class="grid">
+  <div class="card" id="card-cal">
+    <div class="card-title">This Week <span class="card-count" id="cal-count"></span></div>
+    <div class="loading">Loading calendar...</div>
+  </div>
+  <div class="card" id="card-tasks">
+    <div class="card-title">Priority Tasks <span class="card-count" id="task-count"></span></div>
+    <div class="loading">Loading tasks...</div>
+  </div>
+  <div class="card" id="card-email">
+    <div class="card-title">Inbox <span class="card-count" id="email-count"></span></div>
+    <div class="loading">Loading email...</div>
+  </div>
+  <div class="card" id="card-hs">
+    <div class="card-title">HubSpot Pipeline <span class="card-count" id="hs-count"></span></div>
+    <div class="loading">Loading contacts...</div>
+  </div>
+</div>
+
+<div class="footer" id="footer-ts"></div>
+
+<script>
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const now = new Date();
+
+// Header
+document.getElementById('header-date').textContent =
+  now.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric', timeZone:'America/New_York' });
+
+function fmtTime(iso) {
+  const d = new Date(iso);
+  const h = d.getHours(), m = d.getMinutes();
+  return `${h%12||12}${m?':'+String(m).padStart(2,'0'):''}${h>=12?'pm':'am'}`;
+}
+function fmtDay(iso) {
+  const d = new Date(iso);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const tom = new Date(today); tom.setDate(tom.getDate()+1);
+  d.setHours(0,0,0,0);
+  if (d.getTime() === today.getTime()) return 'Today';
+  if (d.getTime() === tom.getTime()) return 'Tomorrow';
+  return DAYS[new Date(iso).getDay()] + ' ' + MONTHS[new Date(iso).getMonth()] + ' ' + new Date(iso).getDate();
+}
+function fmtDue(ms) {
+  if (!ms) return '';
+  const d = new Date(parseInt(ms));
+  const diff = d - now;
+  if (diff < -86400000) return 'overdue';
+  if (diff < 0) return 'due today';
+  const days = Math.ceil(diff / 86400000);
+  if (days === 0) return 'due today';
+  if (days === 1) return 'tomorrow';
+  if (days <= 7) return `in ${days}d`;
+  return MONTHS[d.getMonth()] + ' ' + d.getDate();
+}
+function getData(r) {
+  try {
+    if (r && r.structuredContent) return r.structuredContent;
+    if (r && r.content && r.content[0] && r.content[0].text) return JSON.parse(r.content[0].text);
+  } catch(e) {}
+  return null;
+}
+
+// Skip personal events
+const PERSONAL = ['water garden','ozempic','fridge','baskets'];
+function isBusiness(ev) {
+  const s = (ev.summary||'').toLowerCase();
+  return !PERSONAL.some(p => s.includes(p));
+}
+
+async function loadAll() {
+  const s = new Date(); s.setHours(0,0,0,0);
+  const e = new Date(s); e.setDate(e.getDate()+7); e.setHours(23,59,59,0);
+
+  const [calR, gmailR, taskR, hsR] = await Promise.allSettled([
+    window.cowork.callMcpTool(
+      'mcp__904c7984-f3ef-4b29-b8e6-41d4869bd7c0__list_events',
+      { startTime: s.toISOString(), endTime: e.toISOString(), pageSize: 20, timeZone: 'America/New_York' }
+    ),
+    window.cowork.callMcpTool(
+      'mcp__44db0556-6d06-496d-9632-0e38105abefe__search_threads',
+      { query: 'is:unread in:inbox', pageSize: 8 }
+    ),
+    window.cowork.callMcpTool(
+      'mcp__071ff1e4-0397-47e5-b6d2-a190f34ac554__clickup_filter_tasks',
+      { statuses: ['Open','In Progress','To Do','in progress','open','to do'], order_by: 'due_date', page: 0 }
+    ),
+    window.cowork.callMcpTool(
+      'mcp__7c0956dc-f161-4934-983b-5c9cb3e553ea__search_crm_objects',
+      {
+        objectType: 'contacts',
+        properties: ['firstname','lastname','email','lifecyclestage','lastmodifieddate'],
+        sorts: [{ propertyName:'lastmodifieddate', direction:'DESCENDING' }],
+        limit: 8,
+        chatInsights: { userIntent:'View CRM pipeline contacts', satisfaction:'NEUTRAL' }
+      }
+    )
+  ]);
+
+  renderCalendar(calR.status==='fulfilled' ? calR.value : null);
+  renderEmail(gmailR.status==='fulfilled' ? gmailR.value : null);
+  renderTasks(taskR.status==='fulfilled' ? taskR.value : null);
+  renderPipeline(hsR.status==='fulfilled' ? hsR.value : null);
+
+  document.getElementById('footer-ts').textContent =
+    'Last updated ' + new Date().toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', timeZone:'America/New_York' }) + ' ET';
+}
+
+function renderCalendar(raw) {
+  const card = document.getElementById('card-cal');
+  const data = getData(raw);
+  if (!data || raw?.isError) {
+    card.innerHTML = '<div class="card-title">This Week</div><div class="error-msg">Could not load calendar.</div>';
+    return;
+  }
+  const events = (data.events || []).filter(isBusiness);
+  document.getElementById('cal-count').textContent = events.length ? `${events.length} events` : '';
+
+  if (!events.length) {
+    card.innerHTML = '<div class="card-title">This Week</div><div class="empty">Nothing scheduled.</div>';
+    return;
+  }
+
+  let html = '<div class="card-title">This Week <span class="card-count">' + events.length + ' events</span></div>';
+  for (const ev of events.slice(0, 9)) {
+    const start = ev.start?.dateTime || ev.start?.date;
+    const hasCall = !!(ev.conferenceUrl || ev.description?.includes('zoom') || ev.description?.includes('meet'));
+    html += `<div class="event-row">
+      <div class="event-when">
+        <div class="event-day">${fmtDay(start)}</div>
+        <div class="event-time">${ev.start?.dateTime ? fmtTime(start) : 'All day'}</div>
+      </div>
+      <div>
+        <div class="event-title">${ev.summary || '(No title)'}</div>
+        ${hasCall ? '<div class="event-has-meeting">Video call</div>' : ''}
+      </div>
+    </div>`;
+  }
+  card.innerHTML = html;
+}
+
+function renderEmail(raw) {
+  const card = document.getElementById('card-email');
+  const data = getData(raw);
+  if (!data || raw?.isError) {
+    card.innerHTML = '<div class="card-title">Inbox</div><div class="error-msg">Could not load email.</div>';
+    return;
+  }
+  const threads = data.threads || [];
+  const count = parseInt(data.resultCountEstimate || threads.length) || threads.length;
+
+  let html = `<div class="card-title">Inbox <span class="card-count">${count} unread</span></div>`;
+  if (!threads.length) {
+    html += '<div class="empty">Inbox zero.</div>';
+    card.innerHTML = html;
+    return;
+  }
+  for (const t of threads.slice(0,7)) {
+    const msg = t.messages?.[0];
+    if (!msg) continue;
+    const sender = (msg.sender||'').replace(/<[^>]+>/g,'').replace(/"/g,'').trim();
+    const important = msg.labelIds?.includes('IMPORTANT');
+    const d = new Date(msg.date);
+    const isToday = d.toDateString() === now.toDateString();
+    const dateStr = isToday
+      ? d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', timeZone:'America/New_York' })
+      : MONTHS[d.getMonth()] + ' ' + d.getDate();
+    html += `<div class="email-row">
+      <div class="email-top">
+        <div class="email-sender">${important?'<span class="star">★</span>':''}${sender}</div>
+        <div class="email-date">${dateStr}</div>
+      </div>
+      <div class="email-subject">${msg.subject || '(No subject)'}</div>
+    </div>`;
+  }
+  card.innerHTML = html;
+}
+
+function renderTasks(raw) {
+  const card = document.getElementById('card-tasks');
+  const data = getData(raw);
+  if (!data || raw?.isError) {
+    card.innerHTML = '<div class="card-title">Priority Tasks</div><div class="error-msg">Could not load tasks.</div>';
+    return;
+  }
+  const all = data.tasks || [];
+  const ORDER = { urgent:0, high:1, normal:2 };
+  const sorted = [...all].sort((a,b) => (ORDER[a.priority]??2) - (ORDER[b.priority]??2));
+  const top = sorted.slice(0, 10);
+
+  let html = `<div class="card-title">Priority Tasks <span class="card-count">${all.length} open</span></div>`;
+  for (const t of top) {
+    const p = t.priority || 'normal';
+    const cls = p==='urgent' ? 'p-urgent' : p==='high' ? 'p-high' : 'p-normal';
+    const due = t.due_date ? fmtDue(t.due_date) : '';
+    const isOverdue = due === 'overdue';
+    html += `<div class="task-row">
+      <div class="p-badge ${cls}">${p}</div>
+      <div>
+        <div class="task-name"><a href="${t.url}" target="_blank">${t.name}</a></div>
+        <div class="task-meta">${t.list?.name || ''}${due ? ' &middot; <span class="' + (isOverdue?'task-overdue':'') + '">' + due + '</span>' : ''}</div>
+      </div>
+    </div>`;
+  }
+  card.innerHTML = html;
+}
+
+function renderPipeline(raw) {
+  const card = document.getElementById('card-hs');
+  const data = getData(raw);
+  if (!data || raw?.isError) {
+    card.innerHTML = '<div class="card-title">HubSpot Pipeline</div><div class="error-msg">Could not load contacts.</div>';
+    return;
+  }
+  const contacts = data.results || [];
+  const total = data.total || 0;
+
+  let html = `<div class="card-title">HubSpot Pipeline</div>
+  <div class="hs-stat-row">
+    <div class="hs-stat"><div class="n">${total}</div><div class="l">Total Contacts</div></div>
+  </div>`;
+
+  for (const c of contacts.slice(0, 7)) {
+    const p = c.properties || {};
+    const name = [p.firstname, p.lastname].filter(Boolean).join(' ') || p.hs_full_name_or_email || p.email || 'Unknown';
+    const email = p.email || '';
+    const stage = (p.lifecyclestage || 'lead').replace(/_/g,' ');
+    html += `<div class="contact-row">
+      <div>
+        <div class="contact-name">${name}</div>
+        ${email !== name ? `<div class="contact-email">${email}</div>` : ''}
+      </div>
+      <div class="stage-pill">${stage}</div>
+    </div>`;
+  }
+  card.innerHTML = html;
+}
+
+loadAll();
+</script>
+</body>
+</html>

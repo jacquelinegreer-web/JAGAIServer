@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Meeting Notes Tracker",
+  "schemaVersion": 1,
+  "description": "Live meeting notes tracker for Greer Collective. Reads from and updates the Google Sheet (ID: 1gAW9LO5fBJ8HdJ6R5ds9H2CUUM8H4FSiC-phpCywph8). Supports pasting raw notes or Zoom transcripts, AI extracts Person/Email/Affiliation/Recommendations/Next Steps, and sends rows to Claude to append to the sheet.",
+  "mcpTools": [
+    "mcp__f847dc0f-1256-4aed-a92b-68357d7d5ec5__read_file_content"
+  ],
+  "mcpServerNames": [
+    "Google Drive"
+  ]
+}
+</script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meeting Notes Tracker</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css" integrity="sha384-jZvDSsmGB9oGGT/4l9bHXGoAv1OxvG/cFmSo0dZaSqmBgvQTKDBFAMftlXTmMbNW" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #faf9f7; color: #1a1a1a; font-size: 14px;
+  }
+
+  /* Header */
+  .hdr {
+    background: #1a1a1a; color: #fff; padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .hdr-title { font-size: 14px; font-weight: 600; }
+  .hdr-sub { font-size: 11px; color: #aaa; margin-top: 2px; }
+  .sheet-link {
+    font-size: 11px; color: #fff; text-decoration: none;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 5px; padding: 5px 10px;
+  }
+  .sheet-link:hover { background: rgba(255,255,255,0.22); }
+
+  /* Tabs */
+  .tabs { display: flex; background: #fff; border-bottom: 1px solid #e5e3df; padding: 0 18px; }
+  .tab {
+    padding: 10px 14px; font-size: 13px; font-weight: 500;
+    border: none; border-bottom: 2px solid transparent;
+    background: none; cursor: pointer; color: #888;
+  }
+  .tab.on { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+
+  /* Panels */
+  .panel { display: none; padding: 18px; }
+  .panel.on { display: block; }
+
+  /* Utility */
+  .row-sb { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .lbl { font-size: 12px; font-weight: 600; color: #333; }
+  .hint { font-size: 11px; color: #999; margin-bottom: 8px; }
+  .ghost-btn {
+    background: #f0ede8; border: none; border-radius: 5px;
+    padding: 5px 10px; font-size: 12px; cursor: pointer; color: #444;
+  }
+  .ghost-btn:hover { background: #e8e4de; }
+
+  /* State boxes */
+  .state-box {
+    text-align: center; padding: 36px 20px; border: 1px dashed #ddd;
+    border-radius: 8px; color: #888; font-size: 13px; background: #fafafa;
+  }
+  .state-box b { display: block; color: #555; margin-bottom: 4px; font-size: 14px; }
+  .spin {
+    width: 18px; height: 18px; border: 2px solid #e0ddd8;
+    border-top-color: #666; border-radius: 50%;
+    animation: sp 0.7s linear infinite; margin: 0 auto 10px;
+  }
+  @keyframes sp { to { transform: rotate(360deg); } }
+
+  /* Grid overrides */
+  .gridjs-wrapper { border-radius: 7px !important; border: 1px solid #e5e3df !important; }
+  th.gridjs-th { background: #f5f3ef !important; font-size: 11px !important; font-weight: 600 !important; color: #444 !important; }
+  td.gridjs-td { font-size: 12px !important; }
+
+  /* Add panel */
+  .src-toggle { display: flex; gap: 8px; margin-bottom: 14px; }
+  .src-btn {
+    flex: 1; padding: 9px; border: 1px solid #ddd; border-radius: 6px;
+    background: #fff; cursor: pointer; font-size: 12px; font-weight: 500; color: #666;
+  }
+  .src-btn.on { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+  textarea {
+    width: 100%; border: 1px solid #ddd; border-radius: 6px; padding: 10px 12px;
+    font-size: 13px; min-height: 140px; resize: vertical;
+    font-family: inherit; line-height: 1.5; color: #222;
+  }
+  textarea:focus { outline: none; border-color: #999; }
+
+  .zoom-tip {
+    background: #f5f3ef; border-radius: 6px; padding: 11px 13px;
+    font-size: 12px; color: #555; line-height: 1.6; margin-bottom: 12px;
+  }
+
+  .send-btn {
+    background: #1a1a1a; color: #fff; border: none; border-radius: 6px;
+    padding: 10px 22px; font-size: 13px; font-weight: 500; cursor: pointer;
+    margin-top: 12px; display: block; width: 100%;
+  }
+  .send-btn:hover { background: #333; }
+  .send-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+  .confirm-box {
+    margin-top: 14px; background: #e8f5e9; border: 1px solid #c8e6c9;
+    border-radius: 6px; padding: 12px 14px; font-size: 13px; color: #2e7d32;
+    display: none;
+  }
+  .confirm-box b { display: block; margin-bottom: 3px; }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <div class="hdr-title">Meeting Notes Tracker</div>
+    <div class="hdr-sub">Greer Collective</div>
+  </div>
+  <a class="sheet-link" href="https://docs.google.com/spreadsheets/d/1gAW9LO5fBJ8HdJ6R5ds9H2CUUM8H4FSiC-phpCywph8/edit" target="_blank">↗ Open in Google Sheets</a>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="switchTab('view')">All Entries</button>
+  <button class="tab" onclick="switchTab('add')">Add from Notes</button>
+</div>
+
+<!-- VIEW -->
+<div id="pv" class="panel on">
+  <div class="row-sb">
+    <span class="lbl">Current entries in the sheet</span>
+    <button class="ghost-btn" onclick="loadSheet()">↺ Reload</button>
+  </div>
+  <div id="sheet-area"><div class="state-box"><div class="spin"></div>Loading…</div></div>
+</div>
+
+<!-- ADD -->
+<div id="pa" class="panel">
+  <div class="src-toggle">
+    <button class="src-btn on" id="bp" onclick="setSrc('paste')">📋 Paste notes or transcript</button>
+    <button class="src-btn" id="bz" onclick="setSrc('zoom')">🎥 Zoom recording</button>
+  </div>
+
+  <!-- Paste source -->
+  <div id="sp">
+    <div class="lbl" style="margin-bottom:5px;">Your meeting notes</div>
+    <div class="hint">Paste anything — raw notes, a scan, a transcript. Include names, emails, affiliations, and any follow-ups you captured.</div>
+    <textarea id="notes" placeholder="e.g. Met with Sarah Chen (sarah@acme.com) at Acme Corp. She recommended we look at their enterprise plan. Next step: send her a proposal by Friday."></textarea>
+  </div>
+
+  <!-- Zoom source -->
+  <div id="sz" style="display:none;">
+    <div class="zoom-tip">
+      <b>Two ways to use Zoom transcripts:</b>
+      Paste the transcript text below, <em>or</em> close the panel and type:<br>
+      <em>"Pull my latest Zoom transcript and add it to the meeting tracker."</em>
+    </div>
+    <div class="lbl" style="margin-bottom:5px;">Zoom transcript text</div>
+    <textarea id="zoom-notes" placeholder="Paste the Zoom transcript here…"></textarea>
+  </div>
+
+  <button class="send-btn" id="send-btn" onclick="sendToProcess()">
+    Send to Claude for Processing
+  </button>
+
+  <div class="confirm-box" id="confirm">
+    <b>Sent to Claude</b>
+    Claude will extract the entries and add them to your Google Sheet. Check the chat below.
+  </div>
+</div>
+
+<script>
+const SHEET_ID = '1gAW9LO5fBJ8HdJ6R5ds9H2CUUM8H4FSiC-phpCywph8';
+let grid = null;
+
+function switchTab(t) {
+  document.querySelectorAll('.tab').forEach((el, i) => el.classList.toggle('on', (t==='view')===!i));
+  document.getElementById('pv').classList.toggle('on', t==='view');
+  document.getElementById('pa').classList.toggle('on', t==='add');
+  if (t === 'view') loadSheet();
+}
+
+function setSrc(s) {
+  document.getElementById('bp').classList.toggle('on', s==='paste');
+  document.getElementById('bz').classList.toggle('on', s==='zoom');
+  document.getElementById('sp').style.display = s==='paste' ? '' : 'none';
+  document.getElementById('sz').style.display = s==='zoom' ? '' : 'none';
+}
+
+async function loadSheet() {
+  const area = document.getElementById('sheet-area');
+  area.innerHTML = '<div class="state-box"><div class="spin"></div>Loading sheet…</div>';
+  if (grid) { try { grid.destroy(); } catch(e){} grid = null; }
+
+  try {
+    const r = await window.cowork.callMcpTool(
+      'mcp__f847dc0f-1256-4aed-a92b-68357d7d5ec5__read_file_content',
+      { fileId: SHEET_ID }
+    );
+
+    // Parse the result - tool returns {fileContent: "...markdown table..."}
+    let fileContent = '';
+    if (r.structuredContent && r.structuredContent.fileContent) {
+      fileContent = r.structuredContent.fileContent;
+    } else if (r.content && r.content[0]) {
+      const txt = r.content[0].text || '';
+      try {
+        const parsed = JSON.parse(txt);
+        fileContent = parsed.fileContent || txt;
+      } catch(e) {
+        fileContent = txt;
+      }
+    }
+
+    const rows = parseMdTable(fileContent);
+    if (!rows.length) {
+      area.innerHTML = '<div class="state-box"><b>No entries yet</b>Use the "Add from Notes" tab to get started.</div>';
+      return;
+    }
+
+    area.innerHTML = '<div id="gt"></div>';
+    grid = new gridjs.Grid({
+      columns: ['Date','Meeting / Source','Person','Email','Affiliation','Recommendations','Next Steps'],
+      data: rows,
+      search: true,
+      sort: true,
+      pagination: { limit: 25 },
+    }).render(document.getElementById('gt'));
+  } catch(e) {
+    area.innerHTML = `<div class="state-box"><b>Could not load</b><a href="https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit" target="_blank" style="color:#2d6a4f;">Open in Google Sheets ↗</a></div>`;
+  }
+}
+
+function parseMdTable(raw) {
+  if (!raw) return [];
+  const lines = raw.split('\n')
+    .map(l => l.trim())
+    .filter(l => l.startsWith('|') && !l.match(/^\|[-:\s|]+\|$/));
+  // Skip header row (first line), parse rest as data
+  return lines.slice(1).map(line => {
+    const parts = line.split('|').map(c => c.trim());
+    // Remove empty first and last elements from split
+    const cells = parts.filter((c, i) => i > 0 && i < parts.length - 1);
+    while (cells.length < 7) cells.push('');
+    return cells.slice(0, 7);
+  }).filter(row => row.some(c => c));
+}
+
+function sendToProcess() {
+  const isPaste = document.getElementById('sp').style.display !== 'none';
+  const text = (isPaste
+    ? document.getElementById('notes').value
+    : document.getElementById('zoom-notes').value
+  ).trim();
+
+  if (!text) {
+    alert('Please paste some meeting notes first.');
+    return;
+  }
+
+  const btn = document.getElementById('send-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  window.sendPrompt(
+    `Please process these meeting notes and add them to my Greer Collective Meeting Notes Tracker Google Sheet (ID: ${SHEET_ID}).\n\nExtract every person mentioned and create one row per person with: Date, Meeting/Source, Person, Email, Affiliation, Recommendations, Next Steps. Then add those rows to the sheet.\n\nMEETING NOTES:\n${text}`
+  );
+
+  document.getElementById('confirm').style.display = 'block';
+  setTimeout(() => { btn.disabled = false; btn.textContent = 'Send to Claude for Processing'; }, 3000);
+}
+
+loadSheet();
+</script>
+</body>
+</html>
