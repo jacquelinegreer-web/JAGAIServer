@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jacqueline Greer · July 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1c1c1c;
+  --soft: #f7f4ef;
+  --warm: #e8e0d4;
+  --gold: #b8922a;
+  --purple: #2c1a6e;
+  --tag-cpf: #7c5cbf;
+  --tag-pipeline: #1a6e4a;
+  --tag-coach: #b8922a;
+  --tag-rest: #c0392b;
+  --tag-health: #2c7bb8;
+  --tag-usps: #555;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--soft);
+  color: var(--ink);
+  padding: 2rem 1.5rem 4rem;
+}
+header {
+  max-width: 960px; margin: 0 auto 2rem;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 1rem;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  flex-wrap: wrap; gap: 12px;
+}
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.6rem; font-weight: 700; line-height: 1;
+  color: var(--purple);
+}
+header .meta { text-align: right; font-size: 12px; color: #888; line-height: 1.8; }
+header .meta strong { color: var(--ink); font-size: 13px; }
+
+.focus-bar {
+  max-width: 960px; margin: 0 auto 2rem;
+  background: var(--purple); color: white;
+  border-radius: 8px; padding: 14px 20px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;
+}
+.focus-item { font-size: 12px; }
+.focus-item .fi-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #b8a8e8; margin-bottom: 3px; }
+.focus-item .fi-val { font-weight: 600; font-size: 13px; }
+
+.legend {
+  max-width: 960px; margin: 0 auto 1.5rem;
+  display: flex; gap: 14px; flex-wrap: wrap;
+}
+.leg { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.leg-dot { width: 9px; height: 9px; border-radius: 50%; }
+
+.weeks { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+
+.week {
+  background: white; border: 1px solid var(--warm);
+  border-radius: 8px; overflow: hidden;
+}
+.week-header {
+  background: var(--ink); color: white;
+  padding: 10px 18px; display: flex; justify-content: space-between; align-items: center;
+}
+.week-header .wh-num { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #aaa; }
+.week-header .wh-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; }
+.week-header .wh-dates { font-size: 12px; color: #ccc; }
+
+.days { display: grid; grid-template-columns: repeat(5, 1fr); }
+
+.day {
+  padding: 12px 14px; border-right: 1px solid #f0ece5;
+  min-height: 120px; position: relative;
+}
+.day:last-child { border-right: none; }
+.day.light { background: #fdfcfa; }
+.day.focus { background: #faf8ff; }
+
+.day-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 8px;
+}
+.day-name { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #999; }
+.day-num { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--ink); }
+.day.today .day-num {
+  background: var(--purple); color: white;
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+
+.task {
+  display: flex; align-items: flex-start; gap: 5px;
+  margin-bottom: 5px; cursor: pointer;
+}
+.task input[type="checkbox"] { margin-top: 2px; accent-color: var(--purple); flex-shrink: 0; }
+.task label { font-size: 11px; line-height: 1.4; cursor: pointer; }
+.task.done label { text-decoration: line-through; color: #bbb; }
+
+.tag {
+  display: inline-block; font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 1px 6px; border-radius: 10px; margin-bottom: 4px;
+  color: white;
+}
+.tag-cpf { background: var(--tag-cpf); }
+.tag-pipeline { background: var(--tag-pipeline); }
+.tag-coach { background: var(--tag-coach); }
+.tag-rest { background: var(--tag-rest); }
+.tag-health { background: var(--tag-health); }
+.tag-usps { background: var(--tag-usps); }
+
+.day-note {
+  font-size: 10px; color: #bbb; font-style: italic; margin-top: 6px;
+}
+
+.week-summary {
+  background: #faf8f5; border-top: 1px solid var(--warm);
+  padding: 10px 18px; font-size: 12px; color: #888;
+  display: flex; gap: 16px; flex-wrap: wrap;
+}
+.ws-item { display: flex; align-items: center; gap: 5px; }
+.ws-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+.month-note {
+  max-width: 960px; margin: 20px auto 0;
+  background: white; border: 1px solid var(--warm); border-radius: 8px;
+  padding: 18px 20px;
+}
+.month-note h3 { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--purple); margin-bottom: 10px; }
+.month-note ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.month-note li { font-size: 13px; color: #555; display: flex; gap: 8px; }
+.month-note li::before { content: '→'; color: var(--gold); font-weight: 700; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>July 2026</h1>
+    <div style="font-size:13px;color:#888;margin-top:4px;font-family:'DM Sans',sans-serif;">Strategic calendar · Jacqueline Greer</div>
+  </div>
+  <div class="meta">
+    <strong>Priorities this month</strong><br>
+    CPF Stage 2 · Pipeline outreach<br>
+    Coaching demo · Rest & recovery
+  </div>
+</header>
+
+<div class="focus-bar">
+  <div class="focus-item">
+    <div class="fi-label">CPF target</div>
+    <div class="fi-val">Stage 2 by July 31</div>
+  </div>
+  <div class="focus-item">
+    <div class="fi-label">CPF time</div>
+    <div class="fi-val">2–3 hrs/week</div>
+  </div>
+  <div class="focus-item">
+    <div class="fi-label">Weekends</div>
+    <div class="fi-val">Fully protected</div>
+  </div>
+  <div class="focus-item">
+    <div class="fi-label">Fridays</div>
+    <div class="fi-val">Light / flexible</div>
+  </div>
+  <div class="focus-item">
+    <div class="fi-label">Italy trip</div>
+    <div class="fi-val">Sept 15 — prep now</div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:var(--tag-cpf)"></div>CPF Cert</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--tag-pipeline)"></div>Pipeline</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--tag-coach)"></div>Coaching / VO</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--tag-health)"></div>Health</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--tag-usps)"></div>USPS / Admin</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--tag-rest)"></div>Protected rest</div>
+</div>
+
+<div class="weeks">
+
+  <!-- WEEK 1: June 30 - July 4 -->
+  <div class="week">
+    <div class="week-header">
+      <span class="wh-num">Week 1</span>
+      <span class="wh-label">Orientation week — set the month up right</span>
+      <span class="wh-dates">June 30 – July 4</span>
+    </div>
+    <div class="days">
+      <div class="day">
+        <div class="day-header"><span class="day-name">Mon</span><span class="day-num">30</span></div>
+        <div class="tag tag-pipeline">Pipeline</div>
+        <div class="task"><input type="checkbox" id="t1"><label for="t1">Draft July pipeline outreach list (6–8 targets)</label></div>
+        <div class="task"><input type="checkbox" id="t2"><label for="t2">Review FractionalED next steps</label></div>
+      </div>
+      <div class="day">
+        <div class="day-header"><span class="day-name">Tue</span><span class="day-num">1</span></div>
+        <div class="tag tag-cpf">CPF</div>
+        <div class="task"><input type="checkbox" id="t3"><label for="t3">CPF: review Stage 2 requirements + checklist</label></div>
+        <div class="task"><input type="checkbox" id="t4"><label for="t4">Block CPF time on calendar for July</label></div>
+      </div>
+      <div class="day">
+        <div class="day-header"><span class="day-name">Wed</span><span class="day-num">2</span></div>
+        <div class="tag tag-pipeline">Pipeline</div>
+        <div class="task"><input type="checkbox" id="t5"><label for="t5">Send first wave of outreach (3 contacts)</label></div>
+        <div class="task"><input type="checkbox" id="t6"><label for="t6">MSDE RFQ check-in with Johntel</label></div>
+      </div>
+      <div class="day">
+        <div class="day-header"><span class="day-name">Thu</span><span class="day-num">3</span></div>
+        <div class="tag tag-coach">Coaching</div>
+        <div class="task"><input type="checkbox" id="t7"><label for="t7">Research J. Michael Collins demo coaching</label></div>
+        <div class="task"><input type="checkbox" id="t8"><label for="t8">Follow up with Andrew at Moody Pines</label></div>
+      </div>
+      <div class="day light">
+        <div class="day-header"><span class="day-name">Fri</span><span class="day-num">4</span></div>
+        <div class="day-note">🎆 July 4th — light day</div>
+        <div class="task"><input type="checkbox" id="t9"><label for="t9">Weekly review: what's working?</label></div>
+      </div>
+    </div>
+    <div class="week-summary">
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-pipeline)"></div>Pipeline launch</div>
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-cpf)"></div>CPF orientation</div>
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-coach)"></div>Coach research</div>
+    </div>
+  </div>
+
+  <!-- WEEK 2: July 7-11 -->
+  <div class="week">
+    <div class="week-header">
+      <span class="wh-num">Week 2</span>
+      <span class="wh-label">Build momentum — outreach + CPF writing</span>
+      <span class="wh-dates">July 7 – July 11</span>
+    </div>
+    <div class="days">
+      <div class="day">
+        <div class="day-header"><span class="day-name">Mon</span><span class="day-num">7</span></div>
+        <div class="tag tag-pipeline">Pipeline</div>
+        <div class="task"><input type="checkbox" id="t10"><label for="t10">Follow up on Week 1 outreach</label></div>
+        <div class="task"><input type="checkbox" id="t11"><label for="t11">Send second wave (3 more contacts)</label></div>
+        <div class="day-note">🎂 Curtis's birthday week!</div>
+      </div>
+      <div class="day">
+        <div class="day-header"><span class="day-name">Tue</span><span class="day-num">8</span></div>
+        <div class="tag tag-cpf">CPF</div>
+        <div class="task"><input type="checkbox" id="t12"><label for="t12">CPF: draft Stage 2 narrative section 1</label></div>
+        <div class="task"><input type="checkbox" id="t13"><label for="t13">Ask Grace Katabaruki for narrative review</label></div>
+      </div>
+      <div class="day">
+        <div class="day-header"><span class="day-name">Wed</span><span class="day-num">9</span></div>
+        <div class="tag tag-coach">Coaching</div>
+        <div class="task"><input type="checkbox" id="t14"><label for="t14">JacquieVoice: audition pipeline check</label></div>
+        <div class="task"><input type="checkbox" id="t15"><label for="t15">Nancy Barbee audiobook check-in</label></div>
+      </div>
+      <div class="day">
+        <div class="day-header"><span class="day-name">Thu</span><span class="day-num">10</span></div>
+        <div class="tag tag-coach">Coaching</div>
+        <div class="task"><input type="checkbox" id="t16"><label for="t16">Curtis's birthday 🎂 — Stans dinner</label></div>
+        <div class="task"><input type="checkbox" id="t17"><label for="t17">Light work day — wrap early</label></div>
+      </div>
+      <div class="day light">
+        <div class="day-header"><span class="day-name">Fri</span><span class="day-num">11</span></div>
+        <div class="tag tag-health">Health</div>
+        <div class="task"><input type="checkbox" id="t18"><label for="t18">Medical / health appointment if needed</label></div>
+        <div class="task"><input type="checkbox" id="t19"><label for="t19">Weekly review + IRS refund check</label></div>
+      </div>
+    </div>
+    <div class="week-summary">
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-pipeline)"></div>6–8 contacts out</div>
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-cpf)"></div>Stage 2 draft started</div>
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-coach)"></div>VO pipeline active</div>
+    </div>
+  </div>
+
+  <!-- WEEK 3: July 14-18 — PEAK FOCUS -->
+  <div class="week">
+    <div class="week-header" style="background:#2c1a6e;">
+      <span class="wh-num">Week 3</span>
+      <span class="wh-label">⚡ Peak focus week — conversations + CPF push</span>
+      <span class="wh-dates">July 14 – July 18</span>
+    </div>
+    <div class="days">
+      <div class="day focus">
+        <div class="day-header"><span class="day-name">Mon</span><span class="day-num">14</span></div>
+        <div class="tag tag-pipeline">Pipeline</div>
+        <div class="task"><input type="checkbox" id="t20"><label for="t20">Consulting prospect calls — aim for 2 this week</label></div>
+        <div class="task"><input type="checkbox" id="t21"><label for="t21">FractionalED: confirm collaboration structure</label></div>
+      </div>
+      <div class="day focus">
+        <div class="day-header"><span class="day-name">Tue</span><span class="day-num">15</span></div>
+        <div class="tag tag-cpf">CPF</div>
+        <div class="task"><input type="checkbox" id="t22"><label for="t22">CPF: complete Stage 2 narrative draft</label></div>
+        <div class="task"><input type="checkbox" id="t23"><label for="t23">CPF: portfolio tracker update — all 12 sessions</label></div>
+      </div>
+      <div class="day focus">
+        <div class="day-header"><span class="day-name">Wed</span><span class="day-num">16</span></div>
+        <div class="tag tag-pipeline">Pipeline</div>
+        <div class="task"><input type="checkbox" id="t24"><label for="t24">Virtual facilitation outreach — Oct–Jan contracts</label></div>
+        <div class="task"><input type="checkbox" id="t25"><label for="t25">Charter school retreat services — activate deck</label></div>
+      </div>
+      <div class="day focus">
+        <div class="day-header"><span class="day-name">Thu</span><span class="day-num">17</span></div>
+        <div class="tag tag-coach">Coaching / VO</div>
+        <div class="task"><input type="checkbox" id="t26"><label for="t26">Coach demo booking call or inquiry</label></div>
+        <div class="task"><input type="checkbox" id="t27"><label for="t27">Human Capital 101 — Thinkific outline review</label></div>
+      </div>
+      <div class="day light">
+        <div class="day-header"><span class="day-name">Fri</span><span class="day-num">18</span></div>
+        <div class="tag tag-health">Health</div>
+        <div class="task"><input type="checkbox" id="t28"><label for="t28">Hopkins / medical follow-up if needed</label></div>
+        <div class="task"><input type="checkbox" id="t29"><label for="t29">Mid-month energy check — adjust if needed</label></div>
+      </div>
+    </div>
+    <div class="week-summary">
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-cpf)"></div>Stage 2 draft complete</div>
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-pipeline)"></div>2+ warm conversations</div>
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-coach)"></div>Demo booking in motion</div>
+    </div>
+  </div>
+
+  <!-- WEEK 4: July 21-25 -->
+  <div class="week">
+    <div class="week-header">
+      <span class="wh-num">Week 4</span>
+      <span class="wh-label">Refine + advance — proposals and CPF review</span>
+      <span class="wh-dates">July 21 – July 25</span>
+    </div>
+    <div class="days">
+      <div class="day">
+        <div class="day-header"><span class="day-name">Mon</span><span class="day-num">21</span></div>
+        <div class="tag tag-pipeline">Pipeline</div>
+        <div class="task"><input type="checkbox" id="t30"><label for="t30">Draft consulting proposal for top prospect</label></div>
+        <div class="task"><input type="checkbox" id="t31"><label for="t31">Follow up on any open conversations</label></div>
+      </div>
+      <div class="day">
+        <div class="day-header"><span class="day-name">Tue</span><span class="day-num">22</span></div>
+        <div class="tag tag-cpf">CPF</div>
+        <div class="task"><input type="checkbox" id="t32"><label for="t32">CPF: Grace narrative review — incorporate feedback</label></div>
+        <div class="task"><input type="checkbox" id="t33"><label for="t33">CPF: finalize supporting documentation</label></div>
+      </div>
+      <div class="day">
+        <div class="day-header"><span class="day-name">Wed</span><span class="day-num">23</span></div>
+        <div class="tag tag-usps">Admin</div>
+        <div class="task"><input type="checkbox" id="t34"><label for="t34">Deloitte ALP: August planning check-in</label></div>
+        <div class="task"><input type="checkbox" id="t35"><label for="t35">Wave: expense log — monthly reconcile</label></div>
+      </div>
+      <div class="day">
+        <div class="day-header"><span class="day-name">Thu</span><span class="day-num">24</span></div>
+        <div class="tag tag-coach">Coaching / VO</div>
+        <div class="task"><input type="checkbox" id="t36"><label for="t36">JacquieVoice: audition session</label></div>
+        <div class="task"><input type="checkbox" id="t37"><label for="t37">Italy prep: confirm Rome hotel / Trastevere</label></div>
+      </div>
+      <div class="day light">
+        <div class="day-header"><span class="day-name">Fri</span><span class="day-num">25</span></div>
+        <div class="tag tag-health">Health</div>
+        <div class="task"><input type="checkbox" id="t38"><label for="t38">Lymphedema / CLT-LANA appointment check</label></div>
+        <div class="task"><input type="checkbox" id="t39"><label for="t39">Driving rehab OT referral follow-up</label></div>
+      </div>
+    </div>
+    <div class="week-summary">
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-cpf)"></div>CPF near-final</div>
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-pipeline)"></div>Proposals out</div>
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-health)"></div>Medical referrals active</div>
+    </div>
+  </div>
+
+  <!-- WEEK 5: July 28-31 -->
+  <div class="week">
+    <div class="week-header">
+      <span class="wh-num">Week 5</span>
+      <span class="wh-label">Close out July — submit CPF + set up August</span>
+      <span class="wh-dates">July 28 – July 31</span>
+    </div>
+    <div class="days">
+      <div class="day">
+        <div class="day-header"><span class="day-name">Mon</span><span class="day-num">28</span></div>
+        <div class="tag tag-cpf">CPF</div>
+        <div class="task"><input type="checkbox" id="t40"><label for="t40">CPF Stage 2: final review pass</label></div>
+        <div class="task"><input type="checkbox" id="t41"><label for="t41">CPF: submit application 🎯</label></div>
+      </div>
+      <div class="day">
+        <div class="day-header"><span class="day-name">Tue</span><span class="day-num">29</span></div>
+        <div class="tag tag-pipeline">Pipeline</div>
+        <div class="task"><input type="checkbox" id="t42"><label for="t42">August pipeline review — what's warm?</label></div>
+        <div class="task"><input type="checkbox" id="t43"><label for="t43">IRS refund: contact Mrs. Dean (Aug 12 target)</label></div>
+      </div>
+      <div class="day">
+        <div class="day-header"><span class="day-name">Wed</span><span class="day-num">30</span></div>
+        <div class="tag tag-usps">USPS / Admin</div>
+        <div class="task"><input type="checkbox" id="t44"><label for="t44">Deloitte ALP: August transition prep</label></div>
+        <div class="task"><input type="checkbox" id="t45"><label for="t45">Board chair: Sojourner Truth prep for fall</label></div>
+      </div>
+      <div class="day">
+        <div class="day-header"><span class="day-name">Thu</span><span class="day-num">31</span></div>
+        <div class="tag tag-rest">Close out</div>
+        <div class="task"><input type="checkbox" id="t46"><label for="t46">July wins log — what did you accomplish?</label></div>
+        <div class="task"><input type="checkbox" id="t47"><label for="t47">Italy countdown: 46 days — trip prep list</label></div>
+        <div class="day-note">🌟 July done. August is the last USPS month.</div>
+      </div>
+      <div class="day light" style="display:flex;flex-direction:column;justify-content:center;align-items:center;color:#ccc;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;">Aug starts</div>
+        <div style="font-size:28px;margin-top:6px;">→</div>
+      </div>
+    </div>
+    <div class="week-summary">
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-cpf)"></div>CPF submitted ✓</div>
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-pipeline)"></div>August pipeline ready</div>
+      <div class="ws-item"><div class="ws-dot" style="background:var(--tag-usps)"></div>Deloitte transition begun</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="month-note">
+  <h3>July intentions</h3>
+  <ul>
+    <li>IAF CPF Stage 2 submitted by July 29 — the credential that unlocks the full Greer Collective positioning</li>
+    <li>6–8 consulting prospects contacted, 2+ warm conversations, at least 1 proposal out the door</li>
+    <li>Coaching demo inquiry sent to J. Michael Collins or Nancy Wolfson</li>
+    <li>Virtual facilitation contracts (Oct–Jan) in active conversation — protect health through the Italy trip</li>
+    <li>Weekends fully off. Fridays light. Mid-month check-in to adjust if energy dips.</li>
+  </ul>
+</div>
+
+<script>
+// Persist checkboxes
+document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+  const key = 'july26_' + cb.id;
+  cb.checked = localStorage.getItem(key) === 'true';
+  cb.closest('.task').classList.toggle('done', cb.checked);
+  cb.addEventListener('change', () => {
+    localStorage.setItem(key, cb.checked);
+    cb.closest('.task').classList.toggle('done', cb.checked);
+  });
+});
+</script>
+
+</body>
+</html>
