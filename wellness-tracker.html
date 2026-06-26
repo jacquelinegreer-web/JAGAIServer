@@ -53,6 +53,7 @@
       margin-top: 8px; width: 100%;
     }
     .save-btn:hover { background: #6a4aab; }
+    .save-btn:disabled { background: #b0a0d8; cursor: not-allowed; }
     .log-section { margin-top: 28px; }
     .log-section h2 { font-size: 1rem; font-weight: 600; color: #3b2a6e; margin-bottom: 12px; }
     .log-entry {
@@ -66,19 +67,30 @@
       position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
       background: #3b2a6e; color: white; padding: 10px 24px;
       border-radius: 20px; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s;
-      pointer-events: none;
+      pointer-events: none; z-index: 100;
     }
     .toast.show { opacity: 1; }
+    .toast.error { background: #c0392b; }
     .clear-btn {
       background: none; border: none; color: #aaa; font-size: 0.8rem;
       cursor: pointer; margin-left: auto; display: block; margin-top: 8px;
     }
     .clear-btn:hover { color: #e74c3c; }
+    .sync-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: #e8f5e9; color: #2e7d32; border-radius: 20px;
+      padding: 3px 10px; font-size: 0.75rem; font-weight: 600;
+      margin-left: 10px; vertical-align: middle;
+    }
+    .sync-badge.offline { background: #fff3e0; color: #e65100; }
+    .loading-overlay {
+      text-align: center; padding: 20px; color: #999; font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
 
-<h1>Jacqueline's Wellness Tracker</h1>
+<h1>Jacqueline's Wellness Tracker <span class="sync-badge" id="sync-badge">● Cloud Sync</span></h1>
 <p class="subtitle">Daily exercise & mental health log</p>
 
 <div class="date-nav">
@@ -193,34 +205,42 @@
   <textarea id="gratitude" placeholder="One thing that went well, or one thing you're grateful for..."></textarea>
 </div>
 
-<button class="save-btn" onclick="saveEntry()">Save Today's Entry</button>
+<button class="save-btn" id="save-btn" onclick="saveEntry()">Save Today's Entry</button>
 
 <!-- Log -->
 <div class="log-section">
   <h2>Your Log</h2>
-  <div id="log-container"></div>
+  <div id="log-container"><div class="loading-overlay">Loading your log...</div></div>
   <button class="clear-btn" onclick="clearLog()">Clear all log entries</button>
 </div>
 
 <div class="toast" id="toast">Saved!</div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
+  // ── Supabase config ──────────────────────────────────────────────────────────
+  const SUPABASE_URL = 'https://vkwhoicqasotanlkquoa.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2hvaWNxYXNvdGFubGtxdW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NjA1OTIsImV4cCI6MjA5MDEzNjU5Mn0.5LRCWzg2Bj6cMQCHgbNAXcJlm4Po97CbLl3v8PnPP-A';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // ── State ────────────────────────────────────────────────────────────────────
   let currentDateStr = getTodayStr();
   const selections = { mood: null, energy: null };
 
+  // ── Date helpers ─────────────────────────────────────────────────────────────
   function getTodayStr() {
     return new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
   }
 
   function formatDisplayDate(str) {
     const [y, m, d] = str.split('-');
-    const dt = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
-    return dt.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+    const dt = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
+    return dt.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   }
 
   function changeDate(delta) {
-    const [y,m,d] = currentDateStr.split('-').map(Number);
-    const dt = new Date(y, m-1, d);
+    const [y, m, d] = currentDateStr.split('-').map(Number);
+    const dt = new Date(y, m - 1, d);
     dt.setDate(dt.getDate() + delta);
     currentDateStr = dt.toLocaleDateString('en-CA');
     loadEntry();
@@ -231,117 +251,177 @@
     loadEntry();
   }
 
+  // ── UI helpers ───────────────────────────────────────────────────────────────
   function selectEmoji(type, btn) {
     document.querySelectorAll(`#${type}-row .emoji-btn`).forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
     selections[type] = btn.dataset.val;
   }
 
-  function saveEntry() {
-    const entry = {
-      mood: selections.mood,
-      energy: selections.energy,
-      moved: document.getElementById('moved').checked,
-      activityType: document.getElementById('activity-type').value,
-      duration: document.getElementById('duration').value,
-      exerciseNote: document.getElementById('exercise-note').value,
-      anxiety: document.getElementById('anxiety').checked,
-      brainFog: document.getElementById('brain-fog').checked,
-      focusWin: document.getElementById('focus-win').checked,
-      rest: document.getElementById('rest').checked,
-      mhNotes: document.getElementById('mh-notes').value,
-      sleepHours: document.getElementById('sleep-hours').value,
-      sleepQuality: document.getElementById('sleep-quality').value,
-      gratitude: document.getElementById('gratitude').value,
-    };
-
-    const data = getLog();
-    data[currentDateStr] = entry;
-    localStorage.setItem('wellness_log', JSON.stringify(data));
-    renderLog();
-    showToast('Saved!');
+  function moodEmoji(val) {
+    return ['', '😔', '😕', '😐', '🙂', '😄'][parseInt(val)] || '';
   }
 
-  function loadEntry() {
-    document.getElementById('current-date').textContent = formatDisplayDate(currentDateStr);
-    const data = getLog();
-    const e = data[currentDateStr] || {};
+  function energyEmoji(val) {
+    return ['', '🪫', '😴', '⚡', '💪', '🔥'][parseInt(val)] || '';
+  }
 
-    // reset emojis
-    selections.mood = e.mood || null;
-    selections.energy = e.energy || null;
-    ['mood','energy'].forEach(type => {
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.toggle('error', isError);
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  function setSyncBadge(online) {
+    const badge = document.getElementById('sync-badge');
+    if (online) {
+      badge.textContent = '● Cloud Sync';
+      badge.className = 'sync-badge';
+    } else {
+      badge.textContent = '● Offline';
+      badge.className = 'sync-badge offline';
+    }
+  }
+
+  // ── Supabase operations ──────────────────────────────────────────────────────
+  async function saveEntry() {
+    const btn = document.getElementById('save-btn');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    const row = {
+      log_date: currentDateStr,
+      mood: selections.mood ? parseInt(selections.mood) : null,
+      energy: selections.energy ? parseInt(selections.energy) : null,
+      exercise_done: document.getElementById('moved').checked,
+      exercise_type: document.getElementById('activity-type').value || null,
+      exercise_duration_min: parseInt(document.getElementById('duration').value) || null,
+      exercise_feeling: document.getElementById('exercise-note').value || null,
+      anxiety: document.getElementById('anxiety').checked,
+      brain_fog: document.getElementById('brain-fog').checked,
+      focus_win: document.getElementById('focus-win').checked,
+      meaningful_rest: document.getElementById('rest').checked,
+      mental_health_notes: document.getElementById('mh-notes').value || null,
+      sleep_hours: parseFloat(document.getElementById('sleep-hours').value) || null,
+      sleep_quality: document.getElementById('sleep-quality').value || null,
+      win_or_gratitude: document.getElementById('gratitude').value || null,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = await sb.from('wellness_logs').upsert(row, { onConflict: 'log_date' });
+
+    btn.disabled = false;
+    btn.textContent = 'Save Today\'s Entry';
+
+    if (error) {
+      console.error(error);
+      setSyncBadge(false);
+      showToast('Save failed — check your connection', true);
+    } else {
+      setSyncBadge(true);
+      showToast('Saved to cloud!');
+      renderLog();
+    }
+  }
+
+  async function loadEntry() {
+    document.getElementById('current-date').textContent = formatDisplayDate(currentDateStr);
+
+    const { data, error } = await sb
+      .from('wellness_logs')
+      .select('*')
+      .eq('log_date', currentDateStr)
+      .maybeSingle();
+
+    if (error) {
+      setSyncBadge(false);
+    } else {
+      setSyncBadge(true);
+    }
+
+    const e = data || {};
+
+    // Emojis
+    selections.mood = e.mood ? String(e.mood) : null;
+    selections.energy = e.energy ? String(e.energy) : null;
+    ['mood', 'energy'].forEach(type => {
       document.querySelectorAll(`#${type}-row .emoji-btn`).forEach(b => {
-        b.classList.toggle('selected', b.dataset.val === (type === 'mood' ? e.mood : e.energy));
+        const val = type === 'mood' ? selections.mood : selections.energy;
+        b.classList.toggle('selected', b.dataset.val === val);
       });
     });
 
-    document.getElementById('moved').checked = !!e.moved;
-    document.getElementById('activity-type').value = e.activityType || '';
-    document.getElementById('duration').value = e.duration || '';
-    document.getElementById('exercise-note').value = e.exerciseNote || '';
+    document.getElementById('moved').checked = !!e.exercise_done;
+    document.getElementById('activity-type').value = e.exercise_type || '';
+    document.getElementById('duration').value = e.exercise_duration_min || '';
+    document.getElementById('exercise-note').value = e.exercise_feeling || '';
     document.getElementById('anxiety').checked = !!e.anxiety;
-    document.getElementById('brain-fog').checked = !!e.brainFog;
-    document.getElementById('focus-win').checked = !!e.focusWin;
-    document.getElementById('rest').checked = !!e.rest;
-    document.getElementById('mh-notes').value = e.mhNotes || '';
-    document.getElementById('sleep-hours').value = e.sleepHours || '';
-    document.getElementById('sleep-quality').value = e.sleepQuality || '';
-    document.getElementById('gratitude').value = e.gratitude || '';
+    document.getElementById('brain-fog').checked = !!e.brain_fog;
+    document.getElementById('focus-win').checked = !!e.focus_win;
+    document.getElementById('rest').checked = !!e.meaningful_rest;
+    document.getElementById('mh-notes').value = e.mental_health_notes || '';
+    document.getElementById('sleep-hours').value = e.sleep_hours || '';
+    document.getElementById('sleep-quality').value = e.sleep_quality || '';
+    document.getElementById('gratitude').value = e.win_or_gratitude || '';
   }
 
-  function getLog() {
-    try { return JSON.parse(localStorage.getItem('wellness_log') || '{}'); } catch { return {}; }
-  }
-
-  function moodEmoji(val) {
-    return ['','😔','😕','😐','🙂','😄'][parseInt(val)] || '';
-  }
-  function energyEmoji(val) {
-    return ['','🪫','😴','⚡','💪','🔥'][parseInt(val)] || '';
-  }
-
-  function renderLog() {
-    const data = getLog();
+  async function renderLog() {
     const container = document.getElementById('log-container');
-    const sorted = Object.keys(data).sort((a,b) => b.localeCompare(a));
-    if (!sorted.length) { container.innerHTML = '<p style="color:#aaa;font-size:0.85rem;">No entries yet.</p>'; return; }
-    container.innerHTML = sorted.map(date => {
-      const e = data[date];
+    container.innerHTML = '<div class="loading-overlay">Loading your log...</div>';
+
+    const { data, error } = await sb
+      .from('wellness_logs')
+      .select('*')
+      .order('log_date', { ascending: false })
+      .limit(60);
+
+    if (error || !data) {
+      container.innerHTML = '<p style="color:#aaa;font-size:0.85rem;">Could not load log.</p>';
+      setSyncBadge(false);
+      return;
+    }
+
+    setSyncBadge(true);
+
+    if (!data.length) {
+      container.innerHTML = '<p style="color:#aaa;font-size:0.85rem;">No entries yet — save today\'s entry to get started.</p>';
+      return;
+    }
+
+    container.innerHTML = data.map(e => {
       const lines = [];
       if (e.mood) lines.push(`Mood: ${moodEmoji(e.mood)}`);
       if (e.energy) lines.push(`Energy: ${energyEmoji(e.energy)}`);
-      if (e.moved) lines.push(`Moved: ${e.activityType || 'yes'}${e.duration ? ' (' + e.duration + ' min)' : ''}`);
-      if (e.sleepHours) lines.push(`Sleep: ${e.sleepHours}h${e.sleepQuality ? ' — ' + e.sleepQuality : ''}`);
+      if (e.exercise_done) lines.push(`Moved: ${e.exercise_type || 'yes'}${e.exercise_duration_min ? ' (' + e.exercise_duration_min + ' min)' : ''}`);
+      if (e.sleep_hours) lines.push(`Sleep: ${e.sleep_hours}h${e.sleep_quality ? ' — ' + e.sleep_quality : ''}`);
       const flags = [];
       if (e.anxiety) flags.push('Anxiety');
-      if (e.brainFog) flags.push('Brain fog');
-      if (e.focusWin) flags.push('Focus win');
-      if (e.rest) flags.push('Rested');
+      if (e.brain_fog) flags.push('Brain fog');
+      if (e.focus_win) flags.push('Focus win');
+      if (e.meaningful_rest) flags.push('Rested');
       if (flags.length) lines.push(`Mental: ${flags.join(', ')}`);
-      if (e.gratitude) lines.push(`Gratitude: "${e.gratitude}"`);
+      if (e.win_or_gratitude) lines.push(`Gratitude: "${e.win_or_gratitude}"`);
       return `<div class="log-entry">
-        <div class="log-date">${formatDisplayDate(date)}</div>
+        <div class="log-date">${formatDisplayDate(e.log_date)}</div>
         ${lines.map(l => `<div class="log-line">${l}</div>`).join('')}
       </div>`;
     }).join('');
   }
 
-  function clearLog() {
-    if (confirm('Clear all log entries?')) {
-      localStorage.removeItem('wellness_log');
+  async function clearLog() {
+    if (!confirm('Delete all wellness log entries from the cloud? This cannot be undone.')) return;
+    const { error } = await sb.from('wellness_logs').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    if (error) {
+      showToast('Could not clear log', true);
+    } else {
+      showToast('Log cleared');
       renderLog();
     }
   }
 
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2000);
-  }
-
-  // Init
+  // ── Init ─────────────────────────────────────────────────────────────────────
   loadEntry();
   renderLog();
 </script>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPF Portfolio Tracker · Jacqueline Greer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #2c1a6e;
+  --purple-light: #7c5cbf;
+  --purple-pale: #ede8f7;
+  --gold: #b8922a;
+  --gold-pale: #faeeda;
+  --soft: #faf8f5;
+  --ink: #1a1a1a;
+  --muted: #888;
+  --border: #e8e2f0;
+  --green: #0f6e56;
+  --green-pale: #e0f5ee;
+  --red: #c0392b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--soft);
+  color: var(--ink);
+  font-size: 14px;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* Header */
+header {
+  max-width: 980px; margin: 0 auto 2rem;
+  border-bottom: 2px solid var(--purple);
+  padding-bottom: 1rem;
+  display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px;
+}
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; font-weight: 700; color: var(--purple);
+}
+header .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.stage-badge {
+  background: var(--purple); color: white;
+  padding: 8px 16px; border-radius: 20px;
+  font-size: 12px; font-weight: 600; text-align: center;
+}
+.stage-badge .sb-sub { font-size: 10px; color: #b8a8e8; margin-top: 2px; }
+
+/* Progress summary */
+.progress-bar-wrap {
+  max-width: 980px; margin: 0 auto 1.5rem;
+  background: white; border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px;
+}
+.progress-bar-wrap h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--purple); margin-bottom: 12px; }
+.comp-rows { display: flex; flex-direction: column; gap: 8px; }
+.comp-row { display: flex; align-items: center; gap: 10px; }
+.comp-label { font-size: 11px; font-weight: 600; color: var(--ink); width: 200px; flex-shrink: 0; }
+.comp-bar-outer { flex: 1; background: #f0ebfa; border-radius: 6px; height: 10px; }
+.comp-bar-inner { height: 10px; border-radius: 6px; background: var(--purple-light); transition: width 0.4s; }
+.comp-count { font-size: 11px; color: var(--muted); width: 40px; text-align: right; flex-shrink: 0; }
+
+/* Summary cards */
+.summary-grid {
+  max-width: 980px; margin: 0 auto 1.5rem;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;
+}
+.sum-card {
+  background: white; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+}
+.sum-card .sl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--purple-light); margin-bottom: 4px; }
+.sum-card .sv { font-size: 22px; font-weight: 700; color: var(--purple); }
+.sum-card .ss { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* Tabs */
+.tabs {
+  max-width: 980px; margin: 0 auto 1rem;
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.tab-btn {
+  padding: 8px 16px; border: 1.5px solid var(--border); border-radius: 20px;
+  background: white; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--muted);
+  transition: all 0.15s;
+}
+.tab-btn.on { background: var(--purple); color: white; border-color: var(--purple); }
+.tab-btn:hover:not(.on) { border-color: var(--purple-light); color: var(--purple); }
+
+/* Sessions table */
+.sessions-wrap { max-width: 980px; margin: 0 auto; }
+.session-card {
+  background: white; border: 1px solid var(--border); border-radius: 10px;
+  margin-bottom: 10px; overflow: hidden;
+}
+.session-card.status-completed { border-left: 4px solid var(--green); }
+.session-card.status-upcoming { border-left: 4px solid var(--gold); }
+.session-card.status-planned { border-left: 4px solid #ccc; }
+
+.sc-top {
+  padding: 14px 18px; display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 12px; cursor: pointer;
+}
+.sc-top:hover { background: #faf8ff; }
+.sc-left .sc-name { font-size: 14px; font-weight: 700; color: var(--purple); }
+.sc-left .sc-org { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.sc-left .sc-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.sc-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+.status-pill {
+  display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.pill-completed { background: var(--green-pale); color: var(--green); }
+.pill-upcoming { background: var(--gold-pale); color: var(--gold); }
+.pill-planned { background: #f0f0f0; color: #888; }
+
+.comp-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.comp-tag {
+  display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600;
+  background: var(--purple-pale); color: var(--purple);
+}
+
+.sc-detail {
+  display: none; padding: 0 18px 16px; border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.sc-detail.open { display: block; }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.dg-item .dl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 3px; }
+.dg-item .dv { font-size: 13px; color: var(--ink); }
+.notes-area {
+  width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 7px;
+  font-size: 12px; font-family: inherit; color: var(--ink);
+  background: var(--soft); resize: vertical; min-height: 60px;
+}
+.notes-area:focus { outline: none; border-color: var(--purple-light); }
+.save-note-btn {
+  margin-top: 6px; background: var(--purple); color: white; border: none;
+  border-radius: 7px; padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: pointer;
+}
+.save-note-btn:hover { background: #3d2a8e; }
+
+/* Add session */
+.add-section {
+  max-width: 980px; margin: 1.5rem auto 0;
+  background: white; border: 1px solid var(--border); border-radius: 10px; padding: 18px;
+}
+.add-section h3 { font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 14px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+.ff label { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 4px; }
+.ff input, .ff select, .ff textarea {
+  width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 7px;
+  font-size: 13px; font-family: inherit; color: var(--ink); background: var(--soft);
+}
+.ff input:focus, .ff select:focus, .ff textarea:focus { outline: none; border-color: var(--purple-light); }
+.comp-checkboxes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.comp-cb { display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer; }
+.comp-cb input { accent-color: var(--purple); }
+.add-btn {
+  width: 100%; background: var(--purple); color: white; border: none;
+  border-radius: 8px; padding: 11px; font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 8px;
+}
+.add-btn:hover { background: #3d2a8e; }
+
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--purple); color: white; padding: 10px 24px;
+  border-radius: 20px; font-size: 12px; opacity: 0; transition: opacity 0.3s;
+  pointer-events: none; z-index: 999;
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>CPF Portfolio Tracker</h1>
+    <div class="sub">IAF Certified Professional Facilitator · Jacqueline Greer · Stage 2 target: July 2026</div>
+  </div>
+  <div class="stage-badge">
+    Stage 2 Assessment<br>
+    <div class="sb-sub">Target: July 29, 2026</div>
+  </div>
+</header>
+
+<div class="summary-grid" id="summary-cards"></div>
+
+<div class="progress-bar-wrap">
+  <h3>Competency coverage</h3>
+  <div class="comp-rows" id="comp-progress"></div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn on" onclick="filterSessions('all', this)">All sessions</button>
+  <button class="tab-btn" onclick="filterSessions('completed', this)">Completed</button>
+  <button class="tab-btn" onclick="filterSessions('upcoming', this)">Upcoming</button>
+  <button class="tab-btn" onclick="filterSessions('planned', this)">Planned</button>
+  <button class="tab-btn" onclick="filterSessions('add', this)">+ Add session</button>
+</div>
+
+<div class="sessions-wrap" id="sessions-list"></div>
+<div class="add-section" id="add-section" style="display:none;">
+  <h3>Log a new facilitation session</h3>
+  <div class="form-grid">
+    <div class="ff"><label>Session / engagement name</label><input type="text" id="ns-name" placeholder="e.g. ALP 136 Module 7"></div>
+    <div class="ff"><label>Organization / client</label><input type="text" id="ns-org" placeholder="e.g. USPS / Deloitte"></div>
+  </div>
+  <div class="form-grid three">
+    <div class="ff"><label>Date</label><input type="date" id="ns-date"></div>
+    <div class="ff"><label>Participants</label><input type="number" id="ns-participants" placeholder="20" min="1"></div>
+    <div class="ff"><label>Status</label>
+      <select id="ns-status">
+        <option value="completed">Completed</option>
+        <option value="upcoming">Upcoming</option>
+        <option value="planned">Planned</option>
+      </select>
+    </div>
+  </div>
+  <div class="ff" style="margin-bottom:10px;">
+    <label>IAF competencies demonstrated</label>
+    <div class="comp-checkboxes">
+      <label class="comp-cb"><input type="checkbox" value="A"> A — Create collaborative client relationships</label>
+      <label class="comp-cb"><input type="checkbox" value="B"> B — Plan appropriate group processes</label>
+      <label class="comp-cb"><input type="checkbox" value="C"> C — Create and sustain a participatory environment</label>
+      <label class="comp-cb"><input type="checkbox" value="D"> D — Guide group to appropriate and useful outcomes</label>
+      <label class="comp-cb"><input type="checkbox" value="E"> E — Build and maintain professional knowledge</label>
+      <label class="comp-cb"><input type="checkbox" value="F"> F — Model positive professional attitude</label>
+    </div>
+  </div>
+  <div class="ff">
+    <label>Notes / evidence</label>
+    <textarea id="ns-notes" placeholder="Describe what you facilitated, methods used, outcomes achieved..."></textarea>
+  </div>
+  <button class="add-btn" onclick="addSession()">Save session</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const COMPS = {
+  A: 'Create collaborative client relationships',
+  B: 'Plan appropriate group processes',
+  C: 'Create and sustain a participatory environment',
+  D: 'Guide group to appropriate and useful outcomes',
+  E: 'Build and maintain professional knowledge',
+  F: 'Model positive professional attitude',
+};
+
+const DEFAULT_SESSIONS = [
+  {
+    id: 1, name: 'ALP 136 Virtual Kickoff', org: 'USPS / Deloitte', date: '2026-01-15',
+    participants: 35, status: 'completed',
+    competencies: ['A','B','C','D','F'],
+    notes: 'Launched ALP cohort 136. Set norms, built relational trust among senior USPS leaders. Partnered with co-facilitator Keihan Sedghi.'
+  },
+  {
+    id: 2, name: 'ALP 136 Module 1 — Adaptive Leadership', org: 'USPS / Deloitte', date: '2026-01-28',
+    participants: 35, status: 'completed',
+    competencies: ['B','C','D','F'],
+    notes: 'Facilitated Adaptive Leadership module. Used Ripple Effect Mapping and small group debrief structures.'
+  },
+  {
+    id: 3, name: 'ALP 136 Module 2 — Stakeholder Analysis', org: 'USPS / Deloitte', date: '2026-02-11',
+    participants: 35, status: 'completed',
+    competencies: ['B','C','D'],
+    notes: 'Stakeholder mapping and influence analysis. Participants developed real-world stakeholder plans.'
+  },
+  {
+    id: 4, name: 'ALP 136 Virtual Checkpoint 1', org: 'USPS / Deloitte', date: '2026-02-25',
+    participants: 35, status: 'completed',
+    competencies: ['A','C','D','F'],
+    notes: 'Mid-program checkpoint. Facilitated reflection on progress, adjusted group dynamics, surfaced emerging challenges.'
+  },
+  {
+    id: 5, name: 'ALP 136 Module 3 — SOAP Framework', org: 'USPS / Deloitte', date: '2026-03-10',
+    participants: 35, status: 'completed',
+    competencies: ['B','C','D','E'],
+    notes: 'Situation-Opportunity-Action-Plan framework. Participants applied to real USPS initiatives.'
+  },
+  {
+    id: 6, name: 'ALP 136 Module 4 — Executive Presence', org: 'USPS / Deloitte', date: '2026-03-24',
+    participants: 35, status: 'completed',
+    competencies: ['C','D','E','F'],
+    notes: 'Body language, communication clarity, and authentic presence for senior leaders.'
+  },
+  {
+    id: 7, name: 'ALP 136 Virtual Checkpoint 2', org: 'USPS / Deloitte', date: '2026-04-14',
+    participants: 35, status: 'completed',
+    competencies: ['A','C','D','F'],
+    notes: 'Final checkpoint before capstone. Group reflection, peer coaching circles, action planning.'
+  },
+  {
+    id: 8, name: 'ALP 136 Module 5 — Leading Through Change', org: 'USPS / Deloitte', date: '2026-04-28',
+    participants: 35, status: 'completed',
+    competencies: ['B','C','D','F'],
+    notes: 'Change leadership models and USPS-specific application. Kotter and Bridges frameworks.'
+  },
+  {
+    id: 9, name: 'Urban Teachers ED Retreat', org: 'Urban Teachers / City Teaching Alliance', date: '2022-06-15',
+    participants: 22, status: 'completed',
+    competencies: ['A','B','C','D','F'],
+    notes: 'Executive Director retreat for senior leadership team. Strategic planning facilitation, culture reset, and visioning session.'
+  },
+  {
+    id: 10, name: 'Urban Teachers Program Team Retreat', org: 'Urban Teachers / City Teaching Alliance', date: '2021-08-10',
+    participants: 18, status: 'completed',
+    competencies: ['A','B','C','D','E','F'],
+    notes: 'Co-facilitated with Nina Cameron. Full-day program team retreat covering team agreements, strategic priorities, and relational reset.'
+  },
+  {
+    id: 11, name: 'Lead for Delaware — Human Capital 101', org: 'Lead for Delaware', date: '2017-05-01',
+    participants: 20, status: 'completed',
+    competencies: ['B','C','D','E'],
+    notes: 'Multi-session Human Capital 101 for Delaware school principals (cohorts 2015–2017, 15–25 principals per cohort). Talent strategy, instructional staffing, and performance culture.'
+  },
+  {
+    id: 12, name: 'ALP 136 Capstone & Close', org: 'USPS / Deloitte', date: '2026-08-05',
+    participants: 35, status: 'upcoming',
+    competencies: ['A','B','C','D','F'],
+    notes: 'Capstone presentations and program close. Participants present action projects to senior USPS leadership.'
+  },
+];
+
+let sessions = [];
+let currentFilter = 'all';
+
+function load() {
+  const saved = localStorage.getItem('gc_cpf_sessions');
+  sessions = saved ? JSON.parse(saved) : [...DEFAULT_SESSIONS];
+}
+
+function save() {
+  localStorage.setItem('gc_cpf_sessions', JSON.stringify(sessions));
+}
+
+function fmt(d) {
+  if (!d) return '—';
+  const [y, m, day] = d.split('-');
+  return new Date(+y, +m - 1, +day).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function renderSummary() {
+  const completed = sessions.filter(s => s.status === 'completed').length;
+  const total = sessions.length;
+  const allComps = new Set(sessions.filter(s => s.status === 'completed').flatMap(s => s.competencies));
+  const minMet = completed >= 7;
+
+  document.getElementById('summary-cards').innerHTML = `
+    <div class="sum-card">
+      <div class="sl">Total sessions</div>
+      <div class="sv">${total}</div>
+      <div class="ss">7 minimum required</div>
+    </div>
+    <div class="sum-card">
+      <div class="sl">Completed</div>
+      <div class="sv" style="color:${minMet ? 'var(--green)' : 'var(--red)'};">${completed}</div>
+      <div class="ss">${minMet ? '✓ Minimum met!' : `Need ${7 - completed} more`}</div>
+    </div>
+    <div class="sum-card">
+      <div class="sl">Competencies</div>
+      <div class="sv">${allComps.size} / 6</div>
+      <div class="ss">${allComps.size === 6 ? '✓ All covered!' : 'Missing: ' + Object.keys(COMPS).filter(c => !allComps.has(c)).join(', ')}</div>
+    </div>
+    <div class="sum-card">
+      <div class="sl">Stage 2 target</div>
+      <div class="sv" style="font-size:14px;color:var(--gold);">Jul 29</div>
+      <div class="ss">2026</div>
+    </div>
+  `;
+
+  // Competency bars
+  const compCounts = {};
+  Object.keys(COMPS).forEach(c => compCounts[c] = 0);
+  sessions.filter(s => s.status === 'completed').forEach(s => s.competencies.forEach(c => compCounts[c]++));
+  const max = Math.max(...Object.values(compCounts), 1);
+
+  document.getElementById('comp-progress').innerHTML = Object.entries(COMPS).map(([key, label]) => `
+    <div class="comp-row">
+      <div class="comp-label">${key} — ${label.split(' ').slice(0, 4).join(' ')}…</div>
+      <div class="comp-bar-outer">
+        <div class="comp-bar-inner" style="width:${Math.round((compCounts[key]/max)*100)}%"></div>
+      </div>
+      <div class="comp-count">${compCounts[key]} sess.</div>
+    </div>
+  `).join('');
+}
+
+function renderSessions() {
+  const filtered = currentFilter === 'all' ? sessions
+    : sessions.filter(s => s.status === currentFilter);
+
+  const sorted = [...filtered].sort((a, b) => {
+    const order = { completed: 0, upcoming: 1, planned: 2 };
+    if (order[a.status] !== order[b.status]) return order[a.status] - order[b.status];
+    return (b.date || '').localeCompare(a.date || '');
+  });
+
+  document.getElementById('sessions-list').innerHTML = sorted.map((s, i) => {
+    const pillCls = s.status === 'completed' ? 'pill-completed' : s.status === 'upcoming' ? 'pill-upcoming' : 'pill-planned';
+    const pillLabel = s.status === 'completed' ? 'Completed' : s.status === 'upcoming' ? 'Upcoming' : 'Planned';
+    return `
+      <div class="session-card status-${s.status}" id="card-${s.id}">
+        <div class="sc-top" onclick="toggleDetail(${s.id})">
+          <div class="sc-left">
+            <div class="sc-name">${s.name}</div>
+            <div class="sc-org">${s.org}</div>
+            <div class="sc-date">${fmt(s.date)} · ${s.participants} participants</div>
+          </div>
+          <div class="sc-right">
+            <span class="status-pill ${pillCls}">${pillLabel}</span>
+            <div class="comp-tags">${s.competencies.map(c => `<span class="comp-tag">${c}</span>`).join('')}</div>
+          </div>
+        </div>
+        <div class="sc-detail" id="detail-${s.id}">
+          <div class="detail-grid">
+            <div class="dg-item"><div class="dl">Competencies</div><div class="dv">${s.competencies.map(c => `<strong>${c}</strong> — ${COMPS[c]}`).join('<br>')}</div></div>
+            <div class="dg-item"><div class="dl">Evidence / notes</div>
+              <textarea class="notes-area" id="note-${s.id}" rows="3">${s.notes || ''}</textarea>
+              <button class="save-note-btn" onclick="saveNote(${s.id})">Save notes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('') || '<div style="text-align:center;padding:30px;color:#aaa;font-size:13px;">No sessions in this category yet.</div>';
+}
+
+function toggleDetail(id) {
+  const el = document.getElementById(`detail-${id}`);
+  el.classList.toggle('open');
+}
+
+function saveNote(id) {
+  const s = sessions.find(s => s.id === id);
+  s.notes = document.getElementById(`note-${id}`).value;
+  save();
+  toast('Notes saved!');
+}
+
+function filterSessions(filter, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+
+  if (filter === 'add') {
+    document.getElementById('sessions-list').style.display = 'none';
+    document.getElementById('add-section').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('sessions-list').style.display = 'block';
+  document.getElementById('add-section').style.display = 'none';
+  currentFilter = filter;
+  renderSessions();
+}
+
+function addSession() {
+  const name = document.getElementById('ns-name').value.trim();
+  const org = document.getElementById('ns-org').value.trim();
+  const date = document.getElementById('ns-date').value;
+  const participants = parseInt(document.getElementById('ns-participants').value) || 0;
+  const status = document.getElementById('ns-status').value;
+  const notes = document.getElementById('ns-notes').value.trim();
+  const competencies = [...document.querySelectorAll('.comp-checkboxes input:checked')].map(cb => cb.value);
+
+  if (!name || !org) { alert('Please fill in session name and organization.'); return; }
+
+  sessions.push({ id: Date.now(), name, org, date, participants, status, competencies, notes });
+  save();
+  renderSummary();
+  currentFilter = 'all';
+  document.querySelectorAll('.tab-btn')[0].click();
+  toast('Session added!');
+
+  // Reset form
+  ['ns-name','ns-org','ns-date','ns-participants','ns-notes'].forEach(id => document.getElementById(id).value = '');
+  document.querySelectorAll('.comp-checkboxes input').forEach(cb => cb.checked = false);
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+load();
+renderSummary();
+renderSessions();
+</script>
+</body>
+</html>
