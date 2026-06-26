@@ -1,257 +1,637 @@
 <!DOCTYPE html>
-<script type="application/json" id="cowork-artifact-meta">
-{
-  "name": "Greer Command Center",
-  "schemaVersion": 1,
-  "description": "Live command center dashboard pulling from Google Calendar (this week's events), Gmail (unread inbox), ClickUp (open priority tasks), and HubSpot (contact pipeline). Refreshes on each open.",
-  "mcpTools": [
-    "mcp__904c7984-f3ef-4b29-b8e6-41d4869bd7c0__list_events",
-    "mcp__44db0556-6d06-496d-9632-0e38105abefe__search_threads",
-    "mcp__071ff1e4-0397-47e5-b6d2-a190f34ac554__clickup_filter_tasks",
-    "mcp__7c0956dc-f161-4934-983b-5c9cb3e553ea__search_crm_objects"
-  ],
-  "mcpServerNames": [
-    "Google Calendar",
-    "Gmail",
-    "ClickUp",
-    "HubSpot"
-  ]
-}
-</script>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Greer Collective Command Center</title>
-<style>
-:root { color-scheme: light; }
-* { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Greer Collective | Command Center</title>
+  <style>
+    :root {
+      --bg: #f5f0eb;
+      --purple: #3b2a6e;
+      --purple-mid: #7c5cbf;
+      --purple-light: #e8e2f7;
+      --purple-pale: #f3f0fa;
+      --card: #ffffff;
+      --text: #2d2d2d;
+      --muted: #888;
+      --border: #e0dae8;
+      --green: #2e7d32;
+      --green-bg: #e8f5e9;
+      --orange: #d84c00;
+      --orange-bg: #fff3e0;
+      --red: #c0392b;
+      --red-bg: #fdf0ee;
+      --italy: #008c45;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
 
-body {
-  font-family: Arial, sans-serif;
-  background: #FAF6EF;
-  color: #2C1A2E;
-  min-height: 100vh;
-}
+    /* HEADER */
+    .hdr { background: var(--purple); color: white; padding: 14px 22px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .hdr h1 { font-size: 1rem; font-weight: 700; letter-spacing: .02em; }
+    .hdr p { font-size: .78rem; opacity: .75; margin-top: 2px; }
+    .hdr-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .italy-pill { background: rgba(255,255,255,.18); border-radius: 20px; padding: 4px 12px; font-size: .78rem; font-weight: 600; }
+    .italy-pill b { font-size: 1rem; }
+    .sync-badge { font-size: .72rem; padding: 3px 9px; border-radius: 20px; background: rgba(255,255,255,.15); }
+    .sync-badge.ok { color: #a5d6a7; }
+    .sync-badge.err { color: #ef9a9a; }
+    .refresh-btn { background: rgba(255,255,255,.15); border: none; border-radius: 7px; color: white; padding: 5px 12px; font-size: .82rem; cursor: pointer; }
+    .refresh-btn:hover { background: rgba(255,255,255,.28); }
 
-.header {
-  background: #2C1A2E;
-  color: #FAF6EF;
-  padding: 14px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.header-left h1 {
-  font-size: 15px;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-.header-left .tagline {
-  font-size: 11px;
-  color: #B8922A;
-  letter-spacing: 1px;
-  margin-top: 2px;
-}
-.header-date {
-  font-size: 12px;
-  color: #D4B870;
-  text-align: right;
-}
+    /* STATS BAR */
+    .stats { display: grid; grid-template-columns: repeat(4,1fr); border-bottom: 1px solid var(--border); }
+    .stat { background: white; padding: 10px 16px; text-align: center; border-right: 1px solid var(--border); }
+    .stat:last-child { border-right: none; }
+    .stat .n { font-size: 1.5rem; font-weight: 700; color: var(--purple); }
+    .stat .l { font-size: .65rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-top: 1px; }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  padding: 14px;
-}
+    /* SETUP BANNER */
+    .setup-banner { background: var(--orange-bg); border-left: 4px solid var(--orange); padding: 10px 20px; font-size: .85rem; display: none; }
+    .setup-banner strong { color: var(--orange); }
 
-.card {
-  background: white;
-  border-radius: 5px;
-  border-top: 3px solid #B8922A;
-  padding: 14px;
-  box-shadow: 0 1px 6px rgba(44,26,46,0.07);
-  min-height: 200px;
-}
+    /* MAIN GRID */
+    .grid { display: grid; grid-template-columns: 2fr 1fr; grid-template-areas: "cal well" "tasks tasks" "pipe jv" "italy budget"; gap: 14px; padding: 18px; max-width: 1400px; margin: 0 auto; }
+    @media(max-width:900px) { .grid { grid-template-columns: 1fr; grid-template-areas: "well" "cal" "tasks" "pipe" "jv" "italy" "budget"; } }
+    @media(max-width:580px) { .stats { grid-template-columns: repeat(2,1fr); } .grid { padding: 10px; gap: 10px; } }
 
-.card-title {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #2C1A2E;
-  font-weight: bold;
-  margin-bottom: 10px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #F3EDE3;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.card-count {
-  font-weight: normal;
-  color: #B8922A;
-  font-size: 10px;
-  letter-spacing: 0;
-}
+    /* CARDS */
+    .card { background: var(--card); border-radius: 13px; padding: 16px 18px; box-shadow: 0 1px 5px rgba(0,0,0,.06); }
+    .card-cal  { grid-area: cal; }
+    .card-well { grid-area: well; }
+    .card-tasks{ grid-area: tasks; }
+    .card-pipe { grid-area: pipe; }
+    .card-jv   { grid-area: jv; }
+    .card-italy{ grid-area: italy; }
+    .card-budget{ grid-area: budget; }
+    .ch { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .ct { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--purple); }
+    .ca { font-size: .76rem; color: var(--purple-mid); background: none; border: none; cursor: pointer; text-decoration: none; }
+    .ca:hover { text-decoration: underline; }
 
-.loading { color: #bbb; font-size: 12px; font-style: italic; padding: 8px 0; }
-.error-msg { color: #c0392b; font-size: 12px; padding: 8px 0; }
-.empty { color: #ccc; font-size: 12px; font-style: italic; text-align: center; padding: 20px 0; }
+    /* CALENDAR */
+    .cal-wrap { border-radius: 8px; overflow: hidden; background: var(--purple-pale); min-height: 260px; display: flex; align-items: center; justify-content: center; }
+    .cal-wrap iframe { width: 100%; height: 320px; border: none; }
+    .cal-prompt { text-align: center; padding: 28px 20px; }
+    .cal-prompt .ico { font-size: 2rem; margin-bottom: 8px; }
+    .cal-prompt p { color: var(--muted); font-size: .83rem; margin-bottom: 12px; line-height: 1.5; }
+    .setup-form { margin-top: 12px; }
+    .setup-form p { font-size: .78rem; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
+    .setup-form code { background: var(--purple-pale); padding: 1px 5px; border-radius: 4px; font-size: .8rem; }
+    .input-row { display: flex; gap: 7px; }
+    .input-row input { flex: 1; border: 1.5px solid var(--border); border-radius: 7px; padding: 7px 10px; font-size: .85rem; }
+    .btn-purple { background: var(--purple-mid); color: white; border: none; border-radius: 7px; padding: 7px 14px; font-size: .85rem; font-weight: 600; cursor: pointer; }
+    .btn-purple:hover { background: var(--purple); }
+    .btn-light { background: var(--purple-light); color: var(--purple); border: none; border-radius: 7px; padding: 7px 14px; font-size: .83rem; font-weight: 600; cursor: pointer; }
+    .btn-light:hover { background: #d5cdf0; }
 
-/* CALENDAR */
-.event-row {
-  display: flex;
-  gap: 10px;
-  padding: 7px 0;
-  border-bottom: 1px solid #F3EDE3;
-  align-items: flex-start;
-}
-.event-row:last-child { border-bottom: none; }
-.event-when {
-  min-width: 60px;
-  flex-shrink: 0;
-}
-.event-day { font-size: 10px; color: #B8922A; font-weight: bold; text-transform: uppercase; }
-.event-time { font-size: 11px; color: #888; margin-top: 1px; }
-.event-title { font-size: 13px; color: #2C1A2E; line-height: 1.35; padding-top: 1px; }
-.event-has-meeting { font-size: 10px; color: #999; margin-top: 2px; }
+    /* WELLNESS */
+    .well-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    .chip { background: var(--purple-pale); border-radius: 20px; padding: 5px 11px; }
+    .chip .cl { display: block; font-size: .65rem; color: var(--muted); }
+    .chip .cv { font-weight: 600; font-size: .85rem; color: var(--purple); }
+    .well-flags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .flag { font-size: .7rem; padding: 2px 8px; border-radius: 11px; background: var(--purple-light); color: var(--purple); }
+    .flag.alert { background: var(--red-bg); color: var(--red); }
+    .flag.good  { background: var(--green-bg); color: var(--green); }
+    .well-empty { text-align: center; padding: 20px 0; }
+    .well-empty .ico { font-size: 1.8rem; display: block; margin-bottom: 6px; }
+    .well-empty p { color: var(--muted); font-size: .83rem; }
+    .well-quote { font-size: .78rem; color: var(--muted); font-style: italic; margin-top: 10px; line-height: 1.45; }
 
-/* TASKS */
-.task-row {
-  display: flex;
-  gap: 8px;
-  padding: 7px 0;
-  border-bottom: 1px solid #F3EDE3;
-  align-items: flex-start;
-}
-.task-row:last-child { border-bottom: none; }
-.p-badge {
-  font-size: 9px;
-  font-weight: bold;
-  text-transform: uppercase;
-  padding: 2px 5px;
-  border-radius: 3px;
-  white-space: nowrap;
-  margin-top: 2px;
-  min-width: 46px;
-  text-align: center;
-  flex-shrink: 0;
-}
-.p-urgent { background: #fdecea; color: #c0392b; }
-.p-high { background: #fef3df; color: #B8922A; }
-.p-normal { background: #F3EDE3; color: #555; }
-.task-name {
-  font-size: 12px;
-  color: #2C1A2E;
-  line-height: 1.4;
-}
-.task-name a { color: inherit; text-decoration: none; }
-.task-name a:hover { text-decoration: underline; }
-.task-meta { font-size: 10px; color: #aaa; margin-top: 2px; }
-.task-overdue { color: #c0392b; }
+    /* TASKS */
+    .tasks-setup { padding: 18px; text-align: center; }
+    .tasks-setup p { color: var(--muted); font-size: .84rem; margin-bottom: 12px; line-height: 1.5; }
+    .tasks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 0 20px; }
+    .tg-label { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 10px 0 5px; }
+    .task { display: flex; align-items: flex-start; gap: 9px; padding: 7px 8px; border-radius: 7px; transition: background .12s; }
+    .task:hover { background: var(--purple-pale); }
+    .task input[type=checkbox] { width: 15px; height: 15px; accent-color: var(--purple-mid); margin-top: 2px; flex-shrink: 0; cursor: pointer; }
+    .task-body { flex: 1; }
+    .task-name { font-size: .86rem; line-height: 1.3; }
+    .task-meta { display: flex; gap: 6px; margin-top: 3px; flex-wrap: wrap; }
+    .tag { font-size: .68rem; padding: 1px 6px; border-radius: 9px; background: var(--purple-light); color: var(--purple); }
+    .tag.ov { background: var(--red-bg); color: var(--red); }
+    .tag.td { background: var(--orange-bg); color: var(--orange); }
+    .tag.ok { background: var(--green-bg); color: var(--green); }
+    .task.done { opacity: .4; }
+    .task.done .task-name { text-decoration: line-through; }
 
-/* EMAIL */
-.email-row {
-  padding: 7px 0;
-  border-bottom: 1px solid #F3EDE3;
-}
-.email-row:last-child { border-bottom: none; }
-.email-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 6px;
-}
-.email-sender { font-size: 12px; font-weight: bold; color: #2C1A2E; flex-shrink: 0; }
-.email-date { font-size: 10px; color: #bbb; white-space: nowrap; }
-.email-subject {
-  font-size: 11px;
-  color: #666;
-  margin-top: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-.star { color: #B8922A; margin-right: 2px; }
+    /* PIPELINE */
+    .pipe-item { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-bottom: 1px solid var(--border); }
+    .pipe-item:last-child { border-bottom: none; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: #90a4ae; }
+    .dot.a { background: var(--green); }
+    .dot.p { background: var(--orange); }
+    .dot.w { background: #f9a825; }
+    .pipe-name { flex: 1; font-size: .86rem; font-weight: 600; }
+    .pipe-meta { font-size: .72rem; color: var(--muted); }
+    .pipe-badge { font-size: .68rem; padding: 2px 7px; border-radius: 9px; background: var(--purple-light); color: var(--purple); white-space: nowrap; }
+    .pipe-badge.a { background: var(--green-bg); color: var(--green); }
+    .pipe-badge.p { background: var(--orange-bg); color: var(--orange); }
+    .section-lbl { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 10px 0 5px; }
+    .empty { color: var(--muted); font-size: .83rem; padding: 14px 0; text-align: center; }
 
-/* HUBSPOT */
-.hs-stat-row {
-  display: flex;
-  gap: 20px;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #F3EDE3;
-}
-.hs-stat .n { font-size: 26px; font-weight: bold; color: #2C1A2E; line-height: 1; }
-.hs-stat .l { font-size: 9px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+    /* JV */
+    .jv-funnel { display: flex; gap: 6px; margin-bottom: 12px; }
+    .jv-stage { flex: 1; text-align: center; background: var(--purple-pale); border-radius: 8px; padding: 8px 5px; }
+    .jv-stage .n { font-size: 1.3rem; font-weight: 700; color: var(--purple); }
+    .jv-stage .l { font-size: .62rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-top: 1px; }
+    .jv-stage.cb { background: var(--orange-bg); }
+    .jv-stage.cb .n { color: var(--orange); }
+    .jv-stage.bk { background: var(--green-bg); }
+    .jv-stage.bk .n { color: var(--green); }
+    .add-row { display: flex; gap: 6px; margin-top: 10px; }
+    .add-row input, .add-row select { flex: 1; border: 1.5px solid var(--border); border-radius: 6px; padding: 6px 9px; font-size: .8rem; font-family: inherit; }
+    .add-btn { background: var(--purple-mid); color: white; border: none; border-radius: 6px; padding: 6px 12px; font-size: .85rem; cursor: pointer; }
 
-.contact-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 0;
-  border-bottom: 1px solid #F3EDE3;
-  gap: 8px;
-}
-.contact-row:last-child { border-bottom: none; }
-.contact-name { font-size: 12px; color: #2C1A2E; }
-.contact-email { font-size: 10px; color: #aaa; margin-top: 1px; }
-.stage-pill {
-  font-size: 9px;
-  padding: 2px 7px;
-  border-radius: 10px;
-  background: #F3EDE3;
-  color: #2C1A2E;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
+    /* ITALY */
+    .progress-track { background: var(--border); border-radius: 4px; height: 6px; margin-bottom: 12px; overflow: hidden; }
+    .progress-bar { height: 100%; background: var(--italy); border-radius: 4px; transition: width .4s; }
+    .cat-filters { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+    .cf { font-size: .72rem; padding: 3px 9px; border-radius: 11px; border: 1.5px solid var(--border); background: none; cursor: pointer; color: var(--muted); }
+    .cf.on { background: var(--purple-light); border-color: var(--purple-mid); color: var(--purple); }
+    .prep-item { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+    .prep-item:last-child { border-bottom: none; }
+    .prep-item input[type=checkbox] { width: 14px; height: 14px; accent-color: var(--italy); margin-top: 3px; flex-shrink: 0; cursor: pointer; }
+    .prep-text { font-size: .84rem; line-height: 1.3; }
+    .prep-sub { font-size: .68rem; color: var(--muted); margin-top: 1px; }
+    .prep-item.dn .prep-text { color: var(--muted); text-decoration: line-through; }
 
-.footer {
-  text-align: center;
-  font-size: 10px;
-  color: #ccc;
-  padding: 10px;
-  letter-spacing: 0.5px;
-}
-</style>
+    /* BUDGET */
+    .bud-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: .86rem; }
+    .bud-row:last-of-type { border-bottom: none; }
+    .bud-amt { font-weight: 600; color: var(--purple); }
+    .bud-amt.pos { color: var(--green); }
+    .bud-amt.neg { color: var(--red); }
+    .quick-links { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+    .ql { font-size: .78rem; padding: 5px 11px; border-radius: 7px; background: var(--purple-pale); color: var(--purple); text-decoration: none; }
+    .ql:hover { background: var(--purple-light); }
+
+    /* LOADING / TOAST */
+    .loading { color: var(--muted); font-size: .83rem; padding: 14px 0; }
+    .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--purple); color: white; padding: 9px 22px; border-radius: 20px; font-size: .86rem; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+    .toast.show { opacity: 1; }
+    .toast.err { background: var(--red); }
+  </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-left">
-    <h1>The Greer Collective</h1>
-    <div class="tagline">Command Center</div>
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <h1>Greer Collective &nbsp;·&nbsp; Command Center</h1>
+    <p id="hdr-date">Loading...</p>
   </div>
-  <div class="header-date" id="header-date"></div>
+  <div class="hdr-right">
+    <div class="italy-pill">🇮🇹 Italy in <b id="italy-days">—</b> days</div>
+    <span class="sync-badge ok" id="sync-badge">● Live</span>
+    <button class="refresh-btn" onclick="refreshAll()">↻ Refresh</button>
+  </div>
 </div>
 
+<!-- SETUP BANNER -->
+<div class="setup-banner" id="setup-banner">
+  ⚙️ <strong>One step left:</strong> Add your ClickUp API token in the Tasks panel below to activate live task sync.
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="n" id="s-clients">—</div><div class="l">Active Clients</div></div>
+  <div class="stat"><div class="n" id="s-tasks">—</div><div class="l">Open Tasks</div></div>
+  <div class="stat"><div class="n" id="s-auditions">—</div><div class="l">Auditions Active</div></div>
+  <div class="stat"><div class="n" id="s-italy">—</div><div class="l">Italy Prep Done</div></div>
+</div>
+
+<!-- MAIN GRID -->
 <div class="grid">
-  <div class="card" id="card-cal">
-    <div class="card-title">This Week <span class="card-count" id="cal-count"></span></div>
-    <div class="loading">Loading calendar...</div>
+
+  <!-- CALENDAR -->
+  <div class="card card-cal">
+    <div class="ch">
+      <span class="ct">📅 This Week</span>
+      <button class="ca" onclick="toggleCalSetup()">⚙ Connect Calendar</button>
+    </div>
+    <div class="cal-wrap" id="cal-wrap">
+      <div class="cal-prompt" id="cal-prompt">
+        <div class="ico">📅</div>
+        <p>Connect your Google Calendar for a live week view.</p>
+        <button class="btn-light" onclick="toggleCalSetup()">Connect Google Calendar</button>
+      </div>
+    </div>
+    <div class="setup-form" id="cal-form" style="display:none;">
+      <p>In Google Calendar: click ⚙️ → Settings → select your calendar → scroll to <code>Integrate calendar</code> → copy the iframe <code>src</code> URL and paste it here.</p>
+      <div class="input-row">
+        <input type="text" id="cal-input" placeholder="https://calendar.google.com/calendar/embed?src=..."/>
+        <button class="btn-purple" onclick="saveCalendar()">Save</button>
+      </div>
+    </div>
   </div>
-  <div class="card" id="card-tasks">
-    <div class="card-title">Priority Tasks <span class="card-count" id="task-count"></span></div>
-    <div class="loading">Loading tasks...</div>
+
+  <!-- WELLNESS -->
+  <div class="card card-well">
+    <div class="ch">
+      <span class="ct">💜 Wellness Today</span>
+      <a class="ca" href="wellness-tracker.html">Open Tracker →</a>
+    </div>
+    <div id="well-body"><div class="loading">Loading…</div></div>
   </div>
-  <div class="card" id="card-email">
-    <div class="card-title">Inbox <span class="card-count" id="email-count"></span></div>
-    <div class="loading">Loading email...</div>
+
+  <!-- TASKS -->
+  <div class="card card-tasks">
+    <div class="ch">
+      <span class="ct">✅ ClickUp Tasks</span>
+      <span id="tasks-sync" style="font-size:.7rem;color:var(--muted);"></span>
+    </div>
+    <div id="tasks-body"><div class="loading">Loading…</div></div>
   </div>
-  <div class="card" id="card-hs">
-    <div class="card-title">HubSpot Pipeline <span class="card-count" id="hs-count"></span></div>
-    <div class="loading">Loading contacts...</div>
+
+  <!-- PIPELINE -->
+  <div class="card card-pipe">
+    <div class="ch">
+      <span class="ct">🧭 Greer Collective Pipeline</span>
+    </div>
+    <div id="pipe-body"><div class="loading">Loading…</div></div>
   </div>
+
+  <!-- JACQUIEVOICE -->
+  <div class="card card-jv">
+    <div class="ch">
+      <span class="ct">🎙️ JacquieVoice</span>
+    </div>
+    <div id="jv-body"><div class="loading">Loading…</div></div>
+    <div class="add-row">
+      <input type="text" id="jv-name" placeholder="Project or client name"/>
+      <select id="jv-platform">
+        <option>Voice123</option>
+        <option>Casting Networks</option>
+        <option>Direct</option>
+        <option>Other</option>
+      </select>
+      <button class="add-btn" onclick="addAudition()">+</button>
+    </div>
+  </div>
+
+  <!-- ITALY PREP -->
+  <div class="card card-italy">
+    <div class="ch">
+      <span class="ct">🇮🇹 Italy Prep · Sept 15</span>
+      <span id="italy-lbl" style="font-size:.75rem;color:var(--muted);"></span>
+    </div>
+    <div class="progress-track"><div class="progress-bar" id="italy-bar" style="width:0%"></div></div>
+    <div class="cat-filters">
+      <button class="cf on" data-c="All" onclick="filterItaly(this)">All</button>
+      <button class="cf" data-c="Medical" onclick="filterItaly(this)">Medical</button>
+      <button class="cf" data-c="Exercise" onclick="filterItaly(this)">Exercise</button>
+      <button class="cf" data-c="Logistics" onclick="filterItaly(this)">Logistics</button>
+      <button class="cf" data-c="Packing" onclick="filterItaly(this)">Packing</button>
+    </div>
+    <div id="italy-body"><div class="loading">Loading…</div></div>
+  </div>
+
+  <!-- BUDGET -->
+  <div class="card card-budget">
+    <div class="ch">
+      <span class="ct">💰 Budget Overview</span>
+    </div>
+    <div id="budget-body"><div class="loading">Loading…</div></div>
+    <div class="quick-links">
+      <a class="ql" href="expense-tracker.html">🧾 Expense Tracker</a>
+      <a class="ql" href="credit-card-payoff.html">💳 Card Payoff</a>
+      <a class="ql" href="wellness-tracker.html">💜 Wellness Log</a>
+    </div>
+  </div>
+
 </div>
 
-<div class="footer" id="footer-ts"></div>
+<div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const SB_URL  = 'https://vkwhoicqasotanlkquoa.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2hvaWNxYXNvdGFubGtxdW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NjA1OTIsImV4cCI6MjA5MDEzNjU5Mn0.5LRCWzg2Bj6cMQCHgbNAXcJlm4Po97CbLl3v8PnPP-A';
+const EDGE    = SB_URL + '/functions/v1/clickup';
+const sb      = supabase.createClient(SB_URL, SB_KEY);
+
+let prepData = [], italyFilter = 'All', cfg = {};
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+async function init() {
+  setHeaderDate();
+  setCountdown();
+  cfg = await getSettings();
+  renderCalendar();
+  await Promise.all([loadWellness(), loadTasks(), loadPipeline(), loadAuditions(), loadItalyPrep(), loadBudget()]);
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function setHeaderDate() {
+  document.getElementById('hdr-date').textContent =
+    new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+}
+function setCountdown() {
+  const d = Math.ceil((new Date('2026-09-15') - new Date().setHours(0,0,0,0)) / 86400000);
+  document.getElementById('italy-days').textContent = d;
+}
+function showToast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  setTimeout(() => t.className = 'toast', 2600);
+}
+function setSynced(ok) {
+  const b = document.getElementById('sync-badge');
+  b.textContent = ok ? '● Live' : '● Offline';
+  b.className   = 'sync-badge ' + (ok ? 'ok' : 'err');
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────────────────
+async function getSettings() {
+  const { data } = await sb.from('settings').select('key,value');
+  return Object.fromEntries((data||[]).map(r=>[r.key,r.value]));
+}
+async function saveSetting(key, value) {
+  await sb.from('settings').upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict:'key' });
+  cfg[key] = value;
+}
+
+// ── CALENDAR ──────────────────────────────────────────────────────────────────
+function renderCalendar() {
+  const url = cfg['calendar_embed_url'];
+  const wrap = document.getElementById('cal-wrap');
+  if (url) {
+    wrap.innerHTML = `<iframe src="${url}" frameborder="0" scrolling="no"></iframe>`;
+  }
+}
+function toggleCalSetup() {
+  const f = document.getElementById('cal-form');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+  if (cfg['calendar_embed_url']) document.getElementById('cal-input').value = cfg['calendar_embed_url'];
+}
+async function saveCalendar() {
+  const v = document.getElementById('cal-input').value.trim();
+  if (!v.includes('calendar.google.com')) { showToast('Paste a valid Google Calendar embed URL', true); return; }
+  await saveSetting('calendar_embed_url', v);
+  document.getElementById('cal-form').style.display = 'none';
+  renderCalendar();
+  showToast('Calendar connected!');
+}
+
+// ── WELLNESS ──────────────────────────────────────────────────────────────────
+async function loadWellness() {
+  const today = new Date().toLocaleDateString('en-CA');
+  const { data: e } = await sb.from('wellness_logs').select('*').eq('log_date', today).maybeSingle();
+  const el = document.getElementById('well-body');
+  if (!e) {
+    el.innerHTML = `<div class="well-empty"><span class="ico">🌅</span><p>No entry yet today.</p><a href="wellness-tracker.html" style="color:var(--purple-mid);font-size:.82rem;">Log your day →</a></div>`;
+    return;
+  }
+  const moods   = ['','😔','😕','😐','🙂','😄'];
+  const energys = ['','🪫','😴','⚡','💪','🔥'];
+  const moodLbl = ['','Rough','Low','Okay','Good','Great'];
+  const flags = [
+    e.anxiety        && {l:'Anxiety',    t:'alert'},
+    e.brain_fog      && {l:'Brain fog',  t:'alert'},
+    e.focus_win      && {l:'Focus win ✓',t:'good'},
+    e.meaningful_rest&& {l:'Rested ✓',  t:'good'},
+    e.exercise_done  && {l:`Moved${e.exercise_type?' · '+e.exercise_type:''}`,t:'good'},
+  ].filter(Boolean);
+  el.innerHTML = `
+    <div class="well-chips">
+      ${e.mood   ?`<div class="chip"><span class="cl">Mood</span><span class="cv">${moods[e.mood]} ${moodLbl[e.mood]}</span></div>`:''}
+      ${e.energy ?`<div class="chip"><span class="cl">Energy</span><span class="cv">${energys[e.energy]}</span></div>`:''}
+      ${e.sleep_hours?`<div class="chip"><span class="cl">Sleep</span><span class="cv">${e.sleep_hours}h</span></div>`:''}
+    </div>
+    ${flags.length?`<div class="well-flags">${flags.map(f=>`<span class="flag ${f.t}">${f.l}</span>`).join('')}</div>`:''}
+    ${e.win_or_gratitude?`<p class="well-quote">"${e.win_or_gratitude}"</p>`:''}`;
+}
+
+// ── TASKS ─────────────────────────────────────────────────────────────────────
+async function loadTasks() {
+  const el = document.getElementById('tasks-body');
+  const res = await fetch(EDGE, { headers: { apikey: SB_KEY } }).catch(()=>null);
+  if (!res || !res.ok) { el.innerHTML = renderTasksSetup(); setSynced(false); return; }
+  const data = await res.json().catch(()=>({}));
+  if (data.setup_required) {
+    el.innerHTML = renderTasksSetup();
+    document.getElementById('setup-banner').style.display = 'block';
+    return;
+  }
+  setSynced(true);
+  const tasks = data.tasks || [];
+  document.getElementById('s-tasks').textContent = tasks.length;
+  document.getElementById('tasks-sync').textContent = 'synced ' + new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  if (!tasks.length) { el.innerHTML = '<div class="empty">No open tasks — you\'re clear 🎉</div>'; return; }
+
+  const now = Date.now();
+  const eod = new Date(); eod.setHours(23,59,59,999);
+  const overdue  = tasks.filter(t=> t.due_date && +t.due_date < now);
+  const today    = tasks.filter(t=> t.due_date && +t.due_date >= now && +t.due_date <= eod.getTime());
+  const upcoming = tasks.filter(t=> !t.due_date || +t.due_date > eod.getTime());
+
+  el.innerHTML = `<div class="tasks-grid">
+    ${overdue.length ?`<div><div class="tg-label">⚠️ Overdue (${overdue.length})</div>${overdue.map(t=>taskHTML(t,'ov')).join('')}</div>`:''}
+    ${today.length   ?`<div><div class="tg-label">🔥 Today (${today.length})</div>${today.map(t=>taskHTML(t,'td')).join('')}</div>`:''}
+    ${upcoming.length?`<div><div class="tg-label">📅 Upcoming (${upcoming.length})</div>${upcoming.map(t=>taskHTML(t,'ok')).join('')}</div>`:''}
+  </div>`;
+}
+function renderTasksSetup() {
+  return `<div class="tasks-setup">
+    <p>Enter your <strong>ClickUp Personal API Token</strong> to see your tasks here.<br>
+    Find it: <strong>ClickUp → your profile photo → Settings → Apps → API Token</strong></p>
+    <div class="input-row" style="max-width:460px;margin:0 auto;">
+      <input type="password" id="cu-token" placeholder="pk_xxxxxxxxxxxxxxxxxx"/>
+      <button class="btn-purple" onclick="saveClickUpToken()">Connect</button>
+    </div>
+  </div>`;
+}
+function taskHTML(t, urgency) {
+  const due  = t.due_date ? new Date(+t.due_date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+  const list = t.list?.name || t.folder?.name || '';
+  return `<div class="task" id="tk-${t.id}">
+    <input type="checkbox" onchange="completeTask('${t.id}',this)"/>
+    <div class="task-body">
+      <div class="task-name">${t.name}</div>
+      <div class="task-meta">
+        ${due  ?`<span class="tag ${urgency}">${due}</span>`:''}
+        ${list ?`<span class="tag">${list}</span>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+async function saveClickUpToken() {
+  const v = document.getElementById('cu-token')?.value?.trim();
+  if (!v) return;
+  await saveSetting('clickup_token', v);
+  document.getElementById('setup-banner').style.display = 'none';
+  showToast('Token saved — loading tasks…');
+  loadTasks();
+}
+async function completeTask(id, cb) {
+  cb.disabled = true;
+  document.getElementById(`tk-${id}`)?.classList.add('done');
+  const res = await fetch(EDGE, {
+    method:'POST',
+    headers: { apikey: SB_KEY, 'Content-Type':'application/json' },
+    body: JSON.stringify({ action:'complete_task', task_id:id }),
+  }).catch(()=>null);
+  if (res?.ok) {
+    showToast('Task done ✓');
+    setTimeout(()=>document.getElementById(`tk-${id}`)?.remove(), 700);
+    const n = document.getElementById('s-tasks');
+    n.textContent = Math.max(0, (+n.textContent||1) - 1);
+  } else {
+    cb.checked = false; cb.disabled = false;
+    document.getElementById(`tk-${id}`)?.classList.remove('done');
+    showToast('Could not complete task', true);
+  }
+}
+
+// ── PIPELINE ──────────────────────────────────────────────────────────────────
+async function loadPipeline() {
+  const [cr, jr] = await Promise.all([
+    sb.from('clients').select('name,status,industry,rate').order('created_at',{ascending:false}).limit(8),
+    sb.from('jobs').select('client,type,amount,due,status').neq('status','complete').order('due',{ascending:true}).limit(5),
+  ]);
+  const clients = cr.data||[], jobs = jr.data||[];
+  document.getElementById('s-clients').textContent = clients.filter(c=>c.status==='active').length || clients.length;
+  const el = document.getElementById('pipe-body');
+  if (!clients.length && !jobs.length) { el.innerHTML = '<div class="empty">No pipeline entries yet.</div>'; return; }
+  const dotClass = s => ({ active:'a', prospect:'p', warm:'w' })[s?.toLowerCase()] || '';
+  el.innerHTML = `
+    ${clients.length ? clients.map(c=>`
+      <div class="pipe-item">
+        <div class="dot ${dotClass(c.status)}"></div>
+        <div class="pipe-name">${c.name}</div>
+        <div class="pipe-meta">${c.industry||''}</div>
+        <span class="pipe-badge ${dotClass(c.status)}">${c.status||'lead'}</span>
+      </div>`).join(''):''}
+    ${jobs.length ? `<div class="section-lbl">Active Jobs</div>`+jobs.map(j=>`
+      <div class="pipe-item">
+        <div class="dot a"></div>
+        <div class="pipe-name">${j.client}</div>
+        <div class="pipe-meta">${j.type||''}${j.due?' · due '+new Date(j.due).toLocaleDateString('en-US',{month:'short',day:'numeric'}):''}</div>
+        <span class="pipe-badge a">$${(+j.amount||0).toLocaleString()}</span>
+      </div>`).join(''):''}`;
+}
+
+// ── JACQUIEVOICE ──────────────────────────────────────────────────────────────
+async function loadAuditions() {
+  const { data } = await sb.from('auditions').select('*').order('submitted_date',{ascending:false}).limit(30);
+  const rows = data||[];
+  const c = { submitted:0, callback:0, booked:0, passed:0 };
+  rows.forEach(r=>{ if(c[r.status]!==undefined) c[r.status]++; });
+  document.getElementById('s-auditions').textContent = c.submitted + c.callback;
+  const el = document.getElementById('jv-body');
+  el.innerHTML = `
+    <div class="jv-funnel">
+      <div class="jv-stage"><div class="n">${c.submitted}</div><div class="l">Submitted</div></div>
+      <div class="jv-stage cb"><div class="n">${c.callback}</div><div class="l">Callback</div></div>
+      <div class="jv-stage bk"><div class="n">${c.booked}</div><div class="l">Booked</div></div>
+      <div class="jv-stage"><div class="n">${c.passed}</div><div class="l">Passed</div></div>
+    </div>
+    ${rows.slice(0,5).map(a=>`
+      <div class="pipe-item">
+        <div class="dot ${a.status==='booked'?'a':a.status==='callback'?'p':''}"></div>
+        <div class="pipe-name" style="font-size:.82rem;">${a.client_name||a.project_type||'Submission'}</div>
+        <div class="pipe-meta">${a.casting_platform||''}</div>
+        <span class="pipe-badge">${a.status}</span>
+      </div>`).join('')}
+    ${!rows.length?'<div class="empty">No auditions logged yet — add one below.</div>':''}`;
+}
+async function addAudition() {
+  const name = document.getElementById('jv-name').value.trim();
+  const platform = document.getElementById('jv-platform').value;
+  if (!name) return;
+  const { error } = await sb.from('auditions').insert({
+    client_name: name, casting_platform: platform,
+    status: 'submitted', submitted_date: new Date().toLocaleDateString('en-CA'),
+  });
+  if (!error) { document.getElementById('jv-name').value=''; showToast('Audition logged!'); loadAuditions(); }
+}
+
+// ── ITALY PREP ────────────────────────────────────────────────────────────────
+async function loadItalyPrep() {
+  const { data } = await sb.from('italy_prep').select('*').order('category').order('done');
+  prepData = data||[];
+  updateItalyStats();
+  renderPrep();
+}
+function updateItalyStats() {
+  const done = prepData.filter(i=>i.done).length, tot = prepData.length;
+  const pct = tot ? Math.round(done/tot*100) : 0;
+  document.getElementById('italy-bar').style.width = pct+'%';
+  document.getElementById('italy-lbl').textContent = `${done}/${tot} complete`;
+  document.getElementById('s-italy').textContent = pct+'%';
+}
+function renderPrep() {
+  const items = italyFilter==='All' ? prepData : prepData.filter(i=>i.category===italyFilter);
+  const el = document.getElementById('italy-body');
+  if (!items.length) { el.innerHTML='<div class="empty">Nothing here.</div>'; return; }
+  el.innerHTML = items.map(i=>`
+    <div class="prep-item ${i.done?'dn':''}" id="pr-${i.id}">
+      <input type="checkbox" ${i.done?'checked':''} onchange="togglePrep('${i.id}',this.checked)"/>
+      <div>
+        <div class="prep-text">${i.item}</div>
+        <div class="prep-sub">${i.category}${i.due_week?' · '+i.due_week:''}</div>
+      </div>
+    </div>`).join('');
+}
+function filterItaly(btn) {
+  document.querySelectorAll('.cf').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  italyFilter = btn.dataset.c;
+  renderPrep();
+}
+async function togglePrep(id, done) {
+  await sb.from('italy_prep').update({done}).eq('id',id);
+  const item = prepData.find(i=>i.id===id);
+  if (item) item.done = done;
+  document.getElementById(`pr-${id}`)?.classList.toggle('dn', done);
+  updateItalyStats();
+}
+
+// ── BUDGET ────────────────────────────────────────────────────────────────────
+async function loadBudget() {
+  const first = new Date(); first.setDate(1);
+  const ms = first.toLocaleDateString('en-CA');
+  const { data: b } = await sb.from('budget_months').select('*').eq('month',ms).maybeSingle();
+  const el = document.getElementById('budget-body');
+  const monthName = first.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  if (!b) {
+    el.innerHTML = `<div class="empty">${monthName} budget not set yet.</div>
+      <button class="btn-light" style="margin-top:10px;" onclick="initMonth('${ms}')">Set up ${monthName}</button>`;
+    return;
+  }
+  const net = (b.income_actual||0) - (b.expenses_business||0) - (b.expenses_medical||0) - (b.expenses_personal||0);
+  el.innerHTML = `
+    <div style="font-size:.75rem;color:var(--muted);margin-bottom:10px;">${monthName}</div>
+    <div class="bud-row"><span>Income (actual)</span><span class="bud-amt pos">$${(b.income_actual||0).toLocaleString()}</span></div>
+    <div class="bud-row"><span>Income (expected)</span><span class="bud-amt">$${(b.income_expected||0).toLocaleString()}</span></div>
+    <div class="bud-row"><span>Business expenses</span><span class="bud-amt">$${(b.expenses_business||0).toLocaleString()}</span></div>
+    <div class="bud-row"><span>Medical expenses</span><span class="bud-amt">$${(b.expenses_medical||0).toLocaleString()}</span></div>
+    <div class="bud-row"><span>Personal expenses</span><span class="bud-amt">$${(b.expenses_personal||0).toLocaleString()}</span></div>
+    <div class="bud-row" style="border-top:2px solid var(--border);margin-top:4px;padding-top:6px;">
+      <span style="font-weight:700;">Net</span>
+      <span class="bud-amt ${net<0?'neg':'pos'}" style="font-size:1rem;">$${net.toLocaleString()}</span>
+    </div>`;
+}
+async function initMonth(ms) {
+  await sb.from('budget_months').insert({month:ms,updated_at:new Date().toISOString()});
+  loadBudget();
+}
+
+// ── REFRESH ALL ───────────────────────────────────────────────────────────────
+async function refreshAll() {
+  setSynced(true);
+  cfg = await getSettings();
+  renderCalendar();
+  await Promise.all([loadWellness(), loadTasks(), loadPipeline(), loadAuditions(), loadItalyPrep(), loadBudget()]);
+  showToast('All data refreshed');
+}
+
+init();
+</script>
 </body>
 </html>
