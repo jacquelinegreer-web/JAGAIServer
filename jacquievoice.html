@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JacquieVoice | Audition Tracker</title>
+  <style>
+    :root {
+      --bg: #f5f0eb;
+      --purple: #3b2a6e;
+      --mid: #7c5cbf;
+      --light: #e8e2f7;
+      --pale: #f3f0fa;
+      --card: #fff;
+      --text: #2d2d2d;
+      --muted: #888;
+      --border: #e0dae8;
+      --green: #2e7d32; --green-bg: #e8f5e9;
+      --orange: #d84c00; --orange-bg: #fff3e0;
+      --red: #c0392b; --red-bg: #fdf0ee;
+      --gold: #b8860b; --gold-bg: #fffde7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* HEADER */
+    .hdr { background: var(--purple); color: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .hdr h1 { font-size: 1.1rem; font-weight: 700; }
+    .hdr p  { font-size: .78rem; opacity: .75; margin-top: 2px; }
+    .hdr-right { display: flex; gap: 8px; align-items: center; }
+    .hdr-btn { background: rgba(255,255,255,.15); border: none; border-radius: 7px; color: white; padding: 6px 14px; font-size: .82rem; cursor: pointer; }
+    .hdr-btn:hover { background: rgba(255,255,255,.28); }
+    .hdr-btn.primary { background: var(--mid); }
+
+    /* STATS */
+    .stats { display: grid; grid-template-columns: repeat(5,1fr); border-bottom: 1px solid var(--border); }
+    .stat { background: white; padding: 12px 14px; text-align: center; border-right: 1px solid var(--border); }
+    .stat:last-child { border-right: none; }
+    .stat .n { font-size: 1.5rem; font-weight: 700; color: var(--purple); }
+    .stat .n.green { color: var(--green); }
+    .stat .n.orange { color: var(--orange); }
+    .stat .l { font-size: .63rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-top: 1px; }
+    @media(max-width:600px) { .stats { grid-template-columns: repeat(3,1fr); } }
+
+    /* MAIN */
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+    /* FUNNEL */
+    .funnel { display: flex; gap: 6px; margin-bottom: 20px; align-items: stretch; }
+    .stage { flex: 1; background: var(--card); border-radius: 10px; padding: 14px 10px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.06); cursor: pointer; border: 2px solid transparent; transition: border-color .15s; }
+    .stage:hover, .stage.active { border-color: var(--mid); }
+    .stage .sn { font-size: 1.6rem; font-weight: 700; color: var(--purple); }
+    .stage .sl { font-size: .7rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-top: 3px; }
+    .stage.cb .sn { color: var(--orange); }
+    .stage.cb { background: var(--orange-bg); }
+    .stage.bk .sn { color: var(--green); }
+    .stage.bk { background: var(--green-bg); }
+    .stage.pa { background: #f5f5f5; }
+    .stage.pa .sn { color: #aaa; }
+    .funnel-arrow { display: flex; align-items: center; color: var(--border); font-size: 1.2rem; padding: 0 2px; }
+
+    /* ADD FORM */
+    .add-card { background: var(--card); border-radius: 13px; padding: 18px 20px; box-shadow: 0 1px 4px rgba(0,0,0,.06); margin-bottom: 16px; }
+    .add-card h2 { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--purple); margin-bottom: 14px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 10px; }
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field label { font-size: .72rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    .field input, .field select, .field textarea {
+      border: 1.5px solid var(--border); border-radius: 7px; padding: 7px 10px;
+      font-size: .88rem; font-family: inherit; color: var(--text); background: #fafafa;
+    }
+    .field textarea { resize: vertical; min-height: 60px; }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--mid); }
+    .form-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-end; }
+    .btn { border: none; border-radius: 8px; padding: 8px 18px; font-size: .88rem; font-weight: 600; cursor: pointer; }
+    .btn-primary { background: var(--mid); color: white; }
+    .btn-primary:hover { background: var(--purple); }
+    .btn-ghost { background: var(--light); color: var(--purple); }
+    .btn-ghost:hover { background: #d5cdf0; }
+
+    /* FILTERS */
+    .filter-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+    .filter-row span { font-size: .75rem; color: var(--muted); font-weight: 600; margin-right: 4px; }
+    .fp { font-size: .75rem; padding: 4px 12px; border-radius: 12px; border: 1.5px solid var(--border); background: none; cursor: pointer; color: var(--muted); }
+    .fp.on { background: var(--light); border-color: var(--mid); color: var(--purple); font-weight: 600; }
+    .search-box { margin-left: auto; border: 1.5px solid var(--border); border-radius: 7px; padding: 5px 10px; font-size: .82rem; font-family: inherit; width: 180px; }
+    .search-box:focus { outline: none; border-color: var(--mid); }
+
+    /* TABLE */
+    .table-card { background: var(--card); border-radius: 13px; box-shadow: 0 1px 4px rgba(0,0,0,.06); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: 10px 14px; background: var(--pale); text-align: left; border-bottom: 1px solid var(--border); }
+    td { padding: 10px 14px; font-size: .85rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--pale); }
+    .status-select {
+      border: 1.5px solid var(--border); border-radius: 7px; padding: 4px 8px;
+      font-size: .78rem; font-family: inherit; cursor: pointer; background: white;
+    }
+    .status-select:focus { outline: none; border-color: var(--mid); }
+    .status-select.submitted { background: var(--light); color: var(--purple); border-color: var(--mid); }
+    .status-select.callback  { background: var(--orange-bg); color: var(--orange); border-color: var(--orange); }
+    .status-select.booked    { background: var(--green-bg); color: var(--green); border-color: var(--green); }
+    .status-select.passed    { background: #f5f5f5; color: #aaa; border-color: #ddd; }
+    .status-select.expired   { background: #f5f5f5; color: #aaa; border-color: #ddd; }
+    .plat-tag { font-size: .7rem; padding: 2px 7px; border-radius: 9px; background: var(--pale); color: var(--purple); white-space: nowrap; }
+    .fee-cell { font-weight: 600; color: var(--green); }
+    .edit-btn  { font-size: .72rem; padding: 3px 9px; border-radius: 6px; background: var(--light); color: var(--purple); border: none; cursor: pointer; }
+    .edit-btn:hover { background: #d5cdf0; }
+    .del-btn   { font-size: .72rem; padding: 3px 9px; border-radius: 6px; background: var(--red-bg); color: var(--red); border: none; cursor: pointer; }
+    .del-btn:hover { background: #f9d6d3; }
+    .empty-row td { text-align: center; color: var(--muted); padding: 28px; font-size: .88rem; }
+    @media(max-width:700px) { .hide-mobile { display: none; } }
+
+    /* EDIT MODAL */
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+    .modal { background: white; border-radius: 14px; padding: 22px 24px; width: 100%; max-width: 520px; box-shadow: 0 8px 32px rgba(0,0,0,.18); }
+    .modal h3 { font-size: .9rem; font-weight: 700; color: var(--purple); margin-bottom: 16px; }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--purple); color: white; padding: 9px 22px; border-radius: 20px; font-size: .86rem; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+    .toast.show { opacity: 1; }
+    .toast.err { background: var(--red); }
+
+    .loading { color: var(--muted); font-size: .85rem; padding: 28px; text-align: center; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <h1>🎙️ JacquieVoice &nbsp;·&nbsp; Audition Tracker</h1>
+    <p id="hdr-sub">Loading your pipeline…</p>
+  </div>
+  <div class="hdr-right">
+    <a class="hdr-btn" href="command-center.html">← Command Center</a>
+    <button class="hdr-btn primary" onclick="toggleAddForm()">+ Log Audition</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="n" id="s-total">—</div><div class="l">Total</div></div>
+  <div class="stat"><div class="n orange" id="s-cb">—</div><div class="l">Callbacks</div></div>
+  <div class="stat"><div class="n green" id="s-booked">—</div><div class="l">Booked</div></div>
+  <div class="stat"><div class="n" id="s-rate">—</div><div class="l">Booking Rate</div></div>
+  <div class="stat"><div class="n green" id="s-earn">—</div><div class="l">Total Earned</div></div>
+</div>
+
+<div class="wrap">
+
+  <!-- FUNNEL -->
+  <div class="funnel">
+    <div class="stage" data-s="submitted" onclick="filterStatus(this)">
+      <div class="sn" id="f-submitted">0</div><div class="sl">Submitted</div>
+    </div>
+    <div class="funnel-arrow">›</div>
+    <div class="stage cb" data-s="callback" onclick="filterStatus(this)">
+      <div class="sn" id="f-callback">0</div><div class="sl">Callback</div>
+    </div>
+    <div class="funnel-arrow">›</div>
+    <div class="stage bk" data-s="booked" onclick="filterStatus(this)">
+      <div class="sn" id="f-booked">0</div><div class="sl">Booked</div>
+    </div>
+    <div class="funnel-arrow">›</div>
+    <div class="stage pa" data-s="passed" onclick="filterStatus(this)">
+      <div class="sn" id="f-passed">0</div><div class="sl">Passed</div>
+    </div>
+  </div>
+
+  <!-- ADD FORM (collapsed by default) -->
+  <div class="add-card" id="add-form" style="display:none;">
+    <h2>Log New Audition</h2>
+    <div class="form-grid">
+      <div class="field">
+        <label>Date Submitted</label>
+        <input type="date" id="f-date"/>
+      </div>
+      <div class="field">
+        <label>Client / Project Name</label>
+        <input type="text" id="f-name" placeholder="e.g. TechCorp narration"/>
+      </div>
+      <div class="field">
+        <label>Platform</label>
+        <select id="f-platform">
+          <option>Voice123</option>
+          <option>Casting Networks</option>
+          <option>Direct</option>
+          <option>ACX</option>
+          <option>Voices.com</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Project Type</label>
+        <select id="f-type">
+          <option value="">— select —</option>
+          <option>Commercial</option>
+          <option>Audiobook</option>
+          <option>E-learning</option>
+          <option>Corporate narration</option>
+          <option>Animation / character</option>
+          <option>Podcast</option>
+          <option>IVR / telephony</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="f-status">
+          <option value="submitted">Submitted</option>
+          <option value="callback">Callback</option>
+          <option value="booked">Booked</option>
+          <option value="passed">Passed</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Fee ($)</label>
+        <input type="number" id="f-fee" placeholder="0.00" min="0" step="0.01"/>
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Notes</label>
+        <textarea id="f-notes" placeholder="Casting director, script notes, follow-up needed…"></textarea>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="toggleAddForm()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNew()">Save Audition</button>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filter-row">
+    <span>Filter:</span>
+    <button class="fp on" data-s="all" onclick="setFilter(this)">All</button>
+    <button class="fp" data-s="submitted" onclick="setFilter(this)">Submitted</button>
+    <button class="fp" data-s="callback" onclick="setFilter(this)">Callback</button>
+    <button class="fp" data-s="booked" onclick="setFilter(this)">Booked</button>
+    <button class="fp" data-s="passed" onclick="setFilter(this)">Passed</button>
+    <input class="search-box" type="text" id="search-box" placeholder="Search…" oninput="renderTable()"/>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-card">
+    <div class="loading" id="tbl-loading">Loading your auditions…</div>
+    <table id="tbl" style="display:none;">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Project / Client</th>
+          <th class="hide-mobile">Platform</th>
+          <th class="hide-mobile">Type</th>
+          <th>Status</th>
+          <th class="hide-mobile">Fee</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tbl-body"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-bg" id="edit-modal" style="display:none;" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>Edit Audition</h3>
+    <div class="form-grid">
+      <div class="field">
+        <label>Date</label>
+        <input type="date" id="e-date"/>
+      </div>
+      <div class="field">
+        <label>Client / Project</label>
+        <input type="text" id="e-name"/>
+      </div>
+      <div class="field">
+        <label>Platform</label>
+        <select id="e-platform">
+          <option>Voice123</option>
+          <option>Casting Networks</option>
+          <option>Direct</option>
+          <option>ACX</option>
+          <option>Voices.com</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Project Type</label>
+        <select id="e-type">
+          <option value="">— select —</option>
+          <option>Commercial</option>
+          <option>Audiobook</option>
+          <option>E-learning</option>
+          <option>Corporate narration</option>
+          <option>Animation / character</option>
+          <option>Podcast</option>
+          <option>IVR / telephony</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="e-status">
+          <option value="submitted">Submitted</option>
+          <option value="callback">Callback</option>
+          <option value="booked">Booked</option>
+          <option value="passed">Passed</option>
+          <option value="expired">Expired</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Fee ($)</label>
+        <input type="number" id="e-fee" min="0" step="0.01"/>
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>Notes</label>
+        <textarea id="e-notes"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="document.getElementById('edit-modal').style.display='none'">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SB_URL = 'https://vkwhoicqasotanlkquoa.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2hvaWNxYXNvdGFubGtxdW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NjA1OTIsImV4cCI6MjA5MDEzNjU5Mn0.5LRCWzg2Bj6cMQCHgbNAXcJlm4Po97CbLl3v8PnPP-A';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+let allData = [], filterS = 'all', editId = null;
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+async function init() {
+  document.getElementById('f-date').value = new Date().toLocaleDateString('en-CA');
+  await load();
+}
+
+async function load() {
+  const { data, error } = await sb.from('auditions').select('*').order('submitted_date', { ascending: false });
+  if (error) { showToast('Could not load data', true); return; }
+  allData = data || [];
+  updateStats();
+  renderTable();
+  document.getElementById('tbl-loading').style.display = 'none';
+  document.getElementById('tbl').style.display = 'table';
+}
+
+// ── STATS & FUNNEL ────────────────────────────────────────────────────────────
+function updateStats() {
+  const c = { submitted:0, callback:0, booked:0, passed:0, expired:0 };
+  let earned = 0;
+  allData.forEach(r => {
+    if (c[r.status] !== undefined) c[r.status]++;
+    if (r.status === 'booked' && r.fee) earned += +r.fee;
+  });
+  const total = allData.length;
+  const rate = total ? Math.round((c.booked / total) * 100) : 0;
+  document.getElementById('s-total').textContent   = total;
+  document.getElementById('s-cb').textContent      = c.callback;
+  document.getElementById('s-booked').textContent  = c.booked;
+  document.getElementById('s-rate').textContent    = rate + '%';
+  document.getElementById('s-earn').textContent    = '$' + earned.toLocaleString();
+  document.getElementById('f-submitted').textContent = c.submitted;
+  document.getElementById('f-callback').textContent  = c.callback;
+  document.getElementById('f-booked').textContent    = c.booked;
+  document.getElementById('f-passed').textContent    = c.passed;
+  const month = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  document.getElementById('hdr-sub').textContent = `${total} auditions logged · ${c.booked} booked · ${month}`;
+}
+
+// ── TABLE ─────────────────────────────────────────────────────────────────────
+function renderTable() {
+  const q = (document.getElementById('search-box').value || '').toLowerCase();
+  const rows = allData.filter(r => {
+    if (filterS !== 'all' && r.status !== filterS) return false;
+    if (q && !((r.client_name||'').toLowerCase().includes(q) || (r.casting_platform||'').toLowerCase().includes(q) || (r.project_type||'').toLowerCase().includes(q) || (r.notes||'').toLowerCase().includes(q))) return false;
+    return true;
+  });
+  const tbody = document.getElementById('tbl-body');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No auditions found${filterS !== 'all' ? ' for this status' : ''}.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(r => {
+    const date = r.submitted_date ? new Date(r.submitted_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' }) : '—';
+    return `<tr>
+      <td style="white-space:nowrap;">${date}</td>
+      <td>
+        <div style="font-weight:600;">${r.client_name || '—'}</div>
+        ${r.notes ? `<div style="font-size:.72rem;color:var(--muted);margin-top:2px;">${r.notes.slice(0,60)}${r.notes.length>60?'…':''}</div>` : ''}
+      </td>
+      <td class="hide-mobile"><span class="plat-tag">${r.casting_platform || '—'}</span></td>
+      <td class="hide-mobile" style="font-size:.78rem;color:var(--muted);">${r.project_type || '—'}</td>
+      <td>
+        <select class="status-select ${r.status}" onchange="quickStatus('${r.id}', this)">
+          <option value="submitted" ${r.status==='submitted'?'selected':''}>Submitted</option>
+          <option value="callback"  ${r.status==='callback' ?'selected':''}>Callback</option>
+          <option value="booked"    ${r.status==='booked'   ?'selected':''}>Booked</option>
+          <option value="passed"    ${r.status==='passed'   ?'selected':''}>Passed</option>
+          <option value="expired"   ${r.status==='expired'  ?'selected':''}>Expired</option>
+        </select>
+      </td>
+      <td class="hide-mobile fee-cell">${r.fee ? '$' + Number(r.fee).toLocaleString() : '—'}</td>
+      <td style="white-space:nowrap;">
+        <button class="edit-btn" onclick="openEdit('${r.id}')">Edit</button>
+        <button class="del-btn"  onclick="deleteRow('${r.id}')">✕</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── FILTERS ───────────────────────────────────────────────────────────────────
+function setFilter(btn) {
+  document.querySelectorAll('.fp').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  filterS = btn.dataset.s;
+  renderTable();
+}
+function filterStatus(el) {
+  filterS = el.dataset.s;
+  document.querySelectorAll('.fp').forEach(b => b.classList.toggle('on', b.dataset.s === filterS));
+  document.querySelectorAll('.stage').forEach(s => s.classList.toggle('active', s.dataset.s === filterS));
+  renderTable();
+}
+
+// ── ADD ───────────────────────────────────────────────────────────────────────
+function toggleAddForm() {
+  const f = document.getElementById('add-form');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+async function saveNew() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { showToast('Project name is required', true); return; }
+  const row = {
+    submitted_date:   document.getElementById('f-date').value || new Date().toLocaleDateString('en-CA'),
+    client_name:      name,
+    casting_platform: document.getElementById('f-platform').value,
+    project_type:     document.getElementById('f-type').value || null,
+    status:           document.getElementById('f-status').value,
+    fee:              parseFloat(document.getElementById('f-fee').value) || null,
+    notes:            document.getElementById('f-notes').value.trim() || null,
+  };
+  const { error } = await sb.from('auditions').insert(row);
+  if (error) { showToast('Could not save', true); return; }
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-fee').value  = '';
+  document.getElementById('f-notes').value = '';
+  document.getElementById('f-status').value = 'submitted';
+  toggleAddForm();
+  showToast('Audition logged!');
+  await load();
+}
+
+// ── QUICK STATUS ──────────────────────────────────────────────────────────────
+async function quickStatus(id, sel) {
+  const status = sel.value;
+  sel.className = 'status-select ' + status;
+  const { error } = await sb.from('auditions').update({ status }).eq('id', id);
+  if (error) { showToast('Could not update', true); return; }
+  const item = allData.find(r => r.id === id);
+  if (item) item.status = status;
+  updateStats();
+  showToast(`Status updated → ${status}`);
+}
+
+// ── EDIT ──────────────────────────────────────────────────────────────────────
+function openEdit(id) {
+  const r = allData.find(a => a.id === id);
+  if (!r) return;
+  editId = id;
+  document.getElementById('e-date').value     = r.submitted_date || '';
+  document.getElementById('e-name').value     = r.client_name || '';
+  document.getElementById('e-platform').value = r.casting_platform || 'Voice123';
+  document.getElementById('e-type').value     = r.project_type || '';
+  document.getElementById('e-status').value   = r.status || 'submitted';
+  document.getElementById('e-fee').value      = r.fee || '';
+  document.getElementById('e-notes').value    = r.notes || '';
+  document.getElementById('edit-modal').style.display = 'flex';
+}
+function closeModal(e) {
+  if (e.target.id === 'edit-modal') document.getElementById('edit-modal').style.display = 'none';
+}
+async function saveEdit() {
+  if (!editId) return;
+  const row = {
+    submitted_date:   document.getElementById('e-date').value || null,
+    client_name:      document.getElementById('e-name').value.trim(),
+    casting_platform: document.getElementById('e-platform').value,
+    project_type:     document.getElementById('e-type').value || null,
+    status:           document.getElementById('e-status').value,
+    fee:              parseFloat(document.getElementById('e-fee').value) || null,
+    notes:            document.getElementById('e-notes').value.trim() || null,
+  };
+  const { error } = await sb.from('auditions').update(row).eq('id', editId);
+  if (error) { showToast('Could not save changes', true); return; }
+  document.getElementById('edit-modal').style.display = 'none';
+  showToast('Saved!');
+  await load();
+}
+
+// ── DELETE ────────────────────────────────────────────────────────────────────
+async function deleteRow(id) {
+  const item = allData.find(r => r.id === id);
+  if (!confirm(`Delete "${item?.client_name || 'this entry'}"?`)) return;
+  const { error } = await sb.from('auditions').delete().eq('id', id);
+  if (error) { showToast('Could not delete', true); return; }
+  showToast('Entry removed');
+  await load();
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function showToast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  setTimeout(() => t.className = 'toast', 2600);
+}
+
+init();
+</script>
+</body>
+</html>
