@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Card Payoff Tracker</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #faf8f5; color: #1a1a1a; font-size: 14px; min-height: 100vh;
+}
+.header {
+  background: #2c1a6e; color: white;
+  padding: 16px 20px;
+}
+.header h1 { font-size: 15px; font-weight: 600; letter-spacing: 1px; }
+.header .sub { font-size: 11px; color: #b8a8e8; margin-top: 3px; }
+
+.main { padding: 18px; max-width: 860px; margin: 0 auto; }
+
+/* Summary bar */
+.summary-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px; margin-bottom: 20px;
+}
+.sum-card {
+  background: white; border: 1px solid #ede8f7;
+  border-radius: 10px; padding: 14px 16px;
+}
+.sum-card .lbl { font-size: 10px; color: #9b8bcc; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+.sum-card .val { font-size: 20px; font-weight: 700; color: #2c1a6e; }
+.sum-card .sub { font-size: 11px; color: #999; margin-top: 2px; }
+
+/* Monthly payment input */
+.payment-bar {
+  background: white; border: 1px solid #ede8f7; border-radius: 10px;
+  padding: 16px 18px; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.payment-bar label { font-size: 13px; font-weight: 600; color: #2c1a6e; white-space: nowrap; }
+.payment-bar input {
+  padding: 8px 12px; border: 1.5px solid #c4b8e8; border-radius: 8px;
+  font-size: 15px; font-weight: 700; color: #2c1a6e; width: 140px;
+}
+.payment-bar input:focus { outline: none; border-color: #7c5cbf; }
+.payment-bar .hint { font-size: 11px; color: #999; }
+.badge {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 700;
+}
+.badge-avalanche { background: #2c1a6e; color: white; }
+.badge-paid { background: #e0f5ee; color: #0f6e56; }
+
+/* Cards */
+.card-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.cc-card {
+  background: white; border: 1px solid #ede8f7; border-radius: 12px;
+  padding: 18px; position: relative; overflow: hidden;
+}
+.cc-card.priority-1 { border-left: 4px solid #c0392b; }
+.cc-card.priority-2 { border-left: 4px solid #e67e22; }
+.cc-card.priority-3 { border-left: 4px solid #f1c40f; }
+.cc-card.paid-off { border-left: 4px solid #27ae60; opacity: 0.75; }
+
+.cc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.cc-name { font-size: 15px; font-weight: 700; color: #2c1a6e; }
+.cc-last4 { font-size: 12px; color: #aaa; margin-top: 2px; }
+.cc-right { text-align: right; }
+.cc-balance { font-size: 22px; font-weight: 700; color: #2c1a6e; }
+.cc-apr { font-size: 12px; color: #c0392b; font-weight: 600; margin-top: 2px; }
+
+.cc-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.cc-stat .sl { font-size: 10px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+.cc-stat .sv { font-size: 13px; font-weight: 600; color: #333; }
+
+/* Progress bar */
+.progress-wrap { margin-bottom: 6px; }
+.progress-label { display: flex; justify-content: space-between; font-size: 11px; color: #999; margin-bottom: 4px; }
+.progress-bar { background: #f0ebfa; border-radius: 6px; height: 8px; }
+.progress-fill { height: 8px; border-radius: 6px; transition: width 0.4s; }
+.fill-1 { background: #c0392b; }
+.fill-2 { background: #e67e22; }
+.fill-3 { background: #f1c40f; }
+.fill-paid { background: #27ae60; }
+
+/* Edit form */
+.edit-btn {
+  background: #ede8f7; border: none; border-radius: 7px;
+  padding: 5px 12px; font-size: 11px; font-weight: 600;
+  color: #2c1a6e; cursor: pointer; margin-top: 4px;
+}
+.edit-btn:hover { background: #ddd6f0; }
+.edit-form {
+  display: none; margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid #ede8f7;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+}
+.ef-field label { display: block; font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.ef-field input {
+  width: 100%; padding: 7px 10px; border: 1px solid #ddd; border-radius: 7px;
+  font-size: 13px; color: #1a1a1a; background: #fafafa;
+}
+.ef-field input:focus { outline: none; border-color: #7c5cbf; }
+.save-btn {
+  background: #2c1a6e; color: white; border: none; border-radius: 7px;
+  padding: 7px 16px; font-size: 12px; font-weight: 600; cursor: pointer;
+  margin-top: 8px; grid-column: 1/-1;
+}
+.save-btn:hover { background: #3d2a8e; }
+
+/* Payoff timeline */
+.timeline-section {
+  background: white; border: 1px solid #ede8f7; border-radius: 12px;
+  padding: 18px; margin-bottom: 20px;
+}
+.timeline-section h3 { font-size: 13px; font-weight: 700; color: #2c1a6e; margin-bottom: 14px; }
+.timeline-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 0; border-bottom: 1px solid #f5f0fb; font-size: 13px;
+}
+.timeline-row:last-child { border-bottom: none; }
+.tl-name { color: #333; font-weight: 500; }
+.tl-date { color: #7c5cbf; font-weight: 700; }
+.tl-interest { font-size: 11px; color: #c0392b; }
+
+.note {
+  background: #ede8f7; border-radius: 8px; padding: 12px 14px;
+  font-size: 12px; color: #5a4a8a; line-height: 1.6;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Credit Card Payoff Tracker</h1>
+  <div class="sub">Avalanche method &nbsp;·&nbsp; Highest APR first</div>
+</div>
+
+<div class="main">
+
+  <div class="summary-grid" id="summary"></div>
+
+  <div class="payment-bar">
+    <label>Total monthly payment: $</label>
+    <input type="number" id="monthly-payment" value="1500" min="0" step="50" oninput="recalculate()">
+    <div>
+      <span class="badge badge-avalanche">Avalanche order</span>
+      <div class="hint" style="margin-top:4px;">Extra goes to highest APR card first</div>
+    </div>
+  </div>
+
+  <div class="card-list" id="card-list"></div>
+
+  <div class="timeline-section">
+    <h3>Projected payoff timeline</h3>
+    <div id="timeline"></div>
+  </div>
+
+  <div class="note">
+    Projections assume consistent monthly payment and no new charges. Interest calculated monthly (APR ÷ 12). When a card is paid off, its minimum payment rolls over to the next highest-APR card automatically (the avalanche roll). Update balances monthly for accuracy.
+  </div>
+
+</div>
+
+<script>
+let cards = [];
+
+function loadCards() {
+  const saved = localStorage.getItem('gc_cc_cards');
+  if (saved) {
+    cards = JSON.parse(saved);
+  } else {
+    cards = [
+      { id: 1, name: 'Amex Platinum', last4: '81006', balance: 29627.12, apr: 27.49, minPayment: 613.63, originalBalance: 29627.12 },
+      { id: 2, name: 'Delta SkyMiles Amex', last4: '41005', balance: 26583.70, apr: 26.24, minPayment: 612.48, originalBalance: 26583.70 },
+      { id: 3, name: 'Chase Sapphire Preferred', last4: '7042', balance: 23243.03, apr: 12.00, minPayment: 232.43, originalBalance: 23243.03 },
+      { id: 4, name: 'Chase Slate', last4: '4774', balance: 0.00, apr: 0.00, minPayment: 0, originalBalance: 500.00 },
+    ];
+    saveCards();
+  }
+}
+
+function saveCards() {
+  localStorage.setItem('gc_cc_cards', JSON.stringify(cards));
+}
+
+function fmt(n) {
+  return '$' + Math.abs(parseFloat(n)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function fmtPct(n) { return parseFloat(n).toFixed(2) + '%'; }
+
+// Avalanche payoff simulation
+function simulate(cards, monthlyTotal) {
+  // Work on copies, only active cards
+  let active = cards.filter(c => c.balance > 0).map(c => ({
+    ...c,
+    bal: c.balance,
+    totalInterest: 0,
+    paidOffMonth: null
+  })).sort((a, b) => b.apr - a.apr);
+
+  const results = {};
+  active.forEach(c => results[c.id] = { months: 0, totalInterest: 0, payoffDate: null });
+
+  let month = 0;
+  const MAX_MONTHS = 360;
+
+  while (active.length > 0 && month < MAX_MONTHS) {
+    month++;
+
+    // Apply interest to all active cards
+    active.forEach(c => {
+      const interest = c.bal * (c.apr / 100 / 12);
+      c.bal += interest;
+      c.totalInterest += interest;
+    });
+
+    // Distribute payments: minimums first, extra to highest APR
+    let remaining = monthlyTotal;
+
+    // Pay minimums on all but the top card
+    for (let i = 1; i < active.length; i++) {
+      const min = Math.min(active[i].minPayment, active[i].bal);
+      active[i].bal -= min;
+      remaining -= min;
+      if (remaining < 0) remaining = 0;
+    }
+
+    // All remaining goes to highest APR card
+    if (remaining > 0 && active.length > 0) {
+      active[0].bal -= remaining;
+      if (active[0].bal < 0) active[0].bal = 0;
+    }
+
+    // Check for paid off cards
+    active = active.filter(c => {
+      if (c.bal <= 0.50) {
+        results[c.id].months = month;
+        results[c.id].totalInterest = c.totalInterest;
+        const d = new Date();
+        d.setMonth(d.getMonth() + month);
+        results[c.id].payoffDate = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        return false;
+      }
+      return true;
+    });
+  }
+
+  return results;
+}
+
+function recalculate() {
+  const monthly = parseFloat(document.getElementById('monthly-payment').value) || 0;
+  const activeCards = cards.filter(c => c.balance > 0).sort((a, b) => b.apr - a.apr);
+  const totalDebt = cards.reduce((s, c) => s + c.balance, 0);
+  const totalMinimums = cards.reduce((s, c) => s + c.minPayment, 0);
+  const results = simulate(cards, monthly);
+
+  // Summary
+  const maxMonths = Math.max(...Object.values(results).map(r => r.months || 0));
+  const totalInterest = Object.values(results).reduce((s, r) => s + (r.totalInterest || 0), 0);
+  const debtFreeDate = maxMonths > 0 ? (() => {
+    const d = new Date(); d.setMonth(d.getMonth() + maxMonths);
+    return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  })() : '—';
+
+  document.getElementById('summary').innerHTML = `
+    <div class="sum-card">
+      <div class="lbl">Total debt</div>
+      <div class="val">${fmt(totalDebt)}</div>
+      <div class="sub">${cards.filter(c => c.balance > 0).length} active cards</div>
+    </div>
+    <div class="sum-card">
+      <div class="lbl">Monthly minimums</div>
+      <div class="val">${fmt(totalMinimums)}</div>
+      <div class="sub">Required minimum</div>
+    </div>
+    <div class="sum-card">
+      <div class="lbl">Est. interest</div>
+      <div class="val" style="color:#c0392b;">${fmt(totalInterest)}</div>
+      <div class="sub">At current payment</div>
+    </div>
+    <div class="sum-card">
+      <div class="lbl">Debt-free date</div>
+      <div class="val" style="font-size:15px;color:#27ae60;">${debtFreeDate}</div>
+      <div class="sub">${maxMonths} months away</div>
+    </div>
+  `;
+
+  // Card list
+  const sorted = [...cards].sort((a, b) => {
+    if (a.balance === 0 && b.balance > 0) return 1;
+    if (b.balance === 0 && a.balance > 0) return -1;
+    return b.apr - a.apr;
+  });
+
+  let priorityIdx = 0;
+  document.getElementById('card-list').innerHTML = sorted.map((card, i) => {
+    const isPaid = card.balance === 0;
+    const priority = isPaid ? 0 : ++priorityIdx;
+    const cls = isPaid ? 'paid-off' : `priority-${priority}`;
+    const fillCls = isPaid ? 'fill-paid' : `fill-${priority}`;
+    const orig = card.originalBalance || card.balance;
+    const paid = Math.max(0, orig - card.balance);
+    const paidPct = orig > 0 ? Math.round((paid / orig) * 100) : 100;
+    const res = results[card.id] || {};
+    const priorityLabel = isPaid
+      ? '<span class="badge badge-paid">Paid off!</span>'
+      : priority === 1
+        ? '<span class="badge badge-avalanche">🎯 Attack now</span>'
+        : `<span style="font-size:11px;color:#aaa;">Priority ${priority}</span>`;
+
+    return `
+      <div class="cc-card ${cls}">
+        <div class="cc-top">
+          <div>
+            <div class="cc-name">${card.name}</div>
+            <div class="cc-last4">····${card.last4}</div>
+            <div style="margin-top:6px;">${priorityLabel}</div>
+          </div>
+          <div class="cc-right">
+            <div class="cc-balance">${fmt(card.balance)}</div>
+            <div class="cc-apr">${fmtPct(card.apr)} APR</div>
+            <button class="edit-btn" onclick="toggleEdit(${card.id})">Edit</button>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>${fmt(paid)} paid</span>
+            <span>${paidPct}% done</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill ${fillCls}" style="width:${paidPct}%"></div>
+          </div>
+        </div>
+
+        <div class="cc-stats">
+          <div class="cc-stat">
+            <div class="sl">Min payment</div>
+            <div class="sv">${fmt(card.minPayment)}/mo</div>
+          </div>
+          ${!isPaid ? `
+          <div class="cc-stat">
+            <div class="sl">Est. payoff</div>
+            <div class="sv" style="color:#7c5cbf;">${res.payoffDate || '—'}</div>
+          </div>
+          <div class="cc-stat">
+            <div class="sl">Est. interest</div>
+            <div class="sv" style="color:#c0392b;">${res.totalInterest ? fmt(res.totalInterest) : '—'}</div>
+          </div>` : ''}
+        </div>
+
+        <div class="edit-form" id="edit-${card.id}" style="display:none;">
+          <div class="ef-field">
+            <label>Current balance</label>
+            <input type="number" id="eb-${card.id}" value="${card.balance}" step="0.01" min="0">
+          </div>
+          <div class="ef-field">
+            <label>APR (%)</label>
+            <input type="number" id="ea-${card.id}" value="${card.apr}" step="0.01" min="0">
+          </div>
+          <div class="ef-field">
+            <label>Min payment</label>
+            <input type="number" id="em-${card.id}" value="${card.minPayment}" step="0.01" min="0">
+          </div>
+          <button class="save-btn" onclick="saveCard(${card.id})">Save changes</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Timeline
+  const activeResults = Object.entries(results)
+    .filter(([id, r]) => r.months > 0)
+    .map(([id, r]) => ({ ...r, card: cards.find(c => c.id == id) }))
+    .sort((a, b) => a.months - b.months);
+
+  document.getElementById('timeline').innerHTML = activeResults.length ? activeResults.map(r => `
+    <div class="timeline-row">
+      <div>
+        <div class="tl-name">${r.card.name} ····${r.card.last4}</div>
+        <div class="tl-interest">Est. ${fmt(r.totalInterest)} in interest</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="tl-date">${r.payoffDate}</div>
+        <div style="font-size:11px;color:#aaa;">${r.months} months</div>
+      </div>
+    </div>
+  `).join('') : '<div style="color:#aaa;font-size:13px;">Enter a monthly payment above to see projections.</div>';
+}
+
+function toggleEdit(id) {
+  const el = document.getElementById(`edit-${id}`);
+  el.style.display = el.style.display === 'none' ? 'grid' : 'none';
+}
+
+function saveCard(id) {
+  const card = cards.find(c => c.id === id);
+  const newBal = parseFloat(document.getElementById(`eb-${id}`).value) || 0;
+  card.balance = newBal;
+  card.apr = parseFloat(document.getElementById(`ea-${id}`).value) || 0;
+  card.minPayment = parseFloat(document.getElementById(`em-${id}`).value) || 0;
+  if (!card.originalBalance || newBal > card.originalBalance) card.originalBalance = newBal;
+  saveCards();
+  recalculate();
+}
+
+loadCards();
+recalculate();
+</script>
+</body>
+</html>
