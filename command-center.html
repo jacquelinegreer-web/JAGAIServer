@@ -18,12 +18,14 @@
       --green: #2e7d32; --green-bg: #e8f5e9;
       --orange: #d84c00; --orange-bg: #fff3e0;
       --red: #c0392b; --red-bg: #fdf0ee;
+      --gold: #c9a84c; --gold-bg: #fdf8e8; --gold-border: #e8d48a;
+      --navy: #1a3558; --navy-mid: #2a5080;
       --italy: #008c45;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
 
-    .hdr { background: var(--purple); color: white; padding: 14px 22px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .hdr { background: linear-gradient(135deg, var(--purple) 0%, var(--purple) 55%, var(--navy) 100%); color: white; padding: 14px 22px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
     .hdr h1 { font-size: 1rem; font-weight: 700; letter-spacing: .02em; }
     .hdr p  { font-size: .78rem; opacity: .75; margin-top: 2px; }
     .hdr-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -41,8 +43,26 @@
     .stat .n { font-size: 1.5rem; font-weight: 700; color: var(--purple); }
     .stat .l { font-size: .65rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-top: 1px; }
 
-    .setup-banner { background: var(--orange-bg); border-left: 4px solid var(--orange); padding: 10px 20px; font-size: .85rem; display: none; }
-    .setup-banner strong { color: var(--orange); }
+    /* Simple task list */
+    .task-add-row { display: flex; gap: 7px; margin-bottom: 12px; }
+    .task-add-row input[type=text] { flex: 1; border: 1.5px solid var(--border); border-radius: 7px; padding: 7px 10px; font-size: .85rem; font-family: inherit; }
+    .task-add-row input[type=date] { border: 1.5px solid var(--border); border-radius: 7px; padding: 7px 10px; font-size: .85rem; font-family: inherit; width: 140px; }
+    .task-add-row input:focus { outline: none; border-color: var(--mid); }
+    .btn-add-task { background: var(--mid); color: white; border: none; border-radius: 7px; padding: 7px 14px; font-size: .85rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .btn-add-task:hover { background: var(--purple); }
+    .task-row { display: flex; align-items: center; gap: 9px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .task-row:last-child { border-bottom: none; }
+    .task-row input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--mid); flex-shrink: 0; cursor: pointer; }
+    .task-name-txt { flex: 1; font-size: .87rem; line-height: 1.3; }
+    .task-name-txt.done { text-decoration: line-through; color: var(--muted); }
+    .due-badge { font-size: .68rem; padding: 2px 8px; border-radius: 9px; white-space: nowrap; font-weight: 600; }
+    .due-badge.overdue { background: var(--red-bg);    color: var(--red); }
+    .due-badge.today   { background: var(--orange-bg); color: var(--orange); }
+    .due-badge.soon    { background: var(--light);     color: var(--purple); }
+    .due-badge.future  { background: #f5f5f5;          color: var(--muted); }
+    .task-del { width: 22px; height: 22px; border-radius: 5px; border: none; background: none; cursor: pointer; color: var(--muted); font-size: .8rem; flex-shrink: 0; }
+    .task-del:hover { background: var(--red-bg); color: var(--red); }
+    .tasks-empty { text-align: center; padding: 18px 0; color: var(--muted); font-size: .84rem; }
 
     .grid { display: grid; grid-template-columns: 2fr 1fr; grid-template-areas: "cal well" "tasks tasks" "pipe jv" "italy budget"; gap: 14px; padding: 18px; max-width: 1400px; margin: 0 auto; }
     @media(max-width:900px) { .grid { grid-template-columns: 1fr; grid-template-areas: "well" "cal" "tasks" "pipe" "jv" "italy" "budget"; } }
@@ -56,10 +76,18 @@
     .card-jv    { grid-area: jv; }
     .card-italy { grid-area: italy; }
     .card-budget{ grid-area: budget; }
+
+    /* JacquieVoice card — navy/gold accent */
+    .card-jv { border-top: 3px solid var(--gold); }
+
     .ch { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
     .ct { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--purple); }
+    .ct.jv { color: var(--navy); }
     .ca { font-size: .76rem; color: var(--mid); background: none; border: none; cursor: pointer; text-decoration: none; }
     .ca:hover { text-decoration: underline; }
+    .ca.jv { color: var(--gold); }
+    .ca.jv:hover { color: var(--navy); }
+    .ca-links { display: flex; gap: 10px; }
 
     .cal-wrap { border-radius: 8px; overflow: hidden; background: var(--pale); min-height: 260px; display: flex; align-items: center; justify-content: center; }
     .cal-wrap iframe { width: 100%; height: 320px; border: none; }
@@ -89,23 +117,9 @@
     .well-empty p { color: var(--muted); font-size: .83rem; }
     .well-quote { font-size: .78rem; color: var(--muted); font-style: italic; margin-top: 10px; line-height: 1.45; }
 
-    .tasks-setup { padding: 18px; text-align: center; }
-    .tasks-setup p { color: var(--muted); font-size: .84rem; margin-bottom: 12px; line-height: 1.5; }
-    .tasks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 0 20px; }
-    .tg-label { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 10px 0 5px; }
-    .task { display: flex; align-items: flex-start; gap: 9px; padding: 7px 8px; border-radius: 7px; transition: background .12s; }
-    .task:hover { background: var(--pale); }
-    .task input[type=checkbox] { width: 15px; height: 15px; accent-color: var(--mid); margin-top: 2px; flex-shrink: 0; cursor: pointer; }
-    .task-body { flex: 1; }
-    .task-name { font-size: .86rem; line-height: 1.3; }
-    .task-meta { display: flex; gap: 6px; margin-top: 3px; flex-wrap: wrap; }
-    .tag { font-size: .68rem; padding: 1px 6px; border-radius: 9px; background: var(--light); color: var(--purple); }
-    .tag.ov { background: var(--red-bg); color: var(--red); }
-    .tag.td { background: var(--orange-bg); color: var(--orange); }
-    .tag.ok { background: var(--green-bg); color: var(--green); }
-    .task.done { opacity: .4; }
-    .task.done .task-name { text-decoration: line-through; }
+    /* (task styles moved above) */
 
+    /* Greer Collective Pipeline (consulting clients only) */
     .pipe-item { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-bottom: 1px solid var(--border); }
     .pipe-item:last-child { border-bottom: none; }
     .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: #90a4ae; }
@@ -120,13 +134,30 @@
     .section-lbl { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 10px 0 5px; }
     .empty { color: var(--muted); font-size: .83rem; padding: 14px 0; text-align: center; }
 
-    /* JV */
+    /* JV audition funnel */
     .jv-funnel { display: flex; gap: 6px; margin-bottom: 12px; }
     .jv-stage { flex: 1; text-align: center; background: var(--pale); border-radius: 8px; padding: 8px 5px; }
     .jv-stage .n { font-size: 1.3rem; font-weight: 700; color: var(--purple); }
     .jv-stage .l { font-size: .62rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-top: 1px; }
     .jv-stage.cb { background: var(--orange-bg); } .jv-stage.cb .n { color: var(--orange); }
     .jv-stage.bk { background: var(--green-bg); } .jv-stage.bk .n { color: var(--green); }
+
+    /* JV VO Pipeline mini-section */
+    .jv-pipeline-mini { background: var(--gold-bg); border: 1px solid var(--gold-border); border-radius: 9px; padding: 10px 12px; margin-bottom: 12px; }
+    .jv-pipeline-mini .jv-pip-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+    .jv-pipeline-mini .jv-pip-title { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--navy); }
+    .jv-pipeline-mini .jv-pip-link { font-size: .72rem; color: var(--gold); text-decoration: none; }
+    .jv-pipeline-mini .jv-pip-link:hover { color: var(--navy); text-decoration: underline; }
+    .jv-pip-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--gold-border); font-size: .82rem; }
+    .jv-pip-row:last-child { border-bottom: none; }
+    .jv-pip-name { flex: 1; font-weight: 600; color: var(--navy); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .jv-pip-meta { font-size: .68rem; color: var(--muted); }
+    .jv-pip-badge { font-size: .65rem; padding: 2px 7px; border-radius: 8px; white-space: nowrap; }
+    .jv-pip-badge.in_progress { background: var(--orange-bg); color: var(--orange); }
+    .jv-pip-badge.new { background: var(--light); color: var(--navy); }
+    .jv-pip-badge.revision { background: var(--red-bg); color: var(--red); }
+    .jv-pip-badge.delivered { background: var(--gold-bg); color: #7a5c10; border: 1px solid var(--gold-border); }
+    .jv-pip-badge.paid { background: var(--green-bg); color: var(--green); }
 
     /* Inline status dropdown */
     .jv-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); }
@@ -167,6 +198,8 @@
     .quick-links { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
     .ql { font-size: .78rem; padding: 5px 11px; border-radius: 7px; background: var(--pale); color: var(--purple); text-decoration: none; }
     .ql:hover { background: var(--light); }
+    .ql.jv { background: var(--gold-bg); color: var(--navy); border: 1px solid var(--gold-border); }
+    .ql.jv:hover { background: #faecc0; }
 
     .loading { color: var(--muted); font-size: .83rem; padding: 14px 0; }
     .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--purple); color: white; padding: 9px 22px; border-radius: 20px; font-size: .86rem; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 999; white-space: nowrap; }
@@ -188,15 +221,13 @@
   </div>
 </div>
 
-<div class="setup-banner" id="setup-banner">
-  ⚙️ <strong>One step left:</strong> Add your ClickUp API token in the Tasks panel to activate live task sync.
-</div>
 
 <div class="stats">
-  <div class="stat"><div class="n" id="s-clients">—</div><div class="l">Active Clients</div></div>
+  <div class="stat"><div class="n" id="s-clients">—</div><div class="l">GC Clients</div></div>
   <div class="stat"><div class="n" id="s-tasks">—</div><div class="l">Open Tasks</div></div>
+
   <div class="stat"><div class="n" id="s-auditions">—</div><div class="l">Auditions Active</div></div>
-  <div class="stat"><div class="n" id="s-italy">—</div><div class="l">Italy Prep Done</div></div>
+  <div class="stat"><div class="n" id="s-vo-active">—</div><div class="l">VO Jobs Active</div></div>
 </div>
 
 <div class="grid">
@@ -230,14 +261,21 @@
     <div id="well-body"><div class="loading">Loading…</div></div>
   </div>
 
+  <!-- TASKS — simple built-in list -->
   <div class="card card-tasks">
     <div class="ch">
-      <span class="ct">✅ ClickUp Tasks</span>
+      <span class="ct">✅ Tasks</span>
       <span id="tasks-sync" style="font-size:.7rem;color:var(--muted);"></span>
+    </div>
+    <div class="task-add-row">
+      <input type="text" id="new-task-name" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addTask()"/>
+      <input type="date" id="new-task-due" title="Due date"/>
+      <button class="btn-add-task" onclick="addTask()">+ Add</button>
     </div>
     <div id="tasks-body"><div class="loading">Loading…</div></div>
   </div>
 
+  <!-- GREER COLLECTIVE PIPELINE — consulting clients only -->
   <div class="card card-pipe">
     <div class="ch">
       <span class="ct">🧭 Greer Collective Pipeline</span>
@@ -245,17 +283,21 @@
     <div id="pipe-body"><div class="loading">Loading…</div></div>
   </div>
 
+  <!-- JACQUIEVOICE — auditions + active VO project pipeline -->
   <div class="card card-jv">
     <div class="ch">
-      <span class="ct">🎙️ JacquieVoice</span>
-      <a class="ca" href="jacquievoice.html">Full Tracker →</a>
+      <span class="ct jv">🎙️ JacquieVoice</span>
+      <div class="ca-links">
+        <a class="ca jv" href="vo-pipeline.html">Pipeline →</a>
+        <a class="ca" href="jacquievoice.html">Auditions →</a>
+      </div>
     </div>
     <div id="jv-body"><div class="loading">Loading…</div></div>
     <div class="add-row">
-      <input type="text" id="jv-name" placeholder="Project or client name"/>
+      <input type="text" id="jv-name" placeholder="Audition: project or client name"/>
       <select id="jv-platform">
         <option>Voice123</option><option>Casting Networks</option>
-        <option>Direct</option><option>Other</option>
+        <option>Fiverr</option><option>Direct</option><option>Other</option>
       </select>
       <button class="add-btn" onclick="addAudition()">+</button>
     </div>
@@ -283,7 +325,7 @@
     <div class="quick-links">
       <a class="ql" href="expense-tracker.html">🧾 Expense Tracker</a>
       <a class="ql" href="credit-card-payoff.html">💳 Card Payoff</a>
-      <a class="ql" href="jacquievoice.html">🎙️ JacquieVoice</a>
+      <a class="ql jv" href="rate-earnings.html">📈 VO Earnings</a>
       <a class="ql" href="wellness-tracker.html">💜 Wellness</a>
     </div>
   </div>
@@ -296,7 +338,6 @@
 <script>
 const SB_URL = 'https://vkwhoicqasotanlkquoa.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2hvaWNxYXNvdGFubGtxdW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NjA1OTIsImV4cCI6MjA5MDEzNjU5Mn0.5LRCWzg2Bj6cMQCHgbNAXcJlm4Po97CbLl3v8PnPP-A';
-const EDGE   = SB_URL + '/functions/v1/clickup';
 const sb     = supabase.createClient(SB_URL, SB_KEY);
 let prepData = [], italyFilter = 'All', cfg = {};
 
@@ -304,7 +345,7 @@ async function init() {
   setHeaderDate(); setCountdown();
   cfg = await getSettings();
   renderCalendar();
-  await Promise.all([loadWellness(), loadTasks(), loadPipeline(), loadAuditions(), loadItalyPrep(), loadBudget()]);
+  await Promise.all([loadWellness(), loadTasks(), loadPipeline(), loadJacquieVoice(), loadItalyPrep(), loadBudget()]);
 }
 
 function setHeaderDate() {
@@ -377,98 +418,161 @@ async function loadWellness() {
     ${e.win_or_gratitude?`<p class="well-quote">"${e.win_or_gratitude}"</p>`:''}`;
 }
 
+/* ── TASKS — simple built-in list (Supabase tasks table) ── */
 async function loadTasks() {
+  const { data, error } = await sb.from('tasks')
+    .select('*')
+    .eq('done', false)
+    .order('due_date', { ascending: true, nullsFirst: false })
+    .order('created_at', { ascending: true });
+
   const el = document.getElementById('tasks-body');
-  const res = await fetch(EDGE, {headers:{apikey:SB_KEY}}).catch(()=>null);
-  if (!res||!res.ok) { el.innerHTML=renderTasksSetup(); setSynced(false); return; }
-  const data = await res.json().catch(()=>({}));
-  if (data.setup_required) { el.innerHTML=renderTasksSetup(); document.getElementById('setup-banner').style.display='block'; return; }
-  setSynced(true);
-  const tasks = data.tasks||[];
-  document.getElementById('s-tasks').textContent = tasks.length;
-  document.getElementById('tasks-sync').textContent = 'synced '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-  if (!tasks.length) { el.innerHTML='<div class="empty">No open tasks — you\'re clear 🎉</div>'; return; }
-  const now=Date.now(), eod=new Date(); eod.setHours(23,59,59,999);
-  const ov=tasks.filter(t=>t.due_date&&+t.due_date<now);
-  const td=tasks.filter(t=>t.due_date&&+t.due_date>=now&&+t.due_date<=eod.getTime());
-  const up=tasks.filter(t=>!t.due_date||+t.due_date>eod.getTime());
-  el.innerHTML=`<div class="tasks-grid">
-    ${ov.length?`<div><div class="tg-label">⚠️ Overdue (${ov.length})</div>${ov.map(t=>taskHTML(t,'ov')).join('')}</div>`:''}
-    ${td.length?`<div><div class="tg-label">🔥 Today (${td.length})</div>${td.map(t=>taskHTML(t,'td')).join('')}</div>`:''}
-    ${up.length?`<div><div class="tg-label">📅 Upcoming (${up.length})</div>${up.map(t=>taskHTML(t,'ok')).join('')}</div>`:''}
-  </div>`;
+  if (error) { el.innerHTML = '<div class="empty">Could not load tasks.</div>'; return; }
+
+  const rows = data || [];
+  document.getElementById('s-tasks').textContent = rows.length;
+  document.getElementById('tasks-sync').textContent = rows.length ? '' : '';
+
+  if (!rows.length) {
+    el.innerHTML = '<div class="tasks-empty">No open tasks — you\'re clear! 🎉</div>';
+    return;
+  }
+
+  const today = new Date().toISOString().split('T')[0];
+  const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+
+  el.innerHTML = rows.map(t => {
+    let badgeHtml = '';
+    if (t.due_date) {
+      if (t.due_date < today)        badgeHtml = `<span class="due-badge overdue">⚠ ${fmtDue(t.due_date)} Overdue</span>`;
+      else if (t.due_date === today) badgeHtml = `<span class="due-badge today">Today</span>`;
+      else if (t.due_date <= tomorrow) badgeHtml = `<span class="due-badge soon">Tomorrow</span>`;
+      else                           badgeHtml = `<span class="due-badge future">${fmtDue(t.due_date)}</span>`;
+    }
+    return `<div class="task-row" id="tr-${t.id}">
+      <input type="checkbox" onchange="completeTask('${t.id}', this)"/>
+      <span class="task-name-txt">${escHtml(t.name)}</span>
+      ${badgeHtml}
+      <button class="task-del" title="Delete" onclick="deleteTask('${t.id}')">✕</button>
+    </div>`;
+  }).join('');
 }
-function renderTasksSetup() {
-  return `<div class="tasks-setup">
-    <p>Enter your <strong>ClickUp Personal API Token</strong> to see your tasks.<br>Find it: <strong>ClickUp → profile photo → Settings → Apps → API Token</strong></p>
-    <div class="input-row" style="max-width:460px;margin:0 auto;">
-      <input type="password" id="cu-token" placeholder="pk_xxxxxxxxxxxxxxxxxx"/>
-      <button class="btn-purple" onclick="saveClickUpToken()">Connect</button>
-    </div>
-  </div>`;
+
+async function addTask() {
+  const nameEl = document.getElementById('new-task-name');
+  const dueEl  = document.getElementById('new-task-due');
+  const name   = nameEl.value.trim();
+  if (!name) { nameEl.focus(); return; }
+
+  const { error } = await sb.from('tasks').insert({
+    name,
+    due_date: dueEl.value || null,
+    done: false,
+  });
+  if (error) { showToast('Could not add task', true); return; }
+  nameEl.value = '';
+  dueEl.value  = '';
+  nameEl.focus();
+  await loadTasks();
 }
-function taskHTML(t, urgency) {
-  const due  = t.due_date ? new Date(+t.due_date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
-  const list = t.list?.name||t.folder?.name||'';
-  return `<div class="task" id="tk-${t.id}">
-    <input type="checkbox" onchange="completeTask('${t.id}',this)"/>
-    <div class="task-body">
-      <div class="task-name">${t.name}</div>
-      <div class="task-meta">
-        ${due ?`<span class="tag ${urgency}">${due}</span>`:''}
-        ${list?`<span class="tag">${list}</span>`:''}
-      </div>
-    </div>
-  </div>`;
-}
-async function saveClickUpToken() {
-  const v = document.getElementById('cu-token')?.value?.trim();
-  if (!v) return;
-  await saveSetting('clickup_token', v);
-  document.getElementById('setup-banner').style.display='none';
-  showToast('Token saved — loading tasks…'); loadTasks();
-}
+
 async function completeTask(id, cb) {
-  cb.disabled=true;
-  document.getElementById(`tk-${id}`)?.classList.add('done');
-  const res = await fetch(EDGE,{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({action:'complete_task',task_id:id})}).catch(()=>null);
-  if (res?.ok) {
-    showToast('Task done ✓');
-    setTimeout(()=>document.getElementById(`tk-${id}`)?.remove(),700);
-    const n=document.getElementById('s-tasks'); n.textContent=Math.max(0,(+n.textContent||1)-1);
-  } else { cb.checked=false; cb.disabled=false; document.getElementById(`tk-${id}`)?.classList.remove('done'); showToast('Could not complete task',true); }
+  cb.disabled = true;
+  const row = document.getElementById('tr-' + id);
+  if (row) { row.querySelector('.task-name-txt').classList.add('done'); }
+  const { error } = await sb.from('tasks').update({ done: true }).eq('id', id);
+  if (error) { cb.checked = false; cb.disabled = false; showToast('Update failed', true); return; }
+  showToast('Done ✓');
+  setTimeout(() => loadTasks(), 500);
 }
 
+async function deleteTask(id) {
+  await sb.from('tasks').delete().eq('id', id);
+  await loadTasks();
+}
+
+function fmtDue(d) {
+  return new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month:'short', day:'numeric' });
+}
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ── GREER COLLECTIVE PIPELINE ── consulting clients only (no VO jobs) */
 async function loadPipeline() {
-  const [cr,jr]=await Promise.all([
-    sb.from('clients').select('name,status,industry').order('created_at',{ascending:false}).limit(8),
-    sb.from('jobs').select('client,type,amount,due,status').neq('status','complete').order('due',{ascending:true}).limit(5),
-  ]);
-  const clients=cr.data||[], jobs=jr.data||[];
-  document.getElementById('s-clients').textContent=clients.filter(c=>c.status==='active').length||clients.length;
-  const el=document.getElementById('pipe-body');
-  if (!clients.length&&!jobs.length) { el.innerHTML='<div class="empty">No pipeline entries yet.</div>'; return; }
-  const dc=s=>({active:'a',prospect:'p',warm:'w'})[s?.toLowerCase()]||'';
-  el.innerHTML=`
-    ${clients.map(c=>`<div class="pipe-item"><div class="dot ${dc(c.status)}"></div><div class="pipe-name">${c.name}</div><div class="pipe-meta">${c.industry||''}</div><span class="pipe-badge ${dc(c.status)}">${c.status||'lead'}</span></div>`).join('')}
-    ${jobs.length?`<div class="section-lbl">Active Jobs</div>`+jobs.map(j=>`<div class="pipe-item"><div class="dot a"></div><div class="pipe-name">${j.client}</div><div class="pipe-meta">${j.type||''}${j.due?' · due '+new Date(j.due).toLocaleDateString('en-US',{month:'short',day:'numeric'}):''}</div><span class="pipe-badge a">$${(+j.amount||0).toLocaleString()}</span></div>`).join(''):''}`;
+  const { data: clients } = await sb.from('clients')
+    .select('name,status,industry')
+    .order('created_at',{ascending:false})
+    .limit(10);
+  const rows = clients||[];
+  document.getElementById('s-clients').textContent = rows.filter(c=>c.status==='active').length || rows.length;
+  const el = document.getElementById('pipe-body');
+  if (!rows.length) { el.innerHTML='<div class="empty">No consulting clients yet.<br><span style="font-size:.78rem;">Add clients to the Clients table in Supabase.</span></div>'; return; }
+  const dc = s => ({active:'a',prospect:'p',warm:'w'})[s?.toLowerCase()]||'';
+  el.innerHTML = rows.map(c=>`
+    <div class="pipe-item">
+      <div class="dot ${dc(c.status)}"></div>
+      <div class="pipe-name">${c.name}</div>
+      <div class="pipe-meta">${c.industry||''}</div>
+      <span class="pipe-badge ${dc(c.status)}">${c.status||'lead'}</span>
+    </div>`).join('');
 }
 
-async function loadAuditions() {
-  const { data } = await sb.from('auditions').select('*').order('submitted_date',{ascending:false}).limit(30);
-  const rows=data||[];
+/* ── JACQUIEVOICE CARD ── auditions funnel + active VO project pipeline */
+async function loadJacquieVoice() {
+  const [audRes, jobRes] = await Promise.all([
+    sb.from('auditions').select('*').order('submitted_date',{ascending:false}).limit(30),
+    sb.from('jobs')
+      .select('id,client,project_name,type,amount,due,status,platform')
+      .in('status',['new','in_progress','revision','delivered'])
+      .order('due',{ascending:true})
+      .limit(5),
+  ]);
+
+  const rows = audRes.data||[];
+  const jobs = jobRes.data||[];
+
   const c={submitted:0,callback:0,booked:0,passed:0};
   rows.forEach(r=>{if(c[r.status]!==undefined)c[r.status]++;});
-  document.getElementById('s-auditions').textContent=c.submitted+c.callback;
-  const el=document.getElementById('jv-body');
-  el.innerHTML=`
+  document.getElementById('s-auditions').textContent = c.submitted+c.callback;
+  document.getElementById('s-vo-active').textContent = jobs.length;
+
+  const PLAT_COLOR = {fiverr:'#1dbf73',voice123:'#003087',direct:'#c9a84c','casting networks':'#7c5cbf'};
+  const statusLabel = {new:'New',in_progress:'Recording',revision:'Revision',delivered:'Delivered',paid:'Paid'};
+  const today = new Date().toISOString().split('T')[0];
+
+  const el = document.getElementById('jv-body');
+  el.innerHTML = `
+    <!-- Active VO Pipeline mini preview -->
+    <div class="jv-pipeline-mini">
+      <div class="jv-pip-hd">
+        <span class="jv-pip-title">🗂️ Active Projects (${jobs.length})</span>
+        <a class="jv-pip-link" href="vo-pipeline.html">View all →</a>
+      </div>
+      ${!jobs.length
+        ? `<div style="font-size:.8rem;color:var(--muted);text-align:center;padding:8px 0;">No active projects right now.</div>`
+        : jobs.map(j => {
+            const overdue = j.due && j.due < today;
+            const name = j.project_name || j.client || 'Untitled';
+            const platKey = (j.platform||'').toLowerCase();
+            const platColor = PLAT_COLOR[platKey] || 'var(--muted)';
+            return `<div class="jv-pip-row">
+              <div class="jv-pip-name" title="${name}">${name}</div>
+              <div class="jv-pip-meta" style="${overdue?'color:var(--red);font-weight:600;':''}">${j.due ? (overdue?'⚠ ':'')+new Date(j.due+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : ''}</div>
+              <span class="jv-pip-badge ${j.status}">${statusLabel[j.status]||j.status}</span>
+            </div>`;
+          }).join('')
+      }
+    </div>
+
+    <!-- Auditions funnel -->
     <div class="jv-funnel">
       <div class="jv-stage"><div class="n">${c.submitted}</div><div class="l">Submitted</div></div>
       <div class="jv-stage cb"><div class="n">${c.callback}</div><div class="l">Callback</div></div>
       <div class="jv-stage bk"><div class="n">${c.booked}</div><div class="l">Booked</div></div>
       <div class="jv-stage"><div class="n">${c.passed}</div><div class="l">Passed</div></div>
     </div>
-    ${rows.slice(0,6).map(a=>`
+    ${rows.slice(0,5).map(a=>`
       <div class="jv-row">
         <div>
           <div class="jv-name">${a.client_name||a.project_type||'Submission'}</div>
@@ -483,12 +587,13 @@ async function loadAuditions() {
       </div>`).join('')}
     ${!rows.length?'<div class="empty">No auditions yet — add one below.</div>':''}`;
 }
+
 async function quickJVStatus(id, sel) {
   const status = sel.value;
   sel.className = 'jv-sel ' + status;
   await sb.from('auditions').update({status}).eq('id',id);
   showToast(`Updated → ${status}`);
-  loadAuditions();
+  loadJacquieVoice();
 }
 async function addAudition() {
   const name=document.getElementById('jv-name').value.trim();
@@ -496,7 +601,7 @@ async function addAudition() {
   if (!name) return;
   await sb.from('auditions').insert({client_name:name,casting_platform:platform,status:'submitted',submitted_date:new Date().toLocaleDateString('en-CA')});
   document.getElementById('jv-name').value='';
-  showToast('Audition logged!'); loadAuditions();
+  showToast('Audition logged!'); loadJacquieVoice();
 }
 
 async function loadItalyPrep() {
@@ -509,7 +614,6 @@ function updateItalyStats() {
   const pct=tot?Math.round(done/tot*100):0;
   document.getElementById('italy-bar').style.width=pct+'%';
   document.getElementById('italy-lbl').textContent=`${done}/${tot} complete`;
-  document.getElementById('s-italy').textContent=pct+'%';
 }
 function renderPrep() {
   const items=italyFilter==='All'?prepData:prepData.filter(i=>i.category===italyFilter);
@@ -559,7 +663,7 @@ async function initMonth(ms) {
 
 async function refreshAll() {
   setSynced(true); cfg=await getSettings(); renderCalendar();
-  await Promise.all([loadWellness(),loadTasks(),loadPipeline(),loadAuditions(),loadItalyPrep(),loadBudget()]);
+  await Promise.all([loadWellness(), loadTasks(), loadPipeline(), loadJacquieVoice(), loadItalyPrep(), loadBudget()]);
   showToast('All data refreshed');
 }
 
