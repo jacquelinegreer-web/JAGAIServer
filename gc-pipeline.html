@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Greer Collective | Client Pipeline</title>
+  <style>
+    :root {
+      --bg: #f5f0eb;
+      --purple: #3b2a6e;
+      --mid: #7c5cbf;
+      --light: #e8e2f7;
+      --pale: #f3f0fa;
+      --card: #fff;
+      --text: #2d2d2d;
+      --muted: #888;
+      --border: #e0dae8;
+      --green: #2e7d32; --green-bg: #e8f5e9;
+      --orange: #d84c00; --orange-bg: #fff3e0;
+      --red: #c0392b; --red-bg: #fdf0ee;
+      --gold: #b8860b; --gold-bg: #fffde7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* HEADER */
+    .hdr { background: var(--purple); color: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .hdr h1 { font-size: 1.05rem; font-weight: 700; }
+    .hdr p  { font-size: .78rem; opacity: .7; margin-top: 2px; }
+    .nav-links { display: flex; gap: 8px; }
+    .nav-link { font-size: .78rem; color: rgba(255,255,255,.75); text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,.1); }
+    .nav-link:hover { background: rgba(255,255,255,.2); color: white; }
+
+    /* STATS */
+    .stats { display: flex; border-bottom: 1px solid var(--border); background: white; overflow-x: auto; }
+    .stat { padding: 10px 24px; text-align: center; border-right: 1px solid var(--border); min-width: 90px; }
+    .stat:last-child { border-right: none; }
+    .stat .n { font-size: 1.5rem; font-weight: 700; color: var(--purple); }
+    .stat .l { font-size: .62rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-top: 1px; }
+
+    .wrap { max-width: 1050px; margin: 0 auto; padding: 20px 16px 60px; }
+
+    .section-hdr { font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin: 24px 0 10px; display: flex; align-items: center; gap: 10px; }
+    .section-hdr::after { content:''; flex:1; height:1px; background: var(--border); }
+
+    /* ACTION BAR */
+    .action-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+    .btn { padding: 7px 14px; border-radius: 8px; font-size: .82rem; font-weight: 600; cursor: pointer; border: none; font-family: inherit; }
+    .btn-primary { background: var(--mid); color: white; }
+    .btn-primary:hover { background: var(--purple); }
+    .filter-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+    .chip { font-size: .75rem; padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--border); background: none; cursor: pointer; color: var(--muted); font-family: inherit; }
+    .chip.on { background: var(--light); border-color: var(--mid); color: var(--purple); font-weight: 600; }
+    .search-box { border: 1.5px solid var(--border); border-radius: 8px; padding: 7px 12px; font-size: .83rem; font-family: inherit; flex: 1; min-width: 150px; max-width: 240px; }
+    .search-box:focus { outline: none; border-color: var(--mid); }
+
+    /* CLIENT CARDS GRID */
+    .client-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+
+    .client-card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 5px rgba(0,0,0,.06);
+      border-left: 4px solid var(--border);
+      position: relative;
+    }
+    .client-card.active   { border-left-color: var(--green); }
+    .client-card.prospect { border-left-color: var(--orange); }
+    .client-card.warm     { border-left-color: #f9a825; }
+    .client-card.lead     { border-left-color: var(--mid); }
+    .client-card.complete { border-left-color: #ccc; }
+
+    .cc-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+    .cc-name { font-size: 1rem; font-weight: 700; color: var(--purple); line-height: 1.2; }
+    .cc-industry { font-size: .75rem; color: var(--muted); margin-top: 3px; }
+
+    .status-badge { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 3px 9px; border-radius: 9px; white-space: nowrap; }
+    .status-badge.active   { background: var(--green-bg);  color: var(--green); }
+    .status-badge.prospect { background: var(--orange-bg); color: var(--orange); }
+    .status-badge.warm     { background: var(--gold-bg);   color: var(--gold); }
+    .status-badge.lead     { background: var(--light);     color: var(--mid); }
+    .status-badge.complete { background: #f5f5f5;          color: #aaa; }
+
+    .cc-details { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+    .cc-detail { font-size: .8rem; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+    .cc-detail a { color: var(--mid); text-decoration: none; }
+    .cc-detail a:hover { text-decoration: underline; }
+    .cc-detail strong { color: var(--text); }
+
+    .cc-notes { font-size: .78rem; color: var(--muted); background: var(--pale); border-radius: 7px; padding: 8px 10px; margin-bottom: 12px; line-height: 1.45; font-style: italic; }
+
+    .cc-actions { display: flex; gap: 6px; }
+    .btn-sm { font-size: .75rem; padding: 5px 11px; border-radius: 7px; border: 1.5px solid var(--border); background: none; cursor: pointer; color: var(--purple); font-family: inherit; }
+    .btn-sm:hover { background: var(--pale); }
+    .btn-sm.danger { color: var(--red); border-color: var(--red); }
+    .btn-sm.danger:hover { background: var(--red-bg); }
+
+    .empty-state { text-align: center; padding: 52px 20px; color: var(--muted); }
+    .empty-state .ico { font-size: 2.5rem; margin-bottom: 10px; }
+
+    /* MODAL */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; }
+    .overlay.open { display: flex; }
+    .modal { background: white; border-radius: 16px; padding: 24px; max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 16px 48px rgba(0,0,0,.18); }
+    .modal h2 { font-size: 1rem; font-weight: 700; color: var(--purple); margin-bottom: 18px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+    input[type=text], input[type=email], input[type=tel], select, textarea {
+      border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 11px;
+      font-size: .87rem; font-family: inherit; color: var(--text); background: white;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--mid); }
+    textarea { resize: vertical; min-height: 80px; }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+    .btn-cancel { background: var(--pale); color: var(--muted); border: none; border-radius: 8px; padding: 8px 16px; font-size: .85rem; cursor: pointer; font-family: inherit; }
+    .btn-save { background: var(--mid); color: white; border: none; border-radius: 8px; padding: 8px 18px; font-size: .85rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .btn-save:hover { background: var(--purple); }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--purple); color: white; padding: 9px 22px; border-radius: 20px; font-size: .86rem; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+    .toast.show { opacity: 1; }
+    .toast.err  { background: var(--red); }
+  </style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <h1>🧭 Greer Collective · Client Pipeline</h1>
+    <p>Consulting and facilitation engagements — feeds the Command Center live</p>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link" href="command-center.html">⚡ Command Center</a>
+    <a class="nav-link" href="index.html">🏠 Home</a>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="n" id="s-total">—</div><div class="l">Total</div></div>
+  <div class="stat"><div class="n" id="s-active">—</div><div class="l">Active</div></div>
+  <div class="stat"><div class="n" id="s-prospect">—</div><div class="l">Prospects</div></div>
+  <div class="stat"><div class="n" id="s-warm">—</div><div class="l">Warm</div></div>
+  <div class="stat"><div class="n" id="s-complete">—</div><div class="l">Complete</div></div>
+</div>
+
+<div class="wrap">
+  <div class="section-hdr">👥 Clients</div>
+
+  <div class="action-bar">
+    <button class="btn btn-primary" onclick="openModal()">+ Add Client</button>
+    <div class="filter-chips">
+      <button class="chip on" data-f="all" onclick="setFilter(this)">All</button>
+      <button class="chip" data-f="active" onclick="setFilter(this)">Active</button>
+      <button class="chip" data-f="prospect" onclick="setFilter(this)">Prospect</button>
+      <button class="chip" data-f="warm" onclick="setFilter(this)">Warm</button>
+      <button class="chip" data-f="lead" onclick="setFilter(this)">Lead</button>
+      <button class="chip" data-f="complete" onclick="setFilter(this)">Complete</button>
+    </div>
+    <input class="search-box" type="text" placeholder="Search clients…" oninput="searchFilter(this.value)"/>
+  </div>
+
+  <div class="client-grid" id="client-grid">
+    <div class="empty-state"><div class="ico">🔄</div><p>Loading clients…</p></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="modal-overlay" onclick="closeOnOverlay(event)">
+  <div class="modal">
+    <h2 id="modal-title">Add Client</h2>
+    <input type="hidden" id="edit-id"/>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Client / Organization Name *</label>
+        <input type="text" id="f-name" placeholder="e.g. Deloitte-USPS"/>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="f-status">
+          <option value="active">Active</option>
+          <option value="prospect">Prospect</option>
+          <option value="warm">Warm</option>
+          <option value="lead">Lead</option>
+          <option value="complete">Complete</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Industry / Sector</label>
+        <input type="text" id="f-industry" placeholder="e.g. Healthcare / Association"/>
+      </div>
+      <div class="form-group">
+        <label>Primary Contact</label>
+        <input type="text" id="f-contact" placeholder="Name"/>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="f-email" placeholder="contact@org.com"/>
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="tel" id="f-phone" placeholder="(202) 555-0100"/>
+      </div>
+      <div class="form-group">
+        <label>Engagement / Rate</label>
+        <input type="text" id="f-rate" placeholder="e.g. $5,000 / workshop"/>
+      </div>
+      <div class="form-group full">
+        <label>Notes</label>
+        <textarea id="f-notes" placeholder="Engagement details, next steps, relationship context…"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveClient()">Save Client</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SB_URL = 'https://vkwhoicqasotanlkquoa.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2hvaWNxYXNvdGFubGtxdW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NjA1OTIsImV4cCI6MjA5MDEzNjU5Mn0.5LRCWzg2Bj6cMQCHgbNAXcJlm4Po97CbLl3v8PnPP-A';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+let allClients = [], activeFilter = 'all', searchTerm = '';
+
+// ── DATA ─────────────────────────────────────────────────────────────────────
+async function loadData() {
+  const { data, error } = await sb
+    .from('clients')
+    .select('*')
+    .order('status')
+    .order('name');
+  if (error) { showToast('Could not load clients', true); return; }
+  allClients = data || [];
+  updateStats();
+  renderGrid();
+}
+
+function updateStats() {
+  const count = s => allClients.filter(c => c.status === s).length;
+  document.getElementById('s-total').textContent    = allClients.length;
+  document.getElementById('s-active').textContent   = count('active');
+  document.getElementById('s-prospect').textContent = count('prospect');
+  document.getElementById('s-warm').textContent     = count('warm');
+  document.getElementById('s-complete').textContent = count('complete');
+}
+
+function renderGrid() {
+  let clients = allClients;
+  if (activeFilter !== 'all') clients = clients.filter(c => c.status === activeFilter);
+  if (searchTerm) {
+    const s = searchTerm.toLowerCase();
+    clients = clients.filter(c =>
+      (c.name||'').toLowerCase().includes(s) ||
+      (c.industry||'').toLowerCase().includes(s) ||
+      (c.contact||'').toLowerCase().includes(s)
+    );
+  }
+
+  const el = document.getElementById('client-grid');
+  if (!clients.length) {
+    el.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="ico">🔍</div><p>No clients match this filter.</p></div>`;
+    return;
+  }
+
+  const STATUS_LABEL = { active:'Active', prospect:'Prospect', warm:'Warm', lead:'Lead', complete:'Complete' };
+
+  el.innerHTML = clients.map(c => `
+    <div class="client-card ${c.status||'lead'}">
+      <div class="cc-top">
+        <div>
+          <div class="cc-name">${escHtml(c.name)}</div>
+          ${c.industry ? `<div class="cc-industry">${escHtml(c.industry)}</div>` : ''}
+        </div>
+        <span class="status-badge ${c.status||'lead'}">${STATUS_LABEL[c.status]||c.status||'Lead'}</span>
+      </div>
+
+      <div class="cc-details">
+        ${c.contact ? `<div class="cc-detail">👤 <strong>${escHtml(c.contact)}</strong></div>` : ''}
+        ${c.email   ? `<div class="cc-detail">✉️ <a href="mailto:${c.email}">${escHtml(c.email)}</a></div>` : ''}
+        ${c.phone   ? `<div class="cc-detail">📞 ${escHtml(c.phone)}</div>` : ''}
+        ${c.rate    ? `<div class="cc-detail">💰 ${escHtml(c.rate)}</div>` : ''}
+      </div>
+
+      ${c.notes ? `<div class="cc-notes">${escHtml(c.notes)}</div>` : ''}
+
+      <div class="cc-actions">
+        <button class="btn-sm" onclick="openEdit('${c.id}')">✏️ Edit</button>
+        <select class="btn-sm" style="padding:4px 8px;font-size:.72rem;" onchange="quickStatus('${c.id}', this)">
+          ${['active','prospect','warm','lead','complete'].map(s =>
+            `<option value="${s}" ${c.status===s?'selected':''}>${STATUS_LABEL[s]}</option>`
+          ).join('')}
+        </select>
+        <button class="btn-sm danger" onclick="deleteClient('${c.id}')">Delete</button>
+      </div>
+    </div>`
+  ).join('');
+}
+
+// ── QUICK STATUS ──────────────────────────────────────────────────────────────
+async function quickStatus(id, sel) {
+  const status = sel.value;
+  const { error } = await sb.from('clients').update({ status }).eq('id', id);
+  if (error) { showToast('Update failed', true); return; }
+  showToast(`Status → ${status}`);
+  await loadData();
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────────
+function openModal(client = null) {
+  document.getElementById('modal-title').textContent = client ? 'Edit Client' : 'Add Client';
+  document.getElementById('edit-id').value     = client?.id     || '';
+  document.getElementById('f-name').value      = client?.name   || '';
+  document.getElementById('f-status').value    = client?.status || 'active';
+  document.getElementById('f-industry').value  = client?.industry || '';
+  document.getElementById('f-contact').value   = client?.contact  || '';
+  document.getElementById('f-email').value     = client?.email    || '';
+  document.getElementById('f-phone').value     = client?.phone    || '';
+  document.getElementById('f-rate').value      = client?.rate     || '';
+  document.getElementById('f-notes').value     = client?.notes    || '';
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('f-name').focus();
+}
+
+function openEdit(id) {
+  const client = allClients.find(c => c.id === id);
+  if (client) openModal(client);
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+function closeOnOverlay(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+async function saveClient() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { showToast('Client name is required', true); document.getElementById('f-name').focus(); return; }
+
+  const id = document.getElementById('edit-id').value;
+  const payload = {
+    name,
+    status:   document.getElementById('f-status').value,
+    industry: document.getElementById('f-industry').value.trim() || null,
+    contact:  document.getElementById('f-contact').value.trim()  || null,
+    email:    document.getElementById('f-email').value.trim()    || null,
+    phone:    document.getElementById('f-phone').value.trim()    || null,
+    rate:     document.getElementById('f-rate').value.trim()     || null,
+    notes:    document.getElementById('f-notes').value.trim()    || null,
+  };
+
+  const { error } = id
+    ? await sb.from('clients').update(payload).eq('id', id)
+    : await sb.from('clients').insert(payload);
+
+  if (error) { showToast('Save failed: ' + error.message, true); return; }
+  showToast(id ? 'Client updated!' : 'Client added!');
+  closeModal();
+  await loadData();
+}
+
+async function deleteClient(id) {
+  const client = allClients.find(c => c.id === id);
+  if (!confirm(`Remove "${client?.name}" from your pipeline?`)) return;
+  const { error } = await sb.from('clients').delete().eq('id', id);
+  if (error) { showToast('Delete failed', true); return; }
+  showToast('Client removed');
+  await loadData();
+}
+
+// ── FILTERS ───────────────────────────────────────────────────────────────────
+function setFilter(btn) {
+  document.querySelectorAll('.filter-chips .chip').forEach(c => c.classList.remove('on'));
+  btn.classList.add('on');
+  activeFilter = btn.dataset.f;
+  renderGrid();
+}
+function searchFilter(val) {
+  searchTerm = val;
+  renderGrid();
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function showToast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  setTimeout(() => t.className = 'toast', 2800);
+}
+
+loadData();
+</script>
+</body>
+</html>
