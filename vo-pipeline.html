@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JacquieVoice | Project Pipeline</title>
+  <style>
+    :root {
+      --bg: #f5f0eb;
+      --navy: #1a3558;
+      --navy-mid: #2a5080;
+      --navy-pale: #eef3f8;
+      --gold: #c9a84c;
+      --gold-bg: #fdf8e8;
+      --gold-border: #e8d48a;
+      --gold-dark: #7a5c10;
+      --card: #fff;
+      --text: #2d2d2d;
+      --muted: #888;
+      --border: #e0dae8;
+      --green: #2e7d32; --green-bg: #e8f5e9;
+      --orange: #d84c00; --orange-bg: #fff3e0;
+      --red: #c0392b; --red-bg: #fdf0ee;
+      --purple: #3b2a6e; --light: #e8e2f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* HEADER */
+    .hdr { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%); color: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .hdr h1 { font-size: 1.1rem; font-weight: 700; }
+    .hdr p  { font-size: .78rem; opacity: .7; margin-top: 2px; }
+    .hdr-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .hdr-btn { background: rgba(255,255,255,.15); border: none; border-radius: 7px; color: white; padding: 6px 14px; font-size: .82rem; cursor: pointer; text-decoration: none; display: inline-block; }
+    .hdr-btn:hover { background: rgba(255,255,255,.28); }
+    .hdr-btn.gold { background: var(--gold); color: var(--navy); font-weight: 700; border: none; }
+    .hdr-btn.gold:hover { background: #d4b35a; }
+
+    /* STATS */
+    .stats { display: grid; grid-template-columns: repeat(5,1fr); border-bottom: 1px solid var(--border); }
+    .stat { background: white; padding: 12px 14px; text-align: center; border-right: 1px solid var(--border); }
+    .stat:last-child { border-right: none; }
+    .stat .n { font-size: 1.5rem; font-weight: 700; color: var(--navy); }
+    .stat .n.gold  { color: var(--gold-dark); }
+    .stat .n.green { color: var(--green); }
+    .stat .n.red   { color: var(--red); }
+    .stat .n.orange{ color: var(--orange); }
+    .stat .l { font-size: .63rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-top: 1px; }
+    @media(max-width:640px) { .stats { grid-template-columns: repeat(3,1fr); } }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+    /* PIPELINE FUNNEL */
+    .funnel { display: flex; gap: 4px; margin-bottom: 18px; align-items: stretch; flex-wrap: wrap; }
+    .stage { flex: 1; min-width: 80px; background: var(--card); border-radius: 10px; padding: 11px 8px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.06); cursor: pointer; border: 2px solid transparent; transition: border-color .15s; }
+    .stage:hover, .stage.active { border-color: var(--gold); }
+    .stage .sn { font-size: 1.35rem; font-weight: 700; color: var(--navy); }
+    .stage .sl { font-size: .62rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-top: 2px; }
+    .stage.s-new        { background: var(--navy-pale); }
+    .stage.s-new .sn    { color: var(--navy); }
+    .stage.s-inprogress { background: #fff3e0; }
+    .stage.s-inprogress .sn { color: var(--orange); }
+    .stage.s-revision   { background: var(--red-bg); }
+    .stage.s-revision .sn   { color: var(--red); }
+    .stage.s-delivered  { background: var(--gold-bg); }
+    .stage.s-delivered .sn  { color: var(--gold-dark); }
+    .stage.s-paid       { background: var(--green-bg); }
+    .stage.s-paid .sn   { color: var(--green); }
+    .stage.s-cancelled  { background: #f5f5f5; }
+    .stage.s-cancelled .sn  { color: #bbb; }
+    .funnel-arrow { display: flex; align-items: center; color: var(--border); font-size: 1.1rem; }
+
+    /* ADD FORM */
+    .add-card { background: var(--card); border-radius: 13px; padding: 18px 20px; box-shadow: 0 1px 4px rgba(0,0,0,.06); margin-bottom: 14px; border-left: 3px solid var(--gold); }
+    .add-card h2 { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--navy); margin-bottom: 14px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap: 10px; }
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field label { font-size: .72rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    .field input, .field select, .field textarea {
+      border: 1.5px solid var(--border); border-radius: 7px; padding: 7px 10px;
+      font-size: .88rem; font-family: inherit; color: var(--text); background: #fafafa;
+    }
+    .field textarea { resize: vertical; min-height: 56px; }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--gold); }
+    .form-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-end; }
+    .btn { border: none; border-radius: 8px; padding: 8px 18px; font-size: .88rem; font-weight: 600; cursor: pointer; }
+    .btn-primary { background: var(--navy); color: white; }
+    .btn-primary:hover { background: var(--navy-mid); }
+    .btn-gold { background: var(--gold); color: var(--navy); }
+    .btn-gold:hover { background: #d4b35a; }
+    .btn-ghost { background: var(--navy-pale); color: var(--navy); }
+    .btn-ghost:hover { background: #dce8f2; }
+
+    /* FILTER ROW */
+    .filter-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+    .filter-row span { font-size: .75rem; color: var(--muted); font-weight: 600; margin-right: 2px; }
+    .fp { font-size: .75rem; padding: 4px 12px; border-radius: 12px; border: 1.5px solid var(--border); background: none; cursor: pointer; color: var(--muted); }
+    .fp.on { background: var(--gold-bg); border-color: var(--gold); color: var(--gold-dark); font-weight: 600; }
+    .search-box { margin-left: auto; border: 1.5px solid var(--border); border-radius: 7px; padding: 5px 10px; font-size: .82rem; font-family: inherit; width: 180px; }
+    .search-box:focus { outline: none; border-color: var(--gold); }
+
+    /* TABLE */
+    .table-card { background: var(--card); border-radius: 13px; box-shadow: 0 1px 4px rgba(0,0,0,.06); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { font-size: .67rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: 10px 14px; background: var(--navy-pale); text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    td { padding: 9px 14px; font-size: .84rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--gold-bg); }
+
+    /* STATUS SELECT */
+    .status-sel { border: 1.5px solid var(--border); border-radius: 7px; padding: 4px 7px; font-size: .76rem; font-family: inherit; cursor: pointer; background: white; }
+    .status-sel:focus { outline: none; }
+    .status-sel.new        { background: var(--navy-pale); color: var(--navy); border-color: var(--navy); }
+    .status-sel.in_progress{ background: var(--orange-bg); color: var(--orange); border-color: var(--orange); }
+    .status-sel.revision   { background: var(--red-bg); color: var(--red); border-color: var(--red); }
+    .status-sel.delivered  { background: var(--gold-bg); color: var(--gold-dark); border-color: var(--gold-border); }
+    .status-sel.paid       { background: var(--green-bg); color: var(--green); border-color: var(--green); }
+    .status-sel.cancelled  { background: #f5f5f5; color: #aaa; border-color: #ddd; }
+
+    /* PLATFORM TAGS */
+    .plat-tag { font-size: .69rem; padding: 2px 8px; border-radius: 9px; white-space: nowrap; font-weight: 600; }
+    .plat-fiverr  { background: #e8f5e9; color: #1b5e20; }
+    .plat-voice123{ background: var(--navy-pale); color: var(--navy); }
+    .plat-direct  { background: var(--gold-bg); color: var(--gold-dark); }
+    .plat-casting { background: var(--light); color: var(--purple); }
+    .plat-other   { background: #f5f5f5; color: #666; }
+
+    /* PRIORITY */
+    .pri-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+    .pri-high   .pri-dot { background: var(--red); }
+    .pri-normal .pri-dot { background: var(--gold); }
+    .pri-low    .pri-dot { background: #ccc; }
+
+    /* DUE DATE */
+    .due-overdue { color: var(--red); font-weight: 700; }
+    .due-today   { color: var(--orange); font-weight: 700; }
+    .due-soon    { color: var(--gold-dark); font-weight: 600; }
+
+    /* FEE */
+    .fee-cell { font-weight: 700; color: var(--green); }
+
+    /* ACTION BUTTONS */
+    .edit-btn { font-size: .72rem; padding: 3px 9px; border-radius: 6px; background: var(--navy-pale); color: var(--navy); border: none; cursor: pointer; }
+    .edit-btn:hover { background: #dce8f2; }
+    .del-btn  { font-size: .72rem; padding: 3px 9px; border-radius: 6px; background: var(--red-bg); color: var(--red); border: none; cursor: pointer; }
+    .del-btn:hover { background: #f9d6d3; }
+    .empty-row td { text-align: center; color: var(--muted); padding: 32px; }
+
+    @media(max-width:700px) { .hide-mobile { display: none; } }
+
+    /* MODAL */
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+    .modal { background: white; border-radius: 14px; padding: 22px 24px; width: 100%; max-width: 580px; box-shadow: 0 8px 32px rgba(0,0,0,.18); max-height: 90vh; overflow-y: auto; }
+    .modal h3 { font-size: .9rem; font-weight: 700; color: var(--navy); margin-bottom: 16px; }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--navy); color: white; padding: 9px 22px; border-radius: 20px; font-size: .86rem; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+    .toast.show { opacity: 1; }
+    .toast.err { background: var(--red); }
+    .loading { color: var(--muted); font-size: .85rem; padding: 28px; text-align: center; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <h1>🎙️ JacquieVoice &nbsp;·&nbsp; Project Pipeline</h1>
+    <p id="hdr-sub">Your active VO work across Fiverr, direct clients, and platforms</p>
+  </div>
+  <div class="hdr-right">
+    <a class="hdr-btn" href="command-center.html">← Command Center</a>
+    <a class="hdr-btn" href="jacquievoice.html">Audition Tracker</a>
+    <a class="hdr-btn" href="rate-earnings.html">Earnings</a>
+    <button class="hdr-btn gold" onclick="toggleAdd()">+ New Project</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="n" id="s-active">—</div><div class="l">Active</div></div>
+  <div class="stat"><div class="n red" id="s-overdue">—</div><div class="l">Overdue</div></div>
+  <div class="stat"><div class="n orange" id="s-dueweek">—</div><div class="l">Due This Week</div></div>
+  <div class="stat"><div class="n gold" id="s-pending">—</div><div class="l">Awaiting Payment</div></div>
+  <div class="stat"><div class="n green" id="s-monthearned">—</div><div class="l">Paid This Month</div></div>
+</div>
+
+<div class="wrap">
+
+  <!-- FUNNEL -->
+  <div class="funnel" style="margin-top:18px;">
+    <div class="stage s-new" data-s="new" onclick="filterStage(this)">
+      <div class="sn" id="f-new">0</div><div class="sl">New</div>
+    </div>
+    <div class="funnel-arrow">›</div>
+    <div class="stage s-inprogress" data-s="in_progress" onclick="filterStage(this)">
+      <div class="sn" id="f-inprogress">0</div><div class="sl">Recording</div>
+    </div>
+    <div class="funnel-arrow">›</div>
+    <div class="stage s-revision" data-s="revision" onclick="filterStage(this)">
+      <div class="sn" id="f-revision">0</div><div class="sl">Revision</div>
+    </div>
+    <div class="funnel-arrow">›</div>
+    <div class="stage s-delivered" data-s="delivered" onclick="filterStage(this)">
+      <div class="sn" id="f-delivered">0</div><div class="sl">Delivered</div>
+    </div>
+    <div class="funnel-arrow">›</div>
+    <div class="stage s-paid" data-s="paid" onclick="filterStage(this)">
+      <div class="sn" id="f-paid">0</div><div class="sl">Paid</div>
+    </div>
+    <div class="funnel-arrow">·</div>
+    <div class="stage s-cancelled" data-s="cancelled" onclick="filterStage(this)">
+      <div class="sn" id="f-cancelled">0</div><div class="sl">Cancelled</div>
+    </div>
+  </div>
+
+  <!-- ADD FORM -->
+  <div class="add-card" id="add-form" style="display:none;">
+    <h2>New Project</h2>
+    <div class="form-grid">
+      <div class="field" style="grid-column:1/-1;">
+        <label>Project / Spot Name</label>
+        <input type="text" id="f-name" placeholder="e.g. TechCorp product launch narration"/>
+      </div>
+      <div class="field">
+        <label>Client Name</label>
+        <input type="text" id="f-client" placeholder="Client or Fiverr username"/>
+      </div>
+      <div class="field">
+        <label>Platform / Source</label>
+        <select id="f-platform">
+          <option value="Fiverr">Fiverr</option>
+          <option value="Voice123">Voice123</option>
+          <option value="Direct">Direct Client</option>
+          <option value="Casting Networks">Casting Networks</option>
+          <option value="Voices.com">Voices.com</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Project Type</label>
+        <select id="f-type">
+          <option value="">— select —</option>
+          <option>Commercial</option>
+          <option>E-learning</option>
+          <option>Corporate narration</option>
+          <option>Animation / character</option>
+          <option>Podcast</option>
+          <option>IVR / telephony</option>
+          <option>Audiobook</option>
+          <option>Social media</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Fee ($)</label>
+        <input type="number" id="f-amount" placeholder="0.00" min="0" step="0.01"/>
+      </div>
+      <div class="field">
+        <label>Deadline</label>
+        <input type="date" id="f-due"/>
+      </div>
+      <div class="field">
+        <label>Priority</label>
+        <select id="f-priority">
+          <option value="normal">Normal</option>
+          <option value="high">High</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="f-status">
+          <option value="new">New</option>
+          <option value="in_progress">Recording</option>
+          <option value="revision">Revision</option>
+          <option value="delivered">Delivered</option>
+          <option value="paid">Paid</option>
+        </select>
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>Notes</label>
+        <textarea id="f-notes" placeholder="Script details, tone direction, client notes, Fiverr order ID…"></textarea>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="toggleAdd()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNew()">Save Project</button>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filter-row">
+    <span>Filter:</span>
+    <button class="fp on" data-s="active" onclick="setFilter(this)">Active</button>
+    <button class="fp" data-s="all" onclick="setFilter(this)">All</button>
+    <button class="fp" data-s="fiverr" onclick="setFilter(this)">Fiverr</button>
+    <button class="fp" data-s="direct" onclick="setFilter(this)">Direct</button>
+    <button class="fp" data-s="overdue" onclick="setFilter(this)">Overdue</button>
+    <button class="fp" data-s="paid" onclick="setFilter(this)">Paid</button>
+    <input class="search-box" type="text" id="search-box" placeholder="Search projects…" oninput="renderTable()"/>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-card">
+    <div class="loading" id="tbl-loading">Loading your pipeline…</div>
+    <table id="tbl" style="display:none;">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Project</th>
+          <th class="hide-mobile">Platform</th>
+          <th class="hide-mobile">Type</th>
+          <th>Due</th>
+          <th>Status</th>
+          <th class="hide-mobile">Fee</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tbl-body"></tbody>
+    </table>
+  </div>
+
+</div><!-- /wrap -->
+
+<!-- EDIT MODAL -->
+<div class="modal-bg" id="edit-modal" style="display:none;" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>Edit Project</h3>
+    <div class="form-grid">
+      <div class="field" style="grid-column:1/-1;">
+        <label>Project / Spot Name</label>
+        <input type="text" id="e-name"/>
+      </div>
+      <div class="field">
+        <label>Client</label>
+        <input type="text" id="e-client"/>
+      </div>
+      <div class="field">
+        <label>Platform</label>
+        <select id="e-platform">
+          <option value="Fiverr">Fiverr</option>
+          <option value="Voice123">Voice123</option>
+          <option value="Direct">Direct Client</option>
+          <option value="Casting Networks">Casting Networks</option>
+          <option value="Voices.com">Voices.com</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Project Type</label>
+        <select id="e-type">
+          <option value="">— select —</option>
+          <option>Commercial</option>
+          <option>E-learning</option>
+          <option>Corporate narration</option>
+          <option>Animation / character</option>
+          <option>Podcast</option>
+          <option>IVR / telephony</option>
+          <option>Audiobook</option>
+          <option>Social media</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Fee ($)</label>
+        <input type="number" id="e-amount" min="0" step="0.01"/>
+      </div>
+      <div class="field">
+        <label>Deadline</label>
+        <input type="date" id="e-due"/>
+      </div>
+      <div class="field">
+        <label>Priority</label>
+        <select id="e-priority">
+          <option value="normal">Normal</option>
+          <option value="high">High</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="e-status">
+          <option value="new">New</option>
+          <option value="in_progress">Recording</option>
+          <option value="revision">Revision</option>
+          <option value="delivered">Delivered</option>
+          <option value="paid">Paid</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>Notes</label>
+        <textarea id="e-notes"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="document.getElementById('edit-modal').style.display='none'">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SB_URL = 'https://vkwhoicqasotanlkquoa.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2hvaWNxYXNvdGFubGtxdW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NjA1OTIsImV4cCI6MjA5MDEzNjU5Mn0.5LRCWzg2Bj6cMQCHgbNAXcJlm4Po97CbLl3v8PnPP-A';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+let allData = [], filterS = 'active', editId = null;
+const today = new Date(); today.setHours(0,0,0,0);
+const weekEnd = new Date(today); weekEnd.setDate(weekEnd.getDate() + 7);
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+async function init() {
+  document.getElementById('f-due').value = new Date(Date.now() + 86400000 * 2).toLocaleDateString('en-CA');
+  await load();
+}
+
+async function load() {
+  const { data, error } = await sb.from('jobs').select('*').order('due', { ascending: true, nullsLast: true });
+  if (error) { showToast('Could not load projects', true); return; }
+  allData = data || [];
+  updateStats();
+  renderTable();
+  document.getElementById('tbl-loading').style.display = 'none';
+  document.getElementById('tbl').style.display = 'table';
+}
+
+// ── STATS ─────────────────────────────────────────────────────────────────────
+function updateStats() {
+  const ACTIVE = ['new','in_progress','revision','delivered'];
+  const now = new Date();
+  const monthStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  let active=0, overdue=0, dueWeek=0, pending=0, monthPaid=0;
+  const counts = { new:0, in_progress:0, revision:0, delivered:0, paid:0, cancelled:0 };
+  allData.forEach(r => {
+    if (counts[r.status] !== undefined) counts[r.status]++;
+    if (ACTIVE.includes(r.status)) active++;
+    if (r.status === 'delivered') pending++;
+    if (r.status === 'paid' && r.created_at && r.created_at.slice(0,7) === monthStr) monthPaid += r.amount || 0;
+    if (r.due && ACTIVE.includes(r.status)) {
+      const d = new Date(r.due + 'T12:00:00');
+      if (d < today) overdue++;
+      else if (d <= weekEnd) dueWeek++;
+    }
+  });
+  document.getElementById('s-active').textContent    = active;
+  document.getElementById('s-overdue').textContent   = overdue;
+  document.getElementById('s-dueweek').textContent   = dueWeek;
+  document.getElementById('s-pending').textContent   = pending;
+  document.getElementById('s-monthearned').textContent = '$' + monthPaid.toLocaleString();
+  ['new','in_progress','revision','delivered','paid','cancelled'].forEach(s => {
+    const el = document.getElementById('f-' + s.replace('_',''));
+    if (el) el.textContent = counts[s] || 0;
+  });
+  const active_count = allData.filter(r => ['new','in_progress','revision'].includes(r.status)).length;
+  document.getElementById('hdr-sub').textContent = `${active_count} projects in progress · ${overdue ? overdue + ' overdue · ' : ''}${allData.length} total`;
+}
+
+// ── TABLE ─────────────────────────────────────────────────────────────────────
+function renderTable() {
+  const q = (document.getElementById('search-box').value || '').toLowerCase();
+  const ACTIVE = ['new','in_progress','revision','delivered'];
+  const rows = allData.filter(r => {
+    if (filterS === 'active'  && !ACTIVE.includes(r.status)) return false;
+    if (filterS === 'paid'    && r.status !== 'paid') return false;
+    if (filterS === 'fiverr'  && (r.platform||'').toLowerCase() !== 'fiverr') return false;
+    if (filterS === 'direct'  && (r.platform||'') !== 'Direct') return false;
+    if (filterS === 'overdue') {
+      if (!ACTIVE.includes(r.status) || !r.due) return false;
+      if (new Date(r.due + 'T12:00:00') >= today) return false;
+    }
+    if (q) {
+      const hay = [(r.project_name||''), (r.client||''), (r.platform||''), (r.type||''), (r.notes||'')].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  const tbody = document.getElementById('tbl-body');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="8">No projects here. Hit "+ New Project" to get started.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(r => {
+    // Priority indicator
+    const pri = r.priority || 'normal';
+    const priHtml = `<span class="pri-dot" style="background:${pri==='high'?'var(--red)':pri==='low'?'#ccc':'var(--gold)'};display:inline-block;width:8px;height:8px;border-radius:50%;"></span>`;
+    // Platform tag
+    const platKey = (r.platform||'').toLowerCase().replace(/[^a-z]/g,'');
+    const platClass = platKey === 'fiverr' ? 'plat-fiverr' : platKey === 'voice123' ? 'plat-voice123' : platKey === 'direct' ? 'plat-direct' : platKey === 'castingnetworks' ? 'plat-casting' : 'plat-other';
+    // Due date
+    let dueHtml = '—';
+    if (r.due) {
+      const d = new Date(r.due + 'T12:00:00');
+      const label = d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+      const isActive = ['new','in_progress','revision','delivered'].includes(r.status);
+      if (isActive && d < today)      dueHtml = `<span class="due-overdue">⚠ ${label}</span>`;
+      else if (isActive && d.getTime() === today.getTime()) dueHtml = `<span class="due-today">Today</span>`;
+      else if (isActive && d <= weekEnd) dueHtml = `<span class="due-soon">${label}</span>`;
+      else dueHtml = `<span style="font-size:.8rem;">${label}</span>`;
+    }
+    return `<tr>
+      <td style="padding:9px 6px 9px 14px;">${priHtml}</td>
+      <td>
+        <div style="font-weight:600;">${r.project_name || r.client || '—'}</div>
+        ${r.client && r.project_name ? `<div style="font-size:.72rem;color:var(--muted);margin-top:1px;">${r.client}</div>` : ''}
+        ${r.notes ? `<div style="font-size:.7rem;color:var(--muted);margin-top:2px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.notes}</div>` : ''}
+      </td>
+      <td class="hide-mobile"><span class="plat-tag ${platClass}">${r.platform || '—'}</span></td>
+      <td class="hide-mobile" style="font-size:.78rem;color:var(--muted);">${r.type || '—'}</td>
+      <td style="white-space:nowrap;">${dueHtml}</td>
+      <td>
+        <select class="status-sel ${(r.status||'').replace('_','')}" onchange="quickStatus('${r.id}', this)">
+          <option value="new"         ${r.status==='new'         ?'selected':''}>New</option>
+          <option value="in_progress" ${r.status==='in_progress' ?'selected':''}>Recording</option>
+          <option value="revision"    ${r.status==='revision'    ?'selected':''}>Revision</option>
+          <option value="delivered"   ${r.status==='delivered'   ?'selected':''}>Delivered</option>
+          <option value="paid"        ${r.status==='paid'        ?'selected':''}>Paid ✓</option>
+          <option value="cancelled"   ${r.status==='cancelled'   ?'selected':''}>Cancelled</option>
+        </select>
+      </td>
+      <td class="hide-mobile fee-cell">${r.amount ? '$' + Number(r.amount).toLocaleString() : '—'}</td>
+      <td style="white-space:nowrap;">
+        <button class="edit-btn" onclick="openEdit('${r.id}')">Edit</button>
+        <button class="del-btn"  onclick="deleteRow('${r.id}')">✕</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── FILTER ────────────────────────────────────────────────────────────────────
+function setFilter(btn) {
+  document.querySelectorAll('.fp').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  filterS = btn.dataset.s;
+  renderTable();
+}
+function filterStage(el) {
+  filterS = el.dataset.s;
+  document.querySelectorAll('.fp').forEach(b => b.classList.toggle('on', b.dataset.s === filterS));
+  document.querySelectorAll('.stage').forEach(s => s.classList.toggle('active', s.dataset.s === filterS));
+  renderTable();
+}
+
+// ── ADD ───────────────────────────────────────────────────────────────────────
+function toggleAdd() {
+  const f = document.getElementById('add-form');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+async function saveNew() {
+  const name = document.getElementById('f-name').value.trim();
+  const client = document.getElementById('f-client').value.trim();
+  if (!name && !client) { showToast('Project name or client required', true); return; }
+  const row = {
+    project_name: name || null,
+    client:       client || null,
+    platform:     document.getElementById('f-platform').value,
+    type:         document.getElementById('f-type').value || null,
+    amount:       parseFloat(document.getElementById('f-amount').value) || null,
+    due:          document.getElementById('f-due').value || null,
+    priority:     document.getElementById('f-priority').value,
+    status:       document.getElementById('f-status').value,
+    notes:        document.getElementById('f-notes').value.trim() || null,
+  };
+  const { error } = await sb.from('jobs').insert(row);
+  if (error) { showToast('Could not save', true); return; }
+  ['f-name','f-client','f-amount','f-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-status').value = 'new';
+  document.getElementById('f-priority').value = 'normal';
+  toggleAdd();
+  showToast('Project added!');
+  await load();
+}
+
+// ── QUICK STATUS ──────────────────────────────────────────────────────────────
+async function quickStatus(id, sel) {
+  const status = sel.value;
+  sel.className = 'status-sel ' + status.replace('_','');
+  const { error } = await sb.from('jobs').update({ status }).eq('id', id);
+  if (error) { showToast('Could not update', true); return; }
+  const item = allData.find(r => r.id === id);
+  if (item) item.status = status;
+  updateStats();
+  renderTable();
+  showToast(`→ ${status.replace('_',' ')}`);
+}
+
+// ── EDIT ──────────────────────────────────────────────────────────────────────
+function openEdit(id) {
+  const r = allData.find(a => a.id === id);
+  if (!r) return;
+  editId = id;
+  document.getElementById('e-name').value     = r.project_name || '';
+  document.getElementById('e-client').value   = r.client || '';
+  document.getElementById('e-platform').value = r.platform || 'Fiverr';
+  document.getElementById('e-type').value     = r.type || '';
+  document.getElementById('e-amount').value   = r.amount || '';
+  document.getElementById('e-due').value      = r.due || '';
+  document.getElementById('e-priority').value = r.priority || 'normal';
+  document.getElementById('e-status').value   = r.status || 'new';
+  document.getElementById('e-notes').value    = r.notes || '';
+  document.getElementById('edit-modal').style.display = 'flex';
+}
+function closeModal(e) {
+  if (e.target.id === 'edit-modal') document.getElementById('edit-modal').style.display = 'none';
+}
+async function saveEdit() {
+  if (!editId) return;
+  const row = {
+    project_name: document.getElementById('e-name').value.trim() || null,
+    client:       document.getElementById('e-client').value.trim() || null,
+    platform:     document.getElementById('e-platform').value,
+    type:         document.getElementById('e-type').value || null,
+    amount:       parseFloat(document.getElementById('e-amount').value) || null,
+    due:          document.getElementById('e-due').value || null,
+    priority:     document.getElementById('e-priority').value,
+    status:       document.getElementById('e-status').value,
+    notes:        document.getElementById('e-notes').value.trim() || null,
+  };
+  const { error } = await sb.from('jobs').update(row).eq('id', editId);
+  if (error) { showToast('Could not save', true); return; }
+  document.getElementById('edit-modal').style.display = 'none';
+  showToast('Saved!');
+  await load();
+}
+
+// ── DELETE ────────────────────────────────────────────────────────────────────
+async function deleteRow(id) {
+  const item = allData.find(r => r.id === id);
+  if (!confirm(`Remove "${item?.project_name || item?.client || 'this project'}"?`)) return;
+  const { error } = await sb.from('jobs').delete().eq('id', id);
+  if (error) { showToast('Could not delete', true); return; }
+  showToast('Removed');
+  await load();
+}
+
+function showToast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  setTimeout(() => t.className = 'toast', 2600);
+}
+
+init();
+</script>
+</body>
+</html>
