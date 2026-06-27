@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Greer Collective · Coaching Learning Plan 2026–2027</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --plum:    #2C1A2E;
+      --gold:    #B8922A;
+      --cream:   #FAF6EF;
+      --bgold:   #D4A843;
+      --mauve:   #8A7A8E;
+      --midplum: #4A2455;
+      --green:   #1B6B2A;
+      --green-light: #EAF4EC;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--cream);
+      color: var(--plum);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    header {
+      background: var(--plum);
+      padding: 48px 48px 36px;
+      border-bottom: 4px solid var(--gold);
+    }
+
+    .eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    header h1 { font-weight: 300; font-size: 44px; color: var(--cream); line-height: 1.1; margin-bottom: 8px; }
+    .header-sub { font-family: 'Jost', sans-serif; font-size: 12px; color: var(--mauve); letter-spacing: 2px; }
+
+    .nav-tabs {
+      background: var(--midplum);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      border-bottom: 3px solid var(--gold);
+    }
+
+    .tab {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--mauve);
+      padding: 14px 24px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      white-space: nowrap;
+      transition: color 0.15s, background 0.15s;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -3px;
+    }
+
+    .tab:hover { color: var(--cream); }
+    .tab.active { color: var(--gold); border-bottom-color: var(--gold); background: rgba(184,146,42,0.06); }
+
+    main { max-width: 1040px; margin: 0 auto; padding: 40px 40px 80px; }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── SECTION HEAD ── */
+    .sec-head {
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin: 40px 0 6px;
+      padding-bottom: 8px;
+      border-bottom: 3px solid var(--gold);
+    }
+
+    .sec-title {
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--plum);
+      margin-bottom: 12px;
+    }
+
+    .sec-body {
+      font-size: 18px;
+      color: var(--plum);
+      margin-bottom: 28px;
+      max-width: 720px;
+    }
+
+    /* ── SKILLS TABLE ── */
+    .table-wrap { overflow-x: auto; margin-bottom: 40px; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      background: var(--plum);
+      color: var(--cream);
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 12px 14px;
+      text-align: left;
+    }
+    td {
+      border-bottom: 1px solid #E8E0E2;
+      padding: 14px 14px;
+      vertical-align: top;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    tr:nth-child(even) td { background: rgba(44,26,46,0.03); }
+    tr:hover td { background: rgba(184,146,42,0.05); }
+
+    .skill-name { font-weight: 600; color: var(--plum); font-size: 16px; margin-bottom: 4px; }
+    .skill-ready { font-family: 'Jost', sans-serif; font-size: 11px; font-weight: 500; color: var(--green); }
+    .skill-note { font-family: 'Jost', sans-serif; font-size: 11px; color: var(--mauve); font-style: italic; margin-top: 4px; }
+
+    /* ── COMPARISON ── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+      margin-bottom: 40px;
+    }
+
+    .compare-label {
+      grid-column: 1 / -1;
+      background: var(--plum);
+      color: var(--gold);
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 10px 16px;
+    }
+
+    .compare-col {
+      background: var(--cream);
+      border: 1px solid #E8E0E2;
+      padding: 18px 20px;
+    }
+
+    .compare-col-head {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .compare-item { font-size: 16px; color: var(--plum); margin-bottom: 8px; padding-left: 16px; position: relative; }
+    .compare-item::before { content: "·"; position: absolute; left: 0; color: var(--gold); }
+
+    /* ── AHEAD / LEARN FROM ── */
+    .insight-box {
+      background: var(--plum);
+      border-radius: 3px;
+      padding: 24px 28px;
+      margin-bottom: 12px;
+    }
+    .insight-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .insight-body { font-size: 17px; color: var(--cream); line-height: 1.6; }
+
+    /* ── TIMELINE ── */
+    .phase {
+      border-left: 3px solid var(--gold);
+      margin-bottom: 36px;
+      padding-left: 24px;
+    }
+
+    .phase-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .phase-title { font-size: 28px; font-weight: 400; color: var(--plum); margin-bottom: 4px; }
+    .phase-dates { font-family: 'Jost', sans-serif; font-size: 11px; color: var(--mauve); margin-bottom: 16px; }
+
+    .phase-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+    .phase-col-head {
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(184,146,42,0.3);
+    }
+
+    .phase-item { font-size: 16px; color: var(--plum); margin-bottom: 6px; padding-left: 16px; position: relative; line-height: 1.4; }
+    .phase-item::before { content: "·"; position: absolute; left: 0; color: var(--gold); }
+    .phase-note { font-family: 'Jost', sans-serif; font-size: 11px; color: var(--mauve); padding-left: 16px; margin-bottom: 10px; }
+
+    .phase-meta {
+      display: flex;
+      gap: 20px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #E8E0E2;
+    }
+    .phase-meta-item { font-family: 'Jost', sans-serif; font-size: 11px; }
+    .phase-meta-label { color: var(--mauve); text-transform: uppercase; letter-spacing: 1px; }
+    .phase-meta-val { color: var(--plum); font-weight: 500; }
+
+    /* ── INVESTMENT TABLE ── */
+    .invest-total {
+      background: var(--plum);
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+      border-radius: 3px;
+    }
+    .invest-total-label { font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 2px; color: var(--cream); text-transform: uppercase; }
+    .invest-total-amt { font-size: 32px; font-weight: 300; color: var(--gold); }
+
+    /* ── READING LIST ── */
+    .book {
+      border-bottom: 1px solid #E8E0E2;
+      padding: 16px 0;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 20px;
+    }
+    .book-title { font-size: 18px; font-weight: 600; color: var(--plum); }
+    .book-author { font-family: 'Jost', sans-serif; font-size: 12px; color: var(--mauve); margin-top: 2px; }
+    .book-why { font-size: 16px; color: var(--plum); }
+    .book-when { font-family: 'Jost', sans-serif; font-size: 11px; color: var(--gold); margin-top: 4px; font-weight: 500; letter-spacing: 1px; }
+
+    footer {
+      background: var(--plum);
+      border-top: 3px solid var(--gold);
+      padding: 20px 40px;
+      text-align: center;
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: var(--mauve);
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 680px) {
+      .phase-cols, .compare-grid { grid-template-columns: 1fr; }
+      .book { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Greer Collective · Coaching Practice</div>
+  <h1>Coaching Skills &amp; Learning Plan</h1>
+  <div class="header-sub">July 2026 – June 2027 &nbsp;·&nbsp; Skills Inventory · Benchmarks · 12-Month Curriculum</div>
+</header>
+
+<div class="nav-tabs">
+  <button class="tab active" onclick="showTab('skills')">Skills Inventory</button>
+  <button class="tab" onclick="showTab('compare')">Coach Benchmarks</button>
+  <button class="tab" onclick="showTab('plan')">12-Month Plan</button>
+  <button class="tab" onclick="showTab('invest')">Investment</button>
+  <button class="tab" onclick="showTab('reading')">Reading List</button>
+</div>
+
+<main>
+
+  <!-- ── PANEL: SKILLS ── -->
+  <div class="panel active" id="panel-skills">
+    <div class="sec-head">01 · Skills Inventory</div>
+    <div class="sec-title">What You Bring to Coaching Right Now</div>
+    <div class="sec-body">These are not aspirational — they are active, documented tools you already deploy in facilitation, consulting, and leadership development contexts. Each one maps directly into a coaching application.</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:22%">Skill / Tool</th>
+            <th style="width:28%">How You Use It Now</th>
+            <th style="width:30%">Coaching Application</th>
+            <th style="width:20%">Readiness</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="skill-name">CliftonStrengths</div></td>
+            <td>Administer and debrief the Gallup assessment with leaders in facilitation and ALP contexts</td>
+            <td>Client onboarding tool. Anchor for strengths-based coaching across the full engagement — use Top 5 or Full 34 to identify natural patterns, then coach into them</td>
+            <td><div class="skill-ready">Ready to deploy now</div><div class="skill-note">Gallup certification optional but adds credibility for corporate clients</div></td>
+          </tr>
+          <tr>
+            <td><div class="skill-name">360-Degree Feedback Facilitation</div></td>
+            <td>Design instruments, collect multi-rater input, synthesize themes, debrief with leaders in ALP and organizational contexts</td>
+            <td>One of your strongest differentiators. Most coaches can debrief an assessment — few can design, run, and hold the space for a full 360 process</td>
+            <td><div class="skill-ready">Advanced — deploy now</div><div class="skill-note">Standalone coaching add-on; name it explicitly in your offer</div></td>
+          </tr>
+          <tr>
+            <td><div class="skill-name">Executive Presence Frameworks</div></td>
+            <td>Facilitated EP content within ALP; taught to senior leaders navigating visibility and authority</td>
+            <td>Coaching lens for leaders who need to close the gap between their impact and perceived authority. Pairs with 360 data</td>
+            <td><div class="skill-ready">Experienced — ready</div><div class="skill-note">Named, credible expertise — use it in your positioning</div></td>
+          </tr>
+          <tr>
+            <td><div class="skill-name">Ripple Effect Mapping</div></td>
+            <td>Facilitation and coaching tool — documented and deployed in program contexts</td>
+            <td>Mid-engagement reflection tool. Helps clients visualize downstream impact of their leadership decisions</td>
+            <td><div class="skill-ready">Intermediate</div><div class="skill-note">Document specific case applications for your portfolio</div></td>
+          </tr>
+          <tr>
+            <td><div class="skill-name">SOAP Model</div></td>
+            <td>Structured coaching and feedback tool already in facilitation library</td>
+            <td>Session structure scaffold. Use as your default opening and closing frame for coaching conversations</td>
+            <td><div class="skill-ready">Familiar</div><div class="skill-note">Deepen by making it your consistent session frame</div></td>
+          </tr>
+          <tr>
+            <td><div class="skill-name">Stakeholder Analysis</div></td>
+            <td>Help leaders map and manage their stakeholder landscape in consulting and facilitation</td>
+            <td>Core tool for clients navigating politics, new authority, or organizational change: who holds power, who is affected, who must be won</td>
+            <td><div class="skill-ready">Strong — deploy now</div><div class="skill-note">Name it explicitly with coaching clients</div></td>
+          </tr>
+          <tr>
+            <td><div class="skill-name">Harvard / Ganz Organizing Framework</div></td>
+            <td>MPP training; power mapping, narrative, strategy from HKS</td>
+            <td>Applicable for clients in advocacy, policy, or community-facing roles. Rare depth in your DEI and public sector coaching</td>
+            <td><div class="skill-ready">Expert / Contextual</div><div class="skill-note">Does not need certification — it is lived expertise</div></td>
+          </tr>
+          <tr>
+            <td><div class="skill-name">Conditions of Belonging (EOS)</div></td>
+            <td>Led implementation across A4EHC districts; embedded in PD design</td>
+            <td>Use with leaders building inclusive teams or navigating demographic shifts. Strong differentiator in education sector coaching</td>
+            <td><div class="skill-ready">Advanced</div><div class="skill-note">Document as a named framework in your coaching toolkit</div></td>
+          </tr>
+          <tr>
+            <td><div class="skill-name">Group Facilitation (CPF Candidate)</div></td>
+            <td>Lead high-stakes group processes — strategic planning, leadership immersions, cohort programs</td>
+            <td>Group and cohort coaching is the natural extension. Your facilitation credential strengthens the group offer in ways most coaches cannot match</td>
+            <td><div class="skill-ready">Expert</div><div class="skill-note">CPF candidacy is a meaningful differentiator — complete and name it</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── PANEL: COMPARE ── -->
+  <div class="panel" id="panel-compare">
+    <div class="sec-head">02 · Coach Benchmarks</div>
+    <div class="sec-title">Peer Comparison — Tai Dixon Darden &amp; Top C-Suite Coaches</div>
+    <div class="sec-body">Tai Dixon Darden is one of the most visible Black women executive coaches in the DC market. The comparison below is honest: where she is ahead, where you are ahead, and what you can learn from her practice.</div>
+
+    <div class="compare-grid">
+      <div class="compare-label">Credentials &amp; Certifications</div>
+      <div class="compare-col">
+        <div class="compare-col-head">Tai Dixon Darden</div>
+        <div class="compare-item">Center for Coaching Certification (CCC)</div>
+        <div class="compare-item">Leadership Circle Profile certified</div>
+        <div class="compare-item">Immunity to Change (Minds at Work)</div>
+        <div class="compare-item">Cornell Certificate in Strategic HR Leadership</div>
+        <div class="compare-item">JD, Howard University School of Law</div>
+      </div>
+      <div class="compare-col">
+        <div class="compare-col-head">Jacqueline Greer</div>
+        <div class="compare-item">ICF Level 1 → ACC (target Nov 2026)</div>
+        <div class="compare-item">ICF PCC (target 2028)</div>
+        <div class="compare-item">CPF Candidacy (IAF) in progress</div>
+        <div class="compare-item">CliftonStrengths (active, uncertified)</div>
+        <div class="compare-item">Harvard MPP · University of Chicago BS</div>
+      </div>
+
+      <div class="compare-label">Core Frameworks</div>
+      <div class="compare-col">
+        <div class="compare-col-head">Tai Dixon Darden</div>
+        <div class="compare-item">Leadership Circle Profile</div>
+        <div class="compare-item">Immunity to Change (Kegan &amp; Lahey)</div>
+        <div class="compare-item">DEI and talent strategy lens</div>
+        <div class="compare-item">Liberatory Leadership brand</div>
+      </div>
+      <div class="compare-col">
+        <div class="compare-col-head">Jacqueline Greer</div>
+        <div class="compare-item">CliftonStrengths / 360-Degree Feedback</div>
+        <div class="compare-item">Executive Presence</div>
+        <div class="compare-item">Ripple Effect Mapping</div>
+        <div class="compare-item">Conditions of Belonging (EOS)</div>
+      </div>
+
+      <div class="compare-label">Sector Background</div>
+      <div class="compare-col">
+        <div class="compare-col-head">Tai Dixon Darden</div>
+        <div class="compare-item">Education (TFA, E.L. Haynes CTEO)</div>
+        <div class="compare-item">Children's Defense Fund (advocacy/national)</div>
+        <div class="compare-item">Howard University Law School (adjunct)</div>
+      </div>
+      <div class="compare-col">
+        <div class="compare-col-head">Jacqueline Greer</div>
+        <div class="compare-item">Education (Urban Teachers CPO, EOS VP)</div>
+        <div class="compare-item">Government / Nonprofit (VP-level, P&amp;L ownership)</div>
+        <div class="compare-item">Federal (Deloitte/USPS — current engagement)</div>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:32px;">
+      <div class="insight-box">
+        <div class="insight-label">What You Can Learn From Tai</div>
+        <div class="insight-body">Leadership Circle Profile certification — it is the psychometric C-suite buyers specifically request, and Tai uses it as her primary tool. Immunity to Change facilitator training (Minds at Work) — one of the most rigorous frameworks for persistent leadership barriers. Tai holds both. You should too by Q2 2027.</div>
+      </div>
+      <div class="insight-box">
+        <div class="insight-label">Where You Are Ahead</div>
+        <div class="insight-body">Organizational scale at VP level with P&amp;L ownership. Active federal client work (Deloitte/USPS). Facilitation credential path (CPF) — Tai does not hold an IAF credential. Policy and public sector depth (Harvard MPP / UChicago). Broader sector reach: education + government + nonprofit + private.</div>
+      </div>
+    </div>
+
+    <div class="sec-head" style="margin-top: 0">What Top C-Suite Coaches Have in Common</div>
+    <div class="sec-body">The coaches who command premium rates and federal or corporate contracts consistently hold multiple credentials (ICF PCC or MCC plus at least one psychometric certification), deploy named frameworks rather than just good questions, maintain clear niche positioning, and have documented organizational outcomes — not just client testimonials. The goal is not to replicate anyone else's path. It is to build a credential and framework stack that is both authentic to your experience and legible to institutional buyers.</div>
+  </div>
+
+  <!-- ── PANEL: PLAN ── -->
+  <div class="panel" id="panel-plan">
+    <div class="sec-head">03 · 12-Month Learning Plan</div>
+    <div class="sec-title">July 2026 – June 2027</div>
+    <div class="sec-body">Organized into four phases. Do not add new frameworks until the ICF training is complete. Build depth before breadth.</div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 1 · Foundation</div>
+      <div class="phase-title">Get Credentialed, Get Clients, Get Hours</div>
+      <div class="phase-dates">July – September 2026</div>
+      <div class="phase-cols">
+        <div>
+          <div class="phase-col-head">Focus &amp; Actions</div>
+          <div class="phase-item">Enroll and begin ICF Level 1 program</div>
+          <div class="phase-item">Onboard Helene Felman and Tarin Bynum Neal as first clients</div>
+          <div class="phase-item">Begin ICF coaching hours log — every session tracked</div>
+          <div class="phase-item">Get GL + E&O insurance before first paying client</div>
+          <div class="phase-item">Set up Simply.Coach coaching backend</div>
+          <div class="phase-item">Launch coaching page on thegreercollective.com</div>
+          <div class="phase-item">Begin mentor coaching (3-month requirement for ACC)</div>
+          <div class="phase-item">Conduct first 360 debrief with a client as a paid add-on</div>
+          <div class="phase-item">Attend first NAWBO Greater DC event</div>
+          <div class="phase-item">Set ACC application target date (November 2026)</div>
+        </div>
+        <div>
+          <div class="phase-col-head">Frameworks to Learn</div>
+          <div class="phase-item">GROW Model — master this first. It is the foundation all other models build on</div>
+          <div class="phase-note">Goal · Reality · Options · Will/Way Forward</div>
+          <div class="phase-item">CLEAR Model — stronger than GROW for executive contexts with psychological safety demands</div>
+          <div class="phase-note">Contract · Listen · Explore · Action · Review</div>
+          <div class="phase-item">ICF 8 Core Competencies — know these cold before your first assessed session</div>
+          <div class="phase-item">Read: Co-Active Coaching (Kimsey-House et al.) — the foundational text</div>
+        </div>
+      </div>
+      <div class="phase-meta">
+        <div class="phase-meta-item"><span class="phase-meta-label">Hours target: </span><span class="phase-meta-val">0 → 40 hours</span></div>
+        <div class="phase-meta-item"><span class="phase-meta-label">Investment: </span><span class="phase-meta-val">$4,500–$11,600 (ICF program + insurance + memberships)</span></div>
+        <div class="phase-meta-item"><span class="phase-meta-label">Milestone: </span><span class="phase-meta-val">First paying coaching client</span></div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 2 · Credential &amp; Specialize</div>
+      <div class="phase-title">ACC in Hand. Stack the Psychometric Toolkit.</div>
+      <div class="phase-dates">October – December 2026</div>
+      <div class="phase-cols">
+        <div>
+          <div class="phase-col-head">Focus &amp; Actions</div>
+          <div class="phase-item">Submit ACC application (target: November 2026)</div>
+          <div class="phase-item">Pass ICF Coach Knowledge Assessment (CKA)</div>
+          <div class="phase-item">Build 3–5 active coaching clients</div>
+          <div class="phase-item">Launch Group Coaching cohort (6–8 participants)</div>
+          <div class="phase-item">Begin organizational retainer outreach</div>
+          <div class="phase-item">Research Leadership Circle Profile certification</div>
+        </div>
+        <div>
+          <div class="phase-col-head">Frameworks to Learn</div>
+          <div class="phase-item">Leadership Circle Profile — research certification. This is Tai Dixon Darden's primary psychometric; requested by C-suite HR buyers</div>
+          <div class="phase-item">ICF Core Competency 5 (Maintains Presence) and 6 (Listens Actively) — assessed in your CKA; study these deeply</div>
+          <div class="phase-item">Stakeholder Centered Coaching (Marshall Goldsmith) — full methodology study</div>
+          <div class="phase-item">OSKAR Model — solutions-focused; useful when clients are stuck in problem framing</div>
+        </div>
+      </div>
+      <div class="phase-meta">
+        <div class="phase-meta-item"><span class="phase-meta-label">Hours target: </span><span class="phase-meta-val">40 → 85 hours (ACC eligible at 100)</span></div>
+        <div class="phase-meta-item"><span class="phase-meta-label">Investment: </span><span class="phase-meta-val">Leadership Circle cert research ($2,000–$3,000)</span></div>
+        <div class="phase-meta-item"><span class="phase-meta-label">Milestone: </span><span class="phase-meta-val">ACC credential received</span></div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 3 · Scale</div>
+      <div class="phase-title">EQ, Leadership Circle, First Retainer</div>
+      <div class="phase-dates">January – April 2027</div>
+      <div class="phase-cols">
+        <div>
+          <div class="phase-col-head">Focus &amp; Actions</div>
+          <div class="phase-item">Add EQ-i 2.0 certification (Multi-Health Systems)</div>
+          <div class="phase-item">Leadership Circle Profile certification</div>
+          <div class="phase-item">Launch second Group Coaching cohort</div>
+          <div class="phase-item">First organizational coaching retainer active</div>
+          <div class="phase-item">Apply to BetterUp coach network (requires ACC)</div>
+          <div class="phase-item">Begin Immunity to Change facilitator training (Minds at Work)</div>
+          <div class="phase-item">Publish first coaching-focused LinkedIn article</div>
+        </div>
+        <div>
+          <div class="phase-col-head">Frameworks to Learn</div>
+          <div class="phase-item">EQ-i 2.0 — 15 emotional intelligence competencies. Pairs naturally with your Executive Presence work. Standard tool in C-suite coaching</div>
+          <div class="phase-item">Leadership Circle Profile — integrates EQ, systems thinking, and reactive vs. creative leadership into a single psychometric. Best assessment for senior leaders</div>
+          <div class="phase-item">Immunity to Change (Kegan &amp; Lahey) — facilitator training. Designed for persistent leadership barriers. What Tai Dixon Darden uses</div>
+        </div>
+      </div>
+      <div class="phase-meta">
+        <div class="phase-meta-item"><span class="phase-meta-label">Hours target: </span><span class="phase-meta-val">85 → 180 hours</span></div>
+        <div class="phase-meta-item"><span class="phase-meta-label">Investment: </span><span class="phase-meta-val">EQ-i 2.0 ($1,500–$2,000) + LCP ($2,000–$3,000) + ITC ($2,000–$3,000)</span></div>
+        <div class="phase-meta-item"><span class="phase-meta-label">Milestone: </span><span class="phase-meta-val">First organizational retainer</span></div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 4 · PCC Path Begins</div>
+      <div class="phase-title">200+ Hours. Set the PCC Timeline.</div>
+      <div class="phase-dates">May – June 2027</div>
+      <div class="phase-cols">
+        <div>
+          <div class="phase-col-head">Focus &amp; Actions</div>
+          <div class="phase-item">200+ coaching hours logged and verified</div>
+          <div class="phase-item">Set PCC target date (aim for late 2028)</div>
+          <div class="phase-item">Research Hogan Assessments certification</div>
+          <div class="phase-item">Audit: which certifications generated clients vs which are shelf credentials</div>
+          <div class="phase-item">Build Q3–Q4 2027 coaching pipeline</div>
+        </div>
+        <div>
+          <div class="phase-col-head">Frameworks to Learn</div>
+          <div class="phase-item">Hogan Assessments — personality, values, and derailer profiling. Required for C-suite selection and succession. Pairs with organizational consulting work</div>
+          <div class="phase-note">Certification: $3,500–$5,000. Steep but high ROI for executive-level clients</div>
+          <div class="phase-item">Goldsmith Stakeholder Centered Coaching certification — often required in federal/government coaching contract RFPs</div>
+        </div>
+      </div>
+      <div class="phase-meta">
+        <div class="phase-meta-item"><span class="phase-meta-label">Hours target: </span><span class="phase-meta-val">200+ (PCC path: 500 hrs, target 2028)</span></div>
+        <div class="phase-meta-item"><span class="phase-meta-label">Investment: </span><span class="phase-meta-val">Hogan research ($3,500–$5,000)</span></div>
+        <div class="phase-meta-item"><span class="phase-meta-label">Milestone: </span><span class="phase-meta-val">PCC path formally begins</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PANEL: INVESTMENT ── -->
+  <div class="panel" id="panel-invest">
+    <div class="sec-head">04 · Investment Summary</div>
+    <div class="sec-title">12-Month Projected Investment</div>
+    <div class="sec-body">All coaching-related certifications, memberships, tools, and education are deductible as ordinary business expenses. Keep receipts and categorize under Professional Development and Business Education.</div>
+
+    <div class="invest-total">
+      <div class="invest-total-label">Estimated 12-Month Total</div>
+      <div class="invest-total-amt">$13,000 – $26,000</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40%">Investment Item</th>
+            <th style="width:18%">Estimated Cost</th>
+            <th style="width:12%">When</th>
+            <th style="width:30%">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>ICF Level 1 Training Program</td><td style="font-family:'Jost',sans-serif; font-weight:500;">$3,000 – $10,000</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--gold);">Jul 2026</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--mauve);">One-time. Payment plans available. Largest variable in the budget.</td></tr>
+          <tr><td>Business Insurance (GL + E&O)</td><td style="font-family:'Jost',sans-serif; font-weight:500;">$800 – $1,200 / yr</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--gold);">Jul 2026</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--mauve);">Before first paying client. Fully tax-deductible.</td></tr>
+          <tr><td>ICF Membership</td><td style="font-family:'Jost',sans-serif; font-weight:500;">$245 / yr</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--gold);">Jul 2026</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--mauve);">Required for ACC application and credential.</td></tr>
+          <tr><td>NAWBO Greater DC (NextGen)</td><td style="font-family:'Jost',sans-serif; font-weight:500;">$175 / yr</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--gold);">Jul 2026</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--mauve);">Includes insurance access and networking.</td></tr>
+          <tr><td>Simply.Coach (coaching backend)</td><td style="font-family:'Jost',sans-serif; font-weight:500;">$108 / yr</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--gold);">Jul 2026</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--mauve);">Starter plan, $9/mo. Covers first 5 clients.</td></tr>
+          <tr><td>StrengthsFinder access codes</td><td style="font-family:'Jost',sans-serif; font-weight:500;">$50 / client</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--gold);">Ongoing</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--mauve);">Per client. Do not buy in bulk.</td></tr>
+          <tr><td>Leadership Circle Profile Certification</td><td style="font-family:'Jost',sans-serif; font-weight:500;">$2,000 – $3,000</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--gold);">Oct–Nov 2026</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--mauve);">High-value for C-suite and HR buyer conversations.</td></tr>
+          <tr><td>EQ-i 2.0 Certification (MHS)</td><td style="font-family:'Jost',sans-serif; font-weight:500;">$1,500 – $2,000</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--gold);">Jan 2027</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--mauve);">Pairs with Executive Presence and 360 facilitation.</td></tr>
+          <tr><td>Immunity to Change Facilitator (Minds at Work)</td><td style="font-family:'Jost',sans-serif; font-weight:500;">$2,000 – $3,000</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--gold);">Mar 2027</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--mauve);">One of the most rigorous executive coaching frameworks.</td></tr>
+          <tr><td>Hogan Assessments Certification</td><td style="font-family:'Jost',sans-serif; font-weight:500;">$3,500 – $5,000</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--gold);">May–Jun 2027</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--mauve);">C-suite selection and succession work. High ROI.</td></tr>
+          <tr><td>Books and self-study</td><td style="font-family:'Jost',sans-serif; font-weight:500;">$300 – $500</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--gold);">Ongoing</td><td style="font-family:'Jost',sans-serif; font-size:13px; color:var(--mauve);">See Reading List tab for recommended titles.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── PANEL: READING ── -->
+  <div class="panel" id="panel-reading">
+    <div class="sec-head">05 · Reading List</div>
+    <div class="sec-title">Core Library for Coaching Practice</div>
+    <div class="sec-body">Read in order of the phases above. The right book at the right moment in your practice lands differently than reading ahead of experience. Nine books across one year is one every six weeks — that is the right pace.</div>
+
+    <div class="book">
+      <div><div class="book-title">Co-Active Coaching</div><div class="book-author">Kimsey-House, Kimsey-House, Sandahl &amp; Whitworth</div><div class="book-when">Phase 1 · July 2026</div></div>
+      <div class="book-why">The foundational text behind the Co-Active model. Read it in Phase 1 — before you accumulate habits from other frameworks. One of the most cited books in ICF-aligned training programs.</div>
+    </div>
+    <div class="book">
+      <div><div class="book-title">The Coaching Habit</div><div class="book-author">Michael Bungay Stanier</div><div class="book-when">Phase 1 · August 2026</div></div>
+      <div class="book-why">Seven core coaching questions. Simple, practical, frequently referenced. Read it fast — one sitting. Know the vocabulary before your clients bring it up.</div>
+    </div>
+    <div class="book">
+      <div><div class="book-title">Strengths-Based Leadership</div><div class="book-author">Tom Rath &amp; Barry Conchie</div><div class="book-when">Phase 1 · September 2026</div></div>
+      <div class="book-why">Companion to CliftonStrengths — links strengths to follower needs and leadership outcomes. Essential for making your StrengthsFinder debriefs land with senior leaders, not just as personal discovery.</div>
+    </div>
+    <div class="book">
+      <div><div class="book-title">What Got You Here Won't Get You There</div><div class="book-author">Marshall Goldsmith</div><div class="book-when">Phase 2 · October 2026</div></div>
+      <div class="book-why">Core reading for stakeholder-centered coaching. Understand the behavioral change model before you study the full Goldsmith methodology. This is the book your C-suite clients will have already read.</div>
+    </div>
+    <div class="book">
+      <div><div class="book-title">Immunity to Change</div><div class="book-author">Robert Kegan &amp; Lisa Laskow Lahey</div><div class="book-when">Phase 2 · November 2026</div></div>
+      <div class="book-why">The most rigorous framework for persistent leadership barriers. Read it before you take the facilitator training. Understanding the theory first makes the training land at a different level.</div>
+    </div>
+    <div class="book">
+      <div><div class="book-title">Dare to Lead</div><div class="book-author">Brené Brown</div><div class="book-when">Phase 3 · January 2027</div></div>
+      <div class="book-why">Widely referenced by executive clients. Know the vocabulary — shame resilience, rumbling with vulnerability, armored vs. daring leadership. You will hear it in sessions whether you assigned it or not.</div>
+    </div>
+    <div class="book">
+      <div><div class="book-title">Multipliers</div><div class="book-author">Liz Wiseman</div><div class="book-when">Phase 3 · February 2027</div></div>
+      <div class="book-why">Widely used framework in education and nonprofit leadership coaching. Know it cold — Multiplier vs. Diminisher is a lens many of your clients will find immediately useful and self-implicating.</div>
+    </div>
+    <div class="book">
+      <div><div class="book-title">Leadership and Self-Deception</div><div class="book-author">The Arbinger Institute</div><div class="book-when">Phase 3 · March 2027</div></div>
+      <div class="book-why">Powerful for clients stuck in self-justifying patterns. Written as a narrative, not a textbook — accessible and frequently cited. The "in the box / out of the box" framing is immediately applicable in coaching sessions.</div>
+    </div>
+    <div class="book">
+      <div><div class="book-title">The Work of Leaders</div><div class="book-author">Grenny, Patterson et al.</div><div class="book-when">Phase 4 · May 2027</div></div>
+      <div class="book-why">Companion to Everything DiSC Work of Leaders — relevant when you eventually add DISC to your toolkit. Also valuable standalone as a framework for vision, alignment, and execution coaching conversations.</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Greer Collective &nbsp;·&nbsp; thegreercollective.com &nbsp;·&nbsp; Coaching Learning Plan &nbsp;·&nbsp; July 2026 – June 2027
+</footer>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+</script>
+</body>
+</html>
