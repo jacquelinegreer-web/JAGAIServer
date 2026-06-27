@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JacquieVoice | VO Marketing Log</title>
+  <style>
+    :root {
+      --bg: #f5f0eb;
+      --purple: #3b2a6e;
+      --mid: #7c5cbf;
+      --light: #e8e2f7;
+      --pale: #f3f0fa;
+      --card: #fff;
+      --text: #2d2d2d;
+      --muted: #888;
+      --border: #e0dae8;
+      --green: #2e7d32; --green-bg: #e8f5e9;
+      --orange: #d84c00; --orange-bg: #fff3e0;
+      --red: #c0392b; --red-bg: #fdf0ee;
+      --gold: #b8860b; --gold-bg: #fffde7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* HEADER */
+    .hdr { background: var(--purple); color: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .hdr h1 { font-size: 1.1rem; font-weight: 700; }
+    .hdr p  { font-size: .78rem; opacity: .75; margin-top: 2px; }
+    .hdr-right { display: flex; gap: 8px; align-items: center; }
+    .hdr-btn { background: rgba(255,255,255,.15); border: none; border-radius: 7px; color: white; padding: 6px 14px; font-size: .82rem; cursor: pointer; text-decoration: none; display: inline-block; }
+    .hdr-btn:hover { background: rgba(255,255,255,.28); }
+    .hdr-btn.primary { background: var(--mid); }
+
+    /* STATS */
+    .stats { display: grid; grid-template-columns: repeat(5,1fr); border-bottom: 1px solid var(--border); }
+    .stat { background: white; padding: 12px 14px; text-align: center; border-right: 1px solid var(--border); }
+    .stat:last-child { border-right: none; }
+    .stat .n { font-size: 1.5rem; font-weight: 700; color: var(--purple); }
+    .stat .n.green { color: var(--green); }
+    .stat .n.orange { color: var(--orange); }
+    .stat .n.gold { color: var(--gold); }
+    .stat .l { font-size: .63rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-top: 1px; }
+    @media(max-width:600px) { .stats { grid-template-columns: repeat(3,1fr); } }
+
+    /* MAIN */
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+    /* SECTION HEADERS */
+    .section-hdr { display: flex; align-items: center; justify-content: space-between; margin: 24px 0 12px; }
+    .section-hdr h2 { font-size: .85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--purple); }
+    .section-hdr span { font-size: .75rem; color: var(--muted); }
+
+    /* FUNNEL */
+    .funnel { display: flex; gap: 6px; margin-bottom: 20px; align-items: stretch; }
+    .stage { flex: 1; background: var(--card); border-radius: 10px; padding: 12px 8px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.06); cursor: pointer; border: 2px solid transparent; transition: border-color .15s; }
+    .stage:hover, .stage.active { border-color: var(--mid); }
+    .stage .sn { font-size: 1.4rem; font-weight: 700; color: var(--purple); }
+    .stage .sl { font-size: .65rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-top: 3px; }
+    .stage.sent  { background: var(--light); }
+    .stage.sent .sn { color: var(--purple); }
+    .stage.roster { background: var(--green-bg); }
+    .stage.roster .sn { color: var(--green); }
+    .stage.declined { background: #f5f5f5; }
+    .stage.declined .sn { color: #aaa; }
+    .stage.followup { background: var(--orange-bg); }
+    .stage.followup .sn { color: var(--orange); }
+    .funnel-arrow { display: flex; align-items: center; color: var(--border); font-size: 1.2rem; padding: 0 2px; }
+
+    /* ADD FORM */
+    .add-card { background: var(--card); border-radius: 13px; padding: 18px 20px; box-shadow: 0 1px 4px rgba(0,0,0,.06); margin-bottom: 16px; }
+    .add-card h2 { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--purple); margin-bottom: 14px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 10px; }
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field label { font-size: .72rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    .field input, .field select, .field textarea {
+      border: 1.5px solid var(--border); border-radius: 7px; padding: 7px 10px;
+      font-size: .88rem; font-family: inherit; color: var(--text); background: #fafafa;
+    }
+    .field textarea { resize: vertical; min-height: 60px; }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--mid); }
+    .form-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-end; }
+    .btn { border: none; border-radius: 8px; padding: 8px 18px; font-size: .88rem; font-weight: 600; cursor: pointer; }
+    .btn-primary { background: var(--mid); color: white; }
+    .btn-primary:hover { background: var(--purple); }
+    .btn-ghost { background: var(--light); color: var(--purple); }
+    .btn-ghost:hover { background: #d5cdf0; }
+    .btn-gold { background: var(--gold-bg); color: var(--gold); border: 1px solid #e0c96b; }
+    .btn-gold:hover { background: #fff8c0; }
+
+    /* FILTERS */
+    .filter-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+    .filter-row span { font-size: .75rem; color: var(--muted); font-weight: 600; margin-right: 4px; }
+    .fp { font-size: .75rem; padding: 4px 12px; border-radius: 12px; border: 1.5px solid var(--border); background: none; cursor: pointer; color: var(--muted); }
+    .fp.on { background: var(--light); border-color: var(--mid); color: var(--purple); font-weight: 600; }
+    .search-box { margin-left: auto; border: 1.5px solid var(--border); border-radius: 7px; padding: 5px 10px; font-size: .82rem; font-family: inherit; width: 180px; }
+    .search-box:focus { outline: none; border-color: var(--mid); }
+
+    /* TABLE */
+    .table-card { background: var(--card); border-radius: 13px; box-shadow: 0 1px 4px rgba(0,0,0,.06); overflow: hidden; margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: 10px 14px; background: var(--pale); text-align: left; border-bottom: 1px solid var(--border); }
+    td { padding: 10px 14px; font-size: .85rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--pale); }
+    .status-sel {
+      border: 1.5px solid var(--border); border-radius: 7px; padding: 4px 8px;
+      font-size: .78rem; font-family: inherit; cursor: pointer; background: white;
+    }
+    .status-sel:focus { outline: none; border-color: var(--mid); }
+    .status-sel.queued    { background: var(--pale); color: var(--purple); border-color: var(--mid); }
+    .status-sel.sent      { background: var(--light); color: var(--purple); border-color: var(--mid); }
+    .status-sel.followed_up { background: var(--orange-bg); color: var(--orange); border-color: var(--orange); }
+    .status-sel.responded { background: var(--gold-bg); color: var(--gold); border-color: #e0c96b; }
+    .status-sel.on_roster { background: var(--green-bg); color: var(--green); border-color: var(--green); }
+    .status-sel.declined  { background: #f5f5f5; color: #aaa; border-color: #ddd; }
+    .status-sel.no_response { background: #f5f5f5; color: #aaa; border-color: #ddd; }
+    .priority-badge { display: inline-block; width: 22px; height: 22px; border-radius: 50%; font-size: .72rem; font-weight: 700; text-align: center; line-height: 22px; }
+    .priority-badge.top5  { background: #fff3cd; color: #856404; }
+    .priority-badge.mid   { background: var(--light); color: var(--purple); }
+    .priority-badge.other { background: #f5f5f5; color: #999; }
+    .plat-tag { font-size: .7rem; padding: 2px 7px; border-radius: 9px; background: var(--pale); color: var(--purple); white-space: nowrap; }
+    .edit-btn  { font-size: .72rem; padding: 3px 9px; border-radius: 6px; background: var(--light); color: var(--purple); border: none; cursor: pointer; }
+    .edit-btn:hover { background: #d5cdf0; }
+    .del-btn   { font-size: .72rem; padding: 3px 9px; border-radius: 6px; background: var(--red-bg); color: var(--red); border: none; cursor: pointer; }
+    .del-btn:hover { background: #f9d6d3; }
+    .empty-row td { text-align: center; color: var(--muted); padding: 28px; font-size: .88rem; }
+    @media(max-width:700px) { .hide-mobile { display: none; } }
+
+    /* CHECKLIST */
+    .month-block { background: var(--card); border-radius: 13px; box-shadow: 0 1px 4px rgba(0,0,0,.06); margin-bottom: 10px; overflow: hidden; }
+    .month-hdr { display: flex; align-items: center; justify-content: space-between; padding: 13px 18px; cursor: pointer; user-select: none; }
+    .month-hdr:hover { background: var(--pale); }
+    .month-name { font-size: .88rem; font-weight: 700; color: var(--purple); display: flex; align-items: center; gap: 8px; }
+    .month-prog { font-size: .75rem; color: var(--muted); }
+    .month-arrow { font-size: .8rem; color: var(--muted); transition: transform .2s; }
+    .month-arrow.open { transform: rotate(90deg); }
+    .month-body { display: none; padding: 0 18px 16px; border-top: 1px solid var(--border); }
+    .month-body.open { display: block; }
+    .week-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 14px 0 6px; }
+    .task-item { display: flex; align-items: flex-start; gap: 9px; padding: 5px 0; }
+    .task-item input[type="checkbox"] { margin-top: 2px; accent-color: var(--mid); width: 15px; height: 15px; flex-shrink: 0; cursor: pointer; }
+    .task-item label { font-size: .84rem; color: var(--text); cursor: pointer; line-height: 1.4; }
+    .task-item.done label { text-decoration: line-through; color: var(--muted); }
+
+    /* MODAL */
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+    .modal { background: white; border-radius: 14px; padding: 22px 24px; width: 100%; max-width: 560px; box-shadow: 0 8px 32px rgba(0,0,0,.18); }
+    .modal h3 { font-size: .9rem; font-weight: 700; color: var(--purple); margin-bottom: 16px; }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--purple); color: white; padding: 9px 22px; border-radius: 20px; font-size: .86rem; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+    .toast.show { opacity: 1; }
+    .toast.err { background: var(--red); }
+
+    .loading { color: var(--muted); font-size: .85rem; padding: 28px; text-align: center; }
+    .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .content-card { background: var(--card); border-radius: 13px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .content-card h3 { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--purple); margin-bottom: 10px; }
+    .content-card p { font-size: .82rem; color: var(--muted); line-height: 1.5; }
+    .pillar { display: flex; gap: 8px; margin-bottom: 7px; align-items: flex-start; }
+    .pillar-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mid); margin-top: 5px; flex-shrink: 0; }
+    .pillar-text { font-size: .82rem; line-height: 1.4; }
+    .pillar-text strong { color: var(--purple); }
+    @media(max-width:600px) { .content-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <h1>🎙️ JacquieVoice &nbsp;·&nbsp; VO Marketing Log</h1>
+    <p id="hdr-sub">Agent outreach · Production house submissions · July 2026 → January 2027</p>
+  </div>
+  <div class="hdr-right">
+    <a class="hdr-btn" href="command-center.html">← Command Center</a>
+    <a class="hdr-btn" href="jacquievoice.html">Audition Tracker</a>
+    <button class="hdr-btn primary" onclick="toggleAddForm()">+ Add Submission</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="n" id="s-total">—</div><div class="l">Total Agencies</div></div>
+  <div class="stat"><div class="n orange" id="s-queued">—</div><div class="l">Queued</div></div>
+  <div class="stat"><div class="n" id="s-sent">—</div><div class="l">Submitted</div></div>
+  <div class="stat"><div class="n orange" id="s-followup">—</div><div class="l">Need Follow-Up</div></div>
+  <div class="stat"><div class="n green" id="s-roster">—</div><div class="l">On Roster</div></div>
+</div>
+
+<div class="wrap">
+
+  <!-- FUNNEL -->
+  <div class="funnel" style="margin-top:20px;">
+    <div class="stage" data-s="queued" onclick="filterStatus(this)">
+      <div class="sn" id="f-queued">0</div><div class="sl">Queued</div>
+    </div>
+    <div class="funnel-arrow">›</div>
+    <div class="stage sent" data-s="sent" onclick="filterStatus(this)">
+      <div class="sn" id="f-sent">0</div><div class="sl">Sent</div>
+    </div>
+    <div class="funnel-arrow">›</div>
+    <div class="stage followup" data-s="followed_up" onclick="filterStatus(this)">
+      <div class="sn" id="f-followed">0</div><div class="sl">Followed Up</div>
+    </div>
+    <div class="funnel-arrow">›</div>
+    <div class="stage" data-s="responded" onclick="filterStatus(this)">
+      <div class="sn" id="f-responded">0</div><div class="sl">Responded</div>
+    </div>
+    <div class="funnel-arrow">›</div>
+    <div class="stage roster" data-s="on_roster" onclick="filterStatus(this)">
+      <div class="sn" id="f-roster">0</div><div class="sl">On Roster</div>
+    </div>
+  </div>
+
+  <!-- ADD FORM -->
+  <div class="add-card" id="add-form" style="display:none;">
+    <h2>Add Submission</h2>
+    <div class="form-grid">
+      <div class="field">
+        <label>Agency Name</label>
+        <input type="text" id="f-agency" placeholder="e.g. Sound Lounge"/>
+      </div>
+      <div class="field">
+        <label>Specialty</label>
+        <input type="text" id="f-specialty" placeholder="e.g. Commercial, Corporate"/>
+      </div>
+      <div class="field">
+        <label>Contact / Submission Method</label>
+        <input type="text" id="f-contact" placeholder="e.g. submissions@agency.com"/>
+      </div>
+      <div class="field">
+        <label>Priority (1 = highest)</label>
+        <input type="number" id="f-priority" min="1" max="90" placeholder="1–90"/>
+      </div>
+      <div class="field">
+        <label>Fit Score (1–10)</label>
+        <input type="number" id="f-fit" min="1" max="10" placeholder="8"/>
+      </div>
+      <div class="field">
+        <label>Date Sent</label>
+        <input type="date" id="f-datesent"/>
+      </div>
+      <div class="field">
+        <label>Follow-Up 1 Date</label>
+        <input type="date" id="f-fu1"/>
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="f-status">
+          <option value="queued">Queued</option>
+          <option value="sent">Sent</option>
+          <option value="followed_up">Followed Up</option>
+          <option value="responded">Responded</option>
+          <option value="on_roster">On Roster</option>
+          <option value="declined">Declined</option>
+          <option value="no_response">No Response</option>
+        </select>
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>Notes</label>
+        <textarea id="f-notes" placeholder="Warm intro contact, what to include in pitch, any callbacks…"></textarea>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-gold" onclick="seedPriority15()">⭐ Load Priority 15</button>
+      <button class="btn btn-ghost" onclick="toggleAddForm()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNew()">Save Agency</button>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filter-row">
+    <span>Filter:</span>
+    <button class="fp on" data-s="all" onclick="setFilter(this)">All</button>
+    <button class="fp" data-s="queued" onclick="setFilter(this)">Queued</button>
+    <button class="fp" data-s="sent" onclick="setFilter(this)">Sent</button>
+    <button class="fp" data-s="followed_up" onclick="setFilter(this)">Followed Up</button>
+    <button class="fp" data-s="responded" onclick="setFilter(this)">Responded</button>
+    <button class="fp" data-s="on_roster" onclick="setFilter(this)">On Roster</button>
+    <button class="fp" data-s="declined" onclick="setFilter(this)">Declined</button>
+    <input class="search-box" type="text" id="search-box" placeholder="Search agencies…" oninput="renderTable()"/>
+  </div>
+
+  <!-- SUBMISSION TRACKER TABLE -->
+  <div class="table-card">
+    <div class="loading" id="tbl-loading">Loading your submissions…</div>
+    <table id="tbl" style="display:none;">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Agency</th>
+          <th class="hide-mobile">Specialty</th>
+          <th class="hide-mobile">Date Sent</th>
+          <th class="hide-mobile">Follow-Up</th>
+          <th>Status</th>
+          <th class="hide-mobile">Notes</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tbl-body"></tbody>
+    </table>
+  </div>
+
+  <!-- CONTENT PILLARS -->
+  <div class="section-hdr">
+    <h2>Content Pillars & Platform Rules</h2>
+    <span>Reference — do not change without strategy review</span>
+  </div>
+  <div class="content-grid">
+    <div class="content-card">
+      <h3>🎯 Content Pillars</h3>
+      <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text"><strong>Behind the Mic</strong> — Studio life, process, day-in-the-life</div></div>
+      <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text"><strong>The Voice Business</strong> — VO industry tips, GVAA rates, booking reality</div></div>
+      <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text"><strong>Client Spotlights</strong> — Celebrate booked work (with permission)</div></div>
+      <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text"><strong>JacquieVoice POV</strong> — Her story, DC roots, identity, representation</div></div>
+      <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text"><strong>Social Proof</strong> — Reviews, stats (2,500+ projects), CNN credits, MLK III</div></div>
+    </div>
+    <div class="content-card">
+      <h3>📋 Platform Rules</h3>
+      <div class="pillar"><div class="pillar-dot" style="background:#e67e22"></div><div class="pillar-text"><strong>Fiverr</strong> — Raise to GVAA rates; passive income only; no new energy here</div></div>
+      <div class="pillar"><div class="pillar-dot" style="background:var(--green)"></div><div class="pillar-text"><strong>Voice123</strong> — Primary audition platform; 5.0 stars; protect response time</div></div>
+      <div class="pillar"><div class="pillar-dot" style="background:var(--mid)"></div><div class="pillar-text"><strong>Direct/Agent</strong> — End goal; focus outreach energy here Aug+ </div></div>
+      <div class="pillar"><div class="pillar-dot" style="background:#aaa"></div><div class="pillar-text"><strong>Voices.com / ACX</strong> — Low priority; 217:1 ratio too poor for the effort</div></div>
+      <div class="pillar"><div class="pillar-dot" style="background:var(--gold)"></div><div class="pillar-text"><strong>Demos</strong> — 2023 Such A Voice demos current; new refresh pending (not done yet)</div></div>
+    </div>
+  </div>
+
+  <!-- MONTHLY TASK CHECKLIST -->
+  <div class="section-hdr">
+    <h2>Monthly Task Checklist</h2>
+    <span id="overall-progress">—</span>
+  </div>
+  <div id="checklist-container"></div>
+
+</div><!-- /wrap -->
+
+<!-- EDIT MODAL -->
+<div class="modal-bg" id="edit-modal" style="display:none;" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>Edit Submission</h3>
+    <div class="form-grid">
+      <div class="field">
+        <label>Agency Name</label>
+        <input type="text" id="e-agency"/>
+      </div>
+      <div class="field">
+        <label>Specialty</label>
+        <input type="text" id="e-specialty"/>
+      </div>
+      <div class="field">
+        <label>Contact</label>
+        <input type="text" id="e-contact"/>
+      </div>
+      <div class="field">
+        <label>Priority</label>
+        <input type="number" id="e-priority" min="1" max="90"/>
+      </div>
+      <div class="field">
+        <label>Fit Score</label>
+        <input type="number" id="e-fit" min="1" max="10"/>
+      </div>
+      <div class="field">
+        <label>Date Sent</label>
+        <input type="date" id="e-datesent"/>
+      </div>
+      <div class="field">
+        <label>Follow-Up 1</label>
+        <input type="date" id="e-fu1"/>
+      </div>
+      <div class="field">
+        <label>Follow-Up 2</label>
+        <input type="date" id="e-fu2"/>
+      </div>
+      <div class="field">
+        <label>Response</label>
+        <input type="text" id="e-response" placeholder="e.g. Requested full demo reel"/>
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="e-status">
+          <option value="queued">Queued</option>
+          <option value="sent">Sent</option>
+          <option value="followed_up">Followed Up</option>
+          <option value="responded">Responded</option>
+          <option value="on_roster">On Roster</option>
+          <option value="declined">Declined</option>
+          <option value="no_response">No Response</option>
+        </select>
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>Notes</label>
+        <textarea id="e-notes"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="document.getElementById('edit-modal').style.display='none'">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// ── SUPABASE ──────────────────────────────────────────────────────────────────
+const SB_URL = 'https://vkwhoicqasotanlkquoa.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2hvaWNxYXNvdGFubGtxdW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NjA1OTIsImV4cCI6MjA5MDEzNjU5Mn0.5LRCWzg2Bj6cMQCHgbNAXcJlm4Po97CbLl3v8PnPP-A';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+let allData = [], filterS = 'all', editId = null;
+
+// ── PRIORITY 15 SEED DATA ─────────────────────────────────────────────────────
+const PRIORITY_15 = [
+  { priority:1,  agency_name:'Sound Lounge',          specialty:'Commercial, Corporate, TV/Film',    contact:'submissions@soundlounge.com',        notes:'Top NYC post house. Strong commercial fit. Warm tone, diverse rep.', fit_score:10 },
+  { priority:2,  agency_name:'Earshot Audiopost',     specialty:'Commercial, Animation, Corporate',  contact:'talent@earshotaudiopost.com',         notes:'NYC-based. Known for diverse voices. Submit via portal.',            fit_score:9 },
+  { priority:3,  agency_name:'JoeAudio',              specialty:'Corporate, E-learning, Narration',  contact:'joe@joeaudio.com',                   notes:'Boutique studio, direct relationship model. Great for narration.',   fit_score:9 },
+  { priority:4,  agency_name:'Illinois Audio',        specialty:'Corporate, E-learning, Commercial', contact:'info@illinoisaudio.com',              notes:'Chicago-based. Strong corporate/e-learning niche — perfect fit.',    fit_score:9 },
+  { priority:5,  agency_name:'Phantom City Creative', specialty:'Commercial, Animation, Gaming',     contact:'Via website submission form',         notes:'Austin-based boutique. Strong diverse roster. Growing market.',      fit_score:8 },
+  { priority:6,  agency_name:'Blue Wave Productions', specialty:'Commercial, Corporate',             contact:'bluewaveproductions.net contact form', notes:'Southeast market. Good fit for DC-area talent seeking Southeast work.',fit_score:8 },
+  { priority:7,  agency_name:'Sheppard Agency',       specialty:'Commercial, Broadcast, Animation',  contact:'info@sheppardagency.com',             notes:'Atlanta-based agency. Strong diverse roster. Check submission portal.',fit_score:8 },
+  { priority:8,  agency_name:'Real Voice LA',         specialty:'Commercial, Animation, Promo',      contact:'talent@realvoicela.com',              notes:'LA-based. National commercial market. Need updated commercial demo.', fit_score:7 },
+  { priority:9,  agency_name:'Creative Media Design', specialty:'Corporate, E-learning, Narration',  contact:'cmdesign.com/talent',                notes:'NYC. Strong e-learning/corporate niche. Good fit for current demos.', fit_score:8 },
+  { priority:10, agency_name:'Atlas Talent Agency',   specialty:'Commercial, Animation, Promo',      contact:'submissions@atlastalent.com',         notes:'NYC. Large roster. Need referral or strong submission to stand out.', fit_score:7 },
+  { priority:11, agency_name:'CESD Talent Agency',    specialty:'Commercial, Animation, Promo',      contact:'cesd.com — voiceover dept',           notes:'NY/LA bicoastal. Prestige agency. Requires updated demos + credits.',  fit_score:7 },
+  { priority:12, agency_name:'Abrams Artists Agency', specialty:'Commercial, Animation, TV/Film',    contact:'abramsartists.com/voiceover',         notes:'NY/LA. Strong animation/commercial. CNN + MLK III credits help here.', fit_score:7 },
+  { priority:13, agency_name:'Don Buchwald & Assoc.', specialty:'Commercial, Animation, Promo',      contact:'buchwald.com — NY office',            notes:'Prestige NY agency. Need referral or coach connection to break in.',  fit_score:6 },
+  { priority:14, agency_name:'DPN Talent',            specialty:'Commercial, Corporate, E-learning', contact:'dpntalent.com/submit',               notes:'Chicago. Strong diverse roster. Good regional fit for DC-area talent.',fit_score:7 },
+  { priority:15, agency_name:'TalentWorks',           specialty:'Commercial, Corporate, Animation',  contact:'talent-works.com/voices',            notes:'Nationwide boutique. Flexible roster. Good entry point.',             fit_score:7 },
+];
+
+// ── MONTHLY TASKS ─────────────────────────────────────────────────────────────
+const MONTHS = [
+  {
+    name: 'July 2026', emoji: '🚀',
+    weeks: [
+      { label: 'Week 1 (June 30 – July 6)', tasks: [
+        'Finalize top 15 agency list and confirm submission requirements for each',
+        'Update Voice123 profile with Visit Lafayette-West Lafayette tourism spot',
+        'Add MLK III podcast credit prominently to all profiles and pitch materials',
+        'Draft master pitch email — warm, confident, no GVAA rate talk yet',
+        'Research warm intro opportunities: VO coaches, VO Atlanta connections',
+      ]},
+      { label: 'Week 2 (July 7–13)', tasks: [
+        'Submit to agencies #1–5 (Sound Lounge, Earshot, JoeAudio, Illinois Audio, Phantom City)',
+        'Set up follow-up calendar reminders (+14 days) for all submissions sent',
+        'Raise Fiverr Pro rate to GVAA-adjacent ($200+/spot)',
+        'Post 2 pieces of content: behind-the-mic + a client spotlight',
+        'Start Moody Pines AI voice work — keep it separate from traditional VO materials',
+      ]},
+      { label: 'Week 3 (July 14–20)', tasks: [
+        'Submit to agencies #6–10 (Blue Wave, Sheppard, Real Voice LA, CMD, Atlas)',
+        'Log all submissions in this tracker with dates and follow-up windows',
+        'Voice123 audit: update tags, niche keywords, add new credits',
+        'Post 2 pieces of content: VO business tip + personal story',
+        'Identify 1 VO conference or online event to attend this quarter',
+      ]},
+      { label: 'Week 4 (July 21–31)', tasks: [
+        'Submit to agencies #11–15 (CESD, Abrams, Buchwald, DPN, TalentWorks)',
+        'Follow up on Week 2 submissions (now 14 days old)',
+        'Research demo refresh producers: Cliff Zellman, Joe Loesch, others',
+        'Post 2 pieces of content: social proof stats + value/rates content',
+        'Monthly review: how many submitted, any responses?',
+      ]},
+    ]
+  },
+  {
+    name: 'August 2026', emoji: '📬',
+    weeks: [
+      { label: 'Week 1 (Aug 3–9)', tasks: [
+        'Follow up on all July submissions (≥14 days old, no response)',
+        'Research 5 new agencies from the full 90-agency list for next wave',
+        'Post 2 pieces of content',
+        'Book demo refresh consultation — identify producer and timeline',
+      ]},
+      { label: 'Week 2 (Aug 10–16)', tasks: [
+        'Follow up on remaining July submissions (now 28+ days)',
+        'Submit Wave 2: next 5 agencies',
+        'Attend any VO networking event, webinar, or online community session',
+        'Post 2 pieces of content: milestone or celebration if any responses received',
+      ]},
+      { label: 'Week 3 (Aug 17–23)', tasks: [
+        'Confirm demo refresh is scheduled or booked',
+        'Submit Wave 2 continued: next 5 agencies',
+        'Update website jacquievoice.com: fix email inconsistency, remove Fiverr from nav',
+        'Post 2 pieces of content',
+      ]},
+      { label: 'Week 4 (Aug 24–31)', tasks: [
+        'August review: submissions sent, responses received, on-roster progress',
+        'Follow up on all pending Wave 2 submissions',
+        'Begin researching audiobook narration if demo refresh includes that direction',
+        'Plan September content calendar in advance',
+      ]},
+    ]
+  },
+  {
+    name: 'September 2026', emoji: '🎤',
+    weeks: [
+      { label: 'Week 1 (Sep 1–7)', tasks: [
+        'Demo refresh session (if booked for September)',
+        'Post 2 pieces of content',
+        'Submit Wave 3: next batch of agencies from 90-agency list',
+        'Check in on all submissions: update statuses in tracker',
+      ]},
+      { label: 'Week 2–3 (Sep 8–21)', tasks: [
+        'Follow up on August submissions (14-day mark)',
+        'VO Atlanta or comparable conference — attend if possible',
+        'Post 4 pieces of content (maintain 2/week cadence)',
+        'Pitch direct to 1–2 companies without an agent using MLK III / CNN credentials',
+      ]},
+      { label: 'Week 4 (Sep 22–30)', tasks: [
+        'Q3 review: revenue vs. $5K/month goal, submission count, roster progress',
+        'Update tracker with all September activity',
+        'Plan Q4 strategy if no agent signed yet — adjust approach?',
+        'Celebrate progress: 2,500+ projects, rising rates, traction on Voice123',
+      ]},
+    ]
+  },
+  {
+    name: 'October 2026', emoji: '📈',
+    weeks: [
+      { label: 'October Tasks', tasks: [
+        'Continue agency follow-up cadence (14 and 28-day marks)',
+        'Demo refresh complete and distributed — update all profiles',
+        'Post 8 pieces of content across the month (2/week)',
+        'Raise Voice123 rates to full GVAA by Oct 15',
+        'Target one large direct client pitch using new demos',
+        'Review Fiverr performance: track whether rate increase affected volume',
+      ]},
+    ]
+  },
+  {
+    name: 'November 2026', emoji: '🦃',
+    weeks: [
+      { label: 'November Tasks', tasks: [
+        'Holiday push: reach out to direct clients for year-end narration/commercial work',
+        'Follow up with any agents who have not responded since September',
+        'Post holiday-relevant content: gratitude, year-in-review setup',
+        'Track Q4 revenue closely — goal is $5K/month',
+        'Lock in 1 recurring client relationship before year end',
+      ]},
+    ]
+  },
+  {
+    name: 'December 2026', emoji: '🎄',
+    weeks: [
+      { label: 'December Tasks', tasks: [
+        'Year-end review: total submissions, roster count, revenue for 2026',
+        'Send holiday notes to direct clients and agency contacts who responded',
+        'Set 2027 goals: agent, demo, revenue, platform mix',
+        'Update jacquievoice.com with any new credits from second half of 2026',
+        'Rest and reset — the foundation is built',
+      ]},
+    ]
+  },
+  {
+    name: 'January 2027', emoji: '🌟',
+    weeks: [
+      { label: 'January Tasks', tasks: [
+        '2027 launch: refresh strategy based on what worked in 2026',
+        'New submission wave if still seeking agent',
+        'ACX/audiobook decision: pursue narration niche or stay commercial?',
+        'Review platform performance: Voice123 vs Fiverr vs direct — shift resources accordingly',
+        'Target: $60K annualized run rate minimum by end of Q1 2027',
+      ]},
+    ]
+  },
+];
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+async function init() {
+  buildChecklist();
+  loadChecklistState();
+  await loadSubmissions();
+}
+
+// ── SUBMISSIONS ───────────────────────────────────────────────────────────────
+async function loadSubmissions() {
+  const { data, error } = await sb.from('vo_submissions').select('*').order('priority', { ascending: true, nullsLast: true });
+  if (error) { showToast('Could not load submissions', true); return; }
+  allData = data || [];
+  updateStats();
+  renderTable();
+  document.getElementById('tbl-loading').style.display = 'none';
+  document.getElementById('tbl').style.display = 'table';
+}
+
+function updateStats() {
+  const c = { queued:0, sent:0, followed_up:0, responded:0, on_roster:0, declined:0, no_response:0 };
+  allData.forEach(r => { if (c[r.status] !== undefined) c[r.status]++; });
+  document.getElementById('s-total').textContent   = allData.length;
+  document.getElementById('s-queued').textContent  = c.queued;
+  document.getElementById('s-sent').textContent    = c.sent + c.followed_up;
+  document.getElementById('s-followup').textContent = c.followed_up;
+  document.getElementById('s-roster').textContent  = c.on_roster;
+  document.getElementById('f-queued').textContent  = c.queued;
+  document.getElementById('f-sent').textContent    = c.sent;
+  document.getElementById('f-followed').textContent = c.followed_up;
+  document.getElementById('f-responded').textContent = c.responded;
+  document.getElementById('f-roster').textContent  = c.on_roster;
+}
+
+function renderTable() {
+  const q = (document.getElementById('search-box').value || '').toLowerCase();
+  const rows = allData.filter(r => {
+    if (filterS !== 'all' && r.status !== filterS) return false;
+    if (q && !((r.agency_name||'').toLowerCase().includes(q) || (r.specialty||'').toLowerCase().includes(q) || (r.notes||'').toLowerCase().includes(q))) return false;
+    return true;
+  });
+  const tbody = document.getElementById('tbl-body');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="8">No submissions yet. Hit "+ Add Submission" or use ⭐ Load Priority 15.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(r => {
+    const p = r.priority;
+    const pClass = p && p <= 5 ? 'top5' : p && p <= 15 ? 'mid' : 'other';
+    const pLabel = p ? `<span class="priority-badge ${pClass}">${p}</span>` : '—';
+    const dateSent = r.date_sent ? new Date(r.date_sent + 'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric'}) : '—';
+    const fu1 = r.followup_1 ? new Date(r.followup_1 + 'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric'}) : '—';
+    const needsFollowUp = r.followup_1 && new Date(r.followup_1) <= new Date() && r.status === 'sent';
+    const fu1Cell = needsFollowUp ? `<span style="color:var(--orange);font-weight:600;">${fu1} ⚠</span>` : fu1;
+    return `<tr>
+      <td>${pLabel}</td>
+      <td><div style="font-weight:600;">${r.agency_name}</div>${r.contact ? `<div style="font-size:.72rem;color:var(--muted);margin-top:2px;">${r.contact}</div>` : ''}</td>
+      <td class="hide-mobile"><span class="plat-tag">${r.specialty || '—'}</span></td>
+      <td class="hide-mobile" style="font-size:.8rem;">${dateSent}</td>
+      <td class="hide-mobile" style="font-size:.8rem;">${fu1Cell}</td>
+      <td>
+        <select class="status-sel ${r.status}" onchange="quickStatus('${r.id}', this)">
+          <option value="queued"      ${r.status==='queued'      ?'selected':''}>Queued</option>
+          <option value="sent"        ${r.status==='sent'        ?'selected':''}>Sent</option>
+          <option value="followed_up" ${r.status==='followed_up' ?'selected':''}>Followed Up</option>
+          <option value="responded"   ${r.status==='responded'   ?'selected':''}>Responded</option>
+          <option value="on_roster"   ${r.status==='on_roster'   ?'selected':''}>On Roster 🎉</option>
+          <option value="declined"    ${r.status==='declined'    ?'selected':''}>Declined</option>
+          <option value="no_response" ${r.status==='no_response' ?'selected':''}>No Response</option>
+        </select>
+      </td>
+      <td class="hide-mobile" style="font-size:.78rem;color:var(--muted);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.notes||'—'}</td>
+      <td style="white-space:nowrap;">
+        <button class="edit-btn" onclick="openEdit('${r.id}')">Edit</button>
+        <button class="del-btn"  onclick="deleteRow('${r.id}')">✕</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── FILTERS ───────────────────────────────────────────────────────────────────
+function setFilter(btn) {
+  document.querySelectorAll('.fp').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  filterS = btn.dataset.s;
+  renderTable();
+}
+function filterStatus(el) {
+  filterS = el.dataset.s;
+  document.querySelectorAll('.fp').forEach(b => b.classList.toggle('on', b.dataset.s === filterS));
+  document.querySelectorAll('.stage').forEach(s => s.classList.toggle('active', s.dataset.s === filterS));
+  renderTable();
+}
+
+// ── ADD ───────────────────────────────────────────────────────────────────────
+function toggleAddForm() {
+  const f = document.getElementById('add-form');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+async function saveNew() {
+  const name = document.getElementById('f-agency').value.trim();
+  if (!name) { showToast('Agency name is required', true); return; }
+  const dateSent = document.getElementById('f-datesent').value || null;
+  const fu1 = document.getElementById('f-fu1').value || (dateSent ? addDays(dateSent, 14) : null);
+  const row = {
+    agency_name: name,
+    specialty:   document.getElementById('f-specialty').value.trim() || null,
+    contact:     document.getElementById('f-contact').value.trim() || null,
+    priority:    parseInt(document.getElementById('f-priority').value) || null,
+    fit_score:   parseInt(document.getElementById('f-fit').value) || null,
+    date_sent:   dateSent,
+    followup_1:  fu1,
+    status:      document.getElementById('f-status').value,
+    notes:       document.getElementById('f-notes').value.trim() || null,
+  };
+  const { error } = await sb.from('vo_submissions').insert(row);
+  if (error) { showToast('Could not save', true); return; }
+  ['f-agency','f-specialty','f-contact','f-priority','f-fit','f-datesent','f-fu1','f-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-status').value = 'queued';
+  toggleAddForm();
+  showToast('Agency saved!');
+  await loadSubmissions();
+}
+
+// ── SEED PRIORITY 15 ──────────────────────────────────────────────────────────
+async function seedPriority15() {
+  if (!confirm('This will add the Priority 15 agencies to your tracker. Any you already have will be added as duplicates — check first. Continue?')) return;
+  const { error } = await sb.from('vo_submissions').insert(PRIORITY_15.map(a => ({ ...a, status: 'queued' })));
+  if (error) { showToast('Could not seed agencies', true); return; }
+  toggleAddForm();
+  showToast('Priority 15 agencies loaded!');
+  await loadSubmissions();
+}
+
+// ── QUICK STATUS ──────────────────────────────────────────────────────────────
+async function quickStatus(id, sel) {
+  const status = sel.value;
+  sel.className = 'status-sel ' + status;
+  const updates = { status };
+  if (status === 'sent' && !allData.find(r => r.id === id)?.date_sent) {
+    const today = new Date().toLocaleDateString('en-CA');
+    updates.date_sent = today;
+    updates.followup_1 = addDays(today, 14);
+    updates.followup_2 = addDays(today, 28);
+  }
+  const { error } = await sb.from('vo_submissions').update(updates).eq('id', id);
+  if (error) { showToast('Could not update', true); return; }
+  const item = allData.find(r => r.id === id);
+  if (item) Object.assign(item, updates);
+  updateStats();
+  renderTable();
+  showToast(`Status → ${status.replace('_',' ')}`);
+}
+
+// ── EDIT ──────────────────────────────────────────────────────────────────────
+function openEdit(id) {
+  const r = allData.find(a => a.id === id);
+  if (!r) return;
+  editId = id;
+  document.getElementById('e-agency').value    = r.agency_name || '';
+  document.getElementById('e-specialty').value = r.specialty || '';
+  document.getElementById('e-contact').value   = r.contact || '';
+  document.getElementById('e-priority').value  = r.priority || '';
+  document.getElementById('e-fit').value       = r.fit_score || '';
+  document.getElementById('e-datesent').value  = r.date_sent || '';
+  document.getElementById('e-fu1').value       = r.followup_1 || '';
+  document.getElementById('e-fu2').value       = r.followup_2 || '';
+  document.getElementById('e-response').value  = r.response || '';
+  document.getElementById('e-status').value    = r.status || 'queued';
+  document.getElementById('e-notes').value     = r.notes || '';
+  document.getElementById('edit-modal').style.display = 'flex';
+}
+function closeModal(e) {
+  if (e.target.id === 'edit-modal') document.getElementById('edit-modal').style.display = 'none';
+}
+async function saveEdit() {
+  if (!editId) return;
+  const row = {
+    agency_name: document.getElementById('e-agency').value.trim(),
+    specialty:   document.getElementById('e-specialty').value.trim() || null,
+    contact:     document.getElementById('e-contact').value.trim() || null,
+    priority:    parseInt(document.getElementById('e-priority').value) || null,
+    fit_score:   parseInt(document.getElementById('e-fit').value) || null,
+    date_sent:   document.getElementById('e-datesent').value || null,
+    followup_1:  document.getElementById('e-fu1').value || null,
+    followup_2:  document.getElementById('e-fu2').value || null,
+    response:    document.getElementById('e-response').value.trim() || null,
+    status:      document.getElementById('e-status').value,
+    notes:       document.getElementById('e-notes').value.trim() || null,
+  };
+  const { error } = await sb.from('vo_submissions').update(row).eq('id', editId);
+  if (error) { showToast('Could not save', true); return; }
+  document.getElementById('edit-modal').style.display = 'none';
+  showToast('Saved!');
+  await loadSubmissions();
+}
+
+// ── DELETE ────────────────────────────────────────────────────────────────────
+async function deleteRow(id) {
+  const item = allData.find(r => r.id === id);
+  if (!confirm(`Remove "${item?.agency_name || 'this entry'}"?`)) return;
+  const { error } = await sb.from('vo_submissions').delete().eq('id', id);
+  if (error) { showToast('Could not delete', true); return; }
+  showToast('Removed');
+  await loadSubmissions();
+}
+
+// ── CHECKLIST ─────────────────────────────────────────────────────────────────
+function buildChecklist() {
+  const container = document.getElementById('checklist-container');
+  container.innerHTML = MONTHS.map((m, mi) => {
+    const weeksHtml = m.weeks.map((w, wi) => {
+      const tasksHtml = w.tasks.map((t, ti) => {
+        const id = `task-${mi}-${wi}-${ti}`;
+        return `<div class="task-item" id="item-${id}">
+          <input type="checkbox" id="${id}" onchange="saveCheckState('${id}', this.checked)"/>
+          <label for="${id}">${t}</label>
+        </div>`;
+      }).join('');
+      return `<div class="week-label">${w.label}</div>${tasksHtml}`;
+    }).join('');
+    const totalTasks = m.weeks.reduce((acc, w) => acc + w.tasks.length, 0);
+    return `<div class="month-block">
+      <div class="month-hdr" onclick="toggleMonth(${mi})">
+        <div class="month-name">${m.emoji} ${m.name}</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="month-prog" id="prog-${mi}">0 / ${totalTasks}</span>
+          <span class="month-arrow" id="arrow-${mi}">›</span>
+        </div>
+      </div>
+      <div class="month-body" id="body-${mi}">${weeksHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleMonth(mi) {
+  const body  = document.getElementById(`body-${mi}`);
+  const arrow = document.getElementById(`arrow-${mi}`);
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+function saveCheckState(id, checked) {
+  localStorage.setItem('jv-' + id, checked ? '1' : '0');
+  const item = document.getElementById('item-' + id);
+  if (item) item.classList.toggle('done', checked);
+  updateProgressCounters();
+}
+
+function loadChecklistState() {
+  MONTHS.forEach((m, mi) => {
+    m.weeks.forEach((w, wi) => {
+      w.tasks.forEach((_, ti) => {
+        const id = `task-${mi}-${wi}-${ti}`;
+        const checked = localStorage.getItem('jv-' + id) === '1';
+        const cb = document.getElementById(id);
+        const item = document.getElementById('item-' + id);
+        if (cb) cb.checked = checked;
+        if (item && checked) item.classList.add('done');
+      });
+    });
+  });
+  updateProgressCounters();
+  // Auto-open current month
+  const now = new Date();
+  const monthNames = ['July 2026','August 2026','September 2026','October 2026','November 2026','December 2026','January 2027'];
+  const currentLabel = now.toLocaleDateString('en-US', {month:'long', year:'numeric'});
+  const mi = monthNames.indexOf(currentLabel);
+  if (mi >= 0) toggleMonth(mi);
+  else toggleMonth(0); // default open July
+}
+
+function updateProgressCounters() {
+  let totalDone = 0, totalAll = 0;
+  MONTHS.forEach((m, mi) => {
+    let done = 0, all = 0;
+    m.weeks.forEach((w, wi) => {
+      w.tasks.forEach((_, ti) => {
+        const id = `task-${mi}-${wi}-${ti}`;
+        const cb = document.getElementById(id);
+        all++;
+        if (cb && cb.checked) done++;
+      });
+    });
+    document.getElementById(`prog-${mi}`).textContent = `${done} / ${all}`;
+    totalDone += done; totalAll += all;
+  });
+  document.getElementById('overall-progress').textContent = `${totalDone} of ${totalAll} tasks complete`;
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function addDays(dateStr, days) {
+  const d = new Date(dateStr + 'T12:00:00');
+  d.setDate(d.getDate() + days);
+  return d.toLocaleDateString('en-CA');
+}
+
+function showToast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  setTimeout(() => t.className = 'toast', 2600);
+}
+
+init();
+</script>
+</body>
+</html>
