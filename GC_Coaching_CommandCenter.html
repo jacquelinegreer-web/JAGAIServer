@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Greer Collective · Coaching Launch Command Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --plum:   #2C1A2E;
+      --gold:   #B8922A;
+      --cream:  #FAF6EF;
+      --bgold:  #D4A843;
+      --mauve:  #8A7A8E;
+      --midplum:#4A2455;
+      --green:  #2E7D32;
+      --done-bg:#F0F7F0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cream);
+      color: var(--plum);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--plum);
+      padding: 48px 40px 36px;
+      border-bottom: 4px solid var(--gold);
+    }
+
+    .header-eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 42px;
+      color: var(--cream);
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .header-sub {
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      color: var(--mauve);
+      letter-spacing: 2px;
+    }
+
+    /* ── MASTER PROGRESS ── */
+    .master-progress {
+      background: var(--midplum);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .master-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .master-bar-wrap {
+      flex: 1;
+      min-width: 200px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 2px;
+      height: 6px;
+      overflow: hidden;
+    }
+
+    .master-bar-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    .master-count {
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      color: var(--cream);
+      white-space: nowrap;
+    }
+
+    /* ── LAYOUT ── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      margin-bottom: 48px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 6px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--gold);
+    }
+
+    .section-eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 24px;
+      color: var(--plum);
+    }
+
+    .section-deadline {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: var(--mauve);
+      margin-left: auto;
+    }
+
+    /* section progress bar */
+    .section-progress {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .sec-bar-wrap {
+      flex: 1;
+      background: #E8E0E2;
+      border-radius: 2px;
+      height: 4px;
+      overflow: hidden;
+    }
+
+    .sec-bar-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    .sec-count {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: var(--mauve);
+      white-space: nowrap;
+      min-width: 56px;
+      text-align: right;
+    }
+
+    /* ── ITEMS ── */
+    .item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 16px;
+      border-bottom: 1px solid #E8E0E2;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-radius: 3px;
+      margin-bottom: 2px;
+    }
+
+    .item:hover { background: rgba(184,146,42,0.06); }
+
+    .item.done {
+      background: var(--done-bg);
+    }
+
+    .item.done .item-text {
+      text-decoration: line-through;
+      color: var(--mauve);
+    }
+
+    .item.done .item-note {
+      color: #B0A8B0;
+    }
+
+    /* custom checkbox */
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      border: 2px solid var(--gold);
+      border-radius: 3px;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, border-color 0.15s;
+      background: white;
+    }
+
+    .item.done .checkbox {
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .checkbox-check {
+      display: none;
+      width: 11px;
+      height: 8px;
+    }
+
+    .item.done .checkbox-check { display: block; }
+
+    .item-body { flex: 1; }
+
+    .item-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: var(--plum);
+      line-height: 1.4;
+    }
+
+    .item-note {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: var(--mauve);
+      margin-top: 3px;
+      line-height: 1.5;
+    }
+
+    /* ── COSTS SECTION ── */
+    .costs-section {
+      background: var(--plum);
+      border-radius: 4px;
+      padding: 32px 36px;
+      margin-bottom: 48px;
+    }
+
+    .costs-eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .costs-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 28px;
+      color: var(--cream);
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid rgba(184,146,42,0.4);
+    }
+
+    .cost-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .cost-item { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--cream); }
+    .cost-amount { font-family: 'Jost', sans-serif; font-size: 13px; color: var(--gold); white-space: nowrap; }
+    .cost-note { font-family: 'Jost', sans-serif; font-size: 11px; color: var(--mauve); flex: 1; text-align: right; }
+
+    .cost-total {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 2px solid var(--gold);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .cost-total-label { font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 2px; color: var(--cream); text-transform: uppercase; }
+    .cost-total-amount { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--gold); }
+
+    /* ── RESET BUTTON ── */
+    .reset-wrap {
+      text-align: right;
+      margin-bottom: 24px;
+    }
+
+    .reset-btn {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--mauve);
+      background: none;
+      border: 1px solid #D0C8C8;
+      padding: 7px 16px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .reset-btn:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--plum);
+      border-top: 3px solid var(--gold);
+      padding: 20px 40px;
+      text-align: center;
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: var(--mauve);
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">Greer Collective · Coaching Practice</div>
+  <h1>Launch Command Center</h1>
+  <div class="header-sub">July – September 2026 &nbsp;·&nbsp; thegreercollective.com</div>
+</header>
+
+<div class="master-progress">
+  <div class="master-label">Overall Progress</div>
+  <div class="master-bar-wrap">
+    <div class="master-bar-fill" id="masterFill"></div>
+  </div>
+  <div class="master-count" id="masterCount">0 / 0 complete</div>
+</div>
+
+<main>
+
+  <div class="reset-wrap">
+    <button class="reset-btn" onclick="resetAll()">Reset All</button>
+  </div>
+
+  <!-- ── THIS WEEK ── -->
+  <div class="section" id="section-week">
+    <div class="section-header">
+      <span class="section-eyebrow">Now</span>
+      <span class="section-title">This Week</span>
+      <span class="section-deadline">by July 4, 2026</span>
+    </div>
+    <div class="section-progress">
+      <div class="sec-bar-wrap"><div class="sec-bar-fill" id="bar-week"></div></div>
+      <div class="sec-count" id="count-week"></div>
+    </div>
+    <div class="items" id="items-week">
+      <div class="item" data-id="w1" data-section="week" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Reach out to Tarin Bynum Neal</div>
+          <div class="item-note">Send the warm intro email with your Calendly link — she is a referral from Helene and a warm prospect for your first paying client.</div>
+        </div>
+      </div>
+      <div class="item" data-id="w2" data-section="week" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Research ICF Level 1 programs</div>
+          <div class="item-note">iPEC · Accomplishment Coaching · Coach Training Alliance · New Ventures West · Columbia. Range: $3,000–$10,000, most have payment plans. Programs fill.</div>
+        </div>
+      </div>
+      <div class="item" data-id="w3" data-section="week" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Enroll or request enrollment in ICF program</div>
+          <div class="item-note">Do not wait. Cohorts fill and start dates are fixed. Select your program and lock in a spot.</div>
+        </div>
+      </div>
+      <div class="item" data-id="w4" data-section="week" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Get business insurance quote</div>
+          <div class="item-note">GL + E&amp;O bundle. Start at hiscox.com, nextinsurance.com, or Navy Federal/Newtek. Budget $800–$1,200/year. Required before first paying client.</div>
+        </div>
+      </div>
+      <div class="item" data-id="w5" data-section="week" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Update LinkedIn headline</div>
+          <div class="item-note">Add: "ICF coaching credential (in progress)" or "ICF ACC in progress." Do not use "Certified Coach" until ACC is confirmed.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── THIS MONTH ── -->
+  <div class="section" id="section-month">
+    <div class="section-header">
+      <span class="section-eyebrow">July 2026</span>
+      <span class="section-title">This Month</span>
+      <span class="section-deadline">by July 31, 2026</span>
+    </div>
+    <div class="section-progress">
+      <div class="sec-bar-wrap"><div class="sec-bar-fill" id="bar-month"></div></div>
+      <div class="sec-count" id="count-month"></div>
+    </div>
+    <div class="items" id="items-month">
+      <div class="item" data-id="m1" data-section="month" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Add Coaching page to thegreercollective.com</div>
+          <div class="item-note">Include all packages, bio, tools and frameworks, and your Calendly scheduling link. Keep Squarespace as the public-facing site.</div>
+        </div>
+      </div>
+      <div class="item" data-id="m2" data-section="month" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Draft client agreement and intake form</div>
+          <div class="item-note">Must be signed before first paying client. Cover: coaching relationship description, confidentiality, session structure, payment terms, cancellation, client responsibility statement.</div>
+        </div>
+      </div>
+      <div class="item" data-id="m3" data-section="month" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Formalize Helene Felman as a coaching client</div>
+          <div class="item-note">Log previous sessions retroactively. She counts toward your 25 allowed pro bono hours for ACC application.</div>
+        </div>
+      </div>
+      <div class="item" data-id="m4" data-section="month" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Begin ICF coaching hours log</div>
+          <div class="item-note">Track every session: client name · date · duration · paid or pro bono. This log is required for your ACC application. Start now.</div>
+        </div>
+      </div>
+      <div class="item" data-id="m5" data-section="month" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Purchase StrengthsFinder access codes for first 2–3 clients</div>
+          <div class="item-note">$19.99 (Top 5) or $49.99 (Full 34) per client via Gallup. Purchase as needed — not in bulk.</div>
+        </div>
+      </div>
+      <div class="item" data-id="m6" data-section="month" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Request testimonial from Helene Felman</div>
+          <div class="item-note">For website Featured section and LinkedIn. Ask with specific framing — what changed, what she noticed, what she would tell someone considering coaching with you.</div>
+        </div>
+      </div>
+      <div class="item" data-id="m7" data-section="month" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Update LinkedIn About section</div>
+          <div class="item-note">Add: tools, populations served, 15+ years of experience, ICF training in progress, Calendly CTA. Close with "Reach out to explore coaching or facilitation work together."</div>
+        </div>
+      </div>
+      <div class="item" data-id="m8" data-section="month" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Set up coaching backend (Simply.Coach)</div>
+          <div class="item-note">Client portal, session notes, goal tracking, ICF-aligned hours logging. Starter plan: $9/mo. Keep thegreercollective.com as public-facing site.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── THIS QUARTER ── -->
+  <div class="section" id="section-quarter">
+    <div class="section-header">
+      <span class="section-eyebrow">July – September 2026</span>
+      <span class="section-title">This Quarter</span>
+      <span class="section-deadline">by September 30, 2026</span>
+    </div>
+    <div class="section-progress">
+      <div class="sec-bar-wrap"><div class="sec-bar-fill" id="bar-quarter"></div></div>
+      <div class="sec-count" id="count-quarter"></div>
+    </div>
+    <div class="items" id="items-quarter">
+      <div class="item" data-id="q1" data-section="quarter" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Complete at least 30 coaching hours (paid + pro bono)</div>
+          <div class="item-note">Up to 25 can be pro bono. Remaining must involve some exchange of value — even $1 or bartered services counts for ICF purposes.</div>
+        </div>
+      </div>
+      <div class="item" data-id="q2" data-section="quarter" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Begin mentor coaching requirement</div>
+          <div class="item-note">3-month engagement required for ACC. Often embedded in ICF training program — confirm with your chosen program. Do not wait until training ends to start.</div>
+        </div>
+      </div>
+      <div class="item" data-id="q3" data-section="quarter" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Onboard Tarin Bynum Neal as first paying client</div>
+          <div class="item-note">Discovery session first (no charge, 45–60 min). Then signed agreement, first session, and invoice. This is your milestone client.</div>
+        </div>
+      </div>
+      <div class="item" data-id="q4" data-section="quarter" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Identify 2–3 additional pro bono clients</div>
+          <div class="item-note">Tap Urban Teachers alumni network, EOS connections, or ALP participant community. These count toward your 25 pro bono ICF hours.</div>
+        </div>
+      </div>
+      <div class="item" data-id="q5" data-section="quarter" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Conduct first 360 feedback debrief with a client</div>
+          <div class="item-note">Design instrument, collect multi-rater input, synthesize themes, debrief with the leader. Document as a formal coaching session in your hours log.</div>
+        </div>
+      </div>
+      <div class="item" data-id="q6" data-section="quarter" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Build coaching-specific LinkedIn content</div>
+          <div class="item-note">1 post per week. Short, quotable, one insight per post. No hashtag stacking. Speak to leaders — not to other coaches.</div>
+        </div>
+      </div>
+      <div class="item" data-id="q7" data-section="quarter" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Join NAWBO Greater DC and attend one event</div>
+          <div class="item-note">NextGen membership: $175/year. Includes E&amp;O insurance access, networking, directory listing. Nicole Chamblin specifically recommended this community.</div>
+        </div>
+      </div>
+      <div class="item" data-id="q8" data-section="quarter" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Set ACC application target date</div>
+          <div class="item-note">Target: 100 hours total (25 pro bono max). Track hours rigorously now so you know exactly when you can apply. Current target: November 2026.</div>
+        </div>
+      </div>
+      <div class="item" data-id="q9" data-section="quarter" onclick="toggle(this)">
+        <div class="checkbox"><svg class="checkbox-check" viewBox="0 0 11 8" fill="none"><polyline points="1,4 4,7 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-text">Plan Q4 coaching pipeline</div>
+          <div class="item-note">Oct–Jan: virtual facilitation plus coaching. Build pipeline before Italy/London trip (Sept 15–25). Coaching should be a primary revenue stream by Q4.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STARTUP COSTS ── -->
+  <div class="costs-section">
+    <div class="costs-eyebrow">Reference</div>
+    <div class="costs-title">Approximate Startup Costs · Year 1</div>
+
+    <div class="cost-row">
+      <span class="cost-item">ICF Level 1 Training Program</span>
+      <span class="cost-note">one-time · payment plans available</span>
+      <span class="cost-amount">$3,000 – $10,000</span>
+    </div>
+    <div class="cost-row">
+      <span class="cost-item">Business Insurance (GL + E&amp;O bundle)</span>
+      <span class="cost-note">fully tax-deductible</span>
+      <span class="cost-amount">$800 – $1,200 / yr</span>
+    </div>
+    <div class="cost-row">
+      <span class="cost-item">NAWBO NextGen Membership</span>
+      <span class="cost-note">includes insurance access + networking</span>
+      <span class="cost-amount">$175 / yr</span>
+    </div>
+    <div class="cost-row">
+      <span class="cost-item">ICF Membership</span>
+      <span class="cost-note">required for ACC application</span>
+      <span class="cost-amount">$245 / yr</span>
+    </div>
+    <div class="cost-row">
+      <span class="cost-item">Simply.Coach (coaching backend)</span>
+      <span class="cost-note">Starter plan · 5 clients</span>
+      <span class="cost-amount">$9 / mo</span>
+    </div>
+    <div class="cost-row">
+      <span class="cost-item">StrengthsFinder access codes</span>
+      <span class="cost-note">per client · Top 5 or Full 34</span>
+      <span class="cost-amount">$20 – $50 / client</span>
+    </div>
+    <div class="cost-row">
+      <span class="cost-item">Squarespace (existing website)</span>
+      <span class="cost-note">already in use</span>
+      <span class="cost-amount">$23 / mo</span>
+    </div>
+    <div class="cost-row">
+      <span class="cost-item">Calendly scheduling</span>
+      <span class="cost-note">free tier is sufficient to start</span>
+      <span class="cost-amount">$0 – $16 / mo</span>
+    </div>
+    <div class="cost-row">
+      <span class="cost-item">Client agreement template</span>
+      <span class="cost-note">draft or attorney review</span>
+      <span class="cost-amount">$0 – $200</span>
+    </div>
+
+    <div class="cost-total">
+      <span class="cost-total-label">Estimated Year 1 Total</span>
+      <span class="cost-total-amount">$4,500 – $12,500</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Greer Collective &nbsp;·&nbsp; thegreercollective.com &nbsp;·&nbsp; Coaching Launch Command Center &nbsp;·&nbsp; 2026
+</footer>
+
+<script>
+  const STORAGE_KEY = 'gc_coaching_checklist';
+
+  function getSaved() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch { return {}; }
+  }
+
+  function save(state) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function toggle(el) {
+    const state = getSaved();
+    const id = el.dataset.id;
+    state[id] = !state[id];
+    save(state);
+    render();
+  }
+
+  function resetAll() {
+    if (confirm('Reset all items? This cannot be undone.')) {
+      localStorage.removeItem(STORAGE_KEY);
+      render();
+    }
+  }
+
+  function render() {
+    const state = getSaved();
+    const sections = ['week', 'month', 'quarter'];
+    let totalDone = 0, totalAll = 0;
+
+    sections.forEach(sec => {
+      const items = document.querySelectorAll(`[data-section="${sec}"]`);
+      let done = 0;
+      items.forEach(item => {
+        const id = item.dataset.id;
+        if (state[id]) {
+          item.classList.add('done');
+          done++;
+        } else {
+          item.classList.remove('done');
+        }
+      });
+      const pct = items.length ? Math.round((done / items.length) * 100) : 0;
+      document.getElementById(`bar-${sec}`).style.width = pct + '%';
+      document.getElementById(`count-${sec}`).textContent = `${done} / ${items.length}`;
+      totalDone += done;
+      totalAll  += items.length;
+    });
+
+    const masterPct = totalAll ? Math.round((totalDone / totalAll) * 100) : 0;
+    document.getElementById('masterFill').style.width = masterPct + '%';
+    document.getElementById('masterCount').textContent = `${totalDone} / ${totalAll} complete  (${masterPct}%)`;
+  }
+
+  render();
+</script>
+</body>
+</html>
