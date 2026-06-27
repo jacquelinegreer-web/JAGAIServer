@@ -17,24 +17,49 @@
       --border: #e0dae8;
       --green: #2e7d32;
       --italy: #008c45;
+      /* JacquieVoice brand */
+      --navy: #1a3558;
+      --navy-mid: #2a5080;
+      --gold: #c9a84c;
+      --gold-bg: #fdf8e8;
+      --gold-border: #e8d48a;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
+    /* HEADER — split brand bar */
     .hdr {
-      background: var(--purple);
+      background: linear-gradient(135deg, var(--purple) 0%, var(--purple) 55%, var(--navy) 100%);
       color: white;
-      padding: 28px 32px 24px;
-      text-align: center;
+      padding: 0;
     }
+    .hdr-inner { padding: 28px 32px 20px; text-align: center; }
     .hdr h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: .01em; }
     .hdr p  { font-size: .85rem; opacity: .7; margin-top: 5px; }
     .hdr-meta { margin-top: 14px; display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
     .hdr-stat { background: rgba(255,255,255,.12); border-radius: 9px; padding: 7px 16px; font-size: .8rem; }
     .hdr-stat b { font-size: 1.05rem; display: block; }
+    /* Brand bar at bottom of header */
+    .brand-bar {
+      display: flex;
+      border-top: 1px solid rgba(255,255,255,.12);
+    }
+    .brand-pill {
+      flex: 1;
+      padding: 10px 16px;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      text-align: center;
+      opacity: .85;
+    }
+    .brand-pill.gc { background: rgba(124,92,191,.25); border-right: 1px solid rgba(255,255,255,.1); }
+    .brand-pill.jv { background: rgba(201,168,76,.18); color: #f5e4a8; }
 
     .wrap { max-width: 1000px; margin: 0 auto; padding: 28px 20px 48px; }
 
+    /* SECTION TITLES */
     .section-title {
       font-size: .68rem;
       font-weight: 800;
@@ -47,9 +72,13 @@
       gap: 10px;
     }
     .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    /* JacquieVoice section title — gold accent */
+    .section-title.jv { color: var(--gold); }
+    .section-title.jv::after { background: var(--gold-border); }
 
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; }
 
+    /* BASE CARD */
     .tool-card {
       background: var(--card);
       border-radius: 14px;
@@ -66,6 +95,11 @@
     .tool-card.featured { border-color: var(--light); background: linear-gradient(135deg, #fff 80%, var(--pale)); }
     .tool-card.featured:hover { border-color: var(--mid); }
 
+    /* JACQUIEVOICE CARDS — navy/gold treatment */
+    .tool-card.jv { background: linear-gradient(135deg, #fff 75%, #fdf8ee); }
+    .tool-card.jv:hover { border-color: var(--gold); box-shadow: 0 4px 16px rgba(201,168,76,.15); }
+    .tool-card.jv .tc-name { color: var(--navy); }
+
     .tc-icon { font-size: 1.7rem; margin-bottom: 10px; display: block; }
     .tc-name { font-size: .97rem; font-weight: 700; color: var(--purple); }
     .tc-desc { font-size: .8rem; color: var(--muted); margin-top: 4px; line-height: 1.45; }
@@ -81,9 +115,10 @@
       background: var(--light);
       color: var(--purple);
     }
-    .tc-badge.live { background: #e8f5e9; color: var(--green); }
-    .tc-badge.new  { background: #fff3e0; color: #d84c00; }
-    .tc-badge.italy { background: #e8f5ee; color: var(--italy); }
+    .tc-badge.live     { background: #e8f5e9; color: var(--green); }
+    .tc-badge.jv-live  { background: var(--gold-bg); color: #7a5c10; border: 1px solid var(--gold-border); }
+    .tc-badge.new      { background: #fff3e0; color: #d84c00; }
+    .tc-badge.italy    { background: #e8f5ee; color: var(--italy); }
 
     .coming-card {
       background: #fafafa;
@@ -94,6 +129,8 @@
       cursor: default;
     }
     .coming-card .tc-name { color: var(--muted); }
+    /* JacquieVoice coming-soon cards */
+    .coming-card.jv { border-color: var(--gold-border); background: #fffdf5; }
 
     .footer {
       text-align: center;
@@ -103,16 +140,25 @@
       border-top: 1px solid var(--border);
     }
     .footer a { color: var(--mid); text-decoration: none; }
+    .footer-brands { display: flex; justify-content: center; gap: 24px; margin-bottom: 8px; font-size: .7rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+    .footer-brands .gc { color: var(--mid); }
+    .footer-brands .jv { color: var(--gold); }
   </style>
 </head>
 <body>
 
 <div class="hdr">
-  <h1>Greer Collective</h1>
-  <p>jacqueline.greer@gmail.com &nbsp;·&nbsp; Your personal business OS</p>
-  <div class="hdr-meta">
-    <div class="hdr-stat"><b id="h-days">—</b>Days to Italy</div>
-    <div class="hdr-stat"><b id="h-date">—</b>Today</div>
+  <div class="hdr-inner">
+    <h1>Greer Collective &nbsp;·&nbsp; JacquieVoice</h1>
+    <p>jacqueline.greer@gmail.com &nbsp;·&nbsp; Your personal business OS</p>
+    <div class="hdr-meta">
+      <div class="hdr-stat"><b id="h-days">—</b>Days to Italy</div>
+      <div class="hdr-stat"><b id="h-date">—</b>Today</div>
+    </div>
+  </div>
+  <div class="brand-bar">
+    <div class="brand-pill gc">🧭 Greer Collective &nbsp;— Consulting &amp; Coaching</div>
+    <div class="brand-pill jv">🎙️ JacquieVoice &nbsp;— Voice Over</div>
   </div>
 </div>
 
@@ -128,26 +174,26 @@
     </a>
   </div>
 
-  <div class="section-title">🎙️ JacquieVoice</div>
+  <div class="section-title jv">🎙️ JacquieVoice</div>
   <div class="grid">
-    <a class="tool-card" href="jacquievoice.html">
+    <a class="tool-card jv" href="jacquievoice.html">
       <span class="tc-icon">🎙️</span>
       <div class="tc-name">Audition Tracker</div>
       <div class="tc-desc">Log submissions, track callbacks and bookings, update status inline, and monitor your earnings pipeline.</div>
-      <span class="tc-badge live">Live · Supabase</span>
+      <span class="tc-badge jv-live">Live · Supabase</span>
     </a>
-    <a class="tool-card" href="vo-marketing-log.html">
+    <a class="tool-card jv" href="vo-marketing-log.html">
       <span class="tc-icon">📢</span>
       <div class="tc-name">VO Marketing Log</div>
       <div class="tc-desc">Agent submissions, production house outreach, monthly task checklist, and content pillars — July 2026 through January 2027.</div>
-      <span class="tc-badge live">Live · Supabase</span>
+      <span class="tc-badge jv-live">Live · Supabase</span>
     </a>
-    <div class="coming-card">
+    <a class="tool-card jv" href="rate-earnings.html">
       <span class="tc-icon">📈</span>
       <div class="tc-name">Rate & Earnings Report</div>
-      <div class="tc-desc">Monthly breakdown of VO income by platform and project type.</div>
-      <span class="tc-badge">Coming soon</span>
-    </div>
+      <div class="tc-desc">Monthly VO income by platform and project type — live from your bookings plus Wave CSV import for the full picture.</div>
+      <span class="tc-badge jv-live">Live · Supabase + Wave</span>
+    </a>
   </div>
 
   <div class="section-title">🧭 Greer Collective Client Work</div>
@@ -229,7 +275,11 @@
 </div>
 
 <div class="footer">
-  Greer Collective Business OS &nbsp;·&nbsp; Built on <a href="https://supabase.com" target="_blank">Supabase</a> &nbsp;·&nbsp; Hosted on <a href="https://github.com/jacquelinegreer-web/JAGAIServer" target="_blank">GitHub Pages</a>
+  <div class="footer-brands">
+    <span class="gc">Greer Collective</span>
+    <span class="jv">JacquieVoice</span>
+  </div>
+  Built on <a href="https://supabase.com" target="_blank">Supabase</a> &nbsp;·&nbsp; Hosted on <a href="https://github.com/jacquelinegreer-web/JAGAIServer" target="_blank">GitHub Pages</a>
 </div>
 
 <script>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JacquieVoice | Rate & Earnings Report</title>
+  <style>
+    :root {
+      --bg: #f5f0eb;
+      --navy: #1a3558;
+      --navy-mid: #2a5080;
+      --gold: #c9a84c;
+      --gold-bg: #fdf8e8;
+      --gold-border: #e8d48a;
+      --gold-dark: #7a5c10;
+      --purple: #3b2a6e;
+      --mid: #7c5cbf;
+      --light: #e8e2f7;
+      --pale: #f3f0fa;
+      --card: #fff;
+      --text: #2d2d2d;
+      --muted: #888;
+      --border: #e0dae8;
+      --green: #2e7d32; --green-bg: #e8f5e9;
+      --orange: #d84c00; --orange-bg: #fff3e0;
+      --red: #c0392b; --red-bg: #fdf0ee;
+      --navy-pale: #eef3f8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* HEADER */
+    .hdr { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%); color: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .hdr-left h1 { font-size: 1.1rem; font-weight: 700; }
+    .hdr-left p  { font-size: .78rem; opacity: .7; margin-top: 2px; }
+    .hdr-right { display: flex; gap: 8px; align-items: center; }
+    .hdr-btn { background: rgba(255,255,255,.15); border: none; border-radius: 7px; color: white; padding: 6px 14px; font-size: .82rem; cursor: pointer; text-decoration: none; display: inline-block; }
+    .hdr-btn:hover { background: rgba(255,255,255,.28); }
+    .hdr-btn.gold { background: var(--gold); color: var(--navy); font-weight: 700; }
+    .hdr-btn.gold:hover { background: #d4b35a; }
+
+    /* STATS */
+    .stats { display: grid; grid-template-columns: repeat(5, 1fr); border-bottom: 1px solid var(--border); }
+    .stat { background: white; padding: 12px 14px; text-align: center; border-right: 1px solid var(--border); }
+    .stat:last-child { border-right: none; }
+    .stat .n { font-size: 1.5rem; font-weight: 700; color: var(--navy); }
+    .stat .n.gold { color: var(--gold-dark); }
+    .stat .n.green { color: var(--green); }
+    .stat .l { font-size: .63rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-top: 1px; }
+    @media(max-width:600px) { .stats { grid-template-columns: repeat(3,1fr); } }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+    /* GOAL PROGRESS */
+    .goal-bar-wrap { background: var(--card); border-radius: 13px; padding: 16px 20px; box-shadow: 0 1px 4px rgba(0,0,0,.06); margin-bottom: 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .goal-label { font-size: .8rem; font-weight: 700; color: var(--navy); white-space: nowrap; }
+    .goal-track { flex: 1; min-width: 200px; background: var(--navy-pale); border-radius: 8px; height: 12px; overflow: hidden; }
+    .goal-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #d4b35a); border-radius: 8px; transition: width .6s ease; }
+    .goal-pct { font-size: .8rem; font-weight: 700; color: var(--gold-dark); white-space: nowrap; }
+    .goal-sub { font-size: .72rem; color: var(--muted); white-space: nowrap; }
+
+    /* SECTION HEADERS */
+    .section-hdr { display: flex; align-items: center; justify-content: space-between; margin: 20px 0 10px; }
+    .section-hdr h2 { font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--navy); display: flex; align-items: center; gap: 6px; }
+    .section-hdr h2::after { content: ''; display: inline-block; width: 200px; height: 1px; background: var(--gold-border); margin-left: 8px; }
+    .section-hdr span { font-size: .72rem; color: var(--muted); }
+
+    /* TWO-COL */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+    @media(max-width:700px) { .two-col { grid-template-columns: 1fr; } }
+
+    .chart-card { background: var(--card); border-radius: 13px; padding: 18px 20px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .chart-card h3 { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--navy); margin-bottom: 14px; }
+
+    /* BAR CHART */
+    .bar-chart { width: 100%; overflow-x: auto; }
+    .bars-svg { display: block; }
+
+    /* DONUT / PIE */
+    .legend { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: .72rem; color: var(--text); }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* WAVE UPLOAD */
+    .upload-card { background: linear-gradient(135deg, var(--gold-bg), #fff); border: 1.5px solid var(--gold-border); border-radius: 13px; padding: 20px 22px; box-shadow: 0 1px 4px rgba(0,0,0,.06); margin-bottom: 16px; }
+    .upload-card h3 { font-size: .85rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .upload-card p  { font-size: .8rem; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+    .upload-zone { border: 2px dashed var(--gold-border); border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: background .15s; background: rgba(255,255,255,.6); }
+    .upload-zone:hover, .upload-zone.drag { background: var(--gold-bg); border-color: var(--gold); }
+    .upload-zone p { font-size: .82rem; color: var(--muted); margin: 0; }
+    .upload-zone strong { color: var(--navy); }
+    #wave-file { display: none; }
+    .wave-status { margin-top: 10px; font-size: .8rem; color: var(--navy); font-weight: 600; display: none; }
+    .wave-status.show { display: block; }
+    .upload-steps { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .step { background: white; border: 1px solid var(--gold-border); border-radius: 8px; padding: 7px 12px; font-size: .72rem; color: var(--muted); flex: 1; min-width: 120px; }
+    .step b { display: block; color: var(--navy); margin-bottom: 2px; }
+
+    /* TABLE */
+    .table-card { background: var(--card); border-radius: 13px; box-shadow: 0 1px 4px rgba(0,0,0,.06); overflow: hidden; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: 10px 14px; background: var(--navy-pale); text-align: left; border-bottom: 1px solid var(--border); }
+    td { padding: 10px 14px; font-size: .85rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--gold-bg); }
+    .plat-tag { font-size: .7rem; padding: 2px 8px; border-radius: 9px; white-space: nowrap; }
+    .plat-v123  { background: var(--navy-pale); color: var(--navy); }
+    .plat-fiverr { background: #e8f5e9; color: #1b5e20; }
+    .plat-direct { background: var(--gold-bg); color: var(--gold-dark); }
+    .plat-wave   { background: #fff3e0; color: #bf360c; }
+    .plat-other  { background: #f5f5f5; color: #666; }
+    .fee-cell { font-weight: 700; color: var(--green); }
+    .empty-row td { text-align: center; color: var(--muted); padding: 28px; }
+    .source-badge { font-size: .65rem; padding: 1px 6px; border-radius: 6px; margin-left: 4px; vertical-align: middle; }
+    .source-sb { background: var(--navy-pale); color: var(--navy); }
+    .source-wave { background: #fff3e0; color: #bf360c; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--navy); color: white; padding: 9px 22px; border-radius: 20px; font-size: .86rem; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+    .toast.show { opacity: 1; }
+    .toast.err  { background: var(--red); }
+    .loading { color: var(--muted); font-size: .85rem; padding: 28px; text-align: center; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-left">
+    <h1>🎙️ JacquieVoice &nbsp;·&nbsp; Rate & Earnings Report</h1>
+    <p id="hdr-sub">Loading your earnings…</p>
+  </div>
+  <div class="hdr-right">
+    <a class="hdr-btn" href="command-center.html">← Command Center</a>
+    <a class="hdr-btn" href="jacquievoice.html">Audition Tracker</a>
+    <a class="hdr-btn" href="vo-marketing-log.html">Marketing Log</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="n gold" id="s-month">—</div><div class="l">This Month</div></div>
+  <div class="stat"><div class="n" id="s-ytd">—</div><div class="l">YTD (Supabase)</div></div>
+  <div class="stat"><div class="n" id="s-wave">—</div><div class="l">Wave Import</div></div>
+  <div class="stat"><div class="n green" id="s-combined">—</div><div class="l">Combined Total</div></div>
+  <div class="stat"><div class="n" id="s-bookings">—</div><div class="l">Bookings Tracked</div></div>
+</div>
+
+<div class="wrap">
+
+  <!-- GOAL PROGRESS -->
+  <div class="goal-bar-wrap" style="margin-top:16px;">
+    <div class="goal-label">$5K/Month Goal</div>
+    <div class="goal-track"><div class="goal-fill" id="goal-fill" style="width:0%"></div></div>
+    <div class="goal-pct" id="goal-pct">0%</div>
+    <div class="goal-sub" id="goal-sub">of $5,000 target this month</div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="section-hdr"><h2>Monthly Earnings</h2><span id="chart-range">—</span></div>
+  <div class="chart-card" style="margin-bottom:16px;">
+    <h3>Month-by-Month Income</h3>
+    <div class="bar-chart" id="bar-chart-wrap">
+      <p class="loading">Log booked auditions with fees to see your chart.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="chart-card">
+      <h3>By Platform</h3>
+      <svg id="platform-donut" width="100%" viewBox="0 0 200 120" style="display:none;"></svg>
+      <div class="legend" id="platform-legend"></div>
+      <p class="loading" id="platform-empty">No booked earnings yet.</p>
+    </div>
+    <div class="chart-card">
+      <h3>By Project Type</h3>
+      <svg id="type-donut" width="100%" viewBox="0 0 200 120" style="display:none;"></svg>
+      <div class="legend" id="type-legend"></div>
+      <p class="loading" id="type-empty">No booked earnings yet.</p>
+    </div>
+  </div>
+
+  <!-- WAVE UPLOAD -->
+  <div class="section-hdr"><h2>Wave Integration</h2><span>Import your Wave CSV for the complete picture</span></div>
+  <div class="upload-card">
+    <h3>📊 Wave CSV Import</h3>
+    <p>Export your transactions from Wave and upload here to include Fiverr payouts, direct deposits, and any income not yet logged in your Audition Tracker. Wave data combines with your live Supabase bookings for a full view.</p>
+    <div class="upload-zone" onclick="document.getElementById('wave-file').click()" id="drop-zone">
+      <p><strong>Click to upload your Wave CSV</strong><br/>or drag and drop it here</p>
+    </div>
+    <input type="file" id="wave-file" accept=".csv" onchange="handleWaveCSV(this.files[0])"/>
+    <div class="wave-status" id="wave-status"></div>
+    <div class="upload-steps">
+      <div class="step"><b>Step 1</b>Open Wave → Accounting → Transactions</div>
+      <div class="step"><b>Step 2</b>Filter by date range (e.g. Jan–Jun 2026)</div>
+      <div class="step"><b>Step 3</b>Click Export → Download CSV</div>
+      <div class="step"><b>Step 4</b>Upload the file above</div>
+    </div>
+  </div>
+
+  <!-- EARNINGS TABLE -->
+  <div class="section-hdr"><h2>All Booked Earnings</h2><span id="table-count">—</span></div>
+  <div class="table-card">
+    <div class="loading" id="tbl-loading">Loading…</div>
+    <table id="tbl" style="display:none;">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Client / Project</th>
+          <th>Platform</th>
+          <th>Type</th>
+          <th>Fee</th>
+          <th>Source</th>
+        </tr>
+      </thead>
+      <tbody id="tbl-body"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SB_URL = 'https://vkwhoicqasotanlkquoa.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2hvaWNxYXNvdGFubGtxdW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NjA1OTIsImV4cCI6MjA5MDEzNjU5Mn0.5LRCWzg2Bj6cMQCHgbNAXcJlm4Po97CbLl3v8PnPP-A';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+const CHART_COLORS = ['#1a3558','#c9a84c','#2e7d32','#7c5cbf','#d84c00','#0288d1','#6a1b9a','#558b2f'];
+const PLATFORM_COLORS = { 'Voice123':'#1a3558', 'Fiverr':'#2e7d32', 'Direct':'#c9a84c', 'Casting Networks':'#7c5cbf', 'Voices.com':'#d84c00', 'ACX':'#0288d1', 'Other':'#888', 'Wave':'#bf360c' };
+
+let sbData = [];      // booked auditions from Supabase
+let waveData = [];    // parsed Wave CSV rows
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+async function init() {
+  await loadSupabase();
+  renderAll();
+}
+
+async function loadSupabase() {
+  const { data, error } = await sb.from('auditions')
+    .select('*')
+    .eq('status', 'booked')
+    .not('fee', 'is', null)
+    .order('submitted_date', { ascending: false });
+  if (error) { showToast('Could not load bookings', true); return; }
+  sbData = (data || []).map(r => ({
+    date: r.submitted_date,
+    client: r.client_name || '—',
+    platform: r.casting_platform || 'Other',
+    type: r.project_type || 'Other',
+    fee: parseFloat(r.fee),
+    source: 'supabase',
+  }));
+  document.getElementById('tbl-loading').style.display = 'none';
+  document.getElementById('tbl').style.display = 'table';
+}
+
+// ── WAVE CSV ──────────────────────────────────────────────────────────────────
+function handleWaveCSV(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const rows = parseCSV(e.target.result);
+      waveData = extractWaveIncome(rows);
+      const status = document.getElementById('wave-status');
+      status.textContent = `Loaded ${waveData.length} income transactions from Wave (${fmt(waveData.reduce((s,r) => s+r.fee, 0))} total).`;
+      status.classList.add('show');
+      renderAll();
+      showToast(`Wave CSV loaded — ${waveData.length} income rows`);
+    } catch(err) {
+      showToast('Could not parse Wave CSV — check the file format', true);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.replace(/"/g,'').trim().toLowerCase());
+  return lines.slice(1).map(line => {
+    const vals = splitCSVLine(line);
+    const row = {};
+    headers.forEach((h, i) => row[h] = (vals[i] || '').replace(/"/g,'').trim());
+    return row;
+  }).filter(r => Object.keys(r).length > 1);
+}
+
+function splitCSVLine(line) {
+  const result = []; let cur = ''; let inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    if (line[i] === '"') { inQ = !inQ; continue; }
+    if (line[i] === ',' && !inQ) { result.push(cur); cur = ''; continue; }
+    cur += line[i];
+  }
+  result.push(cur);
+  return result;
+}
+
+function extractWaveIncome(rows) {
+  // Wave CSV headers vary — try common patterns
+  const income = [];
+  rows.forEach(r => {
+    // Find date
+    const date = r['transaction date'] || r['date'] || r['transaction_date'] || '';
+    // Find description
+    const desc = r['description'] || r['transaction description'] || r['memo'] || '';
+    // Find amount — Wave uses positive for income on income accounts
+    const amtStr = r['amount'] || r['credit'] || r['debit'] || '0';
+    const amt = parseFloat(amtStr.replace(/[$,]/g,''));
+    if (!amt || amt <= 0) return; // skip expenses/zero
+    // Filter for likely VO income
+    const isVO = /fiverr|voice|narration|audio|voice\s*over|vo |freelance|paypal|stripe/i.test(desc) ||
+                 /income|revenue|sales|freelance/i.test(r['account name'] || r['account'] || r['category'] || '');
+    if (!isVO && amt > 0) {
+      // Still include it but mark as Wave (user can see all income)
+    }
+    // Try to parse a real date
+    const parsed = parseWaveDate(date);
+    if (!parsed) return;
+    income.push({
+      date: parsed,
+      client: desc || 'Wave transaction',
+      platform: guessPlatform(desc),
+      type: 'Other',
+      fee: amt,
+      source: 'wave',
+    });
+  });
+  return income;
+}
+
+function parseWaveDate(str) {
+  if (!str) return null;
+  // Try YYYY-MM-DD, MM/DD/YYYY, M/D/YY
+  const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) return str.slice(0,10);
+  const us = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+  if (us) {
+    const y = us[3].length === 2 ? '20' + us[3] : us[3];
+    return `${y}-${us[1].padStart(2,'0')}-${us[2].padStart(2,'0')}`;
+  }
+  return null;
+}
+
+function guessPlatform(desc) {
+  const d = (desc||'').toLowerCase();
+  if (d.includes('fiverr')) return 'Fiverr';
+  if (d.includes('voice123') || d.includes('voice 123')) return 'Voice123';
+  if (d.includes('voices.com')) return 'Voices.com';
+  if (d.includes('casting')) return 'Casting Networks';
+  return 'Wave';
+}
+
+// ── RENDER ALL ────────────────────────────────────────────────────────────────
+function renderAll() {
+  const all = [...sbData, ...waveData].sort((a,b) => b.date.localeCompare(a.date));
+  updateStats(all);
+  renderBarChart(all);
+  renderPlatformChart(all);
+  renderTypeChart(all);
+  renderTable(all);
+}
+
+function updateStats(all) {
+  const now = new Date();
+  const thisMonth = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const ytdYear  = String(now.getFullYear());
+  let monthTotal = 0, ytdSB = 0, waveTotal = 0, combined = 0;
+  all.forEach(r => {
+    combined += r.fee;
+    if (r.source === 'supabase') ytdSB += r.fee;
+    if (r.source === 'wave')     waveTotal += r.fee;
+    if (r.date && r.date.startsWith(thisMonth)) monthTotal += r.fee;
+  });
+  document.getElementById('s-month').textContent    = fmt(monthTotal);
+  document.getElementById('s-ytd').textContent      = fmt(ytdSB);
+  document.getElementById('s-wave').textContent     = waveData.length ? fmt(waveTotal) : '—';
+  document.getElementById('s-combined').textContent = fmt(combined);
+  document.getElementById('s-bookings').textContent = sbData.length;
+  // Goal bar
+  const pct = Math.min(100, Math.round((monthTotal / 5000) * 100));
+  document.getElementById('goal-fill').style.width = pct + '%';
+  document.getElementById('goal-pct').textContent  = pct + '%';
+  document.getElementById('goal-sub').textContent  = `${fmt(monthTotal)} of $5,000 target this month`;
+  // Header sub
+  const mn = now.toLocaleDateString('en-US', {month:'long', year:'numeric'});
+  document.getElementById('hdr-sub').textContent = `${all.length} earnings records · ${fmt(combined)} total · ${mn}`;
+  document.getElementById('table-count').textContent = `${all.length} records · ${fmt(combined)} total`;
+}
+
+// ── BAR CHART ─────────────────────────────────────────────────────────────────
+function renderBarChart(all) {
+  const wrap = document.getElementById('bar-chart-wrap');
+  if (!all.length) { wrap.innerHTML = '<p class="loading">Log booked auditions with fees to see your chart.</p>'; return; }
+  // Group by month
+  const months = {};
+  all.forEach(r => {
+    if (!r.date) return;
+    const m = r.date.slice(0,7);
+    months[m] = (months[m] || 0) + r.fee;
+  });
+  const keys = Object.keys(months).sort();
+  if (!keys.length) return;
+  const maxVal = Math.max(...Object.values(months));
+  const barW = 36, gap = 10, padL = 50, padB = 32, padT = 10, barH = 140;
+  const svgW = Math.max(400, keys.length * (barW + gap) + padL + 20);
+  const svgH = barH + padB + padT;
+  document.getElementById('chart-range').textContent = `${fmtMonth(keys[0])} — ${fmtMonth(keys[keys.length-1])}`;
+  let bars = '';
+  const now = new Date();
+  const curMonth = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  keys.forEach((m, i) => {
+    const x = padL + i * (barW + gap);
+    const h = maxVal ? Math.round((months[m] / maxVal) * barH) : 0;
+    const y = padT + barH - h;
+    const isCur = m === curMonth;
+    const color = isCur ? 'var(--gold)' : 'var(--navy)';
+    bars += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" fill="${color}" rx="4" opacity="${isCur ? 1 : 0.75}"/>`;
+    bars += `<text x="${x + barW/2}" y="${svgH - 16}" text-anchor="middle" font-size="9" fill="#888">${fmtMonthShort(m)}</text>`;
+    if (months[m] >= 100) {
+      bars += `<text x="${x + barW/2}" y="${y - 4}" text-anchor="middle" font-size="9" font-weight="700" fill="${isCur ? 'var(--gold-dark)' : 'var(--navy)'}">${fmtK(months[m])}</text>`;
+    }
+  });
+  // Y-axis labels
+  let yAxis = '';
+  for (let i = 0; i <= 4; i++) {
+    const val = (maxVal / 4) * i;
+    const y = padT + barH - (maxVal ? Math.round((val/maxVal)*barH) : 0);
+    yAxis += `<text x="${padL-6}" y="${y+4}" text-anchor="end" font-size="9" fill="#aaa">${fmtK(val)}</text>`;
+    yAxis += `<line x1="${padL}" y1="${y}" x2="${svgW-10}" y2="${y}" stroke="#eee" stroke-width="1"/>`;
+  }
+  wrap.innerHTML = `<svg class="bars-svg" viewBox="0 0 ${svgW} ${svgH}" height="${svgH}" style="min-width:${svgW}px;">${yAxis}${bars}</svg>`;
+}
+
+// ── PLATFORM DONUT ────────────────────────────────────────────────────────────
+function renderPlatformChart(all) {
+  renderDonut(all, 'platform', 'platform-donut', 'platform-legend', 'platform-empty');
+}
+function renderTypeChart(all) {
+  renderDonut(all, 'type', 'type-donut', 'type-legend', 'type-empty');
+}
+
+function renderDonut(all, key, svgId, legendId, emptyId) {
+  const svg = document.getElementById(svgId);
+  const legendEl = document.getElementById(legendId);
+  const emptyEl = document.getElementById(emptyId);
+  const totals = {};
+  all.forEach(r => { totals[r[key]] = (totals[r[key]] || 0) + r.fee; });
+  const entries = Object.entries(totals).sort((a,b) => b[1]-a[1]);
+  if (!entries.length) { svg.style.display='none'; emptyEl.style.display='block'; return; }
+  svg.style.display='block'; emptyEl.style.display='none';
+  const total = entries.reduce((s,[,v]) => s+v, 0);
+  const cx=100, cy=60, r=48, ir=30;
+  let angle = -Math.PI/2;
+  let paths = '';
+  entries.forEach(([label, val], i) => {
+    const pct = val/total;
+    const sweep = pct * 2 * Math.PI;
+    const x1 = cx + r * Math.cos(angle);
+    const y1 = cy + r * Math.sin(angle);
+    angle += sweep;
+    const x2 = cx + r * Math.cos(angle);
+    const y2 = cy + r * Math.sin(angle);
+    const ix1 = cx + ir * Math.cos(angle);
+    const iy1 = cy + ir * Math.sin(angle);
+    const ix2 = cx + ir * Math.cos(angle - sweep);
+    const iy2 = cy + ir * Math.sin(angle - sweep);
+    const lg = sweep > Math.PI ? 1 : 0;
+    const color = PLATFORM_COLORS[label] || CHART_COLORS[i % CHART_COLORS.length];
+    paths += `<path d="M${x1},${y1} A${r},${r} 0 ${lg},1 ${x2},${y2} L${ix1},${iy1} A${ir},${ir} 0 ${lg},0 ${ix2},${iy2} Z" fill="${color}" opacity=".9"/>`;
+  });
+  svg.innerHTML = paths;
+  legendEl.innerHTML = entries.map(([label, val], i) => {
+    const color = PLATFORM_COLORS[label] || CHART_COLORS[i % CHART_COLORS.length];
+    return `<div class="legend-item"><div class="legend-dot" style="background:${color}"></div>${label} <span style="color:var(--muted);margin-left:3px;">${fmt(val)}</span></div>`;
+  }).join('');
+}
+
+// ── TABLE ─────────────────────────────────────────────────────────────────────
+function renderTable(all) {
+  const tbody = document.getElementById('tbl-body');
+  if (!all.length) {
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="6">No booked earnings yet — mark auditions as Booked with a fee in the Audition Tracker, or import a Wave CSV above.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = all.map(r => {
+    const date = r.date ? new Date(r.date + 'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'2-digit'}) : '—';
+    const platKey = r.platform.replace(/[^a-z]/gi,'').toLowerCase();
+    const platClass = platKey === 'voice123' ? 'plat-v123' : platKey === 'fiverr' ? 'plat-fiverr' : platKey === 'direct' ? 'plat-direct' : platKey === 'wave' ? 'plat-wave' : 'plat-other';
+    const srcBadge = r.source === 'supabase'
+      ? `<span class="source-badge source-sb">Audition Tracker</span>`
+      : `<span class="source-badge source-wave">Wave</span>`;
+    return `<tr>
+      <td style="white-space:nowrap;font-size:.8rem;">${date}</td>
+      <td style="font-weight:600;">${r.client}</td>
+      <td><span class="plat-tag ${platClass}">${r.platform}</span></td>
+      <td style="font-size:.78rem;color:var(--muted);">${r.type}</td>
+      <td class="fee-cell">${fmt(r.fee)}</td>
+      <td>${srcBadge}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── DRAG & DROP ───────────────────────────────────────────────────────────────
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) handleWaveCSV(file);
+});
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function fmt(n) { return '$' + (n||0).toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0}); }
+function fmtK(n) { return n >= 1000 ? '$' + (n/1000).toFixed(1) + 'k' : '$' + Math.round(n); }
+function fmtMonth(m) { return new Date(m + '-15').toLocaleDateString('en-US', {month:'long', year:'numeric'}); }
+function fmtMonthShort(m) { return new Date(m + '-15').toLocaleDateString('en-US', {month:'short'}); }
+
+function showToast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  setTimeout(() => t.className = 'toast', 2800);
+}
+
+init();
+</script>
+</body>
+</html>
