@@ -25,6 +25,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
 
+    /* HEADER */
     .hdr { background: linear-gradient(135deg, var(--purple) 0%, var(--purple) 55%, var(--navy) 100%); color: white; padding: 14px 22px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
     .hdr h1 { font-size: 1rem; font-weight: 700; letter-spacing: .02em; }
     .hdr p  { font-size: .78rem; opacity: .75; margin-top: 2px; }
@@ -37,43 +38,29 @@
     .refresh-btn { background: rgba(255,255,255,.15); border: none; border-radius: 7px; color: white; padding: 5px 12px; font-size: .82rem; cursor: pointer; }
     .refresh-btn:hover { background: rgba(255,255,255,.28); }
 
+    /* STATS */
     .stats { display: grid; grid-template-columns: repeat(4,1fr); border-bottom: 1px solid var(--border); }
     .stat { background: white; padding: 10px 16px; text-align: center; border-right: 1px solid var(--border); }
     .stat:last-child { border-right: none; }
     .stat .n { font-size: 1.5rem; font-weight: 700; color: var(--purple); }
     .stat .l { font-size: .65rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-top: 1px; }
 
-    /* Simple task list */
-    .task-add-row { display: flex; gap: 7px; margin-bottom: 12px; }
-    .task-add-row input[type=text] { flex: 1; border: 1.5px solid var(--border); border-radius: 7px; padding: 7px 10px; font-size: .85rem; font-family: inherit; }
-    .task-add-row input[type=date] { border: 1.5px solid var(--border); border-radius: 7px; padding: 7px 10px; font-size: .85rem; font-family: inherit; width: 140px; }
-    .task-add-row input:focus { outline: none; border-color: var(--mid); }
-    .btn-add-task { background: var(--mid); color: white; border: none; border-radius: 7px; padding: 7px 14px; font-size: .85rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
-    .btn-add-task:hover { background: var(--purple); }
-    .task-row { display: flex; align-items: center; gap: 9px; padding: 8px 0; border-bottom: 1px solid var(--border); }
-    .task-row:last-child { border-bottom: none; }
-    .task-row input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--mid); flex-shrink: 0; cursor: pointer; }
-    .task-name-txt { flex: 1; font-size: .87rem; line-height: 1.3; }
-    .task-name-txt.done { text-decoration: line-through; color: var(--muted); }
-    .due-badge { font-size: .68rem; padding: 2px 8px; border-radius: 9px; white-space: nowrap; font-weight: 600; }
-    .due-badge.overdue { background: var(--red-bg);    color: var(--red); }
-    .due-badge.today   { background: var(--orange-bg); color: var(--orange); }
-    .due-badge.soon    { background: var(--light);     color: var(--purple); }
-    .due-badge.future  { background: #f5f5f5;          color: var(--muted); }
-    .task-del { width: 22px; height: 22px; border-radius: 5px; border: none; background: none; cursor: pointer; color: var(--muted); font-size: .8rem; flex-shrink: 0; }
-    .task-del:hover { background: var(--red-bg); color: var(--red); }
-    .tasks-empty { text-align: center; padding: 18px 0; color: var(--muted); font-size: .84rem; }
-
-    .grid { display: grid; grid-template-columns: 2fr 1fr; grid-template-areas: "cal right" "tasks tasks" "pipe jv" "italy budget"; gap: 14px; padding: 18px; max-width: 1400px; margin: 0 auto; }
+    /* GRID */
+    .grid { display: grid; grid-template-columns: 2fr 1fr; grid-template-areas: "cal right" "pipe tasks" "jv tasks" "italy budget"; gap: 14px; padding: 18px; max-width: 1400px; margin: 0 auto; }
     .right-col { grid-area: right; display: flex; flex-direction: column; gap: 14px; }
     @media(max-width:900px) { .grid { grid-template-columns: 1fr; grid-template-areas: "right" "cal" "tasks" "pipe" "jv" "italy" "budget"; } }
     @media(max-width:580px) { .stats { grid-template-columns: repeat(2,1fr); } .grid { padding: 10px; gap: 10px; } }
 
+    /* CARDS */
     .card { background: var(--card); border-radius: 13px; padding: 16px 18px; box-shadow: 0 1px 5px rgba(0,0,0,.06); }
     .card-cal   { grid-area: cal; }
-    .card-well  { /* inside .right-col */ }
+    .card-tasks { grid-area: tasks; }
+    .card-pipe  { grid-area: pipe; }
+    .card-jv    { grid-area: jv; border-top: 3px solid var(--gold); }
+    .card-italy { grid-area: italy; }
+    .card-budget{ grid-area: budget; }
 
-    /* Fun card */
+    /* FUN CARD */
     .card-fun { background: linear-gradient(135deg, var(--purple) 0%, var(--mid) 100%); color: white; }
     .card-fun .ct { color: rgba(255,255,255,.75); }
     .card-fun .ca { color: rgba(255,255,255,.6); }
@@ -86,15 +73,52 @@
     .trivia-btn:hover { background: rgba(255,255,255,.2); }
     .trivia-answer { font-size: .8rem; color: #a5d6a7; font-weight: 600; margin-top: 8px; display: none; }
     .trivia-footer { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-    .card-tasks { grid-area: tasks; }
-    .card-pipe  { grid-area: pipe; }
-    .card-jv    { grid-area: jv; }
-    .card-italy { grid-area: italy; }
-    .card-budget{ grid-area: budget; }
 
-    /* JacquieVoice card — navy/gold accent */
-    .card-jv { border-top: 3px solid var(--gold); }
+    /* TASK LIST */
+    .card-tasks { border-left: 3px solid var(--mid); }
+    .task-input-wrap { position: relative; margin-bottom: 8px; }
+    .task-input-wrap input[type=text] {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 9px;
+      padding: 9px 38px 9px 12px; font-size: .88rem; font-family: inherit;
+      background: var(--pale); transition: border-color .15s, background .15s;
+    }
+    .task-input-wrap input[type=text]:focus { outline: none; border-color: var(--mid); background: white; }
+    .task-input-enter { position: absolute; right: 9px; top: 50%; transform: translateY(-50%);
+      font-size: .65rem; color: var(--muted); pointer-events: none; opacity: 0; transition: opacity .15s; }
+    .task-input-wrap input[type=text]:focus + .task-input-enter { opacity: 1; }
+    .task-date-chips { display: flex; gap: 5px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+    .dc { font-size: .68rem; padding: 3px 9px; border-radius: 10px; border: 1.5px solid var(--border);
+      background: none; cursor: pointer; color: var(--muted); font-family: inherit; transition: all .12s; }
+    .dc:hover { background: var(--light); border-color: var(--mid); color: var(--purple); }
+    .dc.sel { background: var(--mid); border-color: var(--mid); color: white; font-weight: 600; }
+    .dc-date { border: 1.5px solid var(--border); border-radius: 10px; padding: 3px 7px; font-size: .68rem;
+      font-family: inherit; color: var(--muted); background: none; cursor: pointer; }
+    .dc-date:focus { outline: none; border-color: var(--mid); }
+    .task-row { display: flex; align-items: center; gap: 8px; padding: 7px 0;
+      border-bottom: 1px solid var(--border); group: true; }
+    .task-row:last-child { border-bottom: none; }
+    .task-cb { width: 17px; height: 17px; border-radius: 50%; border: 2px solid var(--border);
+      flex-shrink: 0; cursor: pointer; appearance: none; -webkit-appearance: none;
+      background: white; transition: all .15s; }
+    .task-cb:checked { background: var(--mid); border-color: var(--mid); }
+    .task-cb:checked::after { content: '✓'; color: white; font-size: .65rem; display: flex; align-items: center; justify-content: center; height: 100%; font-weight: 700; }
+    .task-cb:hover:not(:checked) { border-color: var(--mid); background: var(--pale); }
+    .task-name-txt { flex: 1; font-size: .84rem; line-height: 1.3; }
+    .task-name-txt.done { text-decoration: line-through; color: var(--muted); }
+    .due-badge { font-size: .65rem; padding: 2px 7px; border-radius: 8px; white-space: nowrap; font-weight: 600; }
+    .due-badge.overdue { background: var(--red-bg);    color: var(--red); }
+    .due-badge.today   { background: var(--orange-bg); color: var(--orange); }
+    .due-badge.soon    { background: var(--light);     color: var(--purple); }
+    .due-badge.future  { background: #f5f5f5;          color: var(--muted); }
+    .task-del { width: 20px; height: 20px; border-radius: 5px; border: none; background: none;
+      cursor: pointer; color: transparent; font-size: .75rem; flex-shrink: 0; transition: all .12s; }
+    .task-row:hover .task-del { color: var(--muted); }
+    .task-del:hover { background: var(--red-bg); color: var(--red) !important; }
+    .tasks-empty { text-align: center; padding: 20px 0 10px; color: var(--muted); font-size: .82rem; }
+    .task-count-bar { font-size: .7rem; color: var(--muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .task-count-bar span { color: var(--mid); font-weight: 600; }
 
+    /* SHARED */
     .ch { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
     .ct { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--purple); }
     .ct.jv { color: var(--navy); }
@@ -104,6 +128,7 @@
     .ca.jv:hover { color: var(--navy); }
     .ca-links { display: flex; gap: 10px; }
 
+    /* CALENDAR */
     .cal-wrap { border-radius: 8px; overflow: hidden; background: var(--pale); min-height: 260px; display: flex; align-items: center; justify-content: center; }
     .cal-wrap iframe { width: 100%; height: 320px; border: none; }
     .cal-prompt { text-align: center; padding: 28px 20px; }
@@ -119,6 +144,7 @@
     .btn-light { background: var(--light); color: var(--purple); border: none; border-radius: 7px; padding: 7px 14px; font-size: .83rem; font-weight: 600; cursor: pointer; }
     .btn-light:hover { background: #d5cdf0; }
 
+    /* WELLNESS */
     .well-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
     .chip { background: var(--pale); border-radius: 20px; padding: 5px 11px; }
     .chip .cl { display: block; font-size: .65rem; color: var(--muted); }
@@ -132,9 +158,7 @@
     .well-empty p { color: var(--muted); font-size: .83rem; }
     .well-quote { font-size: .78rem; color: var(--muted); font-style: italic; margin-top: 10px; line-height: 1.45; }
 
-    /* (task styles moved above) */
-
-    /* Greer Collective Pipeline (consulting clients only) */
+    /* PIPELINE (GC) */
     .pipe-item { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-bottom: 1px solid var(--border); }
     .pipe-item:last-child { border-bottom: none; }
     .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: #90a4ae; }
@@ -146,18 +170,9 @@
     .pipe-badge { font-size: .68rem; padding: 2px 7px; border-radius: 9px; background: var(--light); color: var(--purple); white-space: nowrap; }
     .pipe-badge.a { background: var(--green-bg); color: var(--green); }
     .pipe-badge.p { background: var(--orange-bg); color: var(--orange); }
-    .section-lbl { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 10px 0 5px; }
     .empty { color: var(--muted); font-size: .83rem; padding: 14px 0; text-align: center; }
 
-    /* JV audition funnel */
-    .jv-funnel { display: flex; gap: 6px; margin-bottom: 12px; }
-    .jv-stage { flex: 1; text-align: center; background: var(--pale); border-radius: 8px; padding: 8px 5px; }
-    .jv-stage .n { font-size: 1.3rem; font-weight: 700; color: var(--purple); }
-    .jv-stage .l { font-size: .62rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-top: 1px; }
-    .jv-stage.cb { background: var(--orange-bg); } .jv-stage.cb .n { color: var(--orange); }
-    .jv-stage.bk { background: var(--green-bg); } .jv-stage.bk .n { color: var(--green); }
-
-    /* JV VO Pipeline mini-section */
+    /* JV CARD */
     .jv-pipeline-mini { background: var(--gold-bg); border: 1px solid var(--gold-border); border-radius: 9px; padding: 10px 12px; margin-bottom: 12px; }
     .jv-pipeline-mini .jv-pip-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
     .jv-pipeline-mini .jv-pip-title { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--navy); }
@@ -169,30 +184,32 @@
     .jv-pip-meta { font-size: .68rem; color: var(--muted); }
     .jv-pip-badge { font-size: .65rem; padding: 2px 7px; border-radius: 8px; white-space: nowrap; }
     .jv-pip-badge.in_progress { background: var(--orange-bg); color: var(--orange); }
-    .jv-pip-badge.new { background: var(--light); color: var(--navy); }
-    .jv-pip-badge.revision { background: var(--red-bg); color: var(--red); }
-    .jv-pip-badge.delivered { background: var(--gold-bg); color: #7a5c10; border: 1px solid var(--gold-border); }
-    .jv-pip-badge.paid { background: var(--green-bg); color: var(--green); }
-
-    /* Inline status dropdown */
+    .jv-pip-badge.new         { background: var(--light);     color: var(--navy); }
+    .jv-pip-badge.revision    { background: var(--red-bg);    color: var(--red); }
+    .jv-pip-badge.delivered   { background: var(--gold-bg);   color: #7a5c10; border: 1px solid var(--gold-border); }
+    .jv-pip-badge.paid        { background: var(--green-bg);  color: var(--green); }
+    .jv-funnel { display: flex; gap: 6px; margin-bottom: 12px; }
+    .jv-stage { flex: 1; text-align: center; background: var(--pale); border-radius: 8px; padding: 8px 5px; }
+    .jv-stage .n { font-size: 1.3rem; font-weight: 700; color: var(--purple); }
+    .jv-stage .l { font-size: .62rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-top: 1px; }
+    .jv-stage.cb { background: var(--orange-bg); } .jv-stage.cb .n { color: var(--orange); }
+    .jv-stage.bk { background: var(--green-bg);  } .jv-stage.bk .n { color: var(--green); }
     .jv-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); }
     .jv-row:last-child { border-bottom: none; }
     .jv-name { flex: 1; font-size: .83rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .jv-plat { font-size: .68rem; color: var(--muted); }
-    .jv-sel {
-      border: 1.5px solid var(--border); border-radius: 6px; padding: 3px 6px;
-      font-size: .72rem; font-family: inherit; cursor: pointer; background: white;
-    }
+    .jv-sel { border: 1.5px solid var(--border); border-radius: 6px; padding: 3px 6px; font-size: .72rem; font-family: inherit; cursor: pointer; background: white; }
     .jv-sel:focus { outline: none; border-color: var(--mid); }
-    .jv-sel.submitted { background: var(--light); color: var(--purple); border-color: var(--mid); }
-    .jv-sel.callback  { background: var(--orange-bg); color: var(--orange); border-color: var(--orange); }
-    .jv-sel.booked    { background: var(--green-bg); color: var(--green); border-color: var(--green); }
-    .jv-sel.passed    { background: #f5f5f5; color: #aaa; border-color: #ddd; }
-
+    .jv-sel.submitted { background: var(--light);      color: var(--purple); border-color: var(--mid); }
+    .jv-sel.callback  { background: var(--orange-bg);  color: var(--orange); border-color: var(--orange); }
+    .jv-sel.booked    { background: var(--green-bg);   color: var(--green);  border-color: var(--green); }
+    .jv-sel.passed    { background: #f5f5f5;            color: #aaa;          border-color: #ddd; }
     .add-row { display: flex; gap: 6px; margin-top: 10px; }
     .add-row input, .add-row select { flex: 1; border: 1.5px solid var(--border); border-radius: 6px; padding: 6px 9px; font-size: .8rem; font-family: inherit; }
     .add-btn { background: var(--mid); color: white; border: none; border-radius: 6px; padding: 6px 12px; font-size: .85rem; cursor: pointer; }
 
+    /* ITALY */
+    .section-lbl { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 10px 0 5px; }
     .progress-track { background: var(--border); border-radius: 4px; height: 6px; margin-bottom: 12px; overflow: hidden; }
     .progress-bar { height: 100%; background: var(--italy); border-radius: 4px; transition: width .4s; }
     .cat-filters { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
@@ -205,6 +222,7 @@
     .prep-sub  { font-size: .68rem; color: var(--muted); margin-top: 1px; }
     .prep-item.dn .prep-text { color: var(--muted); text-decoration: line-through; }
 
+    /* BUDGET */
     .bud-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: .86rem; }
     .bud-row:last-of-type { border-bottom: none; }
     .bud-amt { font-weight: 600; color: var(--purple); }
@@ -236,17 +254,16 @@
   </div>
 </div>
 
-
 <div class="stats">
   <div class="stat"><div class="n" id="s-clients">—</div><div class="l">GC Clients</div></div>
   <div class="stat"><div class="n" id="s-tasks">—</div><div class="l">Open Tasks</div></div>
-
   <div class="stat"><div class="n" id="s-auditions">—</div><div class="l">Auditions Active</div></div>
   <div class="stat"><div class="n" id="s-vo-active">—</div><div class="l">VO Jobs Active</div></div>
 </div>
 
 <div class="grid">
 
+  <!-- CALENDAR -->
   <div class="card card-cal">
     <div class="ch">
       <span class="ct">📅 This Week</span>
@@ -268,10 +285,9 @@
     </div>
   </div>
 
-  <!-- Upper right column: fun card + wellness stacked -->
+  <!-- UPPER RIGHT: fun card + wellness stacked -->
   <div class="right-col">
 
-    <!-- FUN CARD: daily quote + trivia -->
     <div class="card card-fun">
       <div class="ch">
         <span class="ct">✨ Daily Spark</span>
@@ -288,7 +304,6 @@
       <div class="trivia-answer" id="trivia-answer"></div>
     </div>
 
-    <!-- WELLNESS -->
     <div class="card card-well">
       <div class="ch">
         <span class="ct">💜 Wellness Today</span>
@@ -299,29 +314,36 @@
 
   </div>
 
-  <!-- TASKS — simple built-in list -->
+  <!-- TASKS -->
   <div class="card card-tasks">
     <div class="ch">
       <span class="ct">✅ Tasks</span>
-      <a class="ca" href="https://supabase.com/dashboard/project/vkwhoicqasotanlkquoa/editor?schema=public&table=tasks" target="_blank" rel="noopener">Edit in DB →</a>
+      <a class="ca" href="https://supabase.com/dashboard/project/vkwhoicqasotanlkquoa/editor?schema=public&table=tasks" target="_blank" rel="noopener" style="font-size:.7rem;">DB →</a>
     </div>
-    <div class="task-add-row">
-      <input type="text" id="new-task-name" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addTask()"/>
-      <input type="date" id="new-task-due" title="Due date"/>
-      <button class="btn-add-task" onclick="addTask()">+ Add</button>
+    <div class="task-input-wrap">
+      <input type="text" id="new-task-name" placeholder="Type a task, hit Enter…" onkeydown="if(event.key==='Enter')addTask()" oninput="showDateChips()"/>
+      <span class="task-input-enter">↵ enter</span>
     </div>
+    <div class="task-date-chips" id="date-chips" style="display:none;">
+      <button class="dc" data-days="0" onclick="pickChip(this,0)">Today</button>
+      <button class="dc" data-days="1" onclick="pickChip(this,1)">Tomorrow</button>
+      <button class="dc" data-days="7" onclick="pickChip(this,7)">+7 days</button>
+      <input type="date" class="dc-date" id="new-task-due" title="Pick a date" onchange="pickCustomDate(this)"/>
+    </div>
+    <div class="task-count-bar" id="task-count-bar" style="display:none;"></div>
     <div id="tasks-body"><div class="loading">Loading…</div></div>
   </div>
 
-  <!-- GREER COLLECTIVE PIPELINE — consulting clients only -->
+  <!-- GC PIPELINE — consulting clients only -->
   <div class="card card-pipe">
     <div class="ch">
       <span class="ct">🧭 Greer Collective Pipeline</span>
+      <a class="ca" href="gc-pipeline.html">Manage →</a>
     </div>
     <div id="pipe-body"><div class="loading">Loading…</div></div>
   </div>
 
-  <!-- JACQUIEVOICE — auditions + active VO project pipeline -->
+  <!-- JACQUIEVOICE — VO jobs + auditions -->
   <div class="card card-jv">
     <div class="ch">
       <span class="ct jv">🎙️ JacquieVoice</span>
@@ -341,6 +363,7 @@
     </div>
   </div>
 
+  <!-- ITALY PREP -->
   <div class="card card-italy">
     <div class="ch">
       <span class="ct">🇮🇹 Italy Prep · Sept 15</span>
@@ -357,6 +380,7 @@
     <div id="italy-body"><div class="loading">Loading…</div></div>
   </div>
 
+  <!-- BUDGET -->
   <div class="card card-budget">
     <div class="ch"><span class="ct">💰 Budget Overview</span></div>
     <div id="budget-body"><div class="loading">Loading…</div></div>
@@ -376,18 +400,16 @@
 <script>
 const SB_URL = 'https://vkwhoicqasotanlkquoa.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2hvaWNxYXNvdGFubGtxdW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NjA1OTIsImV4cCI6MjA5MDEzNjU5Mn0.5LRCWzg2Bj6cMQCHgbNAXcJlm4Po97CbLl3v8PnPP-A';
-const sb     = supabase.createClient(SB_URL, SB_KEY);
+const sb = supabase.createClient(SB_URL, SB_KEY);
 let prepData = [], italyFilter = 'All', cfg = {};
 
+/* ── INIT ─────────────────────────────────────────────────────────────────── */
 async function init() {
   setHeaderDate(); setCountdown();
-  loadDailyQuote();
-  newTrivia();
-  cfg = await getSettings();
-  renderCalendar();
+  loadDailyQuote(); newTrivia();
+  cfg = await getSettings(); renderCalendar();
   await Promise.all([loadWellness(), loadTasks(), loadPipeline(), loadJacquieVoice(), loadItalyPrep(), loadBudget()]);
 }
-
 function setHeaderDate() {
   document.getElementById('hdr-date').textContent =
     new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
@@ -398,8 +420,7 @@ function setCountdown() {
 }
 function showToast(msg, isErr=false) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show' + (isErr ? ' err' : '');
+  t.textContent = msg; t.className = 'toast show' + (isErr ? ' err' : '');
   setTimeout(() => t.className = 'toast', 2600);
 }
 function setSynced(ok) {
@@ -408,6 +429,7 @@ function setSynced(ok) {
   b.className = 'sync-badge ' + (ok ? 'ok' : 'err');
 }
 
+/* ── SETTINGS / CALENDAR ──────────────────────────────────────────────────── */
 async function getSettings() {
   const { data } = await sb.from('settings').select('key,value');
   return Object.fromEntries((data||[]).map(r=>[r.key,r.value]));
@@ -416,7 +438,6 @@ async function saveSetting(key, value) {
   await sb.from('settings').upsert({key,value,updated_at:new Date().toISOString()},{onConflict:'key'});
   cfg[key] = value;
 }
-
 function renderCalendar() {
   const url = cfg['calendar_embed_url'];
   const wrap = document.getElementById('cal-wrap');
@@ -435,6 +456,100 @@ async function saveCalendar() {
   renderCalendar(); showToast('Calendar connected!');
 }
 
+/* ── DAILY SPARK ──────────────────────────────────────────────────────────── */
+const QUOTES = [
+  { q:"The voice is a musical instrument that everyone plays.", a:"Ed Asner" },
+  { q:"Your voice is your fingerprint. Own it completely.", a:"Unknown" },
+  { q:"The human voice is the most beautiful instrument of all, but it is the most difficult to play.", a:"Richard Strauss" },
+  { q:"You are never too old to set another goal or to dream a new dream.", a:"C.S. Lewis" },
+  { q:"Success is not final, failure is not fatal: it is the courage to continue that counts.", a:"Winston Churchill" },
+  { q:"The secret of getting ahead is getting started.", a:"Mark Twain" },
+  { q:"Done is better than perfect.", a:"Sheryl Sandberg" },
+  { q:"Opportunities don't happen. You create them.", a:"Chris Grosser" },
+  { q:"The only way to do great work is to love what you do.", a:"Steve Jobs" },
+  { q:"Believe you can and you're halfway there.", a:"Theodore Roosevelt" },
+  { q:"It always seems impossible until it's done.", a:"Nelson Mandela" },
+  { q:"A year from now you may wish you had started today.", a:"Karen Lamb" },
+  { q:"Don't watch the clock; do what it does. Keep going.", a:"Sam Levenson" },
+  { q:"The voice that you have right now is the voice that books jobs.", a:"Dee Bradley Baker" },
+  { q:"Every audition is a performance. Treat it like one.", a:"Unknown" },
+  { q:"Your demo is your handshake. Make it firm and memorable.", a:"Unknown" },
+  { q:"The microphone doesn't lie. Be prepared.", a:"Unknown" },
+  { q:"Consistency is the hallmark of the professional.", a:"Unknown" },
+  { q:"Act as if what you do makes a difference. It does.", a:"William James" },
+  { q:"Start where you are. Use what you have. Do what you can.", a:"Arthur Ashe" },
+  { q:"The best way to predict the future is to create it.", a:"Peter Drucker" },
+  { q:"Creativity is intelligence having fun.", a:"Albert Einstein" },
+  { q:"If you're not growing, you're keeping your voice exactly where it was.", a:"Unknown" },
+  { q:"Every no is one step closer to your yes.", a:"Unknown" },
+  { q:"A rejection is just a redirect.", a:"Unknown" },
+  { q:"You miss 100% of the auditions you don't submit.", a:"Unknown" },
+  { q:"Excellence is not a destination; it is a continuous journey.", a:"Brian Tracy" },
+  { q:"You are the CEO of your own career.", a:"Unknown" },
+  { q:"Small daily improvements are the key to staggering long-term results.", a:"Unknown" },
+  { q:"The most courageous act is still to think for yourself. Aloud.", a:"Coco Chanel" },
+  { q:"Be so good they can't ignore you.", a:"Steve Martin" },
+  { q:"The comeback is always stronger than the setback.", a:"Unknown" },
+  { q:"Hustle in silence and let your bookings make the noise.", a:"Unknown" },
+  { q:"Confidence is not 'they will like me.' It's 'I'll be fine if they don't.'", a:"Christina Grimmie" },
+  { q:"Talent is cheaper than table salt. What separates the talented from the successful is hard work.", a:"Stephen King" },
+  { q:"You don't have to be great to start, but you have to start to be great.", a:"Zig Ziglar" },
+  { q:"The voice is a second face.", a:"Gerard Bauer" },
+  { q:"In the middle of every difficulty lies opportunity.", a:"Albert Einstein" },
+  { q:"Do something today that your future self will thank you for.", a:"Sean Patrick Flanery" },
+  { q:"The harder you work, the luckier you get.", a:"Gary Player" },
+  { q:"Build your own dreams, or someone else will hire you to build theirs.", a:"Farrah Gray" },
+  { q:"Stop waiting for the perfect moment. Take the moment and make it perfect.", a:"Unknown" },
+  { q:"Passion is energy. Feel the power that comes from focusing on what excites you.", a:"Oprah Winfrey" },
+  { q:"What you do speaks so loudly that I cannot hear what you say.", a:"Ralph Waldo Emerson" },
+  { q:"The man who moves a mountain begins by carrying away small stones.", a:"Confucius" },
+  { q:"We are what we repeatedly do. Excellence, then, is not an act but a habit.", a:"Aristotle" },
+  { q:"If not now, when?", a:"Hillel the Elder" },
+  { q:"It's not about being the best. It's about being better than you were yesterday.", a:"Unknown" },
+  { q:"Your voice matters. Use it.", a:"Unknown" },
+  { q:"The most powerful thing you can do is show up and be fully present.", a:"Unknown" },
+  { q:"Discipline is choosing between what you want now and what you want most.", a:"Abraham Lincoln" },
+  { q:"Push yourself, because no one else is going to do it for you.", a:"Unknown" },
+  { q:"Dream big. Start small. Act now.", a:"Robin Sharma" },
+  { q:"Champions keep playing until they get it right.", a:"Billie Jean King" },
+  { q:"You have to be burning with an idea, or a problem, or a wrong you want to right.", a:"Steve Jobs" },
+  { q:"A year from now, the auditions you submit today will be the bookings you celebrate.", a:"Unknown" },
+  { q:"Your work is going to fill a large part of your life. Make it great work.", a:"Steve Jobs" },
+  { q:"The road to success and the road to failure are almost exactly the same.", a:"Colin R. Davis" },
+  { q:"Be yourself. Everyone else is already taken.", a:"Oscar Wilde" },
+  { q:"The only limit to our realization of tomorrow is our doubts of today.", a:"Franklin D. Roosevelt" },
+  { q:"It's not what you do once in a while; it's what you do day in and day out that makes the difference.", a:"Jenny Craig" },
+];
+let currentTrivia = null;
+
+function loadDailyQuote() {
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  const q = QUOTES[dayOfYear % QUOTES.length];
+  document.getElementById('quote-text').textContent = `"${q.q}"`;
+  document.getElementById('quote-author').textContent = `— ${q.a}`;
+}
+async function newTrivia() {
+  const qEl = document.getElementById('trivia-q');
+  const aEl = document.getElementById('trivia-answer');
+  aEl.style.display = 'none'; qEl.textContent = 'Loading…'; currentTrivia = null;
+  try {
+    const res = await fetch('https://opentdb.com/api.php?amount=1&type=multiple').then(r => r.json());
+    const item = res.results?.[0];
+    if (!item) throw new Error();
+    currentTrivia = decodeHtml(item.correct_answer);
+    qEl.innerHTML = `🎯 ${decodeHtml(item.question)}`;
+    aEl.style.display = 'none'; aEl.textContent = '';
+  } catch { qEl.textContent = 'Could not load trivia — check your connection.'; }
+}
+function revealAnswer() {
+  const aEl = document.getElementById('trivia-answer');
+  if (currentTrivia) { aEl.textContent = '✅ ' + currentTrivia; aEl.style.display = 'block'; }
+}
+function decodeHtml(str) {
+  const txt = document.createElement('textarea'); txt.innerHTML = str; return txt.value;
+}
+
+/* ── WELLNESS ─────────────────────────────────────────────────────────────── */
 async function loadWellness() {
   const today = new Date().toLocaleDateString('en-CA');
   const { data: e } = await sb.from('wellness_logs').select('*').eq('log_date',today).maybeSingle();
@@ -458,231 +573,179 @@ async function loadWellness() {
     ${e.win_or_gratitude?`<p class="well-quote">"${e.win_or_gratitude}"</p>`:''}`;
 }
 
-/* ── TASKS — simple built-in list (Supabase tasks table) ── */
+/* ── TASKS ────────────────────────────────────────────────────────────────── */
+let selectedDue = null;
+
+function showDateChips() {
+  const chips = document.getElementById('date-chips');
+  const val = document.getElementById('new-task-name').value.trim();
+  chips.style.display = val ? 'flex' : 'none';
+}
+function pickChip(btn, days) {
+  document.querySelectorAll('.dc').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  const d = new Date(); d.setDate(d.getDate() + days);
+  selectedDue = d.toLocaleDateString('en-CA');
+  document.getElementById('new-task-due').value = '';
+}
+function pickCustomDate(input) {
+  selectedDue = input.value || null;
+  document.querySelectorAll('.dc').forEach(b => b.classList.remove('sel'));
+}
+
 async function loadTasks() {
-  const { data, error } = await sb.from('tasks')
-    .select('*')
-    .eq('done', false)
-    .order('due_date', { ascending: true, nullsFirst: false })
-    .order('created_at', { ascending: true });
-
+  const { data, error } = await sb.from('tasks').select('*').eq('done',false)
+    .order('due_date',{ascending:true,nullsFirst:false}).order('created_at',{ascending:true});
   const el = document.getElementById('tasks-body');
-  if (error) { el.innerHTML = '<div class="empty">Could not load tasks.</div>'; return; }
-
-  const rows = data || [];
+  const barEl = document.getElementById('task-count-bar');
+  if (error) { el.innerHTML='<div class="empty">Could not load tasks.</div>'; return; }
+  const rows = data||[];
   document.getElementById('s-tasks').textContent = rows.length;
-  document.getElementById('tasks-sync').textContent = rows.length ? '' : '';
-
   if (!rows.length) {
-    el.innerHTML = '<div class="tasks-empty">No open tasks — you\'re clear! 🎉</div>';
-    return;
+    el.innerHTML='<div class="tasks-empty">Nothing open — you\'re clear! 🎉</div>';
+    barEl.style.display='none'; return;
   }
-
-  const today = new Date().toISOString().split('T')[0];
-  const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
-
+  const today    = new Date().toISOString().split('T')[0];
+  const tomorrow = new Date(Date.now()+86400000).toISOString().split('T')[0];
+  const overdue  = rows.filter(t => t.due_date && t.due_date < today).length;
+  barEl.style.display = 'flex';
+  barEl.innerHTML = `<span>${rows.length}</span> open task${rows.length!==1?'s':''}${overdue?` &nbsp;·&nbsp; <span style="color:var(--red)">${overdue} overdue</span>`:''}`;
   el.innerHTML = rows.map(t => {
-    let badgeHtml = '';
+    let badge = '';
     if (t.due_date) {
-      if (t.due_date < today)        badgeHtml = `<span class="due-badge overdue">⚠ ${fmtDue(t.due_date)} Overdue</span>`;
-      else if (t.due_date === today) badgeHtml = `<span class="due-badge today">Today</span>`;
-      else if (t.due_date <= tomorrow) badgeHtml = `<span class="due-badge soon">Tomorrow</span>`;
-      else                           badgeHtml = `<span class="due-badge future">${fmtDue(t.due_date)}</span>`;
+      if      (t.due_date < today)    badge = `<span class="due-badge overdue">⚠ ${fmtDue(t.due_date)}</span>`;
+      else if (t.due_date === today)   badge = `<span class="due-badge today">Today</span>`;
+      else if (t.due_date <= tomorrow) badge = `<span class="due-badge soon">Tomorrow</span>`;
+      else                             badge = `<span class="due-badge future">${fmtDue(t.due_date)}</span>`;
     }
     return `<div class="task-row" id="tr-${t.id}">
-      <input type="checkbox" onchange="completeTask('${t.id}', this)"/>
+      <input class="task-cb" type="checkbox" onchange="completeTask('${t.id}',this)"/>
       <span class="task-name-txt">${escHtml(t.name)}</span>
-      ${badgeHtml}
-      <button class="task-del" title="Delete" onclick="deleteTask('${t.id}')">✕</button>
+      ${badge}
+      <button class="task-del" onclick="deleteTask('${t.id}')" title="Delete">✕</button>
     </div>`;
   }).join('');
 }
 
 async function addTask() {
   const nameEl = document.getElementById('new-task-name');
-  const dueEl  = document.getElementById('new-task-due');
-  const name   = nameEl.value.trim();
-  if (!name) { nameEl.focus(); return; }
-
-  const { error } = await sb.from('tasks').insert({
-    name,
-    due_date: dueEl.value || null,
-    done: false,
-  });
+  const name = nameEl.value.trim(); if (!name) { nameEl.focus(); return; }
+  const due_date = selectedDue || document.getElementById('new-task-due').value || null;
+  const { error } = await sb.from('tasks').insert({ name, due_date, done: false });
   if (error) { showToast('Could not add task', true); return; }
   nameEl.value = '';
-  dueEl.value  = '';
+  selectedDue = null;
+  document.getElementById('new-task-due').value = '';
+  document.querySelectorAll('.dc').forEach(b => b.classList.remove('sel'));
+  document.getElementById('date-chips').style.display = 'none';
   nameEl.focus();
   await loadTasks();
 }
-
 async function completeTask(id, cb) {
   cb.disabled = true;
-  const row = document.getElementById('tr-' + id);
-  if (row) { row.querySelector('.task-name-txt').classList.add('done'); }
+  const row = document.getElementById('tr-'+id);
+  row?.querySelector('.task-name-txt')?.classList.add('done');
+  row?.style.setProperty('opacity','0.4');
   const { error } = await sb.from('tasks').update({ done: true }).eq('id', id);
-  if (error) { cb.checked = false; cb.disabled = false; showToast('Update failed', true); return; }
+  if (error) { cb.checked=false; cb.disabled=false; row?.style.removeProperty('opacity'); showToast('Update failed',true); return; }
   showToast('Done ✓');
-  setTimeout(() => loadTasks(), 500);
+  setTimeout(() => loadTasks(), 600);
 }
-
 async function deleteTask(id) {
-  await sb.from('tasks').delete().eq('id', id);
-  await loadTasks();
+  await sb.from('tasks').delete().eq('id', id); await loadTasks();
 }
+function fmtDue(d) { return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-function fmtDue(d) {
-  return new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month:'short', day:'numeric' });
-}
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-/* ── GREER COLLECTIVE PIPELINE ── consulting clients only (no VO jobs) */
+/* ── GC PIPELINE (clients only) ───────────────────────────────────────────── */
 async function loadPipeline() {
-  const { data: clients } = await sb.from('clients')
-    .select('name,status,industry')
-    .order('created_at',{ascending:false})
-    .limit(10);
-  const rows = clients||[];
-  document.getElementById('s-clients').textContent = rows.filter(c=>c.status==='active').length || rows.length;
-  const el = document.getElementById('pipe-body');
-  if (!rows.length) { el.innerHTML='<div class="empty">No consulting clients yet.<br><span style="font-size:.78rem;">Add clients to the Clients table in Supabase.</span></div>'; return; }
-  const dc = s => ({active:'a',prospect:'p',warm:'w'})[s?.toLowerCase()]||'';
-  el.innerHTML = rows.map(c=>`
-    <div class="pipe-item">
-      <div class="dot ${dc(c.status)}"></div>
-      <div class="pipe-name">${c.name}</div>
-      <div class="pipe-meta">${c.industry||''}</div>
-      <span class="pipe-badge ${dc(c.status)}">${c.status||'lead'}</span>
-    </div>`).join('');
+  const {data:clients}=await sb.from('clients').select('name,status,industry').order('created_at',{ascending:false}).limit(10);
+  const rows=clients||[];
+  document.getElementById('s-clients').textContent=rows.filter(c=>c.status==='active').length||rows.length;
+  const el=document.getElementById('pipe-body');
+  if(!rows.length){el.innerHTML='<div class="empty">No clients yet.<br><a href="gc-pipeline.html" style="color:var(--mid);font-size:.78rem;">Add clients →</a></div>';return;}
+  const dc=s=>({active:'a',prospect:'p',warm:'w'})[s?.toLowerCase()]||'';
+  el.innerHTML=rows.map(c=>`<div class="pipe-item"><div class="dot ${dc(c.status)}"></div><div class="pipe-name">${c.name}</div><div class="pipe-meta">${c.industry||''}</div><span class="pipe-badge ${dc(c.status)}">${c.status||'lead'}</span></div>`).join('');
 }
 
-/* ── JACQUIEVOICE CARD ── auditions funnel + active VO project pipeline */
+/* ── JACQUIEVOICE (VO jobs + auditions) ───────────────────────────────────── */
 async function loadJacquieVoice() {
-  const [audRes, jobRes] = await Promise.all([
+  const [audRes,jobRes]=await Promise.all([
     sb.from('auditions').select('*').order('submitted_date',{ascending:false}).limit(30),
-    sb.from('jobs')
-      .select('id,client,project_name,type,amount,due,status,platform')
-      .in('status',['new','in_progress','revision','delivered'])
-      .order('due',{ascending:true})
-      .limit(5),
+    sb.from('jobs').select('id,client,project_name,type,amount,due,status,platform').in('status',['new','in_progress','revision','delivered']).order('due',{ascending:true}).limit(5),
   ]);
-
-  const rows = audRes.data||[];
-  const jobs = jobRes.data||[];
-
+  const rows=audRes.data||[], jobs=jobRes.data||[];
   const c={submitted:0,callback:0,booked:0,passed:0};
   rows.forEach(r=>{if(c[r.status]!==undefined)c[r.status]++;});
-  document.getElementById('s-auditions').textContent = c.submitted+c.callback;
-  document.getElementById('s-vo-active').textContent = jobs.length;
-
-  const PLAT_COLOR = {fiverr:'#1dbf73',voice123:'#003087',direct:'#c9a84c','casting networks':'#7c5cbf'};
-  const statusLabel = {new:'New',in_progress:'Recording',revision:'Revision',delivered:'Delivered',paid:'Paid'};
-  const today = new Date().toISOString().split('T')[0];
-
-  const el = document.getElementById('jv-body');
-  el.innerHTML = `
-    <!-- Active VO Pipeline mini preview -->
+  document.getElementById('s-auditions').textContent=c.submitted+c.callback;
+  document.getElementById('s-vo-active').textContent=jobs.length;
+  const today=new Date().toISOString().split('T')[0];
+  const statusLabel={new:'New',in_progress:'Recording',revision:'Revision',delivered:'Delivered',paid:'Paid'};
+  const el=document.getElementById('jv-body');
+  el.innerHTML=`
     <div class="jv-pipeline-mini">
-      <div class="jv-pip-hd">
-        <span class="jv-pip-title">🗂️ Active Projects (${jobs.length})</span>
-        <a class="jv-pip-link" href="vo-pipeline.html">View all →</a>
-      </div>
-      ${!jobs.length
-        ? `<div style="font-size:.8rem;color:var(--muted);text-align:center;padding:8px 0;">No active projects right now.</div>`
-        : jobs.map(j => {
-            const overdue = j.due && j.due < today;
-            const name = j.project_name || j.client || 'Untitled';
-            const platKey = (j.platform||'').toLowerCase();
-            const platColor = PLAT_COLOR[platKey] || 'var(--muted)';
-            return `<div class="jv-pip-row">
-              <div class="jv-pip-name" title="${name}">${name}</div>
-              <div class="jv-pip-meta" style="${overdue?'color:var(--red);font-weight:600;':''}">${j.due ? (overdue?'⚠ ':'')+new Date(j.due+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : ''}</div>
-              <span class="jv-pip-badge ${j.status}">${statusLabel[j.status]||j.status}</span>
-            </div>`;
-          }).join('')
-      }
+      <div class="jv-pip-hd"><span class="jv-pip-title">🗂️ Active Projects (${jobs.length})</span><a class="jv-pip-link" href="vo-pipeline.html">View all →</a></div>
+      ${!jobs.length?`<div style="font-size:.8rem;color:var(--muted);text-align:center;padding:8px 0;">No active projects right now.</div>`
+        :jobs.map(j=>{const ov=j.due&&j.due<today,nm=j.project_name||j.client||'Untitled';
+        return`<div class="jv-pip-row"><div class="jv-pip-name" title="${nm}">${nm}</div><div class="jv-pip-meta" style="${ov?'color:var(--red);font-weight:600;':''}">${j.due?(ov?'⚠ ':'')+new Date(j.due+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}):''}</div><span class="jv-pip-badge ${j.status}">${statusLabel[j.status]||j.status}</span></div>`;}).join('')}
     </div>
-
-    <!-- Auditions funnel -->
     <div class="jv-funnel">
       <div class="jv-stage"><div class="n">${c.submitted}</div><div class="l">Submitted</div></div>
       <div class="jv-stage cb"><div class="n">${c.callback}</div><div class="l">Callback</div></div>
       <div class="jv-stage bk"><div class="n">${c.booked}</div><div class="l">Booked</div></div>
       <div class="jv-stage"><div class="n">${c.passed}</div><div class="l">Passed</div></div>
     </div>
-    ${rows.slice(0,5).map(a=>`
-      <div class="jv-row">
-        <div>
-          <div class="jv-name">${a.client_name||a.project_type||'Submission'}</div>
-          <div class="jv-plat">${a.casting_platform||''}${a.submitted_date?' · '+new Date(a.submitted_date+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}):''}</div>
-        </div>
-        <select class="jv-sel ${a.status}" onchange="quickJVStatus('${a.id}',this)">
-          <option value="submitted" ${a.status==='submitted'?'selected':''}>Submitted</option>
-          <option value="callback"  ${a.status==='callback' ?'selected':''}>Callback</option>
-          <option value="booked"    ${a.status==='booked'   ?'selected':''}>Booked</option>
-          <option value="passed"    ${a.status==='passed'   ?'selected':''}>Passed</option>
-        </select>
-      </div>`).join('')}
+    ${rows.slice(0,5).map(a=>`<div class="jv-row"><div><div class="jv-name">${a.client_name||a.project_type||'Submission'}</div><div class="jv-plat">${a.casting_platform||''}${a.submitted_date?' · '+new Date(a.submitted_date+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}):''}</div></div><select class="jv-sel ${a.status}" onchange="quickJVStatus('${a.id}',this)"><option value="submitted" ${a.status==='submitted'?'selected':''}>Submitted</option><option value="callback" ${a.status==='callback'?'selected':''}>Callback</option><option value="booked" ${a.status==='booked'?'selected':''}>Booked</option><option value="passed" ${a.status==='passed'?'selected':''}>Passed</option></select></div>`).join('')}
     ${!rows.length?'<div class="empty">No auditions yet — add one below.</div>':''}`;
 }
-
-async function quickJVStatus(id, sel) {
-  const status = sel.value;
-  sel.className = 'jv-sel ' + status;
-  await sb.from('auditions').update({status}).eq('id',id);
-  showToast(`Updated → ${status}`);
-  loadJacquieVoice();
+async function quickJVStatus(id,sel) {
+  sel.className='jv-sel '+sel.value;
+  await sb.from('auditions').update({status:sel.value}).eq('id',id);
+  showToast(`Updated → ${sel.value}`); loadJacquieVoice();
 }
 async function addAudition() {
   const name=document.getElementById('jv-name').value.trim();
   const platform=document.getElementById('jv-platform').value;
-  if (!name) return;
+  if(!name)return;
   await sb.from('auditions').insert({client_name:name,casting_platform:platform,status:'submitted',submitted_date:new Date().toLocaleDateString('en-CA')});
   document.getElementById('jv-name').value='';
   showToast('Audition logged!'); loadJacquieVoice();
 }
 
+/* ── ITALY PREP ───────────────────────────────────────────────────────────── */
 async function loadItalyPrep() {
-  const { data }=await sb.from('italy_prep').select('*').order('category').order('done');
-  prepData=data||[];
-  updateItalyStats(); renderPrep();
+  const {data}=await sb.from('italy_prep').select('*').order('category').order('done');
+  prepData=data||[]; updateItalyStats(); renderPrep();
 }
 function updateItalyStats() {
-  const done=prepData.filter(i=>i.done).length, tot=prepData.length;
-  const pct=tot?Math.round(done/tot*100):0;
+  const done=prepData.filter(i=>i.done).length, tot=prepData.length, pct=tot?Math.round(done/tot*100):0;
   document.getElementById('italy-bar').style.width=pct+'%';
   document.getElementById('italy-lbl').textContent=`${done}/${tot} complete`;
 }
 function renderPrep() {
   const items=italyFilter==='All'?prepData:prepData.filter(i=>i.category===italyFilter);
   const el=document.getElementById('italy-body');
-  if (!items.length) { el.innerHTML='<div class="empty">Nothing here.</div>'; return; }
-  el.innerHTML=items.map(i=>`
-    <div class="prep-item ${i.done?'dn':''}" id="pr-${i.id}">
-      <input type="checkbox" ${i.done?'checked':''} onchange="togglePrep('${i.id}',this.checked)"/>
-      <div><div class="prep-text">${i.item}</div><div class="prep-sub">${i.category}${i.due_week?' · '+i.due_week:''}</div></div>
-    </div>`).join('');
+  if(!items.length){el.innerHTML='<div class="empty">Nothing here.</div>';return;}
+  el.innerHTML=items.map(i=>`<div class="prep-item ${i.done?'dn':''}" id="pr-${i.id}"><input type="checkbox" ${i.done?'checked':''} onchange="togglePrep('${i.id}',this.checked)"/><div><div class="prep-text">${i.item}</div><div class="prep-sub">${i.category}${i.due_week?' · '+i.due_week:''}</div></div></div>`).join('');
 }
 function filterItaly(btn) {
   document.querySelectorAll('.cf').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on'); italyFilter=btn.dataset.c; renderPrep();
 }
-async function togglePrep(id, done) {
+async function togglePrep(id,done) {
   await sb.from('italy_prep').update({done}).eq('id',id);
-  const item=prepData.find(i=>i.id===id); if(item) item.done=done;
-  document.getElementById(`pr-${id}`)?.classList.toggle('dn',done);
-  updateItalyStats();
+  const item=prepData.find(i=>i.id===id); if(item)item.done=done;
+  document.getElementById(`pr-${id}`)?.classList.toggle('dn',done); updateItalyStats();
 }
 
+/* ── BUDGET ───────────────────────────────────────────────────────────────── */
 async function loadBudget() {
   const first=new Date(); first.setDate(1);
   const ms=first.toLocaleDateString('en-CA');
   const {data:b}=await sb.from('budget_months').select('*').eq('month',ms).maybeSingle();
   const el=document.getElementById('budget-body');
   const mn=first.toLocaleDateString('en-US',{month:'long',year:'numeric'});
-  if (!b) { el.innerHTML=`<div class="empty">${mn} budget not set yet.</div><button class="btn-light" style="margin-top:10px;" onclick="initMonth('${ms}')">Set up ${mn}</button>`; return; }
+  if(!b){el.innerHTML=`<div class="empty">${mn} budget not set yet.</div><button class="btn-light" style="margin-top:10px;" onclick="initMonth('${ms}')">Set up ${mn}</button>`;return;}
   const net=(b.income_actual||0)-(b.expenses_business||0)-(b.expenses_medical||0)-(b.expenses_personal||0);
   el.innerHTML=`
     <div style="font-size:.75rem;color:var(--muted);margin-bottom:10px;">${mn}</div>
@@ -697,120 +760,14 @@ async function loadBudget() {
     </div>`;
 }
 async function initMonth(ms) {
-  await sb.from('budget_months').insert({month:ms,updated_at:new Date().toISOString()});
-  loadBudget();
+  await sb.from('budget_months').insert({month:ms,updated_at:new Date().toISOString()}); loadBudget();
 }
 
+/* ── REFRESH ──────────────────────────────────────────────────────────────── */
 async function refreshAll() {
   setSynced(true); cfg=await getSettings(); renderCalendar();
-  await Promise.all([loadWellness(), loadTasks(), loadPipeline(), loadJacquieVoice(), loadItalyPrep(), loadBudget()]);
+  await Promise.all([loadWellness(),loadTasks(),loadPipeline(),loadJacquieVoice(),loadItalyPrep(),loadBudget()]);
   showToast('All data refreshed');
-}
-
-/* ── DAILY SPARK: quotes + trivia ──────────────────────────────────────────── */
-const QUOTES = [
-  { q: "The voice is a musical instrument that everyone plays.", a: "Ed Asner" },
-  { q: "Your voice is your fingerprint. Own it completely.", a: "Unknown" },
-  { q: "The human voice is the most beautiful instrument of all, but it is the most difficult to play.", a: "Richard Strauss" },
-  { q: "You are never too old to set another goal or to dream a new dream.", a: "C.S. Lewis" },
-  { q: "Success is not final, failure is not fatal: it is the courage to continue that counts.", a: "Winston Churchill" },
-  { q: "The secret of getting ahead is getting started.", a: "Mark Twain" },
-  { q: "Done is better than perfect.", a: "Sheryl Sandberg" },
-  { q: "Opportunities don't happen. You create them.", a: "Chris Grosser" },
-  { q: "The only way to do great work is to love what you do.", a: "Steve Jobs" },
-  { q: "Believe you can and you're halfway there.", a: "Theodore Roosevelt" },
-  { q: "It always seems impossible until it's done.", a: "Nelson Mandela" },
-  { q: "A year from now you may wish you had started today.", a: "Karen Lamb" },
-  { q: "Don't watch the clock; do what it does. Keep going.", a: "Sam Levenson" },
-  { q: "The voice that you have right now is the voice that books jobs.", a: "Dee Bradley Baker" },
-  { q: "Every audition is a performance. Treat it like one.", a: "Unknown" },
-  { q: "Your demo is your handshake. Make it firm and memorable.", a: "Unknown" },
-  { q: "The microphone doesn't lie. Be prepared.", a: "Unknown" },
-  { q: "Consistency is the hallmark of the professional.", a: "Unknown" },
-  { q: "Act as if what you do makes a difference. It does.", a: "William James" },
-  { q: "Start where you are. Use what you have. Do what you can.", a: "Arthur Ashe" },
-  { q: "The best way to predict the future is to create it.", a: "Peter Drucker" },
-  { q: "Creativity is intelligence having fun.", a: "Albert Einstein" },
-  { q: "If you're not growing, you're dying. Keep training your voice.", a: "Unknown" },
-  { q: "Every no is one step closer to your yes.", a: "Unknown" },
-  { q: "A rejection is just a redirect.", a: "Unknown" },
-  { q: "The work you do while you procrastinate is probably the work you should be doing for the rest of your life.", a: "Jessica Hische" },
-  { q: "You miss 100% of the auditions you don't submit.", a: "Unknown" },
-  { q: "Excellence is not a destination; it is a continuous journey.", a: "Brian Tracy" },
-  { q: "You are the CEO of your own career.", a: "Unknown" },
-  { q: "Small daily improvements are the key to staggering long-term results.", a: "Unknown" },
-  { q: "The most courageous act is still to think for yourself. Aloud.", a: "Coco Chanel" },
-  { q: "Be so good they can't ignore you.", a: "Steve Martin" },
-  { q: "Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work.", a: "Steve Jobs" },
-  { q: "The comeback is always stronger than the setback.", a: "Unknown" },
-  { q: "Hustle in silence and let your bookings make the noise.", a: "Unknown" },
-  { q: "Confidence is not 'they will like me.' Confidence is 'I'll be fine if they don't.'", a: "Christina Grimmie" },
-  { q: "Talent is cheaper than table salt. What separates the talented individual from the successful one is a lot of hard work.", a: "Stephen King" },
-  { q: "You don't have to be great to start, but you have to start to be great.", a: "Zig Ziglar" },
-  { q: "The voice is a second face.", a: "Gerard Bauer" },
-  { q: "In the middle of every difficulty lies opportunity.", a: "Albert Einstein" },
-  { q: "Do something today that your future self will thank you for.", a: "Sean Patrick Flanery" },
-  { q: "The harder you work, the luckier you get.", a: "Gary Player" },
-  { q: "Build your own dreams, or someone else will hire you to build theirs.", a: "Farrah Gray" },
-  { q: "Stop waiting for the perfect moment. Take the moment and make it perfect.", a: "Unknown" },
-  { q: "Passion is energy. Feel the power that comes from focusing on what excites you.", a: "Oprah Winfrey" },
-  { q: "Two roads diverged in a wood, and I — I took the one less traveled by, and that has made all the difference.", a: "Robert Frost" },
-  { q: "What you do speaks so loudly that I cannot hear what you say.", a: "Ralph Waldo Emerson" },
-  { q: "You have to be burning with an idea, a problem, or a wrong that you want to right.", a: "Steve Jobs" },
-  { q: "The man who moves a mountain begins by carrying away small stones.", a: "Confucius" },
-  { q: "We are what we repeatedly do. Excellence, then, is not an act but a habit.", a: "Aristotle" },
-  { q: "If not now, when?", a: "Hillel the Elder" },
-  { q: "It's not about being the best. It's about being better than you were yesterday.", a: "Unknown" },
-  { q: "Your voice matters. Use it.", a: "Unknown" },
-  { q: "The most powerful thing you can do is show up and be fully present.", a: "Unknown" },
-  { q: "A year from now, the auditions you submit today will be the bookings you celebrate.", a: "Unknown" },
-  { q: "Discipline is choosing between what you want now and what you want most.", a: "Abraham Lincoln" },
-  { q: "Push yourself, because no one else is going to do it for you.", a: "Unknown" },
-  { q: "Dream big. Start small. Act now.", a: "Robin Sharma" },
-  { q: "The road to success and the road to failure are almost exactly the same.", a: "Colin R. Davis" },
-  { q: "Champions keep playing until they get it right.", a: "Billie Jean King" },
-];
-
-let currentTrivia = null;
-
-function loadDailyQuote() {
-  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-  const q = QUOTES[dayOfYear % QUOTES.length];
-  document.getElementById('quote-text').textContent = `"${q.q}"`;
-  document.getElementById('quote-author').textContent = `— ${q.a}`;
-}
-
-async function newTrivia() {
-  const qEl = document.getElementById('trivia-q');
-  const aEl = document.getElementById('trivia-answer');
-  aEl.style.display = 'none';
-  qEl.textContent = 'Loading…';
-  currentTrivia = null;
-  try {
-    const res = await fetch('https://opentdb.com/api.php?amount=1&type=multiple').then(r => r.json());
-    const item = res.results?.[0];
-    if (!item) throw new Error();
-    currentTrivia = decodeHtml(item.correct_answer);
-    qEl.innerHTML = `🎯 ${decodeHtml(item.question)}`;
-    aEl.style.display = 'none';
-    aEl.textContent = '';
-  } catch {
-    qEl.textContent = 'Could not load trivia — check connection.';
-  }
-}
-
-function revealAnswer() {
-  const aEl = document.getElementById('trivia-answer');
-  if (currentTrivia) {
-    aEl.textContent = '✅ ' + currentTrivia;
-    aEl.style.display = 'block';
-  }
-}
-
-function decodeHtml(str) {
-  const txt = document.createElement('textarea');
-  txt.innerHTML = str;
-  return txt.value;
 }
 
 init();
