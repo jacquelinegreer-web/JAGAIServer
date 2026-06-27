@@ -3,289 +3,558 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Greer Collective | Tools</title>
+  <title>Greer Collective | Command Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #f5f0eb;
-      --purple: #3b2a6e;
-      --mid: #7c5cbf;
-      --light: #e8e2f7;
-      --pale: #f3f0fa;
-      --card: #fff;
-      --text: #2d2d2d;
-      --muted: #888;
-      --border: #e0dae8;
-      --green: #2e7d32;
-      --italy: #008c45;
-      /* JacquieVoice brand */
-      --navy: #1a3558;
-      --navy-mid: #2a5080;
-      --gold: #c9a84c;
-      --gold-bg: #fdf8e8;
-      --gold-border: #e8d48a;
+      --plum:     #2C1A2E;
+      --midplum:  #4A2455;
+      --gold:     #B8922A;
+      --bgold:    #D4A843;
+      --cream:    #FAF6EF;
+      --cream2:   #F3EDE2;
+      --mauve:    #8A7A8E;
+      --text:     #2C1A2E;
+      --muted:    #9A8E9E;
+      --border:   #E8DDD0;
+      --white:    #FFFFFF;
+      --violet:   #7F77DD;
+      --coral:    #E8634A;
+      --green:    #1B6B2A;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    /* HEADER — split brand bar */
-    .hdr {
-      background: linear-gradient(135deg, var(--purple) 0%, var(--purple) 55%, var(--navy) 100%);
-      color: white;
-      padding: 0;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Jost', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
     }
-    .hdr-inner { padding: 28px 32px 20px; text-align: center; }
-    .hdr h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: .01em; }
-    .hdr p  { font-size: .85rem; opacity: .7; margin-top: 5px; }
-    .hdr-meta { margin-top: 14px; display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
-    .hdr-stat { background: rgba(255,255,255,.12); border-radius: 9px; padding: 7px 16px; font-size: .8rem; }
-    .hdr-stat b { font-size: 1.05rem; display: block; }
-    /* Brand bar at bottom of header */
-    .brand-bar {
+
+    /* ── HEADER ─────────────────────────────────────────────── */
+    header {
+      background: var(--plum);
+      padding: 52px 48px 44px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 4px solid var(--gold);
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: rgba(184,146,42,0.07);
+      pointer-events: none;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: 10%;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(184,146,42,0.04);
+      pointer-events: none;
+    }
+
+    .hdr-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hdr-eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .hdr-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 300;
+      font-size: 58px;
+      color: var(--cream);
+      line-height: 1.0;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .hdr-sub {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--mauve);
+      letter-spacing: 1px;
+      margin-bottom: 28px;
+    }
+
+    .hdr-stats {
       display: flex;
-      border-top: 1px solid rgba(255,255,255,.12);
+      gap: 12px;
+      flex-wrap: wrap;
     }
-    .brand-pill {
-      flex: 1;
-      padding: 10px 16px;
-      font-size: .72rem;
-      font-weight: 700;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      text-align: center;
-      opacity: .85;
-    }
-    .brand-pill.gc { background: rgba(124,92,191,.25); border-right: 1px solid rgba(255,255,255,.1); }
-    .brand-pill.jv { background: rgba(201,168,76,.18); color: #f5e4a8; }
 
-    .wrap { max-width: 1000px; margin: 0 auto; padding: 28px 20px 48px; }
-
-    /* SECTION TITLES */
-    .section-title {
-      font-size: .68rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: var(--muted);
-      margin: 28px 0 12px;
+    .hdr-stat {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(184,146,42,0.25);
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      color: var(--mauve);
+      letter-spacing: 1px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
-    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-    /* JacquieVoice section title — gold accent */
-    .section-title.jv { color: var(--gold); }
-    .section-title.jv::after { background: var(--gold-border); }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; }
+    .hdr-stat b {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1;
+    }
 
-    /* BASE CARD */
-    .tool-card {
-      background: var(--card);
-      border-radius: 14px;
-      padding: 18px 20px;
-      box-shadow: 0 1px 4px rgba(0,0,0,.06);
-      border: 2px solid transparent;
+    /* ── WRAP ────────────────────────────────────────────────── */
+    .wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 20px 64px;
+    }
+
+    /* ── SECTION HEADER ─────────────────────────────────────── */
+    .sec-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 44px 0 16px;
+    }
+
+    .sec-head:first-of-type { margin-top: 0; }
+
+    .sec-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    .sec-rule {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    .sec-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--muted);
+      font-style: italic;
+      white-space: nowrap;
+    }
+
+    /* ── GRID ────────────────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    /* ── CARD BASE ───────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 22px 22px 20px;
+      border: 1px solid var(--border);
       text-decoration: none;
       color: inherit;
       display: block;
-      transition: border-color .15s, box-shadow .15s, transform .1s;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
       position: relative;
+      overflow: hidden;
     }
-    .tool-card:hover { border-color: var(--mid); box-shadow: 0 4px 16px rgba(124,92,191,.12); transform: translateY(-2px); }
-    .tool-card.featured { border-color: var(--light); background: linear-gradient(135deg, #fff 80%, var(--pale)); }
-    .tool-card.featured:hover { border-color: var(--mid); }
 
-    /* JACQUIEVOICE CARDS — navy/gold treatment */
-    .tool-card.jv { background: linear-gradient(135deg, #fff 75%, #fdf8ee); }
-    .tool-card.jv:hover { border-color: var(--gold); box-shadow: 0 4px 16px rgba(201,168,76,.15); }
-    .tool-card.jv .tc-name { color: var(--navy); }
-
-    .tc-icon { font-size: 1.7rem; margin-bottom: 10px; display: block; }
-    .tc-name { font-size: .97rem; font-weight: 700; color: var(--purple); }
-    .tc-desc { font-size: .8rem; color: var(--muted); margin-top: 4px; line-height: 1.45; }
-    .tc-badge {
-      display: inline-block;
-      font-size: .65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      padding: 2px 8px;
-      border-radius: 9px;
-      margin-top: 9px;
-      background: var(--light);
-      color: var(--purple);
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--border);
+      transition: background 0.18s ease;
     }
-    .tc-badge.live     { background: #e8f5e9; color: var(--green); }
-    .tc-badge.jv-live  { background: var(--gold-bg); color: #7a5c10; border: 1px solid var(--gold-border); }
-    .tc-badge.new      { background: #fff3e0; color: #d84c00; }
-    .tc-badge.italy    { background: #e8f5ee; color: var(--italy); }
 
-    .coming-card {
-      background: #fafafa;
-      border-radius: 14px;
-      padding: 18px 20px;
-      border: 2px dashed var(--border);
-      opacity: .75;
-      cursor: default;
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(44,26,46,0.10);
     }
-    .coming-card .tc-name { color: var(--muted); }
-    /* JacquieVoice coming-soon cards */
-    .coming-card.jv { border-color: var(--gold-border); background: #fffdf5; }
 
-    .footer {
-      text-align: center;
-      padding: 24px;
-      font-size: .78rem;
+    /* Card variants */
+    .card.gc::before      { background: var(--gold); }
+    .card.gc:hover        { border-color: rgba(184,146,42,0.4); }
+
+    .card.coaching::before { background: var(--gold); }
+    .card.coaching:hover   { border-color: rgba(184,146,42,0.4); box-shadow: 0 8px 28px rgba(184,146,42,0.12); }
+
+    .card.jv::before      { background: var(--violet); }
+    .card.jv:hover        { border-color: rgba(127,119,221,0.4); box-shadow: 0 8px 28px rgba(127,119,221,0.10); }
+
+    .card.wellness::before { background: #9C3587; }
+    .card.wellness:hover   { border-color: rgba(156,53,135,0.3); }
+
+    .card.italy::before   { background: #009246; }
+    .card.italy:hover     { border-color: rgba(0,146,70,0.3); }
+
+    .card.finance::before { background: var(--midplum); }
+    .card.finance:hover   { border-color: rgba(74,36,85,0.3); }
+
+    .card.home::before    { background: var(--plum); }
+    .card.home:hover      { border-color: rgba(44,26,46,0.4); }
+
+    /* Coming soon */
+    .card-soon {
+      background: #FAFAF8;
+      border-radius: 8px;
+      padding: 22px 22px 20px;
+      border: 1px dashed var(--border);
+      position: relative;
+      overflow: hidden;
+      opacity: 0.65;
+    }
+
+    .card-soon::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--border);
+    }
+
+    /* ── CARD CONTENTS ───────────────────────────────────────── */
+    .card-icon {
+      font-size: 22px;
+      margin-bottom: 12px;
+      display: block;
+      line-height: 1;
+    }
+
+    .card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 20px;
+      color: var(--plum);
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .card-soon .card-name { color: var(--muted); }
+
+    .card-desc {
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      font-weight: 300;
       color: var(--muted);
-      border-top: 1px solid var(--border);
+      line-height: 1.6;
+      margin-bottom: 14px;
     }
-    .footer a { color: var(--mid); text-decoration: none; }
-    .footer-brands { display: flex; justify-content: center; gap: 24px; margin-bottom: 8px; font-size: .7rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
-    .footer-brands .gc { color: var(--mid); }
-    .footer-brands .jv { color: var(--gold); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .badge.live     { background: #EAF4EC; color: var(--green); }
+    .badge.coaching { background: #FBF3E2; color: var(--gold); }
+    .badge.jv       { background: #EEEDF9; color: var(--violet); }
+    .badge.soon     { background: #F2EFF5; color: var(--mauve); }
+    .badge.italy    { background: #E5F5EB; color: #006B31; }
+
+    .badge::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.7;
+    }
+
+    /* ── HERO CARD ───────────────────────────────────────────── */
+    .card-hero {
+      background: var(--plum);
+      border-radius: 8px;
+      padding: 28px 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      border: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 3px solid var(--gold);
+    }
+
+    .card-hero::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(184,146,42,0.08);
+      pointer-events: none;
+    }
+
+    .card-hero:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(44,26,46,0.22);
+    }
+
+    .card-hero .card-icon { font-size: 28px; }
+    .card-hero .card-name { font-size: 24px; color: var(--cream); }
+    .card-hero .card-desc { color: var(--mauve); }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 20px;
+      text-align: center;
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    footer a { color: var(--gold); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .hdr-name { font-size: 40px; }
+      header { padding: 36px 24px 32px; }
+      .wrap { padding: 28px 16px 48px; }
+    }
   </style>
 </head>
 <body>
 
-<div class="hdr">
+<!-- ── HEADER ── -->
+<header>
   <div class="hdr-inner">
-    <h1>Greer Collective &nbsp;·&nbsp; JacquieVoice</h1>
-    <p>jacqueline.greer@gmail.com &nbsp;·&nbsp; Your personal business OS</p>
-    <div class="hdr-meta">
-      <div class="hdr-stat"><b id="h-days">—</b>Days to Italy</div>
-      <div class="hdr-stat"><b id="h-date">—</b>Today</div>
+    <div class="hdr-eyebrow">Personal Business OS</div>
+    <div class="hdr-name">Jacqueline Greer</div>
+    <div class="hdr-sub">The Greer Collective &nbsp;·&nbsp; JacquieVoice &nbsp;·&nbsp; Washington, DC</div>
+    <div class="hdr-stats">
+      <div class="hdr-stat"><b id="h-days">—</b> days to Italy</div>
+      <div class="hdr-stat"><b id="h-date">—</b></div>
     </div>
   </div>
-  <div class="brand-bar">
-    <div class="brand-pill gc">🧭 Greer Collective &nbsp;— Consulting &amp; Coaching</div>
-    <div class="brand-pill jv">🎙️ JacquieVoice &nbsp;— Voice Over</div>
-  </div>
-</div>
+</header>
 
+<!-- ── MAIN ── -->
 <div class="wrap">
 
-  <div class="section-title">🏠 Home Base</div>
+  <!-- HOME BASE -->
+  <div class="sec-head">
+    <span class="sec-label">Home Base</span>
+    <span class="sec-rule"></span>
+  </div>
   <div class="grid">
-    <a class="tool-card featured" href="command-center.html">
-      <span class="tc-icon">⚡</span>
-      <div class="tc-name">Command Center</div>
-      <div class="tc-desc">Live dashboard — tasks, calendar, pipeline, auditions, wellness, Italy prep, and budget all in one place.</div>
-      <span class="tc-badge live">Live · Supabase</span>
+    <a class="card-hero" href="command-center.html">
+      <span class="card-icon">⚡</span>
+      <div class="card-name">Command Center</div>
+      <div class="card-desc">Live dashboard — tasks, calendar, pipeline, auditions, wellness, Italy prep, and budget all in one place.</div>
+      <span class="badge live">Live · Supabase</span>
     </a>
   </div>
 
-  <div class="section-title jv">🎙️ JacquieVoice</div>
-  <div class="grid">
-    <a class="tool-card jv" href="jacquievoice.html">
-      <span class="tc-icon">🎙️</span>
-      <div class="tc-name">Audition Tracker</div>
-      <div class="tc-desc">Log submissions, track callbacks and bookings, update status inline, and monitor your earnings pipeline.</div>
-      <span class="tc-badge jv-live">Live · Supabase</span>
-    </a>
-    <a class="tool-card jv" href="vo-pipeline.html">
-      <span class="tc-icon">🗂️</span>
-      <div class="tc-name">Project Pipeline</div>
-      <div class="tc-desc">Track active VO work across Fiverr, direct clients, and platforms — from new order through recording, delivery, and payment.</div>
-      <span class="tc-badge jv-live">Live · Supabase</span>
-    </a>
-    <a class="tool-card jv" href="vo-marketing-log.html">
-      <span class="tc-icon">📢</span>
-      <div class="tc-name">VO Marketing Log</div>
-      <div class="tc-desc">Agent submissions, production house outreach, monthly task checklist, and content pillars — July 2026 through January 2027.</div>
-      <span class="tc-badge jv-live">Live · Supabase</span>
-    </a>
-    <a class="tool-card jv" href="rate-earnings.html">
-      <span class="tc-icon">📈</span>
-      <div class="tc-name">Rate & Earnings Report</div>
-      <div class="tc-desc">Monthly VO income by platform and project type — live from your bookings plus Wave CSV import for the full picture.</div>
-      <span class="tc-badge jv-live">Live · Supabase + Wave</span>
-    </a>
+  <!-- GREER COLLECTIVE COACHING -->
+  <div class="sec-head">
+    <span class="sec-label">Greer Collective</span>
+    <span class="sec-rule"></span>
+    <span class="sec-title">Coaching Practice</span>
   </div>
-
-  <div class="section-title">🧭 Greer Collective</div>
   <div class="grid">
-    <a class="tool-card" href="gc-pipeline.html">
-      <span class="tc-icon">👥</span>
-      <div class="tc-name">Client Pipeline</div>
-      <div class="tc-desc">Track consulting and facilitation clients — status, contact info, engagement details, and notes. Feeds the Command Center live.</div>
-      <span class="tc-badge live">Live · Supabase</span>
+    <a class="card coaching" href="coaching/index.html">
+      <span class="card-icon">✦</span>
+      <div class="card-name">Coaching Hub</div>
+      <div class="card-desc">Launch tracker, 12-month learning plan, skills inventory, and coach benchmark — all in one place.</div>
+      <span class="badge coaching">Live · July 2026</span>
     </a>
-    <div class="coming-card">
-      <span class="tc-icon">📣</span>
-      <div class="tc-name">Consulting Marketing Tracker</div>
-      <div class="tc-desc">Outreach cadences and follow-up status for The Greer Collective coaching pipeline.</div>
-      <span class="tc-badge">Coming soon</span>
+    <a class="card coaching" href="coaching/GC_Coaching_CommandCenter.html">
+      <span class="card-icon">☑</span>
+      <div class="card-name">Launch Tracker</div>
+      <div class="card-desc">Interactive checklist with progress tracking — This Week, This Month, This Quarter.</div>
+      <span class="badge coaching">Live</span>
+    </a>
+    <a class="card coaching" href="coaching/GC_Coaching_LearningPlan.html">
+      <span class="card-icon">📚</span>
+      <div class="card-name">Learning Plan</div>
+      <div class="card-desc">Skills inventory, peer benchmark, frameworks, and 12-month certification roadmap through June 2027.</div>
+      <span class="badge coaching">Live</span>
+    </a>
+    <div class="card-soon">
+      <span class="card-icon">👥</span>
+      <div class="card-name">Client Pipeline</div>
+      <div class="card-desc">Active clients, prospects, and lead follow-up.</div>
+      <span class="badge soon">Coming soon</span>
     </div>
   </div>
 
-  <div class="section-title">💜 Wellness & Productivity</div>
+  <!-- GREER COLLECTIVE CONSULTING -->
+  <div class="sec-head">
+    <span class="sec-label">Greer Collective</span>
+    <span class="sec-rule"></span>
+    <span class="sec-title">Consulting &amp; Facilitation</span>
+  </div>
   <div class="grid">
-    <a class="tool-card" href="wellness-tracker.html">
-      <span class="tc-icon">💜</span>
-      <div class="tc-name">Wellness Tracker</div>
-      <div class="tc-desc">Daily mood, energy, sleep, exercise, and mental health log — synced to the cloud.</div>
-      <span class="tc-badge live">Live · Supabase</span>
-    </a>
-    <div class="coming-card">
-      <span class="tc-icon">🗓️</span>
-      <div class="tc-name">Time Blocking Planner</div>
-      <div class="tc-desc">Weekly time block template and daily schedule tracker.</div>
-      <span class="tc-badge">Coming soon</span>
+    <div class="card-soon">
+      <span class="card-icon">📦</span>
+      <div class="card-name">Delivery Tracker</div>
+      <div class="card-desc">Per-client job status, deadlines, and deliverables in one view.</div>
+      <span class="badge soon">Coming soon</span>
+    </div>
+    <div class="card-soon">
+      <span class="card-icon">📣</span>
+      <div class="card-name">Marketing Tracker</div>
+      <div class="card-desc">Campaigns, outreach cadences, and follow-up status across platforms.</div>
+      <span class="badge soon">Coming soon</span>
     </div>
   </div>
 
-  <div class="section-title">🇮🇹 Italy Trip · Sept 15</div>
+  <!-- JACQUIEVOICE -->
+  <div class="sec-head">
+    <span class="sec-label">JacquieVoice</span>
+    <span class="sec-rule"></span>
+    <span class="sec-title">Voice · Creative · Performance</span>
+  </div>
   <div class="grid">
-    <a class="tool-card" href="command-center.html#italy">
-      <span class="tc-icon">🇮🇹</span>
-      <div class="tc-name">Italy Prep Checklist</div>
-      <div class="tc-desc">Medical, exercise, logistics, and packing tasks with progress tracking. Lives inside the Command Center.</div>
-      <span class="tc-badge italy">Live · Supabase</span>
+    <a class="card jv" href="jacquievoice/index.html">
+      <span class="card-icon">🎙️</span>
+      <div class="card-name">JacquieVoice Hub</div>
+      <div class="card-desc">Voice-over creative hub — auditions, rates, marketing, and creative pipeline in one place.</div>
+      <span class="badge soon">Coming soon</span>
     </a>
-    <div class="coming-card">
-      <span class="tc-icon">🏋️</span>
-      <div class="tc-name">Italy Fitness Plan</div>
-      <div class="tc-desc">Pre-trip exercise schedule and weekly goals tracker.</div>
-      <span class="tc-badge">Coming soon</span>
+    <a class="card jv" href="jacquievoice.html">
+      <span class="card-icon">🎙️</span>
+      <div class="card-name">Audition Tracker</div>
+      <div class="card-desc">Log submissions, track callbacks and bookings, and monitor your earnings pipeline.</div>
+      <span class="badge live">Live · Supabase</span>
+    </a>
+    <div class="card-soon">
+      <span class="card-icon">📈</span>
+      <div class="card-name">Rate &amp; Earnings Report</div>
+      <div class="card-desc">Monthly breakdown of VO income by platform and project type.</div>
+      <span class="badge soon">Coming soon</span>
+    </div>
+    <div class="card-soon">
+      <span class="card-icon">📢</span>
+      <div class="card-name">VO Marketing Log</div>
+      <div class="card-desc">Track outreach to casting directors and direct clients.</div>
+      <span class="badge soon">Coming soon</span>
     </div>
   </div>
 
-  <div class="section-title">💰 Finance & Budget</div>
+  <!-- WELLNESS -->
+  <div class="sec-head">
+    <span class="sec-label">Wellness &amp; Productivity</span>
+    <span class="sec-rule"></span>
+  </div>
   <div class="grid">
-    <a class="tool-card" href="expense-tracker.html">
-      <span class="tc-icon">🧾</span>
-      <div class="tc-name">Expense Tracker</div>
-      <div class="tc-desc">Log and categorize business, medical, and personal expenses. Supports Wave CSV import.</div>
-      <span class="tc-badge live">Live</span>
+    <a class="card wellness" href="wellness-tracker.html">
+      <span class="card-icon">💜</span>
+      <div class="card-name">Wellness Tracker</div>
+      <div class="card-desc">Daily mood, energy, sleep, exercise, and mental health log — synced to the cloud.</div>
+      <span class="badge live">Live · Supabase</span>
     </a>
-    <a class="tool-card" href="credit-card-payoff.html">
-      <span class="tc-icon">💳</span>
-      <div class="tc-name">Credit Card Payoff</div>
-      <div class="tc-desc">Payoff timeline calculator and debt reduction planner.</div>
-      <span class="tc-badge live">Live</span>
+    <div class="card-soon">
+      <span class="card-icon">🗓️</span>
+      <div class="card-name">Time Blocking Planner</div>
+      <div class="card-desc">Weekly time block template and daily schedule tracker.</div>
+      <span class="badge soon">Coming soon</span>
+    </div>
+  </div>
+
+  <!-- ITALY -->
+  <div class="sec-head">
+    <span class="sec-label">Italy Trip</span>
+    <span class="sec-rule"></span>
+    <span class="sec-title">September 15, 2026</span>
+  </div>
+  <div class="grid">
+    <a class="card italy" href="command-center.html#italy">
+      <span class="card-icon">🇮🇹</span>
+      <div class="card-name">Italy Prep Checklist</div>
+      <div class="card-desc">Medical, exercise, logistics, and packing tasks with progress tracking.</div>
+      <span class="badge italy">Live · Supabase</span>
     </a>
-    <div class="coming-card">
-      <span class="tc-icon">📊</span>
-      <div class="tc-name">Monthly Budget View</div>
-      <div class="tc-desc">Income vs expense summary by month with trend charts.</div>
-      <span class="tc-badge">Coming soon</span>
+    <div class="card-soon">
+      <span class="card-icon">🏋️</span>
+      <div class="card-name">Italy Fitness Plan</div>
+      <div class="card-desc">Pre-trip exercise schedule and weekly goals tracker.</div>
+      <span class="badge soon">Coming soon</span>
+    </div>
+  </div>
+
+  <!-- FINANCE -->
+  <div class="sec-head">
+    <span class="sec-label">Finance &amp; Budget</span>
+    <span class="sec-rule"></span>
+  </div>
+  <div class="grid">
+    <a class="card finance" href="expense-tracker.html">
+      <span class="card-icon">🧾</span>
+      <div class="card-name">Expense Tracker</div>
+      <div class="card-desc">Log and categorize business, medical, and personal expenses. Supports Wave CSV import.</div>
+      <span class="badge live">Live</span>
+    </a>
+    <a class="card finance" href="credit-card-payoff.html">
+      <span class="card-icon">💳</span>
+      <div class="card-name">Credit Card Payoff</div>
+      <div class="card-desc">Payoff timeline calculator and debt reduction planner.</div>
+      <span class="badge live">Live</span>
+    </a>
+    <div class="card-soon">
+      <span class="card-icon">📊</span>
+      <div class="card-name">Monthly Budget View</div>
+      <div class="card-desc">Income vs expense summary by month with trend charts.</div>
+      <span class="badge soon">Coming soon</span>
     </div>
   </div>
 
 </div>
 
-<div class="footer">
-  <div class="footer-brands">
-    <span class="gc">Greer Collective</span>
-    <span class="jv">JacquieVoice</span>
-  </div>
-  Built on <a href="https://supabase.com" target="_blank">Supabase</a> &nbsp;·&nbsp; Hosted on <a href="https://github.com/jacquelinegreer-web/JAGAIServer" target="_blank">GitHub Pages</a>
-</div>
+<!-- ── FOOTER ── -->
+<footer>
+  Greer Collective &nbsp;·&nbsp; JacquieVoice &nbsp;·&nbsp; Built on <a href="https://supabase.com" target="_blank">Supabase</a> &nbsp;·&nbsp; <a href="https://github.com/jacquelinegreer-web/JAGAIServer" target="_blank">GitHub Pages</a>
+</footer>
 
 <script>
-  const days = Math.ceil((new Date('2026-09-15') - new Date().setHours(0,0,0,0)) / 86400000);
-  document.getElementById('h-days').textContent = days;
-  document.getElementById('h-date').textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const italy = new Date('2026-09-15');
+  const today = new Date(); today.setHours(0,0,0,0);
+  const days  = Math.ceil((italy - today) / 86400000);
+  document.getElementById('h-days').textContent = days > 0 ? days : 0;
+  document.getElementById('h-date').textContent = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' });
 </script>
+
 </body>
 </html>
