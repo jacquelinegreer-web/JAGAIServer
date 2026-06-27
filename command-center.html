@@ -64,13 +64,28 @@
     .task-del:hover { background: var(--red-bg); color: var(--red); }
     .tasks-empty { text-align: center; padding: 18px 0; color: var(--muted); font-size: .84rem; }
 
-    .grid { display: grid; grid-template-columns: 2fr 1fr; grid-template-areas: "cal well" "tasks tasks" "pipe jv" "italy budget"; gap: 14px; padding: 18px; max-width: 1400px; margin: 0 auto; }
-    @media(max-width:900px) { .grid { grid-template-columns: 1fr; grid-template-areas: "well" "cal" "tasks" "pipe" "jv" "italy" "budget"; } }
+    .grid { display: grid; grid-template-columns: 2fr 1fr; grid-template-areas: "cal right" "tasks tasks" "pipe jv" "italy budget"; gap: 14px; padding: 18px; max-width: 1400px; margin: 0 auto; }
+    .right-col { grid-area: right; display: flex; flex-direction: column; gap: 14px; }
+    @media(max-width:900px) { .grid { grid-template-columns: 1fr; grid-template-areas: "right" "cal" "tasks" "pipe" "jv" "italy" "budget"; } }
     @media(max-width:580px) { .stats { grid-template-columns: repeat(2,1fr); } .grid { padding: 10px; gap: 10px; } }
 
     .card { background: var(--card); border-radius: 13px; padding: 16px 18px; box-shadow: 0 1px 5px rgba(0,0,0,.06); }
     .card-cal   { grid-area: cal; }
-    .card-well  { grid-area: well; }
+    .card-well  { /* inside .right-col */ }
+
+    /* Fun card */
+    .card-fun { background: linear-gradient(135deg, var(--purple) 0%, var(--mid) 100%); color: white; }
+    .card-fun .ct { color: rgba(255,255,255,.75); }
+    .card-fun .ca { color: rgba(255,255,255,.6); }
+    .card-fun .ca:hover { color: white; }
+    .quote-text { font-size: .88rem; line-height: 1.55; font-style: italic; color: rgba(255,255,255,.92); margin-bottom: 6px; }
+    .quote-author { font-size: .72rem; color: rgba(255,255,255,.55); text-align: right; }
+    .trivia-divider { border: none; border-top: 1px solid rgba(255,255,255,.15); margin: 12px 0; }
+    .trivia-q { font-size: .82rem; line-height: 1.5; color: rgba(255,255,255,.9); margin-bottom: 10px; }
+    .trivia-btn { font-size: .75rem; padding: 5px 12px; border-radius: 7px; border: 1.5px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: white; cursor: pointer; font-family: inherit; }
+    .trivia-btn:hover { background: rgba(255,255,255,.2); }
+    .trivia-answer { font-size: .8rem; color: #a5d6a7; font-weight: 600; margin-top: 8px; display: none; }
+    .trivia-footer { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
     .card-tasks { grid-area: tasks; }
     .card-pipe  { grid-area: pipe; }
     .card-jv    { grid-area: jv; }
@@ -253,12 +268,35 @@
     </div>
   </div>
 
-  <div class="card card-well">
-    <div class="ch">
-      <span class="ct">💜 Wellness Today</span>
-      <a class="ca" href="wellness-tracker.html">Open Tracker →</a>
+  <!-- Upper right column: fun card + wellness stacked -->
+  <div class="right-col">
+
+    <!-- FUN CARD: daily quote + trivia -->
+    <div class="card card-fun">
+      <div class="ch">
+        <span class="ct">✨ Daily Spark</span>
+        <button class="ca" onclick="newTrivia()" title="New question">↻ New trivia</button>
+      </div>
+      <div class="quote-text" id="quote-text">Loading…</div>
+      <div class="quote-author" id="quote-author"></div>
+      <hr class="trivia-divider"/>
+      <div class="trivia-q" id="trivia-q">Loading trivia…</div>
+      <div class="trivia-footer">
+        <button class="trivia-btn" onclick="revealAnswer()">Reveal Answer</button>
+        <button class="trivia-btn" onclick="newTrivia()">Skip</button>
+      </div>
+      <div class="trivia-answer" id="trivia-answer"></div>
     </div>
-    <div id="well-body"><div class="loading">Loading…</div></div>
+
+    <!-- WELLNESS -->
+    <div class="card card-well">
+      <div class="ch">
+        <span class="ct">💜 Wellness Today</span>
+        <a class="ca" href="wellness-tracker.html">Open Tracker →</a>
+      </div>
+      <div id="well-body"><div class="loading">Loading…</div></div>
+    </div>
+
   </div>
 
   <!-- TASKS — simple built-in list -->
@@ -343,6 +381,8 @@ let prepData = [], italyFilter = 'All', cfg = {};
 
 async function init() {
   setHeaderDate(); setCountdown();
+  loadDailyQuote();
+  newTrivia();
   cfg = await getSettings();
   renderCalendar();
   await Promise.all([loadWellness(), loadTasks(), loadPipeline(), loadJacquieVoice(), loadItalyPrep(), loadBudget()]);
@@ -665,6 +705,112 @@ async function refreshAll() {
   setSynced(true); cfg=await getSettings(); renderCalendar();
   await Promise.all([loadWellness(), loadTasks(), loadPipeline(), loadJacquieVoice(), loadItalyPrep(), loadBudget()]);
   showToast('All data refreshed');
+}
+
+/* ── DAILY SPARK: quotes + trivia ──────────────────────────────────────────── */
+const QUOTES = [
+  { q: "The voice is a musical instrument that everyone plays.", a: "Ed Asner" },
+  { q: "Your voice is your fingerprint. Own it completely.", a: "Unknown" },
+  { q: "The human voice is the most beautiful instrument of all, but it is the most difficult to play.", a: "Richard Strauss" },
+  { q: "You are never too old to set another goal or to dream a new dream.", a: "C.S. Lewis" },
+  { q: "Success is not final, failure is not fatal: it is the courage to continue that counts.", a: "Winston Churchill" },
+  { q: "The secret of getting ahead is getting started.", a: "Mark Twain" },
+  { q: "Done is better than perfect.", a: "Sheryl Sandberg" },
+  { q: "Opportunities don't happen. You create them.", a: "Chris Grosser" },
+  { q: "The only way to do great work is to love what you do.", a: "Steve Jobs" },
+  { q: "Believe you can and you're halfway there.", a: "Theodore Roosevelt" },
+  { q: "It always seems impossible until it's done.", a: "Nelson Mandela" },
+  { q: "A year from now you may wish you had started today.", a: "Karen Lamb" },
+  { q: "Don't watch the clock; do what it does. Keep going.", a: "Sam Levenson" },
+  { q: "The voice that you have right now is the voice that books jobs.", a: "Dee Bradley Baker" },
+  { q: "Every audition is a performance. Treat it like one.", a: "Unknown" },
+  { q: "Your demo is your handshake. Make it firm and memorable.", a: "Unknown" },
+  { q: "The microphone doesn't lie. Be prepared.", a: "Unknown" },
+  { q: "Consistency is the hallmark of the professional.", a: "Unknown" },
+  { q: "Act as if what you do makes a difference. It does.", a: "William James" },
+  { q: "Start where you are. Use what you have. Do what you can.", a: "Arthur Ashe" },
+  { q: "The best way to predict the future is to create it.", a: "Peter Drucker" },
+  { q: "Creativity is intelligence having fun.", a: "Albert Einstein" },
+  { q: "If you're not growing, you're dying. Keep training your voice.", a: "Unknown" },
+  { q: "Every no is one step closer to your yes.", a: "Unknown" },
+  { q: "A rejection is just a redirect.", a: "Unknown" },
+  { q: "The work you do while you procrastinate is probably the work you should be doing for the rest of your life.", a: "Jessica Hische" },
+  { q: "You miss 100% of the auditions you don't submit.", a: "Unknown" },
+  { q: "Excellence is not a destination; it is a continuous journey.", a: "Brian Tracy" },
+  { q: "You are the CEO of your own career.", a: "Unknown" },
+  { q: "Small daily improvements are the key to staggering long-term results.", a: "Unknown" },
+  { q: "The most courageous act is still to think for yourself. Aloud.", a: "Coco Chanel" },
+  { q: "Be so good they can't ignore you.", a: "Steve Martin" },
+  { q: "Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work.", a: "Steve Jobs" },
+  { q: "The comeback is always stronger than the setback.", a: "Unknown" },
+  { q: "Hustle in silence and let your bookings make the noise.", a: "Unknown" },
+  { q: "Confidence is not 'they will like me.' Confidence is 'I'll be fine if they don't.'", a: "Christina Grimmie" },
+  { q: "Talent is cheaper than table salt. What separates the talented individual from the successful one is a lot of hard work.", a: "Stephen King" },
+  { q: "You don't have to be great to start, but you have to start to be great.", a: "Zig Ziglar" },
+  { q: "The voice is a second face.", a: "Gerard Bauer" },
+  { q: "In the middle of every difficulty lies opportunity.", a: "Albert Einstein" },
+  { q: "Do something today that your future self will thank you for.", a: "Sean Patrick Flanery" },
+  { q: "The harder you work, the luckier you get.", a: "Gary Player" },
+  { q: "Build your own dreams, or someone else will hire you to build theirs.", a: "Farrah Gray" },
+  { q: "Stop waiting for the perfect moment. Take the moment and make it perfect.", a: "Unknown" },
+  { q: "Passion is energy. Feel the power that comes from focusing on what excites you.", a: "Oprah Winfrey" },
+  { q: "Two roads diverged in a wood, and I — I took the one less traveled by, and that has made all the difference.", a: "Robert Frost" },
+  { q: "What you do speaks so loudly that I cannot hear what you say.", a: "Ralph Waldo Emerson" },
+  { q: "You have to be burning with an idea, a problem, or a wrong that you want to right.", a: "Steve Jobs" },
+  { q: "The man who moves a mountain begins by carrying away small stones.", a: "Confucius" },
+  { q: "We are what we repeatedly do. Excellence, then, is not an act but a habit.", a: "Aristotle" },
+  { q: "If not now, when?", a: "Hillel the Elder" },
+  { q: "It's not about being the best. It's about being better than you were yesterday.", a: "Unknown" },
+  { q: "Your voice matters. Use it.", a: "Unknown" },
+  { q: "The most powerful thing you can do is show up and be fully present.", a: "Unknown" },
+  { q: "A year from now, the auditions you submit today will be the bookings you celebrate.", a: "Unknown" },
+  { q: "Discipline is choosing between what you want now and what you want most.", a: "Abraham Lincoln" },
+  { q: "Push yourself, because no one else is going to do it for you.", a: "Unknown" },
+  { q: "Dream big. Start small. Act now.", a: "Robin Sharma" },
+  { q: "The road to success and the road to failure are almost exactly the same.", a: "Colin R. Davis" },
+  { q: "Champions keep playing until they get it right.", a: "Billie Jean King" },
+];
+
+let currentTrivia = null;
+
+function loadDailyQuote() {
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  const q = QUOTES[dayOfYear % QUOTES.length];
+  document.getElementById('quote-text').textContent = `"${q.q}"`;
+  document.getElementById('quote-author').textContent = `— ${q.a}`;
+}
+
+async function newTrivia() {
+  const qEl = document.getElementById('trivia-q');
+  const aEl = document.getElementById('trivia-answer');
+  aEl.style.display = 'none';
+  qEl.textContent = 'Loading…';
+  currentTrivia = null;
+  try {
+    const res = await fetch('https://opentdb.com/api.php?amount=1&type=multiple').then(r => r.json());
+    const item = res.results?.[0];
+    if (!item) throw new Error();
+    currentTrivia = decodeHtml(item.correct_answer);
+    qEl.innerHTML = `🎯 ${decodeHtml(item.question)}`;
+    aEl.style.display = 'none';
+    aEl.textContent = '';
+  } catch {
+    qEl.textContent = 'Could not load trivia — check connection.';
+  }
+}
+
+function revealAnswer() {
+  const aEl = document.getElementById('trivia-answer');
+  if (currentTrivia) {
+    aEl.textContent = '✅ ' + currentTrivia;
+    aEl.style.display = 'block';
+  }
+}
+
+function decodeHtml(str) {
+  const txt = document.createElement('textarea');
+  txt.innerHTML = str;
+  return txt.value;
 }
 
 init();
