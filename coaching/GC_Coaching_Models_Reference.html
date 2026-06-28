@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Greer Collective · Coaching Models Reference</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root { --plum:#2C1A2E; --gold:#B8922A; --cream:#FAF6EF; --mauve:#8A7A8E; --midplum:#4A2455; --green:#1B6B2A; --green-light:#EAF4EC; --ltplum:#EDE6F0; --ltgold:#F5EDD8; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--cream);color:var(--plum);font-family:'Cormorant Garamond',Georgia,serif;font-size:17px;line-height:1.7;}
+    header{background:var(--plum);padding:48px 48px 36px;border-bottom:4px solid var(--gold);}
+    .eyebrow{font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+    header h1{font-weight:300;font-size:42px;color:var(--cream);line-height:1.1;margin-bottom:8px;}
+    .header-sub{font-family:'Jost',sans-serif;font-size:12px;color:var(--mauve);letter-spacing:2px;}
+    .nav-tabs{background:var(--midplum);display:flex;gap:0;overflow-x:auto;border-bottom:3px solid var(--gold);}
+    .tab{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--mauve);padding:13px 18px;cursor:pointer;border:none;background:none;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-3px;transition:color .15s,background .15s;}
+    .tab:hover{color:var(--cream);}
+    .tab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(184,146,42,0.06);}
+    main{max-width:1060px;margin:0 auto;padding:40px 40px 80px;}
+    .panel{display:none;} .panel.active{display:block;}
+    .sec-head{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin:40px 0 6px;padding-bottom:8px;border-bottom:3px solid var(--gold);}
+    .sec-title{font-size:32px;font-weight:300;color:var(--plum);margin-bottom:8px;}
+    .sec-body{font-size:17px;color:var(--plum);margin-bottom:24px;max-width:740px;}
+    .origin{font-family:'Jost',sans-serif;font-size:11px;color:var(--mauve);margin-bottom:20px;letter-spacing:1px;}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;}
+    .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:28px;}
+    .card{border:1px solid #E2DAE4;border-top:3px solid var(--gold);border-radius:3px;padding:18px 20px;background:#fff;}
+    .card-head{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #E2DAE4;}
+    .card-body{font-size:16px;color:var(--plum);line-height:1.6;}
+    .item{font-size:16px;color:var(--plum);margin-bottom:8px;padding-left:18px;position:relative;line-height:1.5;}
+    .item::before{content:"·";position:absolute;left:0;color:var(--gold);}
+    .item strong{color:var(--plum);}
+    .dark-box{background:var(--plum);border-radius:3px;padding:22px 26px;margin:20px 0;}
+    .dark-label{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+    .dark-body{font-size:16px;color:var(--cream);line-height:1.7;}
+    .q-list{margin:0;padding:0;list-style:none;}
+    .q-list li{font-size:16px;color:var(--plum);padding:10px 14px 10px 18px;border-left:3px solid var(--gold);margin-bottom:8px;background:#fff;border-radius:0 3px 3px 0;font-style:italic;line-height:1.5;}
+    .quadrant-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin:20px 0;}
+    .q-cell{padding:18px 20px;font-size:16px;line-height:1.5;}
+    .q-label{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+    .pyramid{margin:20px 0;}
+    .pyr-row{display:flex;align-items:center;margin-bottom:3px;}
+    .pyr-block{padding:12px 20px;font-size:15px;font-weight:600;font-family:'Cormorant Garamond',serif;color:#fff;text-align:center;flex:1;}
+    .pyr-desc{font-size:15px;color:var(--plum);padding-left:20px;flex:2;line-height:1.4;}
+    .disc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin:20px 0;}
+    .disc-cell{padding:20px 22px;}
+    .disc-name{font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;}
+    .disc-style{font-size:22px;font-weight:600;margin-bottom:6px;font-family:'Cormorant Garamond',serif;}
+    .disc-body{font-size:15px;line-height:1.5;}
+    .step-flow{display:flex;gap:0;margin:20px 0;flex-wrap:wrap;}
+    .step-box{flex:1;min-width:120px;background:var(--plum);padding:14px 16px;position:relative;}
+    .step-box:not(:last-child)::after{content:"→";position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:18px;z-index:2;}
+    .step-letter{font-family:'Jost',sans-serif;font-size:22px;font-weight:500;color:var(--gold);margin-bottom:4px;}
+    .step-word{font-family:'Jost',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mauve);margin-bottom:6px;}
+    .step-desc{font-size:13px;color:var(--cream);line-height:1.4;}
+    table{width:100%;border-collapse:collapse;margin-bottom:24px;}
+    th{background:var(--plum);color:var(--cream);font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;padding:10px 14px;text-align:left;}
+    td{border-bottom:1px solid #E2DAE4;padding:12px 14px;vertical-align:top;font-size:15px;line-height:1.5;}
+    tr:nth-child(even) td{background:rgba(44,26,46,0.02);}
+    .tag{display:inline-block;background:var(--ltgold);color:#5A4010;font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-right:6px;margin-bottom:4px;}
+    .tag.green{background:var(--green-light);color:var(--green);}
+    .tag.plum{background:var(--ltplum);color:var(--plum);}
+    footer{background:var(--plum);border-top:3px solid var(--gold);padding:20px 40px;text-align:center;font-family:'Jost',sans-serif;font-size:11px;color:var(--mauve);letter-spacing:2px;}
+    @media(max-width:680px){.two-col,.three-col,.disc-grid,.quadrant-grid{grid-template-columns:1fr;}.step-flow{flex-direction:column;}.step-box:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-14px;}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Greer Collective · Coaching Practice</div>
+  <h1>Coaching Models Reference</h1>
+  <div class="header-sub">Frameworks · Application Notes · Key Questions · When to Use Each</div>
+</header>
+<div class="nav-tabs">
+  <button class="tab active" onclick="showTab('grow')">GROW</button>
+  <button class="tab" onclick="showTab('clear')">CLEAR</button>
+  <button class="tab" onclick="showTab('oskar')">OSKAR</button>
+  <button class="tab" onclick="showTab('candor')">Radical Candor</button>
+  <button class="tab" onclick="showTab('five')">Five Dysfunctions</button>
+  <button class="tab" onclick="showTab('disc')">DiSC</button>
+  <button class="tab" onclick="showTab('strengths')">CliftonStrengths</button>
+  <button class="tab" onclick="showTab('itc')">Immunity to Change</button>
+  <button class="tab" onclick="showTab('equity')">Belonging + Equity</button>
+  <button class="tab" onclick="showTab('icf')">ICF Competencies</button>
+</div>
+<main>
+
+<!-- GROW -->
+<div class="panel active" id="panel-grow">
+  <div class="sec-head">Framework 01</div>
+  <div class="sec-title">The GROW Model</div>
+  <div class="origin">Created by Graham Alexander, John Whitmore, and Alan Fine · Widely adopted in ICF-aligned coaching since the 1980s</div>
+  <div class="sec-body">GROW is the most widely used coaching framework in the world. It gives a coaching conversation a clear arc without becoming a script. Learn it first — everything else builds on it.</div>
+
+  <div class="step-flow">
+    <div class="step-box"><div class="step-letter">G</div><div class="step-word">Goal</div><div class="step-desc">What does the client want from this session and from their work overall?</div></div>
+    <div class="step-box"><div class="step-letter">R</div><div class="step-word">Reality</div><div class="step-desc">What is actually happening now? What has been tried?</div></div>
+    <div class="step-box"><div class="step-letter">O</div><div class="step-word">Options</div><div class="step-desc">What are the possible paths forward? Generate, don't evaluate yet.</div></div>
+    <div class="step-box"><div class="step-letter">W</div><div class="step-word">Will / Way Forward</div><div class="step-desc">What will they commit to? What is the specific next action?</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head">When to Use GROW</div>
+      <div class="item">When a client arrives with a clear presenting challenge or decision</div>
+      <div class="item">For manager-level clients working through a specific situation</div>
+      <div class="item">When you want a reliable structure in early sessions before you have the client's full context</div>
+      <div class="item">As a check-in structure at the start of sessions (mini-GROW)</div>
+    </div>
+    <div class="card">
+      <div class="card-head">When GROW Is Not Enough</div>
+      <div class="item">When the real issue is identity, not a problem to solve — GROW keeps clients in solution mode</div>
+      <div class="item">When the "goal" itself needs examination — GROW assumes the goal is known</div>
+      <div class="item">When psychological safety needs to be built first (use CLEAR instead)</div>
+      <div class="item">When you are working with persistent patterns or unconscious blocks (use Immunity to Change)</div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:0">Key Questions — By Stage</div>
+  <table>
+    <thead><tr><th>Stage</th><th>Question</th><th>What It Does</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Goal</strong></td><td style="font-style:italic;">"What do you want to leave this session with?"</td><td>Sets direction without closing off discovery</td></tr>
+      <tr><td><strong>Goal</strong></td><td style="font-style:italic;">"What would make this session feel like time well spent?"</td><td>Client-owned outcome — not what you think they need</td></tr>
+      <tr><td><strong>Reality</strong></td><td style="font-style:italic;">"What is actually happening right now?"</td><td>Separates the situation from the interpretation of it</td></tr>
+      <tr><td><strong>Reality</strong></td><td style="font-style:italic;">"What have you already tried?"</td><td>Honors their effort and prevents redundant suggestions</td></tr>
+      <tr><td><strong>Reality</strong></td><td style="font-style:italic;">"On a scale of 1–10, how satisfied are you with where things are?"</td><td>Anchors the gap. The follow-up is: "What would make it a 7?"</td></tr>
+      <tr><td><strong>Options</strong></td><td style="font-style:italic;">"What are all the possibilities — including the ones that feel too big or too small?"</td><td>Expands thinking before evaluating</td></tr>
+      <tr><td><strong>Options</strong></td><td style="font-style:italic;">"If you knew it would work, what would you do?"</td><td>Removes fear from the options conversation</td></tr>
+      <tr><td><strong>Will</strong></td><td style="font-style:italic;">"What specifically will you do, and by when?"</td><td>Converts insight to commitment</td></tr>
+      <tr><td><strong>Will</strong></td><td style="font-style:italic;">"What might get in the way, and what will you do if it does?"</td><td>Anticipates obstacles without catastrophizing</td></tr>
+    </tbody>
+  </table>
+
+  <div class="dark-box">
+    <div class="dark-label">In Practice — What GROW Looks Like in a Real Session</div>
+    <div class="dark-body">A manager arrives and says: "I need to talk to a direct report about their attitude, but every time I try, it goes badly." You spend about 5 minutes in Goal (what do you want from this conversation and from today's session?), 10 minutes in Reality (what specifically happens? what does "badly" mean?), 10 minutes in Options (what approaches have you considered?), and 5 minutes in Will (what will you do before we meet again?). The conversation is not linear — you loop back. That is fine. GROW is a map, not a script.</div>
+  </div>
+</div>
+
+<!-- CLEAR -->
+<div class="panel" id="panel-clear">
+  <div class="sec-head">Framework 02</div>
+  <div class="sec-title">The CLEAR Model</div>
+  <div class="origin">Developed by Peter Hawkins · Published in Coaching, Mentoring and Organizational Consultancy (2006)</div>
+  <div class="sec-body">CLEAR is built for contexts where psychological safety must come before problem-solving. It opens with an explicit contract and closes with a review — making it stronger than GROW for executive clients, complex organizational dynamics, and sensitive conversations.</div>
+
+  <div class="step-flow">
+    <div class="step-box"><div class="step-letter">C</div><div class="step-word">Contract</div><div class="step-desc">What do we agree to work on? What does success look like today?</div></div>
+    <div class="step-box"><div class="step-letter">L</div><div class="step-word">Listen</div><div class="step-desc">Deep listening. What is really being said beneath the presenting topic?</div></div>
+    <div class="step-box"><div class="step-letter">E</div><div class="step-word">Explore</div><div class="step-desc">Expand the territory. What else is true? What assumptions are in play?</div></div>
+    <div class="step-box"><div class="step-letter">A</div><div class="step-word">Action</div><div class="step-desc">What will the client do? Specific, chosen freely, owned completely.</div></div>
+    <div class="step-box"><div class="step-letter">R</div><div class="step-word">Review</div><div class="step-desc">What happened in this session? What landed? What was the shift?</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head">Why CLEAR Works for Executive Clients</div>
+      <div class="item">The Contract phase names the power dynamic and makes it explicit — executives are used to setting terms, so giving them that space signals respect</div>
+      <div class="item">The Listen phase is active and named — it legitimizes slowing down before solving, which is where most senior leaders struggle most</div>
+      <div class="item">The Review phase closes the loop — clients leave knowing what happened, not just what they will do</div>
+    </div>
+    <div class="card">
+      <div class="card-head">Differences from GROW</div>
+      <div class="item">GROW assumes a goal exists. CLEAR surfaces the right question before working on it.</div>
+      <div class="item">CLEAR has an explicit listening phase — GROW assumes listening happens throughout</div>
+      <div class="item">CLEAR closes with review — what happened in this session? Not just what will you do next.</div>
+      <div class="item">CLEAR is better suited to identity and systemic work. GROW is better for discrete problems.</div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:0">Key Questions — By Stage</div>
+  <ul class="q-list">
+    <li><strong>Contract:</strong> "Before we start, what do you most want to walk away with today? And is there anything you want me to know about how this session should feel?"</li>
+    <li><strong>Listen:</strong> "I want to make sure I am hearing you fully. What is underneath what you just described? What is the thing beneath the thing?"</li>
+    <li><strong>Explore:</strong> "What else is true here that you haven't said yet?"</li>
+    <li><strong>Explore:</strong> "If you were wrong about one thing in this situation, what might that be?"</li>
+    <li><strong>Action:</strong> "Given everything we've surfaced, what feels most alive as a next step?"</li>
+    <li><strong>Review:</strong> "Looking back at this session — what was the most significant moment for you?"</li>
+    <li><strong>Review:</strong> "What shifted, if anything, in how you see this situation?"</li>
+  </ul>
+
+  <div class="dark-box">
+    <div class="dark-label">When to Use CLEAR Instead of GROW</div>
+    <div class="dark-body">When a client arrives unsettled, emotionally activated, or uncertain about what the real issue is. When a client is a senior executive who tends to jump to solutions. When you are working on identity, not just behavior. When there is significant organizational complexity underneath a presenting problem. In your Deep Dive work, CLEAR is often the better session architecture for months 2, 4, and 6.</div>
+  </div>
+</div>
+
+<!-- OSKAR -->
+<div class="panel" id="panel-oskar">
+  <div class="sec-head">Framework 03</div>
+  <div class="sec-title">The OSKAR Model</div>
+  <div class="origin">Developed by Mark McKergow and Paul Z. Jackson · Solutions Focus approach · Published in The Solutions Focus (2002)</div>
+  <div class="sec-body">OSKAR is a solutions-focused coaching model. Unlike GROW or CLEAR — which move through problem analysis — OSKAR starts from the future state and works backward. Use it when clients are stuck in problem narratives and need to find what is already working.</div>
+
+  <div class="step-flow">
+    <div class="step-box"><div class="step-letter">O</div><div class="step-word">Outcome</div><div class="step-desc">What is the desired outcome? What will be different when it is achieved?</div></div>
+    <div class="step-box"><div class="step-letter">S</div><div class="step-word">Scaling</div><div class="step-desc">On a scale of 1–10, where are you now? What would one step up look like?</div></div>
+    <div class="step-box"><div class="step-letter">K</div><div class="step-word">Know-how</div><div class="step-desc">What is already working? What resources and strengths are already present?</div></div>
+    <div class="step-box"><div class="step-letter">A</div><div class="step-word">Affirm + Action</div><div class="step-desc">Acknowledge strengths, then choose one small specific action.</div></div>
+    <div class="step-box"><div class="step-letter">R</div><div class="step-word">Review</div><div class="step-desc">What happened? What worked? What would you do more of?</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head">When OSKAR Outperforms GROW</div>
+      <div class="item">When a client is demoralized, stuck in what is wrong, or cannot see a path forward</div>
+      <div class="item">When a client's "problem analysis" is circular and not producing new insight</div>
+      <div class="item">For clients who have been through a failure or setback — OSKAR starts from where they want to go, not where they came from</div>
+      <div class="item">When you want to build momentum with a specific, achievable action rather than a large commitment</div>
+    </div>
+    <div class="card">
+      <div class="card-head">The Philosophy Behind OSKAR</div>
+      <div class="item"><strong>Solutions Focus principle:</strong> what works is what matters. You do not need to fully understand the problem to solve it.</div>
+      <div class="item"><strong>Scaling questions</strong> are not about evaluation — they are about movement. The question is not "what score do you deserve?" It is "what would a 7 feel like?"</div>
+      <div class="item"><strong>Know-how</strong> is one of the most underused coaching moves. Finding what is already working often unlocks more than analyzing what is not.</div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:0">Key Questions</div>
+  <ul class="q-list">
+    <li>"Imagine you wake up six months from now and this is fully resolved. What is different? What do you notice first?"</li>
+    <li>"On a scale of 1–10, where are you on this right now? What is already at work that has gotten you to [that number] rather than zero?"</li>
+    <li>"What is one thing that is already working — even a little — that we could do more of?"</li>
+    <li>"What would one step up on that scale look like — not ten steps, just one?"</li>
+    <li>"Looking back at our last session: what worked? What would you do more of next time?"</li>
+  </ul>
+</div>
+
+<!-- RADICAL CANDOR -->
+<div class="panel" id="panel-candor">
+  <div class="sec-head">Framework 04</div>
+  <div class="sec-title">Radical Candor</div>
+  <div class="origin">Kim Scott · Radical Candor: Be a Kick-Ass Boss Without Losing Your Humanity (2017) · radicalcandor.com</div>
+  <div class="sec-body">Radical Candor is a framework for honest leadership communication built on two axes: how much you personally care for someone, and how directly you challenge them. The goal is to do both at once. Most leaders default to one or the other — and usually at the wrong time.</div>
+
+  <div class="sec-head" style="margin-top:0">The Four Quadrants</div>
+  <div class="quadrant-grid">
+    <div class="q-cell" style="background:var(--plum);border-radius:3px 0 0 0;">
+      <div class="q-label" style="color:var(--gold);">High Care · Low Challenge</div>
+      <div class="disc-style" style="color:var(--cream);">Ruinous Empathy</div>
+      <div class="disc-body" style="color:#C8BFC9;">The most common failure mode. You care about the person so much that you soften feedback to the point of uselessness. They do not get what they need to grow. You feel kind; they feel confused or blindsided later.</div>
+    </div>
+    <div class="q-cell" style="background:#1B6B2A;border-radius:0 3px 0 0;">
+      <div class="q-label" style="color:#9FD9A7;">High Care · High Challenge</div>
+      <div class="disc-style" style="color:#fff;">Radical Candor</div>
+      <div class="disc-body" style="color:#D4F0D8;">You care deeply about the person and say the hard thing directly. The feedback lands because the relationship can hold it. This is what your best manager was doing when they were most useful to you.</div>
+    </div>
+    <div class="q-cell" style="background:#4A2455;border-radius:0 0 0 3px;">
+      <div class="q-label" style="color:var(--mauve);">Low Care · Low Challenge</div>
+      <div class="disc-style" style="color:var(--cream);">Manipulative Insincerity</div>
+      <div class="disc-body" style="color:#C8BFC9;">Saying what is convenient without meaning it. Organizational politics at its worst. Praise that is not earned, feedback that is not honest, agreements that are not meant.</div>
+    </div>
+    <div class="q-cell" style="background:#7A1A1A;border-radius:0 0 3px 0;">
+      <div class="q-label" style="color:#F09090;">Low Care · High Challenge</div>
+      <div class="disc-style" style="color:#fff;">Obnoxious Aggression</div>
+      <div class="disc-body" style="color:#F5D0D0;">Direct feedback delivered without care. Feels like an attack. Might be technically accurate — but it bruises trust and closes down the relationship. Sometimes confused with strength; it is not.</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head">Coaching Application — Manager Level</div>
+      <div class="item">Most manager clients live in Ruinous Empathy. They delay hard conversations, soften feedback until it is meaningless, and then feel resentful when people do not change.</div>
+      <div class="item">Use the quadrant as a diagnostic in session: "Where are you on this specific conversation?"</div>
+      <div class="item">Role-play a real conversation from Ruinous Empathy and then from Radical Candor — the contrast is instructive</div>
+      <div class="item">The coaching question is not "why are you in Ruinous Empathy?" It is "what would it take to care enough to say the true thing?"</div>
+    </div>
+    <div class="card">
+      <div class="card-head">Coaching Application — Director and Executive Level</div>
+      <div class="item">At director level, Obnoxious Aggression is often the failure mode — directness without the relational investment</div>
+      <div class="item">Senior leaders often do not know what quadrant they are perceived to be in. 360 data paired with this framework is powerful.</div>
+      <div class="item">The executive question: "What are you not saying to your board / your team / your skip-level that they need to hear?" That is almost always a Ruinous Empathy pattern at the top.</div>
+      <div class="item">Frame it as: the more authority you have, the more Radical Candor costs you in political capital — and the more it is worth spending it</div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:0">Key Questions</div>
+  <ul class="q-list">
+    <li>"Is there a conversation you have been softening — where you care so much about the person that you have stopped telling them the truth?"</li>
+    <li>"What would you say if you were certain they could handle it?"</li>
+    <li>"Where on this grid would the people who report to you place your most recent piece of feedback to them?"</li>
+    <li>"What is the cost of staying in Ruinous Empathy here — to them, to you, to the team?"</li>
+    <li>"What would it mean about you if this conversation went badly? That belief is the thing we need to look at."</li>
+  </ul>
+</div>
+
+<!-- FIVE DYSFUNCTIONS -->
+<div class="panel" id="panel-five">
+  <div class="sec-head">Framework 05</div>
+  <div class="sec-title">Five Dysfunctions of a Team</div>
+  <div class="origin">Patrick Lencioni · The Five Dysfunctions of a Team (2002) · The Table Group · Five Behaviors facilitator certification via Wiley</div>
+  <div class="sec-body">Lencioni's model is built as a pyramid — each dysfunction sits on top of the last. You cannot solve Accountability if you do not have Commitment. You cannot have Commitment without Conflict. You cannot have Conflict without Trust. Start at the bottom.</div>
+
+  <div class="pyramid">
+    <div class="pyr-row"><div class="pyr-block" style="background:#B8922A;max-width:80%;margin:0 auto;">Inattention to Results</div></div>
+    <div class="pyr-row" style="justify-content:center;margin-bottom:6px;"><div style="font-size:14px;color:var(--mauve);text-align:center;max-width:600px;">The team prioritizes individual status, ego, or department goals over collective outcomes. You see this when teams report success while the organization is failing.</div></div>
+    <div class="pyr-row"><div class="pyr-block" style="background:#4A2455;max-width:72%;margin:0 auto;">Avoidance of Accountability</div></div>
+    <div class="pyr-row" style="justify-content:center;margin-bottom:6px;"><div style="font-size:14px;color:var(--mauve);text-align:center;max-width:600px;">Team members avoid holding peers accountable for low performance or behavior that violates standards. The leader becomes the only enforcer, which is unsustainable.</div></div>
+    <div class="pyr-row"><div class="pyr-block" style="background:#2C1A2E;max-width:64%;margin:0 auto;">Lack of Commitment</div></div>
+    <div class="pyr-row" style="justify-content:center;margin-bottom:6px;"><div style="font-size:14px;color:var(--mauve);text-align:center;max-width:600px;">Decisions are made but not truly owned. People leave the room saying yes and thinking no. Ambiguity is left unresolved because unresolved ambiguity feels safer than named disagreement.</div></div>
+    <div class="pyr-row"><div class="pyr-block" style="background:#1B6B2A;max-width:56%;margin:0 auto;">Fear of Conflict</div></div>
+    <div class="pyr-row" style="justify-content:center;margin-bottom:6px;"><div style="font-size:14px;color:var(--mauve);text-align:center;max-width:600px;">The team mistakes harmony for health. Difficult conversations happen outside the room, not in it. Ideas are not challenged. The "right" answer is suppressed in favor of keeping the peace.</div></div>
+    <div class="pyr-row"><div class="pyr-block" style="background:#1B5E8A;max-width:48%;margin:0 auto;">Absence of Trust</div></div>
+    <div class="pyr-row" style="justify-content:center;margin-bottom:6px;"><div style="font-size:14px;color:var(--mauve);text-align:center;max-width:600px;">Team members are not vulnerable with each other. Weaknesses, mistakes, and fears are hidden. This is not about personal trust — it is about the willingness to be seen clearly by peers.</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head">Coaching Application — Individual Sessions</div>
+      <div class="item">Use as a diagnostic: "Looking at this model, which level do you think your team is most stuck at?"</div>
+      <div class="item">Trust dysfunction often shows up as: "I can't be honest with my team about what I don't know."</div>
+      <div class="item">Conflict avoidance shows up as: "We all agreed in the meeting but nothing happened."</div>
+      <div class="item">Accountability avoidance shows up as: "I am the only one who ever addresses underperformance."</div>
+    </div>
+    <div class="card">
+      <div class="card-head">Group Cohort Application — Session 3</div>
+      <div class="item">Present the pyramid. Ask each cohort member: "Which level is your team's growth edge right now?"</div>
+      <div class="item">Peer coaching triad: one person shares a real team situation, two others coach using the model as a diagnostic lens</div>
+      <div class="item">Discussion anchor: "What would it mean to have productive conflict on your team? What would that look like differently from what happens now?"</div>
+      <div class="item">Five Behaviors facilitator certification (Wiley) unlocks team-level assessment tools for organizational engagements</div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:0">Key Questions</div>
+  <ul class="q-list">
+    <li>"When is the last time your team had a real conflict — not a fight, but an honest disagreement where people said what they actually thought?"</li>
+    <li>"If I sat in one of your team meetings, what would I not see that should be there?"</li>
+    <li>"Who on your team are you not holding accountable — and what is the story you tell yourself about why?"</li>
+    <li>"Does your team make decisions or make agreements? What is the difference in how they show up afterward?"</li>
+    <li>"What would trust look like on your team if it were fully present? What is missing right now?"</li>
+  </ul>
+</div>
+
+<!-- DISC -->
+<div class="panel" id="panel-disc">
+  <div class="sec-head">Framework 06</div>
+  <div class="sec-title">Everything DiSC</div>
+  <div class="origin">Behavioral framework based on William Moulton Marston's DISC theory (1928) · Everything DiSC is the Wiley-published, validated modern version · Certification required to administer profiles</div>
+  <div class="sec-body">DiSC describes how people tend to respond to their environment — specifically to challenges, people, pace, and rules. It is not a personality type. It is a behavioral pattern that shifts under pressure. Use it to help clients understand their default style and expand their range.</div>
+
+  <div class="disc-grid">
+    <div class="disc-cell" style="background:#B8300A;border-radius:3px 0 0 0;">
+      <div class="disc-name" style="color:#F5A090;">D · Dominance</div>
+      <div class="disc-style" style="color:#fff;">Direct, decisive, driven</div>
+      <div class="disc-body" style="color:#F5D0C8;">Motivated by results, competition, and winning. Fears losing control or being taken advantage of. Under pressure: becomes aggressive, impatient, or steamrolling. Coaching edge: slowing down to listen, considering impact on people, building buy-in before moving.</div>
+    </div>
+    <div class="disc-cell" style="background:#E8A020;border-radius:0 3px 0 0;">
+      <div class="disc-name" style="color:#5A3000;">i · Influence</div>
+      <div class="disc-style" style="color:var(--plum);">Enthusiastic, optimistic, collaborative</div>
+      <div class="disc-body" style="color:#3A2000;">Motivated by enthusiasm, recognition, and relationships. Fears being rejected or ignored. Under pressure: becomes scattered, overcommits, avoids hard conversations. Coaching edge: following through, being direct when the relationship requires it, managing time.</div>
+    </div>
+    <div class="disc-cell" style="background:#1B6B2A;border-radius:0 0 0 3px;">
+      <div class="disc-name" style="color:#9FD9A7;">S · Steadiness</div>
+      <div class="disc-style" style="color:#fff;">Patient, collaborative, loyal</div>
+      <div class="disc-body" style="color:#D4F0D8;">Motivated by stability, cooperation, and helping others. Fears conflict and sudden change. Under pressure: becomes conflict-avoidant, indecisive, or accommodating to the point of resentment. Coaching edge: asserting needs, tolerating ambiguity, leading change.</div>
+    </div>
+    <div class="disc-cell" style="background:#1A3B8A;border-radius:0 0 3px 0;">
+      <div class="disc-name" style="color:#90B0F0;">C · Conscientiousness</div>
+      <div class="disc-style" style="color:#fff;">Analytical, accurate, systematic</div>
+      <div class="disc-body" style="color:#D0DCFC;">Motivated by accuracy, quality, and expertise. Fears criticism and being wrong. Under pressure: becomes over-analytical, perfectionistic, or withdrawn. Coaching edge: making decisions with imperfect information, communicating confidence, releasing control.</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head">Coaching Application</div>
+      <div class="item">DiSC is most useful as a <strong>range expander</strong>, not a box. The question is never "you are a D, so you do this." It is: "your style pulls you toward X — when does that serve you, and when does it limit you?"</div>
+      <div class="item">Under pressure, styles shift. A steady S can become either more accommodating or more stubborn. A dominant D can become more controlling. The coaching conversation lives in that pressure point.</div>
+      <div class="item">Pair DiSC with 360 data: how does the client's self-reported style compare to how they are perceived under pressure?</div>
+      <div class="item">For team coaching: map the team's styles visually. Where is there natural tension? Where is there a gap?</div>
+    </div>
+    <div class="card">
+      <div class="card-head">Common Client Patterns by Level</div>
+      <div class="item"><strong>Managers:</strong> Often high-S or high-i — promoted for being collaborative, now struggling with direct feedback and holding boundaries</div>
+      <div class="item"><strong>Directors:</strong> Often high-D or high-C — promoted for expertise or results, now needing to build influence rather than just deliver</div>
+      <div class="item"><strong>Executives:</strong> Styles vary, but the pattern that shows up most is whatever style got them there is now limiting them at the next level</div>
+      <div class="item">The most useful coaching question for any style: "What is the version of leadership you cannot access from this style alone?"</div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:0">Key Questions</div>
+  <ul class="q-list">
+    <li>"Where on this grid does your style show up in how you lead? And where do you think you are perceived differently from how you intend to be?"</li>
+    <li>"Under pressure — when things are uncertain, when you feel criticized, when the stakes are high — which version of your style comes out?"</li>
+    <li>"What style is most represented on your team? What does that mean for how conflict shows up?"</li>
+    <li>"Which styles do you find easiest to work with? Which feel like friction? What does that friction actually cost you?"</li>
+  </ul>
+</div>
+
+<!-- CLIFTONSTRENGTHS -->
+<div class="panel" id="panel-strengths">
+  <div class="sec-head">Framework 07</div>
+  <div class="sec-title">CliftonStrengths — Coaching Application</div>
+  <div class="origin">Donald Clifton / Gallup · Originally published as StrengthsFinder 2.0 (2007) · gallup.com/cliftonstrengths · Certification optional but available</div>
+  <div class="sec-body">CliftonStrengths identifies 34 talent themes organized into four domains. Unlike assessments that describe personality, it describes where people have the most potential for excellence — their top themes represent natural patterns of thinking, feeling, and behavior that are already present and that coaching can amplify.</div>
+
+  <div class="three-col">
+    <div class="card">
+      <div class="card-head" style="background:var(--plum);color:var(--gold);margin:-18px -20px 14px;padding:10px 20px;">Executing</div>
+      <div class="card-body">Themes about getting things done: Achiever, Arranger, Belief, Consistency, Deliberative, Discipline, Focus, Responsibility, Restorative. Clients with top themes here are most energized by action, completion, and order.</div>
+    </div>
+    <div class="card">
+      <div class="card-head" style="background:#1B5E8A;color:#fff;margin:-18px -20px 14px;padding:10px 20px;">Influencing</div>
+      <div class="card-body">Themes about leading others and making impact: Activator, Command, Communication, Competition, Maximizer, Self-Assurance, Significance, Woo. Clients with these themes are energized by persuading, speaking, and expanding reach.</div>
+    </div>
+    <div class="card">
+      <div class="card-head" style="background:#1B6B2A;color:#fff;margin:-18px -20px 14px;padding:10px 20px;">Relationship Building</div>
+      <div class="card-body">Themes about deep connection: Adaptability, Connectedness, Developer, Empathy, Harmony, Includer, Individualization, Positivity, Relator. These clients build loyalty and cohesion — and often struggle with authority and conflict.</div>
+    </div>
+  </div>
+  <div style="margin-bottom:24px;">
+    <div class="card">
+      <div class="card-head" style="background:#6B3A8A;color:#fff;">Strategic Thinking</div>
+      <div class="card-body">Themes about absorbing and analyzing information: Analytical, Context, Futuristic, Ideation, Input, Intellection, Learner, Strategic. These clients generate ideas and see patterns — and often struggle with follow-through and decisive action.</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head">How to Use CliftonStrengths in Coaching</div>
+      <div class="item"><strong>Debrief the themes in order of rank</strong> — not what they mean generically, but how they show up for this specific person in their specific context</div>
+      <div class="item"><strong>Find the theme pairs that create tension</strong> — e.g., Activator + Deliberative, or Achiever + Relator. These internal tensions often explain leadership blocks</div>
+      <div class="item"><strong>Name the shadow side</strong> — every theme has one. Responsibility can become martyrdom. Harmony can become conflict avoidance. Activator can become recklessness. The coaching work is often in the shadow.</div>
+      <div class="item"><strong>Ask about energy, not just behavior</strong> — when do you feel most alive in your work? That is usually a top theme in full expression.</div>
+    </div>
+    <div class="card">
+      <div class="card-head">Common Coaching Patterns by Theme</div>
+      <div class="item"><strong>Responsibility (top theme):</strong> Takes on too much. Coaching: what would it mean to let something fail that is not yours to carry?</div>
+      <div class="item"><strong>Empathy (top theme):</strong> Absorbs others' emotions. Coaching: whose feelings are you carrying into this room that are not yours?</div>
+      <div class="item"><strong>Command (top theme):</strong> Perceived as intimidating. Coaching: what would it cost you to stay quiet one beat longer?</div>
+      <div class="item"><strong>Futuristic (top theme):</strong> Struggles to be present with what is. Coaching: what does this moment need from you before the future arrives?</div>
+      <div class="item"><strong>Achiever (top theme):</strong> Rests with difficulty. Coaching: what would "enough" feel like, and is that fear or wisdom?</div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:0">Key Questions for CliftonStrengths Debrief</div>
+  <ul class="q-list">
+    <li>"Looking at your top 5 — which one surprises you most? Which one did you see coming?"</li>
+    <li>"Tell me about a moment when your [top theme] was at full power. What did that look like? How did it feel?"</li>
+    <li>"Now tell me about a time when that same theme created problems for you or for others."</li>
+    <li>"If the people who work for you described your leadership in one sentence, which of these themes would they be describing?"</li>
+    <li>"Which themes are underused? Where in your work do you wish you could access more of that?"</li>
+    <li>"What theme do you wish you had that you do not? What is the cost of working around it?"</li>
+  </ul>
+</div>
+
+<!-- IMMUNITY TO CHANGE -->
+<div class="panel" id="panel-itc">
+  <div class="sec-head">Framework 08</div>
+  <div class="sec-title">Immunity to Change</div>
+  <div class="origin">Robert Kegan and Lisa Laskow Lahey · Immunity to Change: How to Overcome It and Unlock the Potential in Yourself and Your Organization (2009) · Facilitator certification: Minds at Work (mindsatwork.com)</div>
+  <div class="sec-body">Immunity to Change is a framework for understanding why committed, motivated, intelligent people fail to change — even when they genuinely want to. The insight is that the barrier is not willpower or skill — it is a hidden competing commitment that the change would threaten. Every column of the ITC map reveals a deeper layer of the same structure.</div>
+
+  <div class="sec-head" style="margin-top:0">The Four-Column Map</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:22%">Column 1</th>
+        <th style="width:22%">Column 2</th>
+        <th style="width:22%">Column 3</th>
+        <th style="width:34%">Column 4</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Improvement Goal</strong><br>What do you want to change or improve?</td>
+        <td><strong>Doing/Not Doing Instead</strong><br>What are you doing (or not doing) that works against that goal?</td>
+        <td><strong>Hidden Competing Commitment</strong><br>If you imagine doing the opposite of Column 2 — what worry arises? What are you committed to preventing?</td>
+        <td><strong>Big Assumption</strong><br>What must be true for Column 3 to be a real risk? What do you believe, deeply, about yourself or the world — that makes this feel necessary?</td>
+      </tr>
+      <tr style="background:var(--ltgold);">
+        <td colspan="4" style="font-style:italic;font-size:15px;color:#5A4010;">Example: "I want to be more direct with my team" → "I hold back, soften feedback, wait until something is really bad" → "I am committed to not being seen as harsh or threatening" → "I believe that if I am direct, people will think I am like the hard manager I had who hurt people, and that would mean I am not a good person."</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head">Why This Matters in Coaching</div>
+      <div class="item">Most coaching works at Column 1 (the goal) and Column 2 (the behavior). ITC goes deeper into what the behavior is actually protecting.</div>
+      <div class="item">The Big Assumption in Column 4 is almost never rationally examined — it just operates. Surfacing it and testing it is where sustained change becomes possible.</div>
+      <div class="item">Column 4 is not about childhood or therapy. It is about a belief about the world that was once adaptive and may now be limiting. That is a coaching conversation.</div>
+    </div>
+    <div class="card">
+      <div class="card-head">When to Use ITC in Your Practice</div>
+      <div class="item">For clients who have been working on the same thing for a long time and keep coming up against the same wall</div>
+      <div class="item">For Deep Dive clients in months 4–5, when surface-level goals have been addressed and the deeper work is available</div>
+      <div class="item">Do not introduce ITC too early — the client needs to trust you and trust the process first</div>
+      <div class="item">Facilitator certification (Minds at Work) is strongly recommended before using this as a formal tool — the map is simple; holding it well is not</div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:0">Key Questions</div>
+  <ul class="q-list">
+    <li>"You have said you want this. And you are clearly capable. So what is in the way — not externally, but in you?"</li>
+    <li>"If you imagined doing the opposite of what you have been doing, what worry immediately shows up?"</li>
+    <li>"What are you protecting? What would be at risk if you changed?"</li>
+    <li>"What must be true about the world — or about you — for that risk to feel real?"</li>
+    <li>"Has there been a time when you tested that assumption and it did not hold? What happened?"</li>
+  </ul>
+</div>
+
+<!-- BELONGING + EQUITY -->
+<div class="panel" id="panel-equity">
+  <div class="sec-head">Framework 09</div>
+  <div class="sec-title">Conditions of Belonging + Equity Lens</div>
+  <div class="origin">Conditions of Belonging: National Equity Project · Equity Lab: national education sector · Your lived practice from Urban Teachers and national nonprofit DEI work</div>
+  <div class="sec-body">This is not an add-on to your coaching practice — it is the foundation of it. Your equity lens is a differentiator because it comes from having led organizational systems, not from a training. Use it where others cannot: in coaching senior leaders who need to examine what their leadership signals, permits, and perpetuates.</div>
+
+  <div class="sec-head" style="margin-top:0">Conditions of Belonging — The Core Framework</div>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-head">Valued</div>
+      <div class="card-body">Do people feel their contributions are recognized and that they matter to the collective work? Who in this organization is seen, and who is invisible?</div>
+    </div>
+    <div class="card">
+      <div class="card-head">Connected</div>
+      <div class="card-body">Do people have authentic relationships across difference? Or are connections clustered by identity, role, or proximity to power?</div>
+    </div>
+    <div class="card">
+      <div class="card-head">Contributing</div>
+      <div class="card-body">Do people have meaningful agency in decisions that affect them? Who gets to influence how things work here, and who is consulted only after the fact?</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head">Coaching Application — Individual Sessions</div>
+      <div class="item">Use as a diagnostic for leaders who are building or inheriting teams. "Walk me through each of these three conditions in your team right now. Who has full belonging? Who does not?"</div>
+      <div class="item">Connect to leadership shadow: "What does your leadership signal to someone who does not look like you or did not come up the way you did?"</div>
+      <div class="item">For leaders who say they "don't see race" or "treat everyone the same" — use Conditions of Belonging as a data-based alternative: what does the data say about who thrives here, who advances, who stays?</div>
+    </div>
+    <div class="card">
+      <div class="card-head">Equity Lens in Executive Coaching</div>
+      <div class="item">Not every client is ready for equity as a named frame. The coaching move is to get there through data and questions, not position.</div>
+      <div class="item">Use Ripple Effect Mapping to help leaders trace the downstream impact of their decisions across different populations</div>
+      <div class="item">The most powerful equity question in executive coaching: "Who benefits from how things work here — and who does not? And how much of that is by design?"</div>
+      <div class="item">Frame equity leadership as what it actually is: more sophisticated leadership, not moral positioning</div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:0">Key Questions</div>
+  <ul class="q-list">
+    <li>"If I asked the people on the margins of your team to describe what it feels like to work here — what would they say that the people in the center would not?"</li>
+    <li>"What patterns show up in who advances, who speaks in meetings, who is given the benefit of the doubt? What do those patterns tell you?"</li>
+    <li>"What does your leadership permission? And what does it prohibit — even unintentionally?"</li>
+    <li>"Who has to work hardest to be seen as competent in your organization? What would change if that were different?"</li>
+    <li>"What would it cost you — politically, relationally, practically — to name this publicly? And what is the cost of not naming it?"</li>
+  </ul>
+</div>
+
+<!-- ICF COMPETENCIES -->
+<div class="panel" id="panel-icf">
+  <div class="sec-head">Framework 10</div>
+  <div class="sec-title">ICF Core Competencies</div>
+  <div class="origin">International Coaching Federation · Updated 2019 · 8 competencies across 4 domains · Foundation for ACC, PCC, and MCC credentialing · coachingfederation.org</div>
+  <div class="sec-body">The ICF Core Competencies are not a checklist — they are a description of what excellent coaching looks like in practice. Know them well enough that you do not think about them in session. Your aim is to embody them, not perform them.</div>
+
+  <div class="three-col">
+    <div class="card">
+      <div class="card-head">Domain A · Foundation</div>
+      <div class="item"><strong>1. Demonstrates Ethical Practice</strong> — honesty, integrity, confidentiality, managing conflicts of interest. Know the ICF Code of Ethics before your first paid session.</div>
+      <div class="item"><strong>2. Embodies a Coaching Mindset</strong> — curiosity over certainty. Not trying to fix. Trusting that the client has the resources and the answers. This is the hardest competency for experienced leaders to embody — you are used to having answers.</div>
+    </div>
+    <div class="card">
+      <div class="card-head">Domain B · Co-Creating the Relationship</div>
+      <div class="item"><strong>3. Establishes and Maintains Agreements</strong> — clear contracts per session and per engagement. What are we working on? How will we know it worked?</div>
+      <div class="item"><strong>4. Cultivates Trust and Safety</strong> — the coaching relationship holds the coaching work. Without safety, clients perform rather than explore. This is built, not assumed.</div>
+      <div class="item"><strong>5. Maintains Presence</strong> — full attention. No fixing, no advice-giving, no half-listening while composing your next question. Presence is the most frequently cited differentiator between good and excellent coaches.</div>
+    </div>
+    <div class="card">
+      <div class="card-head">Domain C · Communicating Effectively</div>
+      <div class="item"><strong>6. Listens Actively</strong> — what is said, how it is said, what is not said, and what the body is communicating. Active listening is not just being quiet. It is absorbing and reflecting the whole person.</div>
+      <div class="item"><strong>7. Evokes Awareness</strong> — asking questions that expand rather than confirm. Sharing observations. Challenging with care. This is where coaching produces insight that the client could not have reached alone.</div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:24px;">
+    <div class="card-head">Domain D · Cultivating Learning and Growth</div>
+    <div class="item"><strong>8. Facilitates Client Growth</strong> — translating insight to action. Supporting integration. Partnering on what comes next. The session ends; the work continues. The coach's job is to make that continuation more likely.</div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head">Which Competencies Are Most Assessed at ACC</div>
+      <div class="item">The ICF assesses recorded sessions. The competencies most frequently cited in feedback: <strong>Maintains Presence (5)</strong> — are you truly present or processing? <strong>Listens Actively (6)</strong> — are you listening to the whole person or just the words? <strong>Evokes Awareness (7)</strong> — are you asking questions that open new territory or confirming what you already think?</div>
+    </div>
+    <div class="card">
+      <div class="card-head">The Competency That Trips Up Experienced Leaders</div>
+      <div class="item"><strong>Embodies a Coaching Mindset (2)</strong> is consistently the hardest for high-achieving leaders entering coaching. The belief that you should add value, share your perspective, and leverage your expertise is the exact thing you have to set aside in the coaching room. Your experience makes you want to solve. The coaching mindset requires you to ask instead.</div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>Greer Collective &nbsp;·&nbsp; thegreercollective.com &nbsp;·&nbsp; Coaching Models Reference</footer>
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Greer Collective · Package Session Guides</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--plum:#2C1A2E;--gold:#B8922A;--cream:#FAF6EF;--mauve:#8A7A8E;--midplum:#4A2455;--ltplum:#EDE6F0;--ltgold:#F5EDD8;--green:#1B6B2A;--green-light:#EAF4EC;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--cream);color:var(--plum);font-family:'Cormorant Garamond',Georgia,serif;font-size:17px;line-height:1.7;}
+    header{background:var(--plum);padding:48px 48px 36px;border-bottom:4px solid var(--gold);}
+    .eyebrow{font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+    header h1{font-weight:300;font-size:42px;color:var(--cream);line-height:1.1;margin-bottom:8px;}
+    .header-sub{font-family:'Jost',sans-serif;font-size:12px;color:var(--mauve);letter-spacing:2px;}
+    .nav-tabs{background:var(--midplum);display:flex;gap:0;overflow-x:auto;border-bottom:3px solid var(--gold);}
+    .tab{font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--mauve);padding:14px 26px;cursor:pointer;border:none;background:none;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-3px;transition:color .15s,background .15s;}
+    .tab:hover{color:var(--cream);}
+    .tab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(184,146,42,0.06);}
+    main{max-width:1060px;margin:0 auto;padding:40px 40px 80px;}
+    .panel{display:none;}.panel.active{display:block;}
+    .pkg-banner{background:var(--plum);padding:24px 28px;margin-bottom:28px;border-left:5px solid var(--gold);border-radius:0 3px 3px 0;}
+    .pkg-eyebrow{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:6px;}
+    .pkg-title{font-size:34px;font-weight:300;color:var(--cream);margin-bottom:8px;}
+    .pkg-meta{display:flex;gap:28px;flex-wrap:wrap;}
+    .pkg-meta-item{font-family:'Jost',sans-serif;font-size:12px;}
+    .pkg-meta-label{color:var(--mauve);text-transform:uppercase;letter-spacing:1px;margin-right:6px;}
+    .pkg-meta-val{color:var(--gold);font-weight:500;}
+    /* FLOW CHART */
+    .flow-wrap{margin:28px 0;overflow-x:auto;}
+    .flow{display:flex;align-items:stretch;gap:0;min-width:600px;}
+    .flow-node{flex:1;background:#fff;border:1px solid #E2DAE4;border-top:3px solid var(--gold);padding:14px 14px 16px;position:relative;min-width:100px;}
+    .flow-node.dark{background:var(--plum);border-top-color:var(--gold);}
+    .flow-node.mid{background:var(--ltplum);}
+    .flow-arrow{display:flex;align-items:center;padding:0 4px;color:var(--gold);font-size:20px;flex-shrink:0;}
+    .flow-num{font-family:'Jost',sans-serif;font-size:18px;font-weight:500;color:var(--gold);margin-bottom:3px;}
+    .flow-sess{font-family:'Jost',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mauve);margin-bottom:5px;}
+    .flow-name{font-size:14px;font-weight:600;color:var(--plum);line-height:1.3;}
+    .flow-node.dark .flow-name{color:var(--cream);}
+    .flow-node.dark .flow-sess{color:var(--mauve);}
+    .flow-tool{font-family:'Jost',sans-serif;font-size:10px;color:var(--gold);margin-top:6px;}
+    /* SESSION CARDS */
+    .sec-head{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin:36px 0 6px;padding-bottom:8px;border-bottom:3px solid var(--gold);}
+    .session-card{border:1px solid #E2DAE4;border-left:4px solid var(--gold);border-radius:0 3px 3px 0;margin-bottom:20px;background:#fff;overflow:hidden;}
+    .sess-hdr{background:var(--plum);padding:14px 20px;display:flex;align-items:baseline;gap:16px;}
+    .sess-num{font-family:'Jost',sans-serif;font-size:22px;font-weight:500;color:var(--gold);}
+    .sess-title{font-size:20px;font-weight:400;color:var(--cream);}
+    .sess-tool{font-family:'Jost',sans-serif;font-size:10px;color:var(--mauve);margin-left:auto;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;}
+    .sess-body{padding:18px 20px;}
+    .sess-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:10px;}
+    .sess-col-head{font-family:'Jost',sans-serif;font-size:9px;font-weight:500;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid var(--ltgold);}
+    .item{font-size:15px;color:var(--plum);margin-bottom:7px;padding-left:16px;position:relative;line-height:1.5;}
+    .item::before{content:"·";position:absolute;left:0;color:var(--gold);}
+    .item em{color:var(--midplum);font-style:italic;}
+    .script-box{background:var(--ltgold);border-left:3px solid var(--gold);padding:12px 16px;margin:10px 0;font-size:15px;font-style:italic;color:#4A3000;border-radius:0 3px 3px 0;line-height:1.6;}
+    .between-box{background:var(--ltplum);border-left:3px solid var(--midplum);padding:12px 16px;margin:10px 0;font-size:15px;color:var(--plum);border-radius:0 3px 3px 0;}
+    .between-label{font-family:'Jost',sans-serif;font-size:9px;font-weight:500;letter-spacing:2px;color:var(--midplum);text-transform:uppercase;margin-bottom:5px;}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:10px;}
+    footer{background:var(--plum);border-top:3px solid var(--gold);padding:20px 40px;text-align:center;font-family:'Jost',sans-serif;font-size:11px;color:var(--mauve);letter-spacing:2px;}
+    @media(max-width:700px){.sess-row,.two-col{grid-template-columns:1fr;}.sess-tool{display:none;}.pkg-meta{gap:12px;}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Greer Collective · Coaching Practice</div>
+  <h1>Package Session Guides</h1>
+  <div class="header-sub">In-Session Reference &nbsp;·&nbsp; Clarity Call &nbsp;·&nbsp; Intensive &nbsp;·&nbsp; Deep Dive &nbsp;·&nbsp; Group Cohort</div>
+</header>
+<div class="nav-tabs">
+  <button class="tab active" onclick="showTab('clarity')">Clarity Call</button>
+  <button class="tab" onclick="showTab('intensive')">Intensive</button>
+  <button class="tab" onclick="showTab('deepdive')">Deep Dive</button>
+  <button class="tab" onclick="showTab('cohort')">Group Cohort</button>
+</div>
+<main>
+
+<!-- ===================== CLARITY CALL ===================== -->
+<div class="panel active" id="panel-clarity">
+  <div class="pkg-banner">
+    <div class="pkg-eyebrow">Package 1</div>
+    <div class="pkg-title">The Clarity Call</div>
+    <div class="pkg-meta">
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Duration</span><span class="pkg-meta-val">Single 90-minute session</span></div>
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Investment</span><span class="pkg-meta-val">$250 – $350</span></div>
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Tools</span><span class="pkg-meta-val">GROW or CLEAR · Reflective listening</span></div>
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Outcome</span><span class="pkg-meta-val">One named clarity · One committed action</span></div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:0">Session Flow</div>
+  <div class="flow-wrap">
+    <div class="flow">
+      <div class="flow-node dark"><div class="flow-num">01</div><div class="flow-sess">0–10 min</div><div class="flow-name">Opening + Grounding</div><div class="flow-tool">Check-in</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-num">02</div><div class="flow-sess">10–30 min</div><div class="flow-name">Their World</div><div class="flow-tool">Active Listening</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node mid"><div class="flow-num">03</div><div class="flow-sess">30–50 min</div><div class="flow-name">Deepening</div><div class="flow-tool">GROW / CLEAR</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-num">04</div><div class="flow-sess">50–75 min</div><div class="flow-name">Core Coaching</div><div class="flow-tool">Evoke Awareness</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node mid"><div class="flow-num">05</div><div class="flow-sess">75–85 min</div><div class="flow-name">Clarity Moment</div><div class="flow-tool">Reflection</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node dark"><div class="flow-num">06</div><div class="flow-sess">85–90 min</div><div class="flow-name">Close + Action</div><div class="flow-tool">Commitment</div></div>
+    </div>
+  </div>
+
+  <div class="sec-head">Phase-by-Phase Guide</div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">01</div><div class="sess-title">Opening + Grounding (0–10 min)</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">What to Do</div>
+          <div class="item">Welcome them warmly. Note that you are glad they are here and that 90 minutes is enough time for something real to happen.</div>
+          <div class="item">Brief them on the session structure — what to expect, what is confidential, that there is no right answer.</div>
+          <div class="item">Ask a grounding check-in before moving to the presenting topic.</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Opening Script</div>
+          <div class="script-box">"Before we get into what brought you here — I want to ask: how are you arriving today? Not necessarily in relation to the topic — just, what is true for you right now?"</div>
+          <div class="item">Listen to the answer fully. Do not rush past it. What they say here tells you a lot about their state and their style.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">02</div><div class="sess-title">Their World (10–30 min)</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">What to Do</div>
+          <div class="item">Ask what brought them to coaching today — the specific situation, question, or moment that made them book this session.</div>
+          <div class="item">Listen without interrupting. Take sparse notes. Let them exhaust the surface-level telling first.</div>
+          <div class="item">Reflect back what you hear, using their exact words where possible.</div>
+          <div class="item">Identify the thread underneath: what is really going on here?</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Key Questions</div>
+          <div class="script-box">"What brought you here today — the specific thing that made you think this was the time?"</div>
+          <div class="script-box">"I heard you say [phrase]. Tell me more about that."</div>
+          <div class="script-box">"What would you most want to be different about this situation?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">03</div><div class="sess-title">Deepening (30–50 min)</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">What to Do</div>
+          <div class="item">Move beneath the presenting topic. This is where GROW or CLEAR takes over as a loose guide.</div>
+          <div class="item">Ask what they already know but have not said out loud yet.</div>
+          <div class="item">Notice what they are avoiding. Name it gently if it is safe to do so.</div>
+          <div class="item">Slow the pace here. Silence is useful. Let the deeper material surface.</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Key Questions</div>
+          <div class="script-box">"What do you already know about this that you haven't fully let yourself know yet?"</div>
+          <div class="script-box">"What is the thing beneath the thing you just described?"</div>
+          <div class="script-box">"If the answer were already in you — and I think it is — what would it be?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">04</div><div class="sess-title">Core Coaching (50–75 min)</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">What to Do</div>
+          <div class="item">This is the heart of the session. The real work lives here. Stay present, stay curious, do not rush to solve.</div>
+          <div class="item">Challenge with care when you see a pattern, contradiction, or belief that is keeping them stuck.</div>
+          <div class="item">Offer observations rather than interpretations: "I notice..." not "I think you are..."</div>
+          <div class="item">Trust that the client will find the clarity if you hold the space well enough.</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Key Questions</div>
+          <div class="script-box">"I want to reflect something back — and tell me if this lands. I noticed that every time we get close to [X], something shifts. What is true about that?"</div>
+          <div class="script-box">"What would you do if you gave yourself permission to do what you actually want to do?"</div>
+          <div class="script-box">"What does this situation need from you that only you can give?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">05</div><div class="sess-title">Clarity Moment (75–85 min)</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">What to Do</div>
+          <div class="item">Ask them to name what has shifted or clarified. Use their words, not yours.</div>
+          <div class="item">A good clarity statement is specific, true, and often involves something they had not fully said before.</div>
+          <div class="item">Write it down (in Simply.Coach notes). Reflect it back to them. Let it land.</div>
+          <div class="item">Ask what question they want to carry with them — one question worth sitting with after the call.</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Key Questions</div>
+          <div class="script-box">"Looking back at this session — what is the most important thing that happened for you?"</div>
+          <div class="script-box">"What is now clear that was not clear when we started?"</div>
+          <div class="script-box">"What is a question worth sitting with — one that does not need an answer today?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">06</div><div class="sess-title">Close + Action (85–90 min)</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">What to Do</div>
+          <div class="item">Ask what one action they will take — not the most ambitious, but the most meaningful.</div>
+          <div class="item">Confirm their action and the timeline. Keep it specific.</div>
+          <div class="item">Close warmly. Mention that you will send a follow-up with notes and a check-in.</div>
+          <div class="item">If appropriate, mention that this work can continue through the Intensive or Deep Dive.</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Closing Script</div>
+          <div class="script-box">"We have about five minutes. What is the one thing you are taking from today? And what will you do — specifically, by when — because of this conversation?"</div>
+          <div class="between-box"><div class="between-label">After the Call — Within 24 Hours</div>Send the follow-up email with: the clarity statement they named (in their words), their committed action, the question to carry, and a brief warm close. Offer a 4-day check-in text or email. See Clarity Call Playbook for full templates.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== INTENSIVE ===================== -->
+<div class="panel" id="panel-intensive">
+  <div class="pkg-banner">
+    <div class="pkg-eyebrow">Package 2</div>
+    <div class="pkg-title">The Intensive</div>
+    <div class="pkg-meta">
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Duration</span><span class="pkg-meta-val">3 months · 6 bi-weekly sessions</span></div>
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Investment</span><span class="pkg-meta-val">$1,800 – $2,400</span></div>
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Tools</span><span class="pkg-meta-val">CliftonStrengths · GROW / CLEAR · Radical Candor · Stakeholder Mapping</span></div>
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Support</span><span class="pkg-meta-val">Email + Voxer between sessions</span></div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:0">3-Month Arc</div>
+  <div class="flow-wrap">
+    <div class="flow">
+      <div class="flow-node dark"><div class="flow-num">S1</div><div class="flow-sess">Month 1 · Week 1</div><div class="flow-name">Foundation + CliftonStrengths</div><div class="flow-tool">Gallup Full 34 or Top 5</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-num">S2</div><div class="flow-sess">Month 1 · Week 3</div><div class="flow-name">Current Reality</div><div class="flow-tool">Stakeholder Map · SOAP</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node mid"><div class="flow-num">S3</div><div class="flow-sess">Month 2 · Week 1</div><div class="flow-name">The Real Work</div><div class="flow-tool">GROW · CLEAR</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-num">S4</div><div class="flow-sess">Month 2 · Week 3</div><div class="flow-name">Skill Building</div><div class="flow-tool">Radical Candor · EP Framework</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node mid"><div class="flow-num">S5</div><div class="flow-sess">Month 3 · Week 1</div><div class="flow-name">Accountability Review</div><div class="flow-tool">Goal Review · REM</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node dark"><div class="flow-num">S6</div><div class="flow-sess">Month 3 · Week 3</div><div class="flow-name">Integration</div><div class="flow-tool">Leadership Statement</div></div>
+    </div>
+  </div>
+
+  <div class="sec-head">Session-by-Session Guide</div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">S1</div><div class="sess-title">Foundation + CliftonStrengths Debrief</div><div class="sess-tool">Month 1 · Week 1 · 60 min</div></div>
+    <div class="sess-body">
+      <div class="sess-row">
+        <div>
+          <div class="sess-col-head">Purpose</div>
+          <div class="item">Establish the relationship and the working agreement. Anchor the engagement in the client's strengths. Set 2–3 meaningful goals for 3 months.</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Key Questions</div>
+          <div class="item"><em>"What kind of leader do you want to be known as?"</em></div>
+          <div class="item"><em>"Looking at your Top 5 — which theme surprises you most? Which did you already know?"</em></div>
+          <div class="item"><em>"When is your leadership at its best? What themes are present in those moments?"</em></div>
+          <div class="item"><em>"What would success look like at the end of three months — in your words, not in metrics?"</em></div>
+        </div>
+        <div>
+          <div class="sess-col-head">Frameworks + Close</div>
+          <div class="item">CliftonStrengths debrief (Top 5 or Full 34) — themes, strengths in context, shadow sides</div>
+          <div class="item">Set 2–3 coaching goals in Simply.Coach (client's words, not coaching-speak)</div>
+          <div class="between-box"><div class="between-label">Between Sessions</div>Written reflection: In what situations do your top strengths help? Where do they get in your way? Share 3–4 sentences in email or Voxer before Session 2.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">S2</div><div class="sess-title">Current Reality</div><div class="sess-tool">Month 1 · Week 3 · 60 min</div></div>
+    <div class="sess-body">
+      <div class="sess-row">
+        <div>
+          <div class="sess-col-head">Purpose</div>
+          <div class="item">Get an honest picture of the leadership landscape. Who are the key relationships? What is working and what is not? Identify the one situation most needing attention.</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Key Questions</div>
+          <div class="item"><em>"What is actually happening in your team or organization — not the version you tell your manager, but the honest one?"</em></div>
+          <div class="item"><em>"Who in your world are you most uncertain about — and why?"</em></div>
+          <div class="item"><em>"If you had to name the one thing getting most in the way of your leadership right now, what would it be?"</em></div>
+        </div>
+        <div>
+          <div class="sess-col-head">Frameworks + Close</div>
+          <div class="item">Stakeholder mapping (manager level: team + peers + own manager; director/exec: expand the map)</div>
+          <div class="item">Name the primary coaching challenge: the one situation that represents the larger pattern</div>
+          <div class="between-box"><div class="between-label">Between Sessions</div>Map your key stakeholders: who is with you, who is neutral, who is uncertain? Note one thing you want to say to each category that you have not said yet.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">S3</div><div class="sess-title">The Real Work — Core Coaching Challenge</div><div class="sess-tool">Month 2 · Week 1 · 60 min</div></div>
+    <div class="sess-body">
+      <div class="sess-row">
+        <div>
+          <div class="sess-col-head">Purpose</div>
+          <div class="item">Go into the primary challenge at depth. This is the heart of the engagement. Do not rush past the discomfort — this is where growth lives.</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Key Questions</div>
+          <div class="item"><em>"What has been sitting with you since our last session?"</em></div>
+          <div class="item"><em>"What is the thing about this situation that you haven't fully said out loud to anyone?"</em></div>
+          <div class="item"><em>"What would you do if you were not afraid of how it would land?"</em></div>
+          <div class="item"><em>"What does staying in the current pattern cost you?"</em></div>
+        </div>
+        <div>
+          <div class="sess-col-head">Frameworks + Close</div>
+          <div class="item">GROW or CLEAR as the session arc — let the client's energy determine which</div>
+          <div class="item">Use ITC framing if appropriate: what competing commitment is underneath this?</div>
+          <div class="item">Commit to one action before Session 4 — specific, uncomfortable, theirs</div>
+          <div class="between-box"><div class="between-label">Between Sessions</div>Take one action connected to the core challenge. Report back via Voxer or email: what happened? What did you notice?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">S4</div><div class="sess-title">Skill Building + Framework Session</div><div class="sess-tool">Month 2 · Week 3 · 60 min</div></div>
+    <div class="sess-body">
+      <div class="sess-row">
+        <div>
+          <div class="sess-col-head">Purpose</div>
+          <div class="item">Introduce a framework that names what the client is navigating. Give them a model they can carry and use between sessions and after the engagement ends.</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Key Questions</div>
+          <div class="item"><em>"Looking at this framework — where do you most recognize yourself?"</em></div>
+          <div class="item"><em>"Which quadrant [or dimension] is your growth edge right now?"</em></div>
+          <div class="item"><em>"If you applied this to one real situation before we meet next — what would you do differently?"</em></div>
+        </div>
+        <div>
+          <div class="sess-col-head">Choose Framework by Client Level</div>
+          <div class="item"><strong>Manager:</strong> Radical Candor — four quadrants, real conversation role-play</div>
+          <div class="item"><strong>Director:</strong> Executive Presence framework + stakeholder influence mapping</div>
+          <div class="item"><strong>Executive:</strong> Ripple Effect Mapping — trace the leadership decisions made in the last 90 days</div>
+          <div class="between-box"><div class="between-label">Between Sessions</div>Apply the framework to one real situation before Session 5. Write 3–5 sentences: what happened, what you noticed, what shifted.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">S5</div><div class="sess-title">Accountability Review</div><div class="sess-tool">Month 3 · Week 1 · 60 min</div></div>
+    <div class="sess-body">
+      <div class="sess-row">
+        <div>
+          <div class="sess-col-head">Purpose</div>
+          <div class="item">Honest review of the whole engagement so far. What has moved? What has not? What does the final stretch need to accomplish?</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Key Questions</div>
+          <div class="item"><em>"On a scale of 1–10, where are you on each of the goals we set in Session 1?"</em></div>
+          <div class="item"><em>"What has actually changed about how you lead — not just what you have tried, but what is different?"</em></div>
+          <div class="item"><em>"What is the honest answer to why one thing has not moved as much as you hoped?"</em></div>
+          <div class="item"><em>"What do you most need from our final session?"</em></div>
+        </div>
+        <div>
+          <div class="sess-col-head">Structure</div>
+          <div class="item">Pull up the 3 goals from Session 1 in Simply.Coach. Rate progress on each together.</div>
+          <div class="item">Identify what still needs attention in Session 6. Recalibrate if needed.</div>
+          <div class="between-box"><div class="between-label">Between Sessions</div>Write a brief self-assessment: What is different about my leadership now vs. when I started? What am I most proud of? What is still unfinished? Share before Session 6.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">S6</div><div class="sess-title">Integration + What Comes Next</div><div class="sess-tool">Month 3 · Week 3 · 60 min</div></div>
+    <div class="sess-body">
+      <div class="sess-row">
+        <div>
+          <div class="sess-col-head">Purpose</div>
+          <div class="item">Full arc review and integration. The client leaves with a named leadership identity, a 30-day plan, and a sense of what they are capable of now that they were not when they started.</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Key Questions</div>
+          <div class="item"><em>"I came as a leader who... I am leaving as a leader who..."</em></div>
+          <div class="item"><em>"What is the version of yourself that showed up in this work that you want to sustain?"</em></div>
+          <div class="item"><em>"What conditions or practices do you need to keep that growth alive without coaching?"</em></div>
+        </div>
+        <div>
+          <div class="sess-col-head">Structure + Close</div>
+          <div class="item">Leadership Statement exercise: 2–3 sentences about who they are as a leader, written by them in the session</div>
+          <div class="item">30-day forward plan: 2–3 specific commitments</div>
+          <div class="item">Warm close. Offer the pathway to Deep Dive if this work has opened something larger.</div>
+          <div class="between-box"><div class="between-label">Follow-Up (within 48 hours)</div>Send the final follow-up: their leadership statement, their 30-day plan, and a warm note about the arc of the work. Request a testimonial at Sessions 4–5 — not here.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== DEEP DIVE ===================== -->
+<div class="panel" id="panel-deepdive">
+  <div class="pkg-banner">
+    <div class="pkg-eyebrow">Package 3</div>
+    <div class="pkg-title">The Deep Dive</div>
+    <div class="pkg-meta">
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Duration</span><span class="pkg-meta-val">6 months · 12 sessions (bi-weekly)</span></div>
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Investment</span><span class="pkg-meta-val">$3,200 – $4,800 · Corporate: $12,000–$18,000</span></div>
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Tools</span><span class="pkg-meta-val">CliftonStrengths Full 34 · 360 Feedback · CLEAR · Ripple Effect Mapping · ITC</span></div>
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Mid-Point</span><span class="pkg-meta-val">Formal written review at Session 6</span></div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:0">6-Month Arc</div>
+  <div class="flow-wrap">
+    <div class="flow">
+      <div class="flow-node dark"><div class="flow-num">M1</div><div class="flow-sess">Sessions 1–2</div><div class="flow-name">Discovery + 360 Launch</div><div class="flow-tool">CliftonStrengths · 360 Deployed</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-num">M2</div><div class="flow-sess">Sessions 3–4</div><div class="flow-name">360 Debrief + Identity</div><div class="flow-tool">360 Debrief · CLEAR</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node mid"><div class="flow-num">M3</div><div class="flow-sess">Sessions 5–6</div><div class="flow-name">Strategy + Mid-Point</div><div class="flow-tool">GROW · Formal Review</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-num">M4</div><div class="flow-sess">Sessions 7–8</div><div class="flow-name">Influence + Equity</div><div class="flow-tool">Stakeholder · COB</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node mid"><div class="flow-num">M5</div><div class="flow-sess">Sessions 9–10</div><div class="flow-name">Sustainability</div><div class="flow-tool">REM · Thought Leadership</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node dark"><div class="flow-num">M6</div><div class="flow-sess">Sessions 11–12</div><div class="flow-name">Integration + Transition</div><div class="flow-tool">Legacy · Forward Plan</div></div>
+    </div>
+  </div>
+
+  <div class="sec-head">Month-by-Month Guide</div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">M1</div><div class="sess-title">Discovery + CliftonStrengths + 360 Launch</div><div class="sess-tool">Sessions 1–2</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">Session 1 Focus</div>
+          <div class="item">Full CliftonStrengths Full 34 debrief — themes in order, shadow sides, patterns under pressure</div>
+          <div class="item">Set 2–4 goals for 6 months. More ambitious than the Intensive — include identity goals, not just behavioral ones</div>
+          <div class="item">Launch the 360: select rater groups, send codes, set 2-week deadline</div>
+          <div class="script-box">"What do you want to be true about your leadership at the end of six months that is not fully true right now?"</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Session 2 Focus</div>
+          <div class="item">Deeper CliftonStrengths exploration — how do themes interact? Where do they create internal tension?</div>
+          <div class="item">Leadership identity mapping: who are you at your best, and what gets in the way?</div>
+          <div class="item">Confirm 360 responses are coming in; follow up with rater groups</div>
+          <div class="script-box">"Tell me about a moment in your leadership when you were most fully yourself. What was present?"</div>
+          <div class="between-box"><div class="between-label">Between Sessions</div>Written reflection: What patterns show up in your leadership that you are proud of? What patterns show up that you wish did not? This becomes the foundation for the 360 debrief conversation.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">M2</div><div class="sess-title">360 Debrief + Identity Work</div><div class="sess-tool">Sessions 3–4</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">Session 3 — 360 Debrief (Full Session)</div>
+          <div class="item">Receive the data together. Walk through it methodically: strengths themes first, then development themes</div>
+          <div class="item">Ask: what surprised you? What confirmed something you already knew? What are you dismissing too quickly?</div>
+          <div class="item">Note the largest gap between self-rating and rater rating — that gap is usually the most important conversation</div>
+          <div class="script-box">"What is the piece of data in here that you do not want to look at? That is where we are going next."</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Session 4 — Identity and Brand</div>
+          <div class="item">From the 360 data: what does your leadership brand say to the people around you? Is it the brand you intend?</div>
+          <div class="item">Identity question: who are you as a leader, separate from your title, your organization, your results?</div>
+          <div class="item">Introduce ITC if appropriate: what would have to change for the gap in the 360 to close — and what belief would be threatened by that change?</div>
+          <div class="between-box"><div class="between-label">Between Sessions</div>Write a draft Leadership Brand Statement: "The leader I am known as is... The leader I want to be known as is..." Keep both honest. Bring it to Session 5.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">M3</div><div class="sess-title">Strategy + Mid-Point Formal Review</div><div class="sess-tool">Sessions 5–6</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">Session 5 — Strategic Leadership</div>
+          <div class="item">Zoom out: what does the client need to build, change, or stop over the next 90 days at the strategic level?</div>
+          <div class="item">Stakeholder map update: what has shifted in the key relationships since Month 1?</div>
+          <div class="item">Leadership strategy: where will they invest their leadership energy for maximum impact in this role?</div>
+          <div class="script-box">"If you had to bet on the one thing that would make the most difference in how you lead over the next 90 days — what would it be?"</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Session 6 — Mid-Point Review (Structured)</div>
+          <div class="item">Pull up the original goals. Rate progress 1–10 on each. Write the ratings together.</div>
+          <div class="item">Client writes a brief self-assessment before this session: what has changed, what has not, what the second half needs</div>
+          <div class="item">Recalibrate goals if needed. Some original goals may be resolved; new ones may have emerged.</div>
+          <div class="between-box"><div class="between-label">Mid-Point Self-Assessment (Client Pre-Work)</div>Before Session 6, client writes 1 page: What has shifted in my leadership since Month 1? Where am I still stuck? What do I most need from the second half of this engagement? Share in Simply.Coach.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">M4</div><div class="sess-title">Influence, Systems, and Equity Leadership</div><div class="sess-tool">Sessions 7–8</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">Session 7 — Influence and Political Navigation</div>
+          <div class="item">Map the political landscape at the organizational level. Who holds informal power? Where does influence actually flow — not as it should, but as it does?</div>
+          <div class="item">Director/Executive level: the real work is often here — navigating systems and people who are not directly accountable to you</div>
+          <div class="script-box">"What conversations are happening about you in rooms you are not in? What do you believe people say about your leadership when you are not there?"</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Session 8 — Equity and Organizational Health</div>
+          <div class="item">Conditions of Belonging as a diagnostic: who has full belonging in the organization this client leads? Who does not?</div>
+          <div class="item">Ripple Effect Mapping: trace the downstream impact of 2–3 key decisions made in the last 6 months. Who was affected, and how?</div>
+          <div class="item">The coaching question: "What does your leadership permit — and what does it prohibit, even unintentionally?"</div>
+          <div class="between-box"><div class="between-label">Between Sessions</div>Equity audit prompt: In the last 30 days, whose voice did you most amplify? Whose did you not hear? What patterns do you notice in who has access to you?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">M5</div><div class="sess-title">Sustainability + Thought Leadership</div><div class="sess-tool">Sessions 9–10</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">Session 9 — Sustainable Leadership Practice</div>
+          <div class="item">What practices are sustaining this client's growth — and which are not?</div>
+          <div class="item">Who is in their support architecture (mentor, sponsor, peer coach, therapist)? What is missing?</div>
+          <div class="item">The executive question: what does rest look like when you are responsible for an organization?</div>
+          <div class="script-box">"What would fall apart if you were unavailable for two weeks? What does that tell you about how you have built this?"</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Session 10 — Thought Leadership and Voice</div>
+          <div class="item">What idea, belief, or experience from this engagement is worth sharing beyond this room?</div>
+          <div class="item">What is the contribution this client's leadership is making to their field, not just their organization?</div>
+          <div class="item">For executive-level clients: succession thinking. Who is being developed to carry what they have built?</div>
+          <div class="between-box"><div class="between-label">Between Sessions</div>Write the first draft of one thing you want to put into the world — a LinkedIn post, a talk, a paper, a policy proposal. It does not have to be polished. Bring it to Session 11.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">M6</div><div class="sess-title">Integration + Transition</div><div class="sess-tool">Sessions 11–12</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">Session 11 — Forward Planning</div>
+          <div class="item">Full arc review. Pull up goals, 360 themes, CliftonStrengths debrief notes, leadership brand statement from Month 2</div>
+          <div class="item">What is different now vs. Session 1? Be specific.</div>
+          <div class="item">Build the 12-month forward plan: 3 commitments the client will sustain without coaching</div>
+          <div class="script-box">"What do you know about yourself as a leader now that you did not know six months ago? And what are you going to do with that?"</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Session 12 — Close and Legacy</div>
+          <div class="item">The final session. Make it feel like one.</div>
+          <div class="item">Client reads their leadership brand statement from Month 2 — and writes a revised version based on who they are now</div>
+          <div class="item">Name what remains. Not every thread gets tied. Some of the best work opens questions that do not resolve.</div>
+          <div class="item">Offer ongoing engagement options: quarterly check-ins, second engagement, organizational retainer</div>
+          <div class="between-box"><div class="between-label">Follow-Up (within 48 hours)</div>Send the full arc summary: original goals + progress rating + leadership brand (before/after) + 12-month forward plan + a personal note about the work. This document lives in Simply.Coach and can be shared as a case study (with permission).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== GROUP COHORT ===================== -->
+<div class="panel" id="panel-cohort">
+  <div class="pkg-banner">
+    <div class="pkg-eyebrow">Package 4</div>
+    <div class="pkg-title">The Group Cohort</div>
+    <div class="pkg-meta">
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Duration</span><span class="pkg-meta-val">6 monthly sessions · 90 min each</span></div>
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Size</span><span class="pkg-meta-val">6–8 participants · Same leadership level</span></div>
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Investment</span><span class="pkg-meta-val">$400–$600/person · Org rate: $800–$1,200/person</span></div>
+      <div class="pkg-meta-item"><span class="pkg-meta-label">Tools</span><span class="pkg-meta-val">CliftonStrengths · Radical Candor · Five Dysfunctions · Peer Coaching Triads</span></div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:0">6-Session Arc</div>
+  <div class="flow-wrap">
+    <div class="flow">
+      <div class="flow-node dark"><div class="flow-num">S1</div><div class="flow-sess">Month 1</div><div class="flow-name">Community + CliftonStrengths</div><div class="flow-tool">Gallup · Community Agreements</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-num">S2</div><div class="flow-sess">Month 2</div><div class="flow-name">Leadership Identity</div><div class="flow-tool">Multipliers · EP Framework</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node mid"><div class="flow-num">S3</div><div class="flow-sess">Month 3</div><div class="flow-name">Difficult Conversations</div><div class="flow-tool">Radical Candor · Five Dysfunctions</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-num">S4</div><div class="flow-sess">Month 4</div><div class="flow-name">Equity + Authority</div><div class="flow-tool">Conditions of Belonging</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node mid"><div class="flow-num">S5</div><div class="flow-sess">Month 5</div><div class="flow-name">Influence + Profile</div><div class="flow-tool">Thought Leadership</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node dark"><div class="flow-num">S6</div><div class="flow-sess">Month 6</div><div class="flow-name">Integration + Community Close</div><div class="flow-tool">Peer Witness</div></div>
+    </div>
+  </div>
+
+  <div class="sec-head">Session-by-Session Guide</div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">S1</div><div class="sess-title">Community Agreements + CliftonStrengths Group Debrief</div><div class="sess-tool">Month 1 · 90 min</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">Structure (90 min)</div>
+          <div class="item"><strong>0–20 min:</strong> Introductions + Community Agreements — each person names what they need to be honest in this space</div>
+          <div class="item"><strong>20–50 min:</strong> CliftonStrengths group debrief — each person shares their Top 3 and the one theme that most shows up in their leadership</div>
+          <div class="item"><strong>50–70 min:</strong> Full group discussion: where do we see overlap? Where do we see tension? What does this cohort collectively bring?</div>
+          <div class="item"><strong>70–85 min:</strong> Paired reflection — one person shares what is hard about being a leader at this level; partner listens without fixing</div>
+          <div class="item"><strong>85–90 min:</strong> Close — each person names one word that describes what they want from this cohort</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Facilitation Notes</div>
+          <div class="item">Community Agreements are not rules — they are commitments. Ask: "What do you need from this group to show up honestly?" Build the list together.</div>
+          <div class="item">The Gallup group debrief should be about patterns in context, not definitions. "Tell us about a time this theme showed up in your leadership" is more useful than "here's what this theme means."</div>
+          <div class="script-box">Opening question: "What is hard about being a leader at this level that you rarely say out loud — and that you are hoping this group might help you carry?"</div>
+          <div class="between-box"><div class="between-label">Between Sessions</div>Read each other's top 5 themes (share the list with the group). Note where you see someone else's theme in their leadership before Session 2.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">S2</div><div class="sess-title">Leadership Identity</div><div class="sess-tool">Month 2 · 90 min</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">Structure (90 min)</div>
+          <div class="item"><strong>0–15 min:</strong> Check-in — what has shown up in your leadership since last month?</div>
+          <div class="item"><strong>15–40 min:</strong> Content input: introduce the Multipliers framework (Multiplier vs. Diminisher). Ask: which lane are you in right now — and when?</div>
+          <div class="item"><strong>40–65 min:</strong> Peer coaching triads (rotate every 8 min) — one person shares a leadership identity challenge; two coach using the framework</div>
+          <div class="item"><strong>65–80 min:</strong> Full group debrief — what came up across the triads?</div>
+          <div class="item"><strong>80–90 min:</strong> Each person names one thing they are going to do differently based on this session</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Facilitation Notes</div>
+          <div class="item">Peer coaching triads are the engine of cohort sessions. Set them up clearly: the "client" shares a real situation in 2 minutes; the "coaches" ask only questions (no advice) for 6 minutes; then switch.</div>
+          <div class="item">Executive Presence lens for director/executive cohorts: "What does your leadership signal to someone who does not have the context you have?"</div>
+          <div class="script-box">For manager cohorts: "What is expected of you as a manager that you were not expecting when you were promoted?"<br>For executive cohorts: "Who are you as a leader when the title or the organization is removed?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">S3</div><div class="sess-title">Difficult Conversations + Candor</div><div class="sess-tool">Month 3 · 90 min</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">Structure (90 min)</div>
+          <div class="item"><strong>0–15 min:</strong> Check-in + what is one conversation you have been putting off?</div>
+          <div class="item"><strong>15–40 min:</strong> Radical Candor four quadrants — present the model, ask where they most recognize themselves and their team</div>
+          <div class="item"><strong>40–65 min:</strong> Role-play in pairs — one person plays themselves, one plays the team member in the delayed conversation. Then debrief in the full group.</div>
+          <div class="item"><strong>65–80 min:</strong> For director/executive cohorts: Five Dysfunctions — which level is your team stuck at? Peer coaching on one real situation.</div>
+          <div class="item"><strong>80–90 min:</strong> Commitments — each person names one conversation they will have before next month's session</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Facilitation Notes</div>
+          <div class="item">The role-play is the most powerful part. Keep it real — use an actual situation, not a hypothetical. The discomfort is the point.</div>
+          <div class="item">For manager cohorts: focus on peer-to-peer and manager-to-direct-report conversations</div>
+          <div class="item">For director/executive cohorts: extend to board conversations, peer executive dynamics, and conversations with people who have more formal power</div>
+          <div class="script-box">Debrief question: "What did you notice about where you went in Ruinous Empathy — and what would it have taken to stay in Radical Candor?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">S4</div><div class="sess-title">Equity + Authority</div><div class="sess-tool">Month 4 · 90 min</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">Structure (90 min)</div>
+          <div class="item"><strong>0–15 min:</strong> Check-in — what is one thing you have noticed about who has voice and power in your organization?</div>
+          <div class="item"><strong>15–40 min:</strong> Conditions of Belonging diagnostic — walk through the three conditions (Valued, Connected, Contributing) as a group. Each person rates their team.</div>
+          <div class="item"><strong>40–65 min:</strong> Small groups: who in your organization is not fully in? What would it take to change that?</div>
+          <div class="item"><strong>65–80 min:</strong> Full group: what does your leadership signal about who belongs here?</div>
+          <div class="item"><strong>80–90 min:</strong> One commitment each — something they will do differently based on this session</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Facilitation Notes</div>
+          <div class="item">This session surfaces real discomfort. Hold it. Do not rush to solutions or reassurance.</div>
+          <div class="item">The goal is not to make everyone comfortable with equity — it is to make the question of equity a leadership question, not a values question</div>
+          <div class="item">Use Ripple Effect Mapping with executive cohorts: trace a recent decision and map who it affected, and how</div>
+          <div class="script-box">Opening reframe: "This session is not about whether you are a good person. It is about what your leadership makes possible — and what it does not — for people who are not like you."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">S5</div><div class="sess-title">Influence + Building Your Leadership Profile</div><div class="sess-tool">Month 5 · 90 min</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">Structure (90 min)</div>
+          <div class="item"><strong>0–15 min:</strong> Check-in — what influence move did you make this month, and how did it land?</div>
+          <div class="item"><strong>15–40 min:</strong> For manager cohorts: Multipliers — from solving to developing. What do you need to let go of to grow?</div>
+          <div class="item">For director/executive cohorts: Thought leadership — what is one idea from your experience that the field needs to hear?</div>
+          <div class="item"><strong>40–65 min:</strong> Peer feedback on thought leadership draft — each person shares 60 seconds on one idea; group asks one deepening question</div>
+          <div class="item"><strong>65–90 min:</strong> Sustainability and burnout — what is the honest conversation about rest and longevity at this level?</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Facilitation Notes</div>
+          <div class="item">By Month 5, the group has enough trust to go to harder places. Use it.</div>
+          <div class="item">The thought leadership conversation is not about producing a LinkedIn post — it is about naming what they know that others do not yet say out loud</div>
+          <div class="script-box">"What is the thing you believe about leadership at this level that you have not yet said publicly — because it is uncomfortable, or too honest, or because you were not sure it was yours to say?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-card">
+    <div class="sess-hdr"><div class="sess-num">S6</div><div class="sess-title">Integration + Community Close</div><div class="sess-tool">Month 6 · 90 min</div></div>
+    <div class="sess-body">
+      <div class="two-col">
+        <div>
+          <div class="sess-col-head">Structure (90 min)</div>
+          <div class="item"><strong>0–20 min:</strong> Full arc check-in — each person completes: "I came as a leader who... I am leaving as a leader who..."</div>
+          <div class="item"><strong>20–50 min:</strong> Peer gifting — each person names one thing they received from someone in this cohort that they could not have gotten from individual coaching</div>
+          <div class="item"><strong>50–70 min:</strong> Commitments witnessed — each person names one commitment made in front of the group</div>
+          <div class="item"><strong>70–85 min:</strong> Closing circle — one word that names what this cohort gave you</div>
+          <div class="item"><strong>85–90 min:</strong> Your close — acknowledge what happened here and what they are taking forward</div>
+        </div>
+        <div>
+          <div class="sess-col-head">Facilitation Notes</div>
+          <div class="item">The peer gifting exercise is one of the most powerful closing structures available. It names what only group work can produce — the insight that comes from being witnessed by people who are navigating the same terrain.</div>
+          <div class="item">Do not rush the closing circle. Let it land.</div>
+          <div class="script-box">Your close: "What happened in this room over six months is not replicable. What you built with each other — the trust, the honesty, the willingness to show up — that is yours. I am grateful to have held this space with you."</div>
+          <div class="between-box"><div class="between-label">Follow-Up (within 48 hours)</div>Send a personal note to each participant naming something specific you observed in their growth. Send the group a summary: what we named together, what we built, what each person committed to.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>Greer Collective &nbsp;·&nbsp; thegreercollective.com &nbsp;·&nbsp; Package Session Guides</footer>
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

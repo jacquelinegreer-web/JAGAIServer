@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Greer Collective · Simply.Coach Setup + Coaching Tips</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root { --plum:#2C1A2E; --gold:#B8922A; --cream:#FAF6EF; --mauve:#8A7A8E; --midplum:#4A2455; --green:#1B6B2A; --green-light:#EAF4EC; --ltplum:#EDE6F0; --ltgold:#F5EDD8; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--cream);color:var(--plum);font-family:'Cormorant Garamond',Georgia,serif;font-size:17px;line-height:1.7;}
+    header{background:var(--plum);padding:48px 48px 36px;border-bottom:4px solid var(--gold);}
+    .eyebrow{font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+    header h1{font-weight:300;font-size:40px;color:var(--cream);line-height:1.1;margin-bottom:8px;}
+    .header-sub{font-family:'Jost',sans-serif;font-size:12px;color:var(--mauve);letter-spacing:2px;}
+    .nav-tabs{background:var(--midplum);display:flex;gap:0;overflow-x:auto;border-bottom:3px solid var(--gold);}
+    .tab{font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--mauve);padding:14px 24px;cursor:pointer;border:none;background:none;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-3px;transition:color .15s,background .15s;}
+    .tab:hover{color:var(--cream);}
+    .tab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(184,146,42,0.06);}
+    main{max-width:1040px;margin:0 auto;padding:40px 40px 80px;}
+    .panel{display:none;} .panel.active{display:block;}
+    .sec-head{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin:40px 0 6px;padding-bottom:8px;border-bottom:3px solid var(--gold);}
+    .sec-title{font-size:30px;font-weight:300;color:var(--plum);margin-bottom:10px;}
+    .sec-body{font-size:17px;color:var(--plum);margin-bottom:28px;max-width:720px;}
+    .step{border-left:3px solid var(--gold);margin-bottom:28px;padding-left:22px;}
+    .step-num{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:4px;}
+    .step-title{font-size:22px;font-weight:400;color:var(--plum);margin-bottom:6px;}
+    .step-body{font-size:16px;color:#444;line-height:1.6;}
+    .item{font-size:16px;color:var(--plum);margin-bottom:8px;padding-left:18px;position:relative;line-height:1.5;}
+    .item::before{content:"·";position:absolute;left:0;color:var(--gold);}
+    .item strong{color:var(--plum);}
+    .note{font-family:'Jost',sans-serif;font-size:11px;color:var(--mauve);padding-left:18px;margin-bottom:10px;font-style:italic;}
+    .info-box{background:var(--plum);border-radius:3px;padding:22px 26px;margin:20px 0;}
+    .info-label{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+    .info-body{font-size:16px;color:var(--cream);line-height:1.6;}
+    .tip-card{border:1px solid #E8E0E2;border-left:4px solid var(--gold);border-radius:3px;padding:16px 20px;margin-bottom:16px;background:#fff;}
+    .tip-num{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:4px;}
+    .tip-title{font-size:18px;font-weight:600;color:var(--plum);margin-bottom:6px;}
+    .tip-body{font-size:16px;color:#444;line-height:1.6;}
+    .tip-example{background:var(--ltgold);border-radius:3px;padding:10px 14px;margin-top:10px;font-size:15px;color:#5A4010;font-style:italic;}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;}
+    .col-card{background:#fff;border:1px solid #E8E0E2;border-top:3px solid var(--gold);border-radius:3px;padding:18px 20px;}
+    .col-head{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #E8E0E2;}
+    table{width:100%;border-collapse:collapse;margin-bottom:28px;}
+    th{background:var(--plum);color:var(--cream);font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;padding:10px 14px;text-align:left;}
+    td{border-bottom:1px solid #E8E0E2;padding:12px 14px;vertical-align:top;font-size:15px;line-height:1.5;}
+    tr:nth-child(even) td{background:rgba(44,26,46,0.02);}
+    .check{color:var(--green);font-weight:700;}
+    .tracker-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;border:1px solid #E8E0E2;border-radius:3px;overflow:hidden;margin-bottom:12px;}
+    .tracker-cell{padding:10px 14px;font-size:14px;border-right:1px solid #E8E0E2;}
+    .tracker-cell:last-child{border-right:none;}
+    .tracker-hdr{background:var(--plum);color:var(--gold);font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;}
+    @media(max-width:700px){.two-col,.tracker-row{grid-template-columns:1fr;}}
+    footer{background:var(--plum);border-top:3px solid var(--gold);padding:20px 40px;text-align:center;font-family:'Jost',sans-serif;font-size:11px;color:var(--mauve);letter-spacing:2px;}
+  </style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Greer Collective · Coaching Operations</div>
+  <h1>Simply.Coach Setup + Coaching Tips</h1>
+  <div class="header-sub">Platform Configuration · Quick-Start Tracker · Coaching Practice Tips · Client Onboarding</div>
+</header>
+<div class="nav-tabs">
+  <button class="tab active" onclick="showTab('setup')">Simply.Coach Setup</button>
+  <button class="tab" onclick="showTab('tracker')">Quick-Start Tracker</button>
+  <button class="tab" onclick="showTab('onboarding')">Client Onboarding</button>
+  <button class="tab" onclick="showTab('tips')">Coaching Tips</button>
+  <button class="tab" onclick="showTab('scripts')">Useful Scripts</button>
+</div>
+<main>
+
+<!-- SIMPLY.COACH SETUP -->
+<div class="panel active" id="panel-setup">
+  <div class="sec-head">01 · Platform Configuration</div>
+  <div class="sec-title">Simply.Coach — Step by Step</div>
+  <div class="sec-body">Simply.Coach is your coaching backend: session notes, client portal, goal tracking, and invoicing in one place. Set it up once and it runs. These steps take about two hours total.</div>
+
+  <div class="step">
+    <div class="step-num">Step 1 · Account and Branding</div>
+    <div class="step-title">Make It Feel Like Yours</div>
+    <div class="step-body">
+      <div class="item"><strong>Upload your logo</strong> — the Greer Collective wordmark. Settings → Branding.</div>
+      <div class="item"><strong>Set your brand colors</strong> — Primary: #2C1A2E (Plum), Accent: #B8922A (Gold).</div>
+      <div class="item"><strong>Write your coach bio</strong> — this appears in the client portal. Use the short version from your OnePager: 3–4 sentences, active voice, no em dashes.</div>
+      <div class="item"><strong>Connect your Zoom account</strong> — Settings → Integrations → Zoom. Every session will auto-generate a unique Zoom link.</div>
+      <div class="item"><strong>Connect your Google Calendar</strong> — prevents double-booking and syncs session times.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">Step 2 · Session Types</div>
+    <div class="step-title">Create One Session Type Per Package</div>
+    <div class="step-body">
+      <div class="item"><strong>Clarity Call</strong> — 90 minutes, $250–$350. Single session. Notes template: see below.</div>
+      <div class="item"><strong>Intensive Session</strong> — 60 minutes, bi-weekly. Used for all 6 sessions in the Intensive package.</div>
+      <div class="item"><strong>Deep Dive Session</strong> — 60 minutes, bi-weekly. Used for all 12 sessions in the Deep Dive package.</div>
+      <div class="item"><strong>Group Cohort Session</strong> — 90 minutes, monthly. Set capacity to 8 max.</div>
+      <div class="item"><strong>Discovery Call</strong> — 45 minutes, complimentary. This is your top-of-funnel session. Mark it as free.</div>
+      <div class="note">Do not create hourly session types. Package billing only — clients pay for the engagement, not the hour.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">Step 3 · Note Templates</div>
+    <div class="step-title">Build These Four Templates Once</div>
+    <div class="step-body">
+      <p style="font-size:16px;color:#444;margin-bottom:14px;">These are for your private session notes — not what you send clients. Having a template means you capture the same things every time.</p>
+
+      <div class="info-box">
+        <div class="info-label">Template 1 · Clarity Call Notes</div>
+        <div class="info-body">
+          <strong>What they came in with:</strong> [presenting situation in their words]<br>
+          <strong>What emerged:</strong> [the insight or shift that happened]<br>
+          <strong>Their clarity statement:</strong> [verbatim if possible]<br>
+          <strong>Their committed action:</strong> [specific, their words]<br>
+          <strong>Open question to carry:</strong> [one question worth sitting with]<br>
+          <strong>Coach observations:</strong> [what I noticed — energy, avoidance, language patterns]<br>
+          <strong>Follow-up sent:</strong> [date] | <strong>Check-in due:</strong> [date +4 days]<br>
+          <strong>Outcome:</strong> [ ] Continue to Intensive / [ ] Continue to Deep Dive / [ ] Complete / [ ] Referral
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">Template 2 · Intensive + Deep Dive Session Notes</div>
+        <div class="info-body">
+          <strong>Session #:</strong> ___ of ___&nbsp;&nbsp; <strong>Date:</strong> ___&nbsp;&nbsp; <strong>Phase:</strong> [Foundation / Real Work / Skill / etc.]<br><br>
+          <strong>Opening check-in:</strong> [Where are they arriving from? What is alive?]<br>
+          <strong>What we worked on:</strong> [the core of the session]<br>
+          <strong>Key question asked:</strong> [the one that landed hardest]<br>
+          <strong>Insight or shift:</strong> [what moved, in their words]<br>
+          <strong>Framework introduced:</strong> [if any — e.g., Radical Candor, Stakeholder Map]<br>
+          <strong>Committed action before next session:</strong> [specific and time-bound]<br>
+          <strong>Coach observations:</strong> [patterns, energy, what was avoided]<br>
+          <strong>Thread to pick up next time:</strong> [the unfinished thing]
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">Template 3 · Group Cohort Facilitation Notes</div>
+        <div class="info-body">
+          <strong>Session #:</strong> ___ &nbsp;&nbsp; <strong>Cohort level:</strong> [Manager / Director / Executive]<br>
+          <strong>Who attended:</strong> [names or initials]<br>
+          <strong>Opening energy:</strong> [what the room felt like at the start]<br>
+          <strong>Framework or content introduced:</strong><br>
+          <strong>What the group surfaced:</strong> [themes that emerged from discussion]<br>
+          <strong>Peer coaching exchange notes:</strong> [what came up in triads or pairs]<br>
+          <strong>What landed:</strong> [the moment that mattered most]<br>
+          <strong>What to follow up on 1:1:</strong> [anyone who needs a check-in]<br>
+          <strong>For next session:</strong> [what to design based on today]
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">Template 4 · 360 Debrief Notes</div>
+        <div class="info-body">
+          <strong>Instrument used:</strong> [Spidergap / Google Forms / CCL / other]<br>
+          <strong>Rater groups:</strong> [who provided feedback]<br>
+          <strong>Top 3 strengths identified:</strong><br>
+          <strong>Top 2 growth edges identified:</strong><br>
+          <strong>Biggest gap between self-rating and rater rating:</strong><br>
+          <strong>What surprised them:</strong> [their words]<br>
+          <strong>What confirmed something they already knew:</strong><br>
+          <strong>How they received it:</strong> [defensive / curious / emotional / matter-of-fact]<br>
+          <strong>What they want to do with it:</strong> [their commitment]
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">Step 4 · Goal Tracking</div>
+    <div class="step-title">Set Goals at Session 1 — Track Through Session 6</div>
+    <div class="step-body">
+      <div class="item">In Simply.Coach, create 2–3 goals per client in the first session. These are the client's words, not coaching-speak.</div>
+      <div class="item">Use the progress indicator to update goal status at each session — "not yet started / in progress / achieved / sustained."</div>
+      <div class="item">At the mid-point (Intensive: Session 3–4 / Deep Dive: Month 3), run a formal goal review and note which goals have shifted or been replaced.</div>
+      <div class="item">At the final session, document the achievement status of every goal. This becomes part of your case study and testimonial request.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">Step 5 · Client Tags</div>
+    <div class="step-title">Use Tags to Track Your Pipeline</div>
+    <div class="step-body">
+      <div class="item"><strong>Clarity Call – [Month Year]</strong> — every single-session client</div>
+      <div class="item"><strong>Intensive – Active</strong> — current 3-month clients</div>
+      <div class="item"><strong>Deep Dive – Active</strong> — current 6-month clients</div>
+      <div class="item"><strong>Cohort – [Cohort Name]</strong> — group members</div>
+      <div class="item"><strong>Pro Bono</strong> — log these for ICF hours but track separately</div>
+      <div class="item"><strong>Corporate Sponsor</strong> — client whose engagement is organizationally funded</div>
+      <div class="item"><strong>Referral Source</strong> — note who referred them. This data matters at 6 months.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">Step 6 · ICF Hours Log</div>
+    <div class="step-title">Track Hours from Day One — Every Session Counts</div>
+    <div class="step-body">
+      <div class="item">Simply.Coach logs session duration automatically. Export monthly to confirm your hours count.</div>
+      <div class="item">For ICF: you need 100 coaching hours for ACC (up to 25 can be pro bono), and 10 hours of mentor coaching. Track these as separate categories.</div>
+      <div class="item">Keep a separate simple spreadsheet: Client | Date | Duration | Paid or Pro Bono | Package. This is the document you submit with your ACC application.</div>
+      <div class="note">Do not wait until you apply to reconstruct your hours. Log them in real time starting with your first session.</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK-START TRACKER -->
+<div class="panel" id="panel-tracker">
+  <div class="sec-head">02 · Quick-Start Tracker</div>
+  <div class="sec-title">Your First 90 Days — What to Track</div>
+  <div class="sec-body">This is a simple reference for what to watch in the first three months of your coaching practice. Not a dashboard — a checklist you return to weekly.</div>
+
+  <div class="sec-head" style="margin-top:0">Client Pipeline</div>
+  <div class="tracker-row">
+    <div class="tracker-cell tracker-hdr">Client</div>
+    <div class="tracker-cell tracker-hdr">Package</div>
+    <div class="tracker-cell tracker-hdr">Start Date</div>
+    <div class="tracker-cell tracker-hdr">Status / Next Step</div>
+  </div>
+  <div class="tracker-row">
+    <div class="tracker-cell">Helene Felman</div>
+    <div class="tracker-cell">Pro Bono / Intensive</div>
+    <div class="tracker-cell">July 2026</div>
+    <div class="tracker-cell">Log sessions; request testimonial at Session 4</div>
+  </div>
+  <div class="tracker-row">
+    <div class="tracker-cell">Tarin Bynum Neal</div>
+    <div class="tracker-cell">Clarity Call → TBD</div>
+    <div class="tracker-cell">Reach out July 2026</div>
+    <div class="tracker-cell">Send warm outreach with Calendly link</div>
+  </div>
+  <div class="tracker-row">
+    <div class="tracker-cell">[Beta corporate client]</div>
+    <div class="tracker-cell">First 90 Days package</div>
+    <div class="tracker-cell">Target: August 2026</div>
+    <div class="tracker-cell">Identify and pitch from Deloitte / USPS / Urban Teachers network</div>
+  </div>
+  <div class="tracker-row" style="border:none;">
+    <div class="tracker-cell" style="color:var(--mauve);font-style:italic;font-family:'Jost',sans-serif;font-size:12px;">Add rows as clients book</div>
+    <div class="tracker-cell"></div><div class="tracker-cell"></div><div class="tracker-cell"></div>
+  </div>
+
+  <div class="sec-head">ICF Hours Log</div>
+  <table>
+    <thead><tr><th style="width:20%">Date</th><th style="width:22%">Client (initials)</th><th style="width:14%">Duration</th><th style="width:16%">Type</th><th style="width:28%">Notes</th></tr></thead>
+    <tbody>
+      <tr><td>——</td><td>H.F.</td><td>60 min</td><td>Pro Bono</td><td>Session 1 – foundation + CliftonStrengths</td></tr>
+      <tr><td colspan="5" style="color:var(--mauve);font-family:'Jost',sans-serif;font-size:12px;font-style:italic;">Log every session here. Export monthly. Target: 100 hours for ACC.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec-head">Weekly Practice Rhythm</div>
+  <div class="two-col">
+    <div class="col-card">
+      <div class="col-head">Before Every Session</div>
+      <div class="item">Re-read your notes from last session</div>
+      <div class="item">Note the thread you left open — start there</div>
+      <div class="item">Clear 15 minutes before the call. Do not go back-to-back.</div>
+      <div class="item">Have your questions ready but hold them loosely — follow the client</div>
+    </div>
+    <div class="col-card">
+      <div class="col-head">After Every Session</div>
+      <div class="item">Write session notes within 2 hours while it is fresh</div>
+      <div class="item">Send the follow-up email (personalized, not templated in feel)</div>
+      <div class="item">Log hours in Simply.Coach</div>
+      <div class="item">Set calendar reminder for the next check-in or session</div>
+    </div>
+  </div>
+
+  <div class="sec-head">Monthly Metrics to Watch</div>
+  <table>
+    <thead><tr><th>Metric</th><th>Target (Month 1–3)</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Coaching hours logged</td><td>10–15 per month</td><td>Mix of pro bono and paid to start</td></tr>
+      <tr><td>Discovery calls held</td><td>2–4 per month</td><td>Not every discovery call converts — that is normal</td></tr>
+      <tr><td>Clarity Calls booked</td><td>1–3 per month</td><td>This is your top-of-funnel; track how many convert to longer engagements</td></tr>
+      <tr><td>Active paying clients</td><td>1–2 by Month 2</td><td>Pro bono counts for hours but not revenue</td></tr>
+      <tr><td>Testimonials collected</td><td>1 by Month 3</td><td>Ask at Session 4–5 of any engagement, not at the end</td></tr>
+      <tr><td>LinkedIn content posted</td><td>1–2 per month</td><td>Thought leadership, not promotion. See content calendar.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- CLIENT ONBOARDING -->
+<div class="panel" id="panel-onboarding">
+  <div class="sec-head">03 · Client Onboarding</div>
+  <div class="sec-title">What Happens Before Session 1</div>
+  <div class="sec-body">First impressions in coaching are not just about the first session — they are about everything that happens before it. A clean, warm, professional onboarding process signals the quality of what follows.</div>
+
+  <div class="step">
+    <div class="step-num">After Discovery Call — Client Says Yes</div>
+    <div class="step-title">Send Within 24 Hours</div>
+    <div class="step-body">
+      <div class="item"><strong>Coaching agreement</strong> — covers confidentiality, session structure, cancellation policy, and payment terms. Must be signed before Session 1. Keep it to 1–2 pages.</div>
+      <div class="item"><strong>Invoice or payment link</strong> — collect the first payment (or full package payment) before the first session. Simply.Coach handles invoicing and stripe payments.</div>
+      <div class="item"><strong>Welcome email</strong> — warm, brief. Confirm the first session date, send the Calendly link for remaining sessions, and include one sentence about what to expect.</div>
+      <div class="note">Required fields in your coaching agreement: client name, engagement type, session count, investment, payment schedule, confidentiality clause, cancellation policy (24-hour notice minimum), scope of coaching vs. therapy disclaimer.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">Before Session 1 — Client Action</div>
+    <div class="step-title">Send the CliftonStrengths Access Code (Intensive + Deep Dive)</div>
+    <div class="step-body">
+      <div class="item">Purchase the code from Gallup ($19.99 Top 5 / $49.99 Full 34) and send it with clear instructions: complete the assessment before Session 1, bring the report PDF.</div>
+      <div class="item">Send the pre-session intake form (via Simply.Coach): 4–5 questions about their goals, leadership context, and what success looks like at the end of the engagement.</div>
+      <div class="item">Add them to your Simply.Coach client portal — they will be able to see session notes you mark as shared, their goals, and upcoming sessions.</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <div class="col-head">Clarity Call Onboarding</div>
+      <div class="item">Booking confirmation (auto via Calendly)</div>
+      <div class="item">Reflection prompt 48 hours before</div>
+      <div class="item">Day-of reminder (send manually)</div>
+      <div class="item">No intake form required — keep the barrier low</div>
+    </div>
+    <div class="col-card">
+      <div class="col-head">Intensive / Deep Dive Onboarding</div>
+      <div class="item">Coaching agreement signed</div>
+      <div class="item">First payment collected</div>
+      <div class="item">CliftonStrengths code sent and completed</div>
+      <div class="item">Intake form completed (in Simply.Coach)</div>
+      <div class="item">Session schedule set for all sessions</div>
+      <div class="item">Client added to Simply.Coach portal</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <div class="info-label">What the Intake Form Should Ask</div>
+    <div class="info-body">
+      1. What brings you to coaching at this point in your career?<br>
+      2. What would feel different about your leadership if this engagement is successful?<br>
+      3. What is one thing you want me to know about how you work and learn best?<br>
+      4. Is there anything you are hoping coaching will <em>not</em> ask of you? (This is an optional question — but the answers are often the most useful.)<br>
+      5. What is the most pressing situation in your work life right now?
+    </div>
+  </div>
+</div>
+
+<!-- COACHING TIPS -->
+<div class="panel" id="panel-tips">
+  <div class="sec-head">04 · Coaching Tips</div>
+  <div class="sec-title">What Separates Good Coaching from Great Coaching</div>
+  <div class="sec-body">These are not rules — they are things that actually matter in the room. They come from ICF competencies, from what top coaches consistently name, and from what you already do well that is worth making more intentional.</div>
+
+  <div class="tip-card">
+    <div class="tip-num">Tip 01</div>
+    <div class="tip-title">Silence is your most powerful tool.</div>
+    <div class="tip-body">When a client answers a question, most coaches nod and ask the next one. The best coaches pause. Let the silence breathe. The client's second and third thoughts — what surfaces after the rehearsed answer — are usually where the real work lives.</div>
+    <div class="tip-example">"Take a moment with that." Then stop talking. Count to ten internally if you have to.</div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-num">Tip 02</div>
+    <div class="tip-title">Ask one question at a time. One.</div>
+    <div class="tip-body">When coaches are nervous or excited, they ask multiple questions in one breath. The client answers the easiest one and the harder questions evaporate. Choose the question that goes deepest and ask only that one. Let them answer it fully.</div>
+    <div class="tip-example">Not: "What happened and how did that feel and what are you going to do about it?" Just: "What happened?"</div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-num">Tip 03</div>
+    <div class="tip-title">Reflect back in their words, not yours.</div>
+    <div class="tip-body">When you paraphrase in your own vocabulary, you introduce your frame. When you reflect back the exact words they used — especially the emotionally loaded ones — they hear themselves differently. You do not need to add anything. Just hand the words back.</div>
+    <div class="tip-example">"You said it felt like disappearing. Say more about that."</div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-num">Tip 04</div>
+    <div class="tip-title">Don't advise when you can ask.</div>
+    <div class="tip-body">When you know the answer — and you often will — the instinct is to offer it. Resist. Ask the question that leads them to it instead. They will own it differently. "What do you think you already know?" is more powerful than the most elegant piece of advice you could give.</div>
+    <div class="tip-example">"What would you tell a colleague in this exact situation?" Then listen while they give themselves the advice.</div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-num">Tip 05</div>
+    <div class="tip-title">Notice what is not being said.</div>
+    <div class="tip-body">The shape of the conversation often matters as much as the content. Who is absent from a story that should be there? What emotion is in the room that they have not named? What question are they avoiding by giving you a lot of words? Name what you notice gently, without certainty.</div>
+    <div class="tip-example">"I notice we have talked for 20 minutes about this situation and you have not mentioned how you feel about it. What is true there?"</div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-num">Tip 06</div>
+    <div class="tip-title">Coach the person, not the problem.</div>
+    <div class="tip-body">Clients will bring you problems. Your job is not to solve the problem — it is to develop the person who is navigating the problem. The tactical question and the identity question are always both available. The identity question is almost always the more useful one.</div>
+    <div class="tip-example">Not: "Here's how to handle that performance situation." But: "What does this situation reveal about what you believe your job is?"</div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-num">Tip 07</div>
+    <div class="tip-title">Challenge directly. Care first.</div>
+    <div class="tip-body">You are not doing your client a service by staying in comfortable territory. When you see a pattern, a contradiction, or a story that is keeping them stuck — name it. Do it with care and directness together. This is the heart of Radical Candor and it applies to your own coaching practice as much as you teach it to clients.</div>
+    <div class="tip-example">"I want to push back gently on something. You have described that person as the obstacle in three different sessions now. What if you are the variable you have not yet examined?"</div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-num">Tip 08</div>
+    <div class="tip-title">Start and end on time. Always.</div>
+    <div class="tip-body">Time boundaries are a form of respect. A coach who lets sessions run over is not being generous — they are being unclear about their own structure. End with intention: summarize what the client named, confirm their action, and close warmly. The last five minutes are as important as the first five.</div>
+    <div class="tip-example">"We have about five minutes. I want to make sure you are leaving with what you need. What is the one thing you are taking?"</div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-num">Tip 09</div>
+    <div class="tip-title">Take notes — but stay present.</div>
+    <div class="tip-body">Notes are for you, not the session. If you are writing so much that you are losing eye contact and presence, you are in reporter mode, not coaching mode. Jot keywords and phrases. Write the full notes immediately after. Your presence in the room is the most important thing you offer.</div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-num">Tip 10</div>
+    <div class="tip-title">Your own self-management is a coaching tool.</div>
+    <div class="tip-body">What you feel in the session is often a mirror of what the client feels. Boredom may signal avoidance. Urgency may signal their anxiety landing in you. When you notice an internal state in session, ask: what is this in response to? Your body is giving you information about the client. Use it.</div>
+    <div class="tip-example">"I am noticing something in myself right now — a kind of urgency. I wonder if that is connected to something you are carrying into this session. What is true for you right now?"</div>
+  </div>
+
+  <div class="info-box">
+    <div class="info-label">The Two Questions That Work in Almost Every Session</div>
+    <div class="info-body">
+      <strong>"What do you already know?"</strong> — When a client is stuck, they usually already have the answer and are afraid to claim it. This question gives them permission to know what they know.<br><br>
+      <strong>"What would you do if you let yourself do what you want to do?"</strong> — The word "let" carries all the weight here. Most leadership blocks are not about capability — they are about permission.
+    </div>
+  </div>
+</div>
+
+<!-- USEFUL SCRIPTS -->
+<div class="panel" id="panel-scripts">
+  <div class="sec-head">05 · Useful Scripts</div>
+  <div class="sec-title">Language for Situations That Come Up Often</div>
+  <div class="sec-body">These are not scripts to memorize — they are starting points you can adapt to your voice and the specific moment.</div>
+
+  <div class="step">
+    <div class="step-num">When a Client Wants Advice</div>
+    <div class="step-title">Redirect Without Dismissing</div>
+    <div class="step-body">
+      <div class="info-box"><div class="info-body">"I hear you asking me what I would do. I will tell you — but first I want to know what you already think. What is your instinct here, if you set the fear aside?"</div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">When a Client Arrives in Crisis Mode</div>
+    <div class="step-title">Slow the Room Down First</div>
+    <div class="step-body">
+      <div class="info-box"><div class="info-body">"I can feel there is a lot happening for you right now. Before we go anywhere, I just want to check in: what do you most need from this session today? We can adjust the agenda completely."</div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">When a Client Is Stuck in a Story</div>
+    <div class="step-title">Interrupt With Care</div>
+    <div class="step-body">
+      <div class="info-box"><div class="info-body">"I want to pause you there — not because what you are saying is not important, but because something you said three sentences ago is still sitting with me. You said [PHRASE]. Can we go back to that?"</div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">When You Want to Name What You Notice</div>
+    <div class="step-title">Make It an Observation, Not a Diagnosis</div>
+    <div class="step-body">
+      <div class="info-box"><div class="info-body">"I want to name something I am noticing, and I hold this lightly — you can correct me. I have observed that every time [X topic] comes up, your energy shifts. What is true about that for you?"</div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">Asking for a Testimonial</div>
+    <div class="step-title">Session 4–5, Not at the End</div>
+    <div class="step-body">
+      <div class="info-box"><div class="info-body">"I want to ask you something — and please feel completely free to say no. I am building the written record of this work and the voices of people I have coached matter a great deal. Would you be willing to write a few sentences about what this experience has been like for you? What you share, what you want to keep private — entirely up to you."</div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">Pitching a Beta Corporate Engagement</div>
+    <div class="step-title">From the Pricing Strategy Guide</div>
+    <div class="step-body">
+      <div class="info-box"><div class="info-body">"I am completing an advanced ICF executive certification and am offering a heavily discounted 3-month strategic leadership package to a small number of high-caliber leaders — $2,500 instead of my post-credential rate of $6,000. I am looking for someone who is navigating a specific leadership challenge or transition and wants an objective sounding board to accelerate their thinking. Would you be open to a 45-minute conversation to see if it is a fit?"</div></div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>Greer Collective &nbsp;·&nbsp; thegreercollective.com &nbsp;·&nbsp; Simply.Coach Setup + Coaching Tips</footer>
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>
