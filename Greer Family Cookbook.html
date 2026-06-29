@@ -1,0 +1,2867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Greer Family Cookbook</title>
+<style>
+@page { size: 8.5in 11in; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Georgia, 'Times New Roman', serif; background: #bbb; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+:root {
+  --gold: #D4A017; --red: #8B1A1A; --green: #1A5C2A;
+  --teal: #006E7F; --orange: #C45E00; --purple: #4A1060;
+  --cream: #FDF5DC; --brown: #1A1008; --lgold: #F5E8B0;
+}
+
+.page {
+  width: 8.5in; height: 11in; overflow: hidden;
+  background: var(--cream); page-break-after: always;
+  display: flex; flex-direction: column; margin: 0 auto 20px;
+}
+
+.kente {
+  height: 20px; flex-shrink: 0;
+  background: linear-gradient(to right,
+    #D4A017 0% 8.33%, #8B1A1A 8.33% 16.66%, #1A5C2A 16.66% 25%,
+    #D4A017 25% 33.33%, #8B1A1A 33.33% 41.66%, #1A5C2A 41.66% 50%,
+    #D4A017 50% 58.33%, #8B1A1A 58.33% 66.66%, #1A5C2A 66.66% 75%,
+    #D4A017 75% 83.33%, #8B1A1A 83.33% 91.66%, #1A5C2A 91.66% 100%);
+}
+.kente-thin {
+  height: 10px; flex-shrink: 0;
+  background: linear-gradient(to right,
+    #D4A017 0% 8.33%, #8B1A1A 8.33% 16.66%, #1A5C2A 16.66% 25%,
+    #D4A017 25% 33.33%, #8B1A1A 33.33% 41.66%, #1A5C2A 41.66% 50%,
+    #D4A017 50% 58.33%, #8B1A1A 58.33% 66.66%, #1A5C2A 66.66% 75%,
+    #D4A017 75% 83.33%, #8B1A1A 83.33% 91.66%, #1A5C2A 91.66% 100%);
+}
+
+.pc { flex: 1; padding: 0.28in 0.42in 0.2in; overflow: hidden; display: flex; flex-direction: column; }
+
+/* ===== COVER ===== */
+.cover { background: var(--brown) !important; align-items: center; justify-content: center; text-align: center; }
+.cover .pc { align-items: center; justify-content: center; }
+.cv-title { font-size: 50pt; color: var(--gold); line-height: 1.1; margin-bottom: 0.18in; }
+.cv-rule { width: 5in; height: 4px; background: var(--gold); margin: 0.15in auto; }
+.cv-sub { font-size: 17pt; color: var(--lgold); font-style: italic; margin-bottom: 0.12in; }
+.cv-year { font-size: 12pt; color: var(--gold); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 0.15in; }
+.cv-tag { font-size: 11pt; color: #ccc; font-style: italic; }
+.cv-ornament { font-size: 28pt; color: var(--gold); opacity: 0.7; margin: 0.1in 0; }
+
+/* ===== DEDICATION ===== */
+.ded-inner { text-align: center; max-width: 6in; margin: 0 auto; padding-top: 0.4in; }
+.ded-inner h2 { font-size: 22pt; color: var(--brown); margin-bottom: 0.25in; }
+.ded-rule { width: 3in; height: 3px; background: var(--gold); margin: 0.15in auto; }
+.ded-inner p { font-size: 11.5pt; line-height: 1.9; color: #333; margin-bottom: 0.12in; }
+.ded-sig { font-size: 14pt; color: var(--red); font-style: italic; margin-top: 0.25in; }
+
+/* ===== TOC ===== */
+.toc-title { font-size: 22pt; color: var(--brown); text-align: center; border-bottom: 3px solid var(--gold); padding-bottom: 0.08in; margin-bottom: 0.2in; }
+.toc-sec { margin-bottom: 0.14in; }
+.toc-sec-hd { font-size: 11pt; font-weight: bold; color: white; padding: 4px 10px; border-radius: 3px; margin-bottom: 5px; }
+.toc-row { display: flex; justify-content: space-between; font-size: 9.5pt; padding: 2px 12px; border-bottom: 1px dotted #ccc; color: #333; }
+
+/* ===== SECTION DIVIDERS ===== */
+.divider { align-items: center; }
+.divider .pc { align-items: center; justify-content: center; }
+.div-name { font-size: 56pt; font-weight: bold; letter-spacing: 5px; color: white; text-shadow: 3px 3px 6px rgba(0,0,0,0.4); text-transform: uppercase; text-align: center; }
+.div-tag { font-size: 15pt; color: rgba(255,255,255,0.85); font-style: italic; margin-top: 0.12in; text-align: center; }
+.div-orn { font-size: 28pt; color: rgba(255,255,255,0.5); margin: 0.18in 0; }
+
+/* ===== RECIPE PAGE ===== */
+.rh { padding: 0.1in 0.14in; color: white; display: flex; justify-content: space-between; align-items: center; border-radius: 4px; margin-bottom: 0.1in; flex-shrink: 0; }
+.rt { font-size: 18pt; font-weight: bold; line-height: 1.1; }
+.rm { font-size: 8.5pt; text-align: right; opacity: 0.92; line-height: 1.5; }
+
+.rbody { display: flex; gap: 0.14in; flex: 1; overflow: hidden; }
+.icol { width: 2.45in; flex-shrink: 0; display: flex; flex-direction: column; gap: 0.1in; }
+.ocol { flex: 1; display: flex; flex-direction: column; }
+
+.clabel { font-size: 8.5pt; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid var(--brown); padding-bottom: 2px; margin-bottom: 0.07in; color: var(--brown); flex-shrink: 0; }
+
+.ilist { list-style: none; font-size: 9pt; line-height: 1.45; flex: 1; overflow: hidden; }
+.ilist li { padding: 1.5px 0; border-bottom: 1px dotted #ddd; }
+.ilist li::before { content: "• "; color: var(--gold); font-weight: bold; }
+
+.slist { list-style: none; font-size: 9pt; line-height: 1.5; counter-reset: s; flex: 1; overflow: hidden; }
+.slist li { counter-increment: s; padding: 2px 0 2px 1.4em; position: relative; border-bottom: 1px dotted #ddd; }
+.slist li::before { content: counter(s)"."; position: absolute; left: 0; color: var(--gold); font-weight: bold; }
+
+.photo-ph {
+  border: 2px dashed var(--gold); background: var(--lgold);
+  border-radius: 6px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  color: #8a7230; font-size: 8.5pt; font-style: italic; padding: 0.06in;
+  min-height: 1.3in;
+}
+.photo-ph .phi { font-size: 18pt; margin-bottom: 3px; }
+
+.tip {
+  background: var(--brown); color: var(--gold); border-radius: 5px;
+  padding: 0.08in 0.12in; margin-top: 0.08in; font-size: 8.5pt; line-height: 1.4; flex-shrink: 0;
+}
+.tip strong { color: var(--lgold); }
+
+/* ===== COLLAGE PAGE ===== */
+.collage-title { font-size: 18pt; color: var(--brown); text-align: center; margin-bottom: 0.15in; font-style: italic; flex-shrink: 0; }
+.pgrid { display: grid; gap: 0.14in; flex: 1; }
+.g2x3 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; }
+.g3x2 { grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.g2x2 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.pcard {
+  border: 2px dashed var(--gold); background: var(--lgold); border-radius: 6px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0.08in; text-align: center;
+}
+.pcard .pi { font-size: 22pt; color: var(--gold); }
+.pcard .pd { font-size: 8pt; color: #7a6230; font-style: italic; margin-top: 4px; }
+.pcard .pl { width: 85%; height: 1px; border-bottom: 1px solid var(--gold); margin-top: 8px; }
+.pcard .ph { font-size: 7pt; color: #bbb; font-style: italic; }
+
+/* ===== TIPS PAGE ===== */
+.tips-title { font-size: 18pt; color: var(--brown); text-align: center; margin-bottom: 0.15in; border-bottom: 2px solid var(--gold); padding-bottom: 0.07in; }
+.tip-card { background: var(--lgold); border: 2px solid var(--gold); border-radius: 8px; padding: 0.15in; margin-bottom: 0.15in; }
+.tip-card h3 { font-size: 13pt; color: var(--brown); margin-bottom: 0.08in; }
+.tip-card p { font-size: 9.5pt; line-height: 1.65; color: #333; }
+.wine-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-top: 0.1in; }
+.wine-cell { background: white; border: 1px solid var(--gold); border-radius: 4px; padding: 0.08in; font-size: 8.5pt; }
+.wine-cell strong { display: block; color: var(--brown); margin-bottom: 3px; font-size: 9pt; }
+
+/* ===== SECTION COLORS ===== */
+.bg-green { background: var(--green) !important; }
+.bg-teal  { background: var(--teal)  !important; }
+.bg-red   { background: var(--red)   !important; }
+.bg-purple{ background: var(--purple)!important; }
+.bg-orange{ background: var(--orange)!important; }
+.bg-brown { background: var(--brown) !important; }
+.bg-gold  { background: var(--gold)  !important; }
+
+@media print {
+  body { background: none; }
+  .page { margin: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== COVER ==================== -->
+<div class="page cover bg-brown">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="cv-ornament">✦ ✦ ✦</div>
+    <div class="cv-title">Greer Family<br>Cookbook</div>
+    <div class="cv-rule"></div>
+    <div class="cv-sub">From Our Kitchens to Yours</div>
+    <div class="cv-year">Recipes Collected with Love &bull; Est. 2024</div>
+    <div class="cv-rule"></div>
+    <div class="cv-tag">"Good food is the foundation of genuine happiness."</div>
+    <div class="cv-ornament" style="margin-top:0.25in;">✦ ✦ ✦</div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== DEDICATION ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="ded-inner">
+      <h2>For the Greers</h2>
+      <div class="ded-rule"></div>
+      <p>This cookbook is a love letter to every kitchen we have gathered in,
+         every holiday we have cooked through together, and every recipe
+         that has become part of who we are.</p>
+      <p>Whether you are Guyanese, African American, Caribbean, or somewhere
+         beautifully in between — these dishes belong to all of us.
+         They are the flavors of our home.</p>
+      <p>May every meal made from these pages bring warmth, laughter,
+         and full bellies. May the table always have room for one more.
+         And may we never stop cooking for each other.</p>
+      <div class="ded-rule"></div>
+      <p style="font-size:10pt;color:#666;">This book is meant to grow. Add your own notes,
+         substitute freely, and pass it on.</p>
+      <div class="ded-sig">With love, the Greer Family</div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== TABLE OF CONTENTS ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="toc-title">Table of Contents</div>
+    <div class="toc-sec">
+      <div class="toc-sec-hd bg-green">🌅 Breakfast &amp; Brunch</div>
+      <div class="toc-row"><span>Angel Biscuits</span><span>Breakfast</span></div>
+      <div class="toc-row"><span>Christmas French Toast</span><span>Breakfast</span></div>
+      <div class="toc-row"><span>Eggnog French Toast</span><span>Breakfast</span></div>
+      <div class="toc-row"><span>Strawberry Stuffed French Toast</span><span>Breakfast</span></div>
+      <div class="toc-row"><span>Monkey Bread</span><span>Breakfast</span></div>
+      <div class="toc-row"><span>Maple-Pepper Bacon</span><span>Breakfast</span></div>
+      <div class="toc-row"><span>Breakfast Sausage Casserole</span><span>Breakfast</span></div>
+      <div class="toc-row"><span>Cottage Cheese Egg Bites (Ninja Foodi)</span><span>Breakfast</span></div>
+    </div>
+    <div class="toc-sec">
+      <div class="toc-sec-hd bg-teal">🫒 Appetizers</div>
+      <div class="toc-row"><span>Spicy Sausage Balls</span><span>Appetizers</span></div>
+      <div class="toc-row"><span>Sugar &amp; Nut Glazed Brie</span><span>Appetizers</span></div>
+      <div class="toc-row"><span>Cranberry-Pear Relish</span><span>Appetizers</span></div>
+      <div class="toc-row"><span>Black Bean Salad with Lime Vinaigrette</span><span>Appetizers</span></div>
+    </div>
+    <div class="toc-sec">
+      <div class="toc-sec-hd bg-red">🍽️ Mains &amp; Sides</div>
+      <div class="toc-row"><span>Six Can Chicken Tortilla Soup</span><span>Mains</span></div>
+      <div class="toc-row"><span>Delilah's Macaroni and Cheese</span><span>Mains</span></div>
+      <div class="toc-row"><span>Patti LaBelle's Mac and Cheese</span><span>Mains</span></div>
+      <div class="toc-row"><span>Spicy Sausage Stuffing</span><span>Mains</span></div>
+      <div class="toc-row"><span>Kicked Up Bacon Cheese Mashed Potatoes</span><span>Mains</span></div>
+      <div class="toc-row"><span>Hash Brown Casserole</span><span>Mains</span></div>
+      <div class="toc-row"><span>Crock Pot Brunswick Stew</span><span>Mains</span></div>
+      <div class="toc-row"><span>Dr. Pepper Pineapple Ham</span><span>Mains</span></div>
+      <div class="toc-row"><span>Cioppino — Seafood Stew</span><span>Mains</span></div>
+    </div>
+    <div class="toc-sec">
+      <div class="toc-sec-hd bg-purple">🍰 Desserts</div>
+      <div class="toc-row"><span>Bacardi Rum Cake</span><span>Desserts</span></div>
+      <div class="toc-row"><span>Seven-Up Pound Cake</span><span>Desserts</span></div>
+      <div class="toc-row"><span>Seven Layer Magic Cookie Bars</span><span>Desserts</span></div>
+      <div class="toc-row"><span>Lemony Cheesecake Bars</span><span>Desserts</span></div>
+      <div class="toc-row"><span>Triple Layer Cookie Bars</span><span>Desserts</span></div>
+      <div class="toc-row"><span>Foolproof Chocolate Fudge</span><span>Desserts</span></div>
+      <div class="toc-row"><span>Peppermint Fudge</span><span>Desserts</span></div>
+      <div class="toc-row"><span>Layered Cookie Brownie Bars</span><span>Desserts</span></div>
+    </div>
+    <div class="toc-sec">
+      <div class="toc-sec-hd bg-orange">🥂 Drinks, Jams &amp; Tips</div>
+      <div class="toc-row"><span>Slow Cooker Christmas Jam</span><span>Drinks</span></div>
+      <div class="toc-row"><span>Build-Your-Own Mimosa Bar</span><span>Drinks</span></div>
+      <div class="toc-row"><span>Glowing Green Smoothie</span><span>Drinks</span></div>
+      <div class="toc-row"><span>Kitchen Wisdom &amp; Tips</span><span>Extras</span></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 1 ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">The Greers — Always Together</div>
+    <div class="pgrid g2x3">
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Boys fishing on the dock</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Kids together — parking lot fun</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Dad &amp; kids with fresh-baked bread</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Kids at school event</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Family BBQ on the deck</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Dad &amp; daughter at National Arboretum</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== BREAKFAST DIVIDER ==================== -->
+<div class="page divider bg-green">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="div-orn">🌅</div>
+    <div class="div-name">Breakfast<br>&amp; Brunch</div>
+    <div class="div-tag">"The most important meal — especially on holidays."</div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Angel Biscuits ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-green">
+      <div class="rt">Angel Biscuits</div>
+      <div class="rm"><div>Makes: 24 biscuits</div><div>Temp: 400°F</div><div>Time: 12 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>5 cups all-purpose flour</li>
+          <li>¾ cup vegetable shortening</li>
+          <li>1 tsp baking soda</li>
+          <li>1 tsp baking powder</li>
+          <li>1 tsp salt</li>
+          <li>3 tbsp sugar</li>
+          <li>1 pkg dry yeast</li>
+          <li>½ cup warm water</li>
+          <li>2 cups buttermilk</li>
+        </ul>
+        <div class="photo-ph" style="padding:0;overflow:hidden;border:2px solid var(--gold);border-radius:6px;min-height:1.3in;"><img src="Sausage Stuffing.jpeg" style="width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Sift all dry ingredients together into a large bowl.</li>
+          <li>Cut in shortening thoroughly until mixture resembles coarse crumbs.</li>
+          <li>Dissolve yeast in warm water. Add yeast mixture and buttermilk to flour mixture.</li>
+          <li>Mix with a spoon until all flour is moistened. Cover bowl and refrigerate until needed (can be kept several days).</li>
+          <li>Remove as much dough as needed. Roll on a floured board to ½ inch thick.</li>
+          <li>Cut with biscuit cutter. Bake at 400°F for 12 minutes until golden.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Keep the dough in the fridge for up to a week and bake fresh each morning. On Christmas day, pop them in the oven while gifts are being opened — the whole house will smell incredible.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Christmas French Toast ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-green">
+      <div class="rt">Christmas French Toast</div>
+      <div class="rm"><div>Serves: 8</div><div>Temp: 400°F</div><div>Time: 25 min bake</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 loaf French bread</li>
+          <li>5 eggs</li>
+          <li>¾ cup milk</li>
+          <li>1 tbsp pure vanilla extract</li>
+          <li>¼ tsp baking powder</li>
+          <li>4 ripe bananas, sliced</li>
+          <li>1 (20 oz) bag strawberries</li>
+          <li>1 cup sugar</li>
+          <li>1 tbsp apple pie spice</li>
+          <li>Cinnamon sugar, for topping</li>
+        </ul>
+        <div class="photo-ph" style="padding:0;overflow:hidden;border:2px solid var(--gold);border-radius:6px;min-height:1.3in;"><img src="BrunchCakes.jpeg" style="width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Cut French bread into 8 thick slices.</li>
+          <li>Whisk together eggs, milk, baking powder, and vanilla. Pour over bread slices. Cover and refrigerate overnight.</li>
+          <li>In the morning, combine strawberries, bananas, sugar, and apple pie spice in a large bowl.</li>
+          <li>Spread fruit mixture into a greased baking dish. Top with the egg-soaked bread slices.</li>
+          <li>Sprinkle generously with cinnamon sugar.</li>
+          <li>Bake at 400°F for 20–25 minutes until golden and set.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Prep this entirely the night before and slide it in the oven on Christmas morning while everyone opens gifts. By the time the chaos settles, breakfast is ready.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Eggnog French Toast ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-green">
+      <div class="rt">Eggnog French Toast</div>
+      <div class="rm"><div>Serves: 4</div><div>Prep: 10 min</div><div>Cook: 15 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>3 large eggs, beaten</li>
+          <li>1½ cups eggnog</li>
+          <li>1½ tsp vanilla extract</li>
+          <li>2½ tsp ground cinnamon</li>
+          <li>½ tsp ground nutmeg</li>
+          <li>1 tsp light rum</li>
+          <li>1 loaf day-old challah bread, sliced 1-inch thick</li>
+          <li>Butter, for the pan</li>
+          <li>Powdered sugar and syrup, to serve</li>
+        </ul>
+        <div class="photo-ph"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Whisk together eggs, eggnog, vanilla, cinnamon, nutmeg, and rum in a medium bowl.</li>
+          <li>Heat a lightly buttered skillet or cast iron pan over medium heat.</li>
+          <li>Dip challah slices one at a time into the eggnog custard, letting each side soak for about 20 seconds.</li>
+          <li>Fry each slice on both sides until golden brown, about 3–4 minutes per side.</li>
+          <li>Serve hot dusted with powdered sugar, with butter and warm syrup on the side.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Day-old challah is the secret — it absorbs the custard without falling apart. Store leftovers in an airtight container up to 3 days; reheat in the oven at 350°F for 8 minutes. (Recipe: Grandbaby Cakes)</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Strawberry Stuffed French Toast ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-green">
+      <div class="rt">Strawberry Stuffed French Toast</div>
+      <div class="rm"><div>Serves: 6</div><div>Prep: 10 min</div><div>Cook: 10 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>8 oz whipped cream cheese</li>
+          <li>2 tbsp honey</li>
+          <li>¼ cup strawberries, diced (plus more for serving)</li>
+          <li>12 slices brioche bread (1 loaf)</li>
+          <li>1 cup milk</li>
+          <li>4 eggs</li>
+          <li>½ tsp vanilla extract</li>
+          <li>½ tsp cinnamon</li>
+          <li>¼ tsp salt</li>
+          <li>3 tbsp butter</li>
+          <li>Maple syrup &amp; powdered sugar, to serve</li>
+        </ul>
+        <div class="photo-ph"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Combine whipped cream cheese, honey, and diced strawberries in a bowl. Set aside.</li>
+          <li>Whisk together milk, eggs, vanilla, cinnamon, and salt in a shallow bowl.</li>
+          <li>Spread the cream cheese mixture on 6 brioche slices; seal each with a second slice.</li>
+          <li>Heat a skillet over medium heat and melt ½ tbsp butter.</li>
+          <li>Dip each stuffed sandwich in the egg mixture, coating both sides well. Cook 3–4 minutes per side until golden. Repeat for all 6.</li>
+          <li>Serve with extra strawberries, maple syrup, and powdered sugar.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Double the cream cheese filling — it is that good. Greek yogurt works as a lighter substitute for the cream cheese. (Recipe: Feel Good Foodie)</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Monkey Bread ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-green">
+      <div class="rt">Monkey Bread</div>
+      <div class="rm"><div>Serves: 16</div><div>Temp: 350°F</div><div>Time: 35–45 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>4 tubes (7.5 oz each) refrigerated buttermilk biscuits</li>
+          <li>½ cup granulated sugar</li>
+          <li>2 tsp ground cinnamon</li>
+          <li>½ cup butter, melted</li>
+          <li>½ cup packed brown sugar</li>
+        </ul>
+        <div class="photo-ph" style="padding:0;overflow:hidden;border:2px solid var(--gold);border-radius:6px;flex:1;min-height:1.2in;"><img src="Monkey Bread.jpeg" style="width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 350°F. Generously grease a 9- or 10-inch fluted tube (Bundt) pan.</li>
+          <li>Cut each biscuit into 4 pieces and roll into balls.</li>
+          <li>Combine granulated sugar and cinnamon in a zip-lock bag. Add biscuit balls in batches and shake to coat.</li>
+          <li>Arrange cinnamon-sugar balls evenly in the prepared pan. Sprinkle any remaining cinnamon sugar over the top.</li>
+          <li>Mix melted butter and brown sugar together; pour evenly over the biscuit balls.</li>
+          <li>Place pan on a baking sheet. Bake 35–45 minutes until golden brown and cooked through. Cool 5 minutes, then invert onto a serving platter.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Let the kids roll the dough balls — this is a recipe they can actually help with! Pull apart with your hands at the table. It is meant to be messy and fun.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Maple-Pepper Bacon ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-green">
+      <div class="rt">Maple-Pepper Bacon</div>
+      <div class="rm"><div>Serves: 6–8</div><div>Temp: 375°F</div><div>Time: 32 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 lb thick-cut bacon</li>
+          <li>Pure maple syrup, for brushing</li>
+          <li>Freshly cracked black pepper</li>
+        </ul>
+        <div class="photo-ph" style="flex:1;min-height:2.5in;"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 375°F. Position wire racks on 2 rimmed baking sheets.</li>
+          <li>Lay bacon in a single layer on the racks.</li>
+          <li>Bake 7 minutes. Remove from oven and brush generously with maple syrup; season with cracked black pepper.</li>
+          <li>Return to oven. Continue baking, flipping and brushing with syrup and seasoning with pepper every 5 minutes, until caramelized and glossy — about 25 more minutes.</li>
+          <li>Let cool 5 minutes on the racks before serving (the glaze firms up as it cools).</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Line your baking sheets with foil first for easy cleanup — maple syrup bakes on hard. This bacon disappears first at every brunch. Make two pounds. (Recipe: Food Network Kitchen)</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Breakfast Sausage Casserole ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-green">
+      <div class="rt">Breakfast Sausage Casserole</div>
+      <div class="rm"><div>Serves: 10–12</div><div>Temp: 375°F</div><div>Time: 1 hour</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 lb sage-flavored breakfast sausage</li>
+          <li>3 cups shredded hash brown potatoes, drained &amp; pressed</li>
+          <li>¼ cup butter, melted</li>
+          <li>12 oz mild Cheddar cheese, shredded</li>
+          <li>½ cup onion, shredded</li>
+          <li>1 (16 oz) container small-curd cottage cheese</li>
+          <li>6 jumbo eggs</li>
+        </ul>
+        <div class="photo-ph" style="padding:0;overflow:hidden;border:2px solid var(--gold);border-radius:6px;min-height:1.3in;"><img src="Sausage Stuffing.jpeg" style="width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 375°F. Lightly grease a 9×13-inch baking dish.</li>
+          <li>Brown sausage in a skillet over medium-high heat. Drain, crumble, and set aside.</li>
+          <li>Stir together shredded potatoes and melted butter. Press mixture into the bottom and up the sides of the baking dish to form a crust.</li>
+          <li>In a bowl, mix sausage, Cheddar, onion, cottage cheese, and eggs together. Pour over potato crust.</li>
+          <li>Bake 1 hour or until a toothpick inserted in the center comes out clean. Let cool 5 minutes before serving.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Assemble the night before, cover, and refrigerate. In the morning, bake straight from the fridge — just add 10 extra minutes. This is the definition of a stress-free holiday morning.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Cottage Cheese Egg Bites ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-green">
+      <div class="rt">Cottage Cheese Egg Bites</div>
+      <div class="rm"><div>Makes: 7 bites</div><div>Ninja Foodi / Instant Pot</div><div>Time: 20 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>6 large eggs</li>
+          <li>½ cup small-curd cottage cheese</li>
+          <li>½ cup Gruyere or sharp cheddar, shredded</li>
+          <li>4 strips bacon, cooked &amp; crumbled</li>
+          <li>¼ cup roasted red peppers, diced</li>
+          <li>Salt, pepper &amp; garlic powder to taste</li>
+          <li>1 cup water (for Ninja Foodi pot)</li>
+          <li>Cooking spray</li>
+        </ul>
+        <div class="photo-ph"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Add 1 cup water to the Ninja Foodi pot. Insert the reversible rack in the low position.</li>
+          <li>Blend eggs and cottage cheese in a blender until completely smooth, about 30 seconds.</li>
+          <li>Stir in shredded cheese, bacon, roasted peppers, and seasonings.</li>
+          <li>Spray silicone egg molds with cooking spray. Fill each cup about ¾ full.</li>
+          <li>Cover the mold tightly with foil. Set on the rack in the Ninja Foodi.</li>
+          <li>Seal lid. Pressure Cook on HIGH for 8 minutes. Quick-release pressure.</li>
+          <li>Carefully remove molds. Let sit 2 minutes, then unmold and serve.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> These keep in the fridge for 5 days — make a batch on Sunday and reheat all week. Swap in any cheese or veggies you love.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 2 ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">Growing Up Greer</div>
+    <div class="pgrid g2x3">
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Boy in Christmas sweater</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Boy with science project</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Two girls hugging in dresses</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Girl in African print dress with sunglasses</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Spider-Man &amp; Pikachu Halloween</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Dragon &amp; unicorn on the stairs</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== APPETIZERS DIVIDER ==================== -->
+<div class="page divider bg-teal">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="div-orn">🫒</div>
+    <div class="div-name">Appetizers</div>
+    <div class="div-tag">"The previews before the main event."</div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Spicy Sausage Balls ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-teal">
+      <div class="rt">Spicy Sausage Balls</div>
+      <div class="rm"><div>Makes: ~36 balls</div><div>Temp: 325°F</div><div>Time: 15 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>½ lb ground pork sausage (regular)</li>
+          <li>½ lb ground spicy pork sausage</li>
+          <li>3 oz processed cheese sauce (Velveeta)</li>
+          <li>2 cups buttermilk biscuit dry mix</li>
+        </ul>
+        <div class="photo-ph" style="padding:0;overflow:hidden;border:2px solid var(--gold);border-radius:6px;flex:1;min-height:2.2in;"><img src="SausageStuffing_Part2.jpeg" style="width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 325°F (165°C).</li>
+          <li>In a large bowl, combine regular sausage, spicy sausage, cheese sauce, and biscuit mix.</li>
+          <li>Mix well with your hands until fully combined.</li>
+          <li>Roll into small balls, about 1 to 1½ inches in diameter. Place on an ungreased baking sheet.</li>
+          <li>Bake 15 minutes or until fully cooked through and lightly golden.</li>
+          <li>Serve warm with toothpicks. Ranch or honey-mustard on the side is a great addition.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> These disappear faster than any other dish at the party. Always double the recipe. You can freeze unbaked balls and bake from frozen — just add 5 minutes.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Sugar and Nut Glazed Brie ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-teal">
+      <div class="rt">Sugar &amp; Nut Glazed Brie</div>
+      <div class="rm"><div>Serves: 8–10</div><div>Temp: 500°F</div><div>Time: 7 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>¼ cup packed brown sugar</li>
+          <li>¼ cup chopped macadamia nuts or pecans</li>
+          <li>1 tbsp brandy</li>
+          <li>1 (14 oz) round of Brie cheese</li>
+          <li>Apple wedges, for serving</li>
+          <li>Pear wedges, for serving</li>
+          <li>2–3 tbsp lemon juice (to brush fruit)</li>
+          <li>Crackers, for serving</li>
+        </ul>
+        <div class="photo-ph" style="padding:0;overflow:hidden;border:2px solid var(--gold);border-radius:6px;min-height:1.3in;"><img src="Cheese and wine.jpeg" style="width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Stir together brown sugar, chopped nuts, and brandy in a small bowl. Cover and chill at least 24 hours (up to 1 week).</li>
+          <li>Preheat oven to 500°F.</li>
+          <li>Place Brie on an oven-safe platter or pie plate. Bake 4–5 minutes until the cheese is just slightly softened.</li>
+          <li>Spread the sugar-nut mixture evenly over the top of the warm Brie.</li>
+          <li>Return to oven and bake 2–3 more minutes, until the sugar melts and bubbles.</li>
+          <li>Brush fruit wedges with lemon juice. Arrange fruit on one side of the Brie, crackers on the other. Serve immediately.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Make the topping up to a week ahead — it only improves. Serve immediately after the second bake; the cheese firms back up as it cools. Beautiful on a holiday cheese board.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Cranberry-Pear Relish ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-teal">
+      <div class="rt">Cranberry-Pear Relish</div>
+      <div class="rm"><div>Makes: ~3 cups</div><div>Chill: 3 hrs</div><div>Stovetop</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>2 cups sugar</li>
+          <li>½ cup orange juice</li>
+          <li>¼ cup balsamic vinegar</li>
+          <li>1 piece (1 inch) peeled fresh ginger</li>
+          <li>1 cinnamon stick</li>
+          <li>2 bags (12 oz each) fresh cranberries</li>
+          <li>2 firm ripe Bosc or Anjou pears, peeled, cored &amp; cubed small</li>
+        </ul>
+        <div class="photo-ph"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>In a 4-quart saucepan, combine sugar, orange juice, balsamic vinegar, ginger, and cinnamon stick. Bring to a boil over medium-high heat, stirring occasionally.</li>
+          <li>Add cranberries and pears. Return to a boil, stirring frequently.</li>
+          <li>Reduce heat to medium-low. Cook 15 minutes, stirring occasionally, until most cranberries have popped, pears are tender, and relish has thickened slightly.</li>
+          <li>Discard ginger piece and cinnamon stick.</li>
+          <li>Spoon into a serving bowl. Cover and refrigerate at least 3 hours before serving.</li>
+          <li>Keeps refrigerated up to 4 days. (Source: Good Housekeeping)</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Make this a week ahead — it only gets better. The balsamic gives it an elegant depth. Incredible alongside the Thanksgiving turkey and just as good on a biscuit the next morning.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Black Bean Salad ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-teal">
+      <div class="rt">Black Bean Salad with Lime Vinaigrette</div>
+      <div class="rm"><div>Serves: 8</div><div>No cook</div><div>Time: 15 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>2 (15 oz) cans black beans, rinsed &amp; drained</li>
+          <li>1 (15 oz) can whole kernel corn, drained</li>
+          <li>1 red bell pepper, finely diced</li>
+          <li>½ red onion, finely diced</li>
+          <li>½ cup fresh cilantro, roughly chopped</li>
+          <li>Juice of 2 limes</li>
+          <li>3 tbsp olive oil</li>
+          <li>1 tsp ground cumin</li>
+          <li>½ tsp garlic powder</li>
+          <li>Salt &amp; pepper to taste</li>
+          <li>1 avocado, diced (optional, add at serving)</li>
+        </ul>
+        <div class="photo-ph"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Combine black beans, corn, red bell pepper, and red onion in a large bowl.</li>
+          <li>In a small bowl, whisk together lime juice, olive oil, cumin, garlic powder, salt, and pepper.</li>
+          <li>Pour dressing over the bean mixture and toss to coat evenly.</li>
+          <li>Fold in fresh cilantro.</li>
+          <li>Refrigerate at least 30 minutes before serving to let the flavors develop.</li>
+          <li>If using avocado, fold in right before serving to prevent browning.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Add diced avocado right before serving — never ahead of time. This salad is even better the next day. Great as a side, on tacos, or scooped with tortilla chips.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== MAINS DIVIDER ==================== -->
+<div class="page divider bg-red">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="div-orn">🍽️</div>
+    <div class="div-name">Mains<br>&amp; Sides</div>
+    <div class="div-tag">"The heart of the holiday table."</div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Six Can Chicken Tortilla Soup ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-red">
+      <div class="rt">Six Can Chicken Tortilla Soup</div>
+      <div class="rm"><div>Serves: 6</div><div>Stovetop</div><div>Time: 20 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>2 (14.5 oz) cans chicken broth</li>
+          <li>1 (15 oz) can whole kernel corn, drained</li>
+          <li>1 (15 oz) can black beans</li>
+          <li>1 (10 oz) can chunk chicken</li>
+          <li>1 (10 oz) can diced tomatoes with green chile peppers, drained</li>
+          <li>Crushed tortilla chips, for serving</li>
+          <li>Shredded Cheddar cheese, for serving</li>
+        </ul>
+        <div class="photo-ph" style="padding:0;overflow:hidden;border:2px solid var(--gold);border-radius:6px;flex:1;min-height:1.2in;"><img src="SeattleSoup.jpeg" style="width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Pour chicken broth, corn, black beans, chunk chicken, and diced tomatoes with green chiles into a large saucepan or stockpot over medium heat.</li>
+          <li>Stir to combine all ingredients.</li>
+          <li>Simmer, stirring occasionally, until chicken is heated through, about 15 minutes.</li>
+          <li>Serve hot, topped with crushed tortilla chips and shredded Cheddar cheese.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Stir in a cup of cooked rice for a chunkier, heartier version. Finish each bowl with a squeeze of lime, a dollop of sour cream, and chopped cilantro for a restaurant-quality finish. This is the easiest weeknight meal in the book. (Source: Allrecipes)</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Delilah's Mac ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-red">
+      <div class="rt">Delilah's Macaroni and Cheese</div>
+      <div class="rm"><div>Serves: 20+</div><div>Temp: 325°F</div><div>Time: 1 hour</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>2 lbs elbow macaroni</li>
+          <li>12 eggs</li>
+          <li>1 cup cubed Velveeta</li>
+          <li>½ lb (2 sticks) butter, melted</li>
+          <li>6 cups half-and-half, divided</li>
+          <li>4 cups grated sharp yellow Cheddar, divided</li>
+          <li>2 cups grated extra-sharp white Cheddar</li>
+          <li>1½ cups grated mozzarella</li>
+          <li>1 cup grated Asiago</li>
+          <li>1 cup grated Gruyere</li>
+          <li>1 cup grated Monterey Jack</li>
+          <li>1 cup grated Muenster</li>
+          <li>⅛ tsp salt; 1 tbsp black pepper</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 325°F. Cook macaroni in salted water until just al dente, about 10 minutes. Drain and set aside warm.</li>
+          <li>Whisk eggs in a very large bowl until frothy.</li>
+          <li>Add Velveeta, butter, and 2 cups half-and-half to the eggs. Add warm macaroni and toss until cheese melts and mixture is smooth.</li>
+          <li>Add remaining 4 cups half-and-half, 3 cups sharp yellow Cheddar, all remaining cheeses, salt, and pepper. Toss to combine.</li>
+          <li>Divide into 3 (3-quart) baking dishes. Bake 30 minutes.</li>
+          <li>Top with remaining 1 cup sharp yellow Cheddar. Bake another 30 minutes until golden.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> This is THE mac. No shortcuts. This is what the holidays taste like in this family. Do not skip any cheese. Do not substitute. Just make it.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Patti's Mac ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-red">
+      <div class="rt">Patti LaBelle's Mac and Cheese</div>
+      <div class="rm"><div>Serves: 8</div><div>Temp: 350°F</div><div>Time: 45 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 lb elbow macaroni</li>
+          <li>8 tbsp unsalted butter, melted</li>
+          <li>½ cup shredded Muenster cheese</li>
+          <li>½ cup shredded mild Cheddar</li>
+          <li>½ cup shredded sharp Cheddar</li>
+          <li>½ cup shredded Monterey Jack</li>
+          <li>2 cups half-and-half</li>
+          <li>2 large eggs, lightly beaten</li>
+          <li>1 cup Velveeta, cubed small</li>
+          <li>¼ tsp seasoned salt</li>
+          <li>⅛ tsp freshly ground black pepper</li>
+        </ul>
+        <div class="photo-ph"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 350°F. Grease a 9×13-inch baking pan.</li>
+          <li>Combine Muenster, mild Cheddar, sharp Cheddar, and Monterey Jack in a bowl. Set aside.</li>
+          <li>Cook macaroni in salted boiling water about 8 minutes until al dente. Drain and add to a large bowl.</li>
+          <li>Pour melted butter over hot noodles and stir.</li>
+          <li>Add half-and-half, eggs, half the shredded cheese blend, all the Velveeta, seasoned salt, and pepper. Stir until fully combined.</li>
+          <li>Pour into prepared pan. Sprinkle remaining cheese on top. Bake 30 minutes until edges bubble. Serve hot.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Velveeta is not a compromise — it is the secret to the creamiest, smoothest sauce. Shred your own cheese from blocks for best melt. (Source: blackpeoplesrecipes.com)</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Spicy Sausage Stuffing ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-red">
+      <div class="rt">Spicy Sausage Stuffing</div>
+      <div class="rm"><div>Serves: 8–10</div><div>Temp: 350°F</div><div>Time: 35 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 lb spicy pork sausage</li>
+          <li>½ onion, chopped</li>
+          <li>1 cup celery, chopped</li>
+          <li>3 cups stuffing cubes</li>
+          <li>4 cups additional bread cubes</li>
+          <li>½ cup milk</li>
+          <li>1 can cream of mushroom soup</li>
+          <li>1 tbsp parsley, chopped</li>
+          <li>½ tsp salt (optional)</li>
+          <li>1 tsp poultry seasoning</li>
+          <li>Butter, for the casserole dish</li>
+        </ul>
+        <div class="photo-ph" style="padding:0;overflow:hidden;border:2px solid var(--gold);border-radius:6px;min-height:1.3in;"><img src="Sausage Stuffing.jpeg" style="width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Crumble and brown sausage in a large skillet over medium heat.</li>
+          <li>Add onion and celery; cook until tender, about 5 minutes.</li>
+          <li>Add 3 cups bread cubes to the skillet; cook until lightly browned.</li>
+          <li>In a saucepan, heat milk and soup together, stirring until smooth.</li>
+          <li>Add 4 additional cups stuffing cubes to the soup mixture, then combine with the sausage mixture. Add parsley, salt, and poultry seasoning. Mix well.</li>
+          <li>Place in a buttered casserole dish. Cover and bake at 350°F for 25 minutes. Uncover and bake 10 more minutes.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Use a spicy Italian sausage for extra kick, or go mild if kids are at the table. This stuffing is good enough to be the main dish. Do not wait for turkey season to make it.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Kicked Up Mashed Potatoes ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-red">
+      <div class="rt">Kicked Up Bacon Cheese Mashed Potatoes</div>
+      <div class="rm"><div>Serves: 6–8</div><div>Stovetop</div><div>Time: 35 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>4 russet potatoes (~3 lbs), peeled &amp; cubed 1-inch</li>
+          <li>1¾ tsp salt, divided</li>
+          <li>½ cup heavy cream</li>
+          <li>4 tbsp butter</li>
+          <li>¼ tsp black pepper</li>
+          <li>8 slices bacon, cooked crisp &amp; crumbled</li>
+          <li>½ lb sharp Cheddar, grated</li>
+          <li>¼ cup sour cream</li>
+          <li>¼ cup fresh chives, chopped</li>
+        </ul>
+        <div class="photo-ph"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Place potatoes and 1 tsp salt in a heavy pot. Cover with water by 1 inch. Bring to a boil, then simmer until fork-tender, about 20 minutes.</li>
+          <li>Drain potatoes and return to the pot.</li>
+          <li>Add cream, butter, remaining ¾ tsp salt, and black pepper.</li>
+          <li>Mash over medium-low heat until smooth and fluffy, 4–5 minutes.</li>
+          <li>Stir in crumbled bacon, grated Cheddar, sour cream, and chives until thoroughly combined.</li>
+          <li>Season to taste with additional salt and pepper. Serve immediately.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Real bacon only — no substitutes. These potatoes are Emeril's recipe and they are unapologetically indulgent. Worth every bite.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Hash Brown Casserole ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-red">
+      <div class="rt">Hash Brown Casserole</div>
+      <div class="rm"><div>Serves: 10–12</div><div>Temp: 350°F</div><div>Time: 55 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 (30 oz) bag frozen shredded hash browns, thawed</li>
+          <li>½ can cream of chicken soup</li>
+          <li>½ can cream of mushroom soup</li>
+          <li>1 cup sour cream</li>
+          <li>2 cups sharp Cheddar, shredded (divided)</li>
+          <li>½ cup butter, melted</li>
+          <li>½ cup yellow onion, diced</li>
+          <li>1 tsp garlic powder</li>
+          <li>Salt &amp; pepper to taste</li>
+        </ul>
+        <div class="photo-ph"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 350°F. Grease a 9×13-inch baking dish.</li>
+          <li>In a large bowl, combine thawed hash browns, both soups, sour cream, 1½ cups Cheddar, melted butter, onion, garlic powder, salt, and pepper. Mix well.</li>
+          <li>Spread evenly into the prepared baking dish.</li>
+          <li>Sprinkle remaining ½ cup Cheddar over the top.</li>
+          <li>Bake uncovered 50–60 minutes until bubbly and golden on top.</li>
+          <li>Let rest 5 minutes before serving.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Jacqueline's secret — use ½ can cream of chicken soup AND ½ can cream of mushroom. The combination is the difference. Do not use a full can of either.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Brunswick Stew ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-red">
+      <div class="rt">Crock Pot Brunswick Stew</div>
+      <div class="rm"><div>Serves: 10–12</div><div>Slow Cooker</div><div>Time: 3–4 hrs</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 onion, chopped</li>
+          <li>1 can Castleberry BBQ beef</li>
+          <li>1 can Castleberry BBQ pork</li>
+          <li>1 large can white meat chicken</li>
+          <li>1 can creamed corn</li>
+          <li>1 can whole kernel corn</li>
+          <li>1 can diced tomatoes</li>
+          <li>2 cans Rotel tomatoes</li>
+          <li>½ cup BBQ sauce</li>
+          <li>1 tsp Tabasco (or to taste)</li>
+        </ul>
+        <div class="photo-ph"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Place chopped onion at the bottom of the crock pot.</li>
+          <li>Add all remaining ingredients on top of the onion.</li>
+          <li>Stir gently to combine.</li>
+          <li>Cook on LOW for 3–4 hours, stirring occasionally.</li>
+          <li>Taste and adjust BBQ sauce and Tabasco before serving.</li>
+          <li>Serve with crusty cornbread or white rice.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Castleberry's BBQ beef and pork are the key ingredients — do not substitute. This is a true Southern classic that has been on the Greer table for decades. Better the next day.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Dr. Pepper Ham ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-red">
+      <div class="rt">Dr. Pepper Pineapple Ham</div>
+      <div class="rm"><div>Serves: 16–20</div><div>Slow Cooker</div><div>Time: 6–8 hrs</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 bone-in spiral ham (8–10 lbs)</li>
+          <li>2 cans Dr Pepper</li>
+          <li>1 (20 oz) can crushed pineapple with juice</li>
+          <li>1 cup brown sugar, packed</li>
+          <li>2 tbsp Dijon mustard</li>
+          <li>½ tsp ground cloves</li>
+        </ul>
+        <div class="photo-ph" style="flex:1;"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Place ham cut-side down in a large slow cooker.</li>
+          <li>Whisk together Dr Pepper, crushed pineapple (with all juice), brown sugar, Dijon mustard, and cloves.</li>
+          <li>Pour the mixture all over the ham.</li>
+          <li>Cook on LOW for 6–8 hours, basting the ham with the cooking juices every 2 hours.</li>
+          <li>Optional finishing step: transfer ham to a foil-lined baking sheet and broil 5 minutes until the outside caramelizes.</li>
+          <li>Rest 10 minutes before slicing. Spoon cooking juices over slices as a glaze.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Save every drop of the cooking juices — they make an incredible glaze for drizzling. The secret ingredient is hiding in plain sight on the can. (Source: Kitchen Divas)</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Cioppino ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-red">
+      <div class="rt">Cioppino — Seafood Stew</div>
+      <div class="rm"><div>Serves: 8</div><div>Stovetop</div><div>Time: 1.5 hrs</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>2 (28 oz) cans whole San Marzano tomatoes</li>
+          <li>¼ cup olive oil</li>
+          <li>1 large onion, chopped</li>
+          <li>1 large fennel bulb, chopped</li>
+          <li>4 garlic cloves, thinly sliced</li>
+          <li>2 tsp fennel seeds</li>
+          <li>2 bay leaves</li>
+          <li>1 cup dry white wine</li>
+          <li>4 cups vegetable or fish stock</li>
+          <li>1½ lbs mussels, scrubbed</li>
+          <li>1 lb shrimp, peeled &amp; deveined</li>
+          <li>1 lb cod or halibut, cut in 2-inch pieces</li>
+          <li>Tarragon or parsley, crusty bread to serve</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Crush tomatoes by hand in a large bowl until no large pieces remain. Set aside.</li>
+          <li>Heat olive oil in a large pot over medium-high. Add onion, fennel, and garlic; season with salt and pepper. Cook 8–10 minutes until softened and starting to brown.</li>
+          <li>Add fennel seeds and bay leaves; stir and cook 1–2 minutes.</li>
+          <li>Add white wine and crushed tomatoes. Cook 10–15 minutes to concentrate flavors.</li>
+          <li>Add stock. Bring to a simmer; cook uncovered 45 minutes. Season throughout.</li>
+          <li>Increase heat to medium. Add mussels; cook 5 minutes until just opening. Add shrimp and cod; cook 4–5 more minutes until all seafood is cooked through.</li>
+          <li>Serve from the pot with crusty bread and fresh herbs.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Make the tomato-fennel base a day ahead — it is even better on day 2. Add the seafood fresh right before serving. (Source: BuzzFeed / Alison Roman)</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 3 ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">Family Everywhere We Go</div>
+    <div class="pgrid g3x2">
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Six kids on the porch swing</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Couple under palm trees</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Seven-person family group</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Boy picking marigold flowers</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Large family — Christmas porch steps</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Family dinner at Chinese restaurant</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== DESSERTS DIVIDER ==================== -->
+<div class="page divider bg-purple">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="div-orn">🍰</div>
+    <div class="div-name">Desserts</div>
+    <div class="div-tag">"Save room. Always save room."</div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Bacardi Rum Cake ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-purple">
+      <div class="rt">Bacardi Rum Cake</div>
+      <div class="rm"><div>Serves: 16</div><div>Temp: 325°F</div><div>Time: 1 hour</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Cake Ingredients</div>
+        <ul class="ilist">
+          <li>1 cup chopped pecans or walnuts</li>
+          <li>1 (18.5 oz) pkg yellow cake mix</li>
+          <li>1 (3.75 oz) pkg vanilla instant pudding</li>
+          <li>4 eggs</li>
+          <li>½ cup cold water</li>
+          <li>½ cup vegetable oil</li>
+          <li>½ cup Bacardi dark rum</li>
+        </ul>
+        <div class="clabel" style="margin-top:0.08in;">Glaze</div>
+        <ul class="ilist">
+          <li>¼ lb (1 stick) butter</li>
+          <li>½ cup water</li>
+          <li>1 cup granulated sugar</li>
+          <li>½ cup Bacardi dark rum</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 325°F. Grease and flour a 12-cup Bundt pan. Sprinkle nuts over the bottom.</li>
+          <li>Beat together cake mix, pudding, eggs, water, oil, and rum until smooth. Pour batter over nuts.</li>
+          <li>Bake 1 hour. Cool 10 minutes, then invert onto a serving plate.</li>
+          <li><strong>Glaze:</strong> Melt butter in a saucepan. Stir in water and sugar. Boil 5 minutes, stirring constantly. Remove from heat and stir in rum.</li>
+          <li>Prick the top of the warm cake all over with a skewer or toothpick.</li>
+          <li>Drizzle and smooth glaze over the cake, letting it absorb. Repeat until all glaze is used. Decorate with maraschino cherries.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Prick the cake while it is still warm and pour the glaze slowly so every bit soaks in. This cake only gets better after a day or two.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Seven-Up Pound Cake ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-purple">
+      <div class="rt">Seven-Up Pound Cake</div>
+      <div class="rm"><div>Serves: 16</div><div>Temp: 325°F</div><div>Time: 70 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 cup (2 sticks) butter, softened</li>
+          <li>½ cup vegetable shortening</li>
+          <li>2 cups white sugar</li>
+          <li>4 eggs</li>
+          <li>3 cups all-purpose flour</li>
+          <li>1 tsp vanilla extract</li>
+          <li>1 tsp lemon extract</li>
+          <li>7 fl oz lemon-lime soda (7-Up or Sprite)</li>
+        </ul>
+        <div class="photo-ph" style="flex:1;"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 325°F. Grease and flour a 10-inch Bundt pan.</li>
+          <li>In a large bowl, cream together butter, shortening, and sugar until light and fluffy.</li>
+          <li>Beat in eggs one at a time. Stir in vanilla and lemon extracts.</li>
+          <li>Beat in flour alternately with the lemon-lime soda, mixing just until incorporated.</li>
+          <li>Pour batter into the prepared pan.</li>
+          <li>Bake 70 minutes, or until a toothpick inserted in the center comes out clean.</li>
+          <li>Cool on a wire rack 30 minutes before removing from the pan.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Store at room temperature — the carbonation in the soda keeps this cake incredibly moist. Dust with powdered sugar and serve with fresh strawberries or a simple glaze.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Seven Layer Magic Cookie Bars ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-purple">
+      <div class="rt">Seven Layer Magic Cookie Bars</div>
+      <div class="rm"><div>Makes: 24 bars</div><div>Temp: 350°F</div><div>Time: 25 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>½ cup butter</li>
+          <li>1½ cups graham cracker crumbs</li>
+          <li>1 (14 oz) can sweetened condensed milk</li>
+          <li>1 cup butterscotch chips</li>
+          <li>1 cup semi-sweet chocolate chips</li>
+          <li>1⅓ cups flaked coconut</li>
+          <li>1 cup chopped nuts (walnuts or pecans)</li>
+        </ul>
+        <div class="photo-ph" style="flex:1;"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 350°F (325°F for glass dish).</li>
+          <li>Melt butter in a 13×9-inch baking pan in the oven.</li>
+          <li>Sprinkle graham cracker crumbs evenly over the melted butter.</li>
+          <li>Pour sweetened condensed milk evenly over the crumbs.</li>
+          <li>Layer butterscotch chips, then chocolate chips, then coconut, then chopped nuts in order. Press down firmly with a fork.</li>
+          <li>Bake 25 minutes until lightly browned.</li>
+          <li>Cool completely. Chill if desired. Cut into bars and store covered at room temperature.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Line the entire pan with foil (including the sides) before melting the butter. Once cool, lift the whole slab out with the foil for perfectly clean, even cuts.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Lemony Cheesecake Bars ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-purple">
+      <div class="rt">Lemony Cheesecake Bars</div>
+      <div class="rm"><div>Makes: 24 bars</div><div>Temp: 325°F</div><div>Time: 36 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1½ cups graham cracker crumbs</li>
+          <li>⅓ cup finely chopped pecans</li>
+          <li>⅓ cup sugar</li>
+          <li>⅓ cup butter, melted</li>
+          <li>2 (8 oz) packages cream cheese, softened</li>
+          <li>1 (14 oz) can sweetened condensed milk</li>
+          <li>2 large eggs</li>
+          <li>½ cup fresh lemon juice</li>
+          <li>Cooking spray</li>
+        </ul>
+        <div class="photo-ph" style="padding:0;overflow:hidden;border:2px solid var(--gold);border-radius:6px;min-height:1.3in;"><img src="CherryCheesecake.jpeg" style="width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 325°F. Spray a 13×9-inch pan with cooking spray.</li>
+          <li>Combine graham cracker crumbs, pecans, sugar, and melted butter. Reserve ⅓ cup. Press remaining crust into the bottom of the pan.</li>
+          <li>Bake crust 6 minutes. Remove and cool.</li>
+          <li>Beat cream cheese until fluffy. Gradually beat in sweetened condensed milk. Add eggs; beat until just combined. Stir in lemon juice.</li>
+          <li>Carefully spoon filling over the cooled crust. Top with reserved crumb mixture in diagonal stripes or scattered over the top.</li>
+          <li>Bake 30 minutes until a knife inserted near the center comes out clean. Cool 1 hour. Refrigerate until chilled. Cut into bars.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Refrigerate overnight for the cleanest slices. Fresh lemon juice (not bottled) makes all the difference here. (Source: Eagle Brand)</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Triple Layer Cookie Bars ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-purple">
+      <div class="rt">Triple Layer Cookie Bars</div>
+      <div class="rm"><div>Makes: 24 bars</div><div>Temp: 350°F</div><div>Time: 30 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1½ cups graham cracker crumbs</li>
+          <li>½ cup butter, melted</li>
+          <li>2⅓ cups flaked coconut</li>
+          <li>1 (14 oz) can sweetened condensed milk</li>
+          <li>1 cup (6 oz) semi-sweet chocolate chips</li>
+          <li>½ cup creamy peanut butter</li>
+          <li>Cooking spray</li>
+        </ul>
+        <div class="photo-ph" style="flex:1;"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 350°F. Spray a 13×9-inch pan with cooking spray (or line with foil).</li>
+          <li>Combine graham cracker crumbs and melted butter; press into the bottom of the pan.</li>
+          <li>Spread coconut evenly over the crumb layer.</li>
+          <li>Pour sweetened condensed milk evenly over the coconut.</li>
+          <li>Bake 25–30 minutes until lightly browned. Loosen from sides while still warm.</li>
+          <li>Microwave chocolate chips and peanut butter in a small bowl on HIGH 1 minute. Stir until smooth. Spread evenly over the hot coconut layer.</li>
+          <li>Cool 15 minutes, then refrigerate 45 minutes until chocolate sets. Cut into bars.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Refrigerate 45 minutes minimum before cutting so the chocolate layer sets cleanly. Use the foil-lifting trick for perfect bar shapes. (Source: Eagle Brand)</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Foolproof Chocolate Fudge ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-purple">
+      <div class="rt">Foolproof Chocolate Fudge</div>
+      <div class="rm"><div>Makes: 64 pieces</div><div>Stovetop</div><div>Chill: 2 hrs</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>3 cups (18 oz) semi-sweet chocolate chips</li>
+          <li>1 (14 oz) can sweetened condensed milk</li>
+          <li>Dash of salt</li>
+          <li>½ to 1 cup chopped nuts (optional)</li>
+          <li>1½ tsp vanilla extract</li>
+        </ul>
+        <div class="clabel" style="margin-top:0.1in;">Variations</div>
+        <ul class="ilist" style="font-size:8pt;">
+          <li><strong>Peanut Butter Glaze:</strong> Melt ½ cup PB chips + ½ cup cream, drizzle on top</li>
+          <li><strong>Milk Chocolate:</strong> Sub 1 cup milk choc chips for 1 cup semi-sweet</li>
+          <li><strong>Marshmallow:</strong> Add 2 cups mini marshmallows</li>
+        </ul>
+        <div class="photo-ph" style="padding:0;overflow:hidden;border:2px solid var(--gold);border-radius:6px;flex:1;min-height:0.8in;"><img src="BrunchTurtle.jpeg" style="width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Line an 8- or 9-inch square pan with foil, extending foil over the edges.</li>
+          <li>Melt chocolate chips with sweetened condensed milk and salt in a heavy saucepan over LOW heat, stirring constantly until smooth.</li>
+          <li>Remove from heat. Stir in nuts and vanilla extract.</li>
+          <li>Spread evenly into the prepared pan.</li>
+          <li>Refrigerate 2 hours until firm.</li>
+          <li>Remove from pan by lifting the foil edges. Place on a cutting board and cut into squares.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> The name is no exaggeration — this is truly foolproof. Low and slow is the key on the stovetop. Store in an airtight container at room temperature up to 2 weeks. (Source: Eagle Brand)</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Peppermint Fudge ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-purple">
+      <div class="rt">Peppermint Fudge</div>
+      <div class="rm"><div>Makes: 36 pieces</div><div>Stovetop</div><div>Chill: 2 hrs</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>3 cups semi-sweet chocolate chips</li>
+          <li>1 (14 oz) can sweetened condensed milk</li>
+          <li>1 tsp pure peppermint extract</li>
+          <li>¼ cup crushed candy canes or peppermint candies</li>
+          <li>Pinch of salt</li>
+        </ul>
+        <div class="photo-ph" style="flex:1;min-height:2in;"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Line an 8×8-inch pan with foil and spray with cooking spray.</li>
+          <li>In a heavy saucepan over low heat, melt chocolate chips with sweetened condensed milk and salt, stirring constantly until smooth.</li>
+          <li>Remove from heat. Stir in peppermint extract.</li>
+          <li>Pour into the prepared pan and spread smooth.</li>
+          <li>Immediately sprinkle crushed candy canes generously over the top. Press lightly so they adhere.</li>
+          <li>Refrigerate at least 2 hours until fully set. Lift out by the foil edges and cut into squares.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Add extra crushed candy canes for a showstopping presentation. Package squares in a little box tied with ribbon — this is the holiday gift everyone wants. Start with ½ tsp peppermint if you prefer a subtler flavor.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Layered Cookie Brownie Bars ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-purple">
+      <div class="rt">Layered Cookie Brownie Bars</div>
+      <div class="rm"><div>Makes: 18 bars</div><div>Temp: 350°F</div><div>Time: 40–50 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Cookie Layer</div>
+        <ul class="ilist">
+          <li>¾ cup butter, softened</li>
+          <li>½ cup brown sugar</li>
+          <li>½ cup white sugar</li>
+          <li>1 egg + 1 egg yolk</li>
+          <li>1 tsp vanilla</li>
+          <li>1½ cups all-purpose flour</li>
+          <li>¼ tsp salt</li>
+          <li>⅔ cup chocolate chips</li>
+        </ul>
+        <div class="clabel" style="margin-top:0.07in;">Middle &amp; Top Layers</div>
+        <ul class="ilist">
+          <li>28 Oreo cookies</li>
+          <li>½ cup butter, cubed</li>
+          <li>6 oz dark or semi-sweet chocolate</li>
+          <li>1 cup sugar</li>
+          <li>2 large eggs</li>
+          <li>½ cup flour</li>
+          <li>¼ cup cocoa powder</li>
+          <li>½ tsp salt</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 350°F. Grease a 9×13-inch pan; line with parchment overhang.</li>
+          <li><strong>Cookie layer:</strong> Beat butter and sugars until fluffy. Beat in egg, yolk, and vanilla. Mix in flour and salt on low. Stir in chocolate chips. Spread evenly in pan.</li>
+          <li>Press Oreos in a single layer over the cookie dough.</li>
+          <li><strong>Brownie layer:</strong> Melt butter and chocolate together in microwave on MEDIUM power in 45-second intervals, stirring between each. Cool 5 minutes.</li>
+          <li>Whisk in eggs, sugar, and vanilla. Fold in flour, cocoa, and salt until just combined.</li>
+          <li>Spoon brownie batter in dollops over Oreos; spread gently into an even layer.</li>
+          <li>Bake 37–45 minutes until a toothpick comes out with a few damp crumbs. Cool FULLY (4+ hours) before slicing. Lift out by parchment to cut.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Cool completely — at least 4 hours, or overnight. Cutting early makes a beautiful mess. Worth the wait. (Source: Just So Tasty)</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== DRINKS DIVIDER ==================== -->
+<div class="page divider bg-orange">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="div-orn">🥂</div>
+    <div class="div-name">Drinks,<br>Jams &amp; Tips</div>
+    <div class="div-tag">"Every great meal needs a great pour."</div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Christmas Jam ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-orange">
+      <div class="rt">Slow Cooker Christmas Jam</div>
+      <div class="rm"><div>Makes: ~4 cups</div><div>Slow Cooker</div><div>Time: 3 hrs</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>2 (12 oz) bags fresh cranberries</li>
+          <li>1 (10 oz) package frozen strawberries</li>
+          <li>2 cups granulated sugar</li>
+          <li>1 tsp orange zest</li>
+          <li>1 package (1.75 oz) powdered pectin</li>
+          <li>½ tsp vanilla extract</li>
+        </ul>
+        <div class="photo-ph" style="flex:1;min-height:2.2in;"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Combine cranberries, strawberries, sugar, and orange zest in the slow cooker. Stir to mix.</li>
+          <li>Cook on HIGH for 2–3 hours, stirring occasionally, until berries have burst and the mixture is bubbling and fragrant.</li>
+          <li>Use a potato masher or the back of a spoon to break down any remaining whole berries.</li>
+          <li>Stir in pectin until fully dissolved. Continue cooking 30 minutes more until slightly thickened.</li>
+          <li>Stir in vanilla. Taste and adjust sugar if needed.</li>
+          <li>Pour into clean jars while hot. Let cool to room temperature, then refrigerate. Keeps up to 3 weeks refrigerated.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Pour into small mason jars, tie with a ribbon, and gift to neighbors and friends. People will ask for this every year. Beautiful with biscuits, cream cheese, and turkey alike.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Mimosa Bar ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-orange">
+      <div class="rt">Build-Your-Own Mimosa Bar</div>
+      <div class="rm"><div>Serves: a crowd</div><div>No cook</div><div>Self-serve</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">You'll Need</div>
+        <ul class="ilist">
+          <li>1–2 bottles Prosecco or Champagne, chilled</li>
+          <li>Fresh orange juice</li>
+          <li>Cranberry juice</li>
+          <li>Mango or pineapple juice</li>
+          <li>Peach nectar</li>
+          <li>Pomegranate juice</li>
+          <li>Grand Marnier or elderflower liqueur (optional)</li>
+          <li>Orange slices, raspberries, blueberries, strawberries for garnish</li>
+          <li>Fresh mint sprigs</li>
+          <li>Chilled champagne flutes</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">How to Set It Up</div>
+        <ol class="slist">
+          <li>Chill all juices, Prosecco, and glasses well before serving.</li>
+          <li>Set out all juice options in clear pitchers with small labels — guests love knowing their choices.</li>
+          <li>Place fruit garnishes in small bowls alongside the glasses.</li>
+          <li>Keep Prosecco in an ice bucket with tongs nearby.</li>
+          <li>Instruct guests: pour your juice or juice blend into the glass first (filling about ⅓ to ½), then gently top with Prosecco. Pouring juice first reduces fizz overflow.</li>
+          <li>Garnish with a fruit skewer or a mint sprig. Toast!</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> Always pour the juice first — it controls the fizz. A splash of Grand Marnier added to orange juice creates the classic "buck's fizz." Make a non-alcoholic station with sparkling water and the same juices for everyone.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== RECIPE: Glowing Green Smoothie ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh bg-orange">
+      <div class="rt">Kimberly Snyder's Glowing Green Smoothie</div>
+      <div class="rm"><div>Makes: ~60 oz</div><div>Blender</div><div>Time: 10 min</div></div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1½ cups water</li>
+          <li>1 head romaine lettuce, roughly chopped</li>
+          <li>3–4 stalks celery, roughly chopped</li>
+          <li>1 large handful spinach (about 2 cups)</li>
+          <li>1 large apple, cored and chopped</li>
+          <li>1 pear, cored and chopped</li>
+          <li>1 banana (fresh or frozen)</li>
+          <li>Juice of ½ lemon</li>
+        </ul>
+        <div class="photo-ph" style="flex:1;"><div class="phi">📷</div><div>Add your photo here</div></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Add water and romaine lettuce to the blender. Blend on high until completely smooth, about 30 seconds.</li>
+          <li>Add celery and spinach. Blend again until smooth.</li>
+          <li>Add apple, pear, banana, and lemon juice.</li>
+          <li>Blend on high until the entire mixture is silky and smooth, about 60 seconds.</li>
+          <li>Pour into glasses and drink immediately, or refrigerate in a sealed jar for up to 24 hours. Shake well before drinking if made ahead.</li>
+        </ol>
+        <div class="tip"><strong>🧡 Greer Tip:</strong> The secret is blending the greens with water FIRST before adding the fruit — it creates a silky base instead of a chunky mess. You cannot taste the greens. Truly. This is the smoothie that converts skeptics.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== KITCHEN TIPS PAGE ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="tips-title">Kitchen Wisdom</div>
+    <div class="tip-card">
+      <h3>🥗 Dress a Salad the Italian Way</h3>
+      <p>Lightly coat your greens with olive oil so that when you sprinkle sea salt on them, the flakes cling to the greens. Then add a dash of balsamic vinegar and lemon juice. You will never buy packaged dressing again. — <em>Lachlan Mackinnon-Patterson, Pizzeria Locale</em></p>
+    </div>
+    <div class="tip-card">
+      <h3>🍷 Wine Pairing at a Glance</h3>
+      <p style="margin-bottom:0.08in;">Match the weight of your wine to the weight of your food. Light foods → light wines. Rich foods → bold wines.</p>
+      <div class="wine-grid">
+        <div class="wine-cell"><strong>Bold Reds</strong>Cabernet Sauvignon, Syrah, Malbec, Chianti — pair with red meats, hearty stews</div>
+        <div class="wine-cell"><strong>Fruity Reds &amp; Rosé</strong>Merlot, Grenache, Pinot Noir — pair with poultry, pasta, lighter fare</div>
+        <div class="wine-cell"><strong>Full Whites</strong>Chardonnay, Viognier — pair with creamy dishes, seafood, poultry</div>
+        <div class="wine-cell"><strong>Light &amp; Bubbly</strong>Prosecco, Cava, Pinot Grigio, Sauvignon Blanc, Riesling — pair with appetizers, shellfish, brunch</div>
+      </div>
+    </div>
+    <div class="tip-card">
+      <h3>🧡 General Greer Rules</h3>
+      <p>Always taste as you go. Season with love. Never skip the garlic. When in doubt, add more cheese. The best recipes are the ones you make your own — write your changes in the margins and pass it on.</p>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 4 ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">More Moments We Love</div>
+    <div class="pgrid g2x2">
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Couple at the restaurant</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Men and kids together</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Old restaurant / graffiti photo</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+      <div class="pcard"><div class="pi">📷</div><div class="pd">Add your favorite family photo here</div><div class="pl"></div><div class="ph">Add caption here</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 5 — Travels & Adventures ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">Travels &amp; Adventures ✦ The Greers Go Places</div>
+    <div class="pgrid g2x3">
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="CoconutinJamaica.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Coconut in Jamaica</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="FriendsinChicago.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Friends in Chicago</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="ATtheMed.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">At the Med</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="LeDimplomate.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Le Diplomate</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="Greersinsneakers.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Greers in Sneakers</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="MagicMiles.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Magic Miles</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 6 — The Next Generation ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">The Next Generation ✦ Little Greers Growing Up</div>
+    <div class="pgrid g2x3">
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="GreerKids.2024.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Greer Kids 2024</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="BabyGigi.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Baby Gigi</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="BabyJAG.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Baby JAG</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="BabyStephen+Train.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Baby Stephen &amp; the Train</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="SuperKnox.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Super Knox</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="SuperTitus.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Super Titus</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 7 — Keepsakes & Brian's Space Center ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">Keepsakes &amp; Moments That Mattered</div>
+    <div class="pgrid g2x3">
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="SpaceCenterPostcard.Brian.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Brian's Kennedy Space Center Postcard</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="SarahGreer_TheOriginal.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Sarah Greer — The Original</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="P1010171_1.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Family Archive</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="Red Beige White Vintage Scrapbook Photo Collage Christmas Postcard 2_jpg.jpg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Christmas Memories</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="ThanksgivingColoring.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Thanksgiving Coloring</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="OldBayGifts.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Old Bay Gifts</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== HERITAGE SECTION DIVIDER ==================== -->
+<div class="page divider" style="background:var(--brown);">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="div-orn">✦</div>
+    <div class="div-name" style="font-size:44pt;">FAMILY HERITAGE</div>
+    <div class="div-name" style="font-size:44pt; margin-top:-0.08in;">KITCHEN</div>
+    <div class="div-orn">✦</div>
+    <div class="div-tag">Cakes, Candies &amp; Cherished Sweets<br>from the families who made us</div>
+    <div class="div-orn" style="font-size:13pt; margin-top:0.2in; color:rgba(255,255,255,0.4);">Saucier · Labat · Singleton · Fairconnetue · Trotter · Parish · Williams</div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PRALINES + PEANUT BUTTER FUDGE ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc" style="padding:0.2in 0.42in;">
+    <!-- PRALINES -->
+    <div class="rh" style="background:var(--brown); margin-bottom:0.08in;">
+      <div class="rt">Pralines</div>
+      <div class="rm">Candy · Makes ~24 pieces<br>By Charmaine Saucier</div>
+    </div>
+    <div class="rbody" style="flex:none; margin-bottom:0.12in;">
+      <div class="icol" style="width:2.2in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>4 cans evaporated milk</li>
+          <li>6 c. sugar</li>
+          <li>1 stick margarine</li>
+          <li>3 tsp. vanilla extract</li>
+          <li>2 c. pecans</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Combine sugar, evaporated milk and margarine in a heavy saucepan.</li>
+          <li>Stir over low heat until butter melts and sugar dissolves.</li>
+          <li>Stirring constantly, cook until candy forms a soft ball when dropped in ice water (about 15 minutes).</li>
+          <li>Remove from heat; cool slightly. Add vanilla and pecans; beat until creamy.</li>
+          <li>Wipe down counter top with butter. Drop spoonfuls on counter and let harden.</li>
+        </ol>
+      </div>
+    </div>
+    <div style="height:2px; background:var(--gold); opacity:0.4; margin:0.08in 0;"></div>
+    <!-- PEANUT BUTTER FUDGE -->
+    <div class="rh" style="background:var(--red); margin-bottom:0.08in; margin-top:0.08in;">
+      <div class="rt">Peanut Butter Fudge</div>
+      <div class="rm">Candy · 13×9 pan</div>
+    </div>
+    <div class="rbody" style="flex:none;">
+      <div class="icol" style="width:2.4in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>4 c. sugar</li>
+          <li>1⅓ c. milk</li>
+          <li>1 (12-oz.) pkg semi-sweet chocolate pieces</li>
+          <li>1 c. creamy peanut butter</li>
+          <li>¼ c. margarine or butter</li>
+          <li>1 (7-oz.) jar marshmallow creme</li>
+          <li>1 c. chopped peanuts</li>
+          <li>2 tsp. vanilla</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Butter a 13×9-inch baking pan and sides of heavy 3-qt. saucepan.</li>
+          <li>Combine sugar and milk in saucepan. Cook and stir over medium heat until sugar dissolves and mixture comes to boiling.</li>
+          <li>Cook without stirring to soft ball stage (234°). Remove from heat.</li>
+          <li>Stir in chocolate, peanut butter and margarine until well combined.</li>
+          <li>Stir in marshmallow creme, peanuts and vanilla. Pour into buttered pan. Cool; cut into squares.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Use a candy thermometer for the soft ball stage. The fudge firms up as it cools — don't rush it!</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== HUMMINGBIRD CAKE ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh" style="background:var(--green);">
+      <div class="rt">Hummingbird Cake</div>
+      <div class="rm">Cake · Serves 12–16 · Three 9-inch layers<br>By Ruth Labat</div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>3 c. flour</li>
+          <li>2 c. sugar</li>
+          <li>1 tsp. salt</li>
+          <li>1 tsp. baking soda</li>
+          <li>1 tsp. cinnamon</li>
+          <li>3 eggs, beaten</li>
+          <li>1½ c. vegetable oil</li>
+          <li>1½ tsp. vanilla</li>
+          <li>1 (8-oz.) can crushed pineapple, undrained</li>
+          <li>1 c. chopped pecans</li>
+          <li>2 c. mashed bananas</li>
+          <li>2½ c. chopped pecans (for top/sides)</li>
+        </ul>
+        <div class="photo-ph" style="padding:0; overflow:hidden; border:2px solid var(--gold); border-radius:6px; min-height:1.3in; margin-top:0.1in; flex-shrink:0;"><img src="VegasCarrotCake.jpeg" style="width:100%; height:100%; object-fit:cover; border-radius:4px; display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 350°. Grease and flour three 9-inch round cake pans.</li>
+          <li>Combine all dry ingredients in a large bowl.</li>
+          <li>Add eggs and oil, stirring until just moistened — do not beat.</li>
+          <li>Stir in vanilla, pineapple (with juice), 1 cup pecans and mashed bananas.</li>
+          <li>Spoon batter evenly into the three prepared pans.</li>
+          <li>Bake at 350° for 25–30 minutes or until a toothpick comes out clean.</li>
+          <li>Cool in pans 10 minutes, then turn out onto wire racks and cool completely.</li>
+          <li>Frost with cream cheese frosting and press remaining pecans into sides and top.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Classic cream cheese frosting is traditional. Refrigerate leftovers — it actually tastes better the next day once the flavors settle in.</div>
+        <div class="tip" style="margin-top:0.07in;"><strong>Cream Cheese Frosting:</strong> Beat 2 (8-oz.) pkgs. cream cheese + 1 c. butter until smooth. Add 2 (1-lb.) boxes powdered sugar and 2 tsp. vanilla. Beat until fluffy.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== SOUR CREAM POUND CAKE ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh" style="background:var(--teal);">
+      <div class="rt">Sour Cream Pound Cake</div>
+      <div class="rm">Cake · 10-inch tube pan · 1 hr 15 min<br>By Jenny Parish</div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 c. butter, softened</li>
+          <li>2¾ c. sugar</li>
+          <li>1 T. vanilla</li>
+          <li>2 tsp. grated orange peel</li>
+          <li>6 eggs</li>
+          <li>3 c. all-purpose flour</li>
+          <li>¼ tsp. baking soda</li>
+          <li>½ tsp. salt</li>
+          <li>1 c. sour cream</li>
+        </ul>
+        <div class="clabel" style="margin-top:0.1in;">Frosting (optional)</div>
+        <ul class="ilist">
+          <li>1 (8-oz.) pkg. cream cheese, softened</li>
+          <li>½ c. butter</li>
+          <li>1 tsp. vanilla</li>
+          <li>1 box powdered sugar</li>
+          <li>Crushed pecans for top</li>
+        </ul>
+        <div class="photo-ph" style="padding:0; overflow:hidden; border:2px solid var(--gold); border-radius:6px; min-height:1.3in; margin-top:0.1in; flex-shrink:0;"><img src="CherryCheesecake.jpeg" style="width:100%; height:100%; object-fit:cover; border-radius:4px; display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 325°. Grease and flour a 10-inch tube pan.</li>
+          <li>Beat butter in large bowl with electric mixer at medium speed until light and creamy, scraping down sides once.</li>
+          <li>Gradually add sugar, beating until light and fluffy.</li>
+          <li>Beat in vanilla and orange peel.</li>
+          <li>Add eggs, one at a time, beating 1 minute after each addition.</li>
+          <li>Combine flour, salt and baking soda in a small bowl.</li>
+          <li>Add flour mixture to butter alternately with sour cream, beginning and ending with flour. Beat well after each addition.</li>
+          <li>Pour into prepared pan. Bake 1 hour and 15 minutes or until a toothpick inserted in center comes out clean.</li>
+          <li>Cool in pan 15 minutes; turn out and cool completely.</li>
+          <li>For frosting: beat cream cheese and butter until smooth. Add vanilla and gradually beat in powdered sugar. Frost cake and top with crushed pecans.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> The orange zest is the secret — don't skip it! It gives the cake a bright, bright lift that makes everyone ask what's in it.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== CARAMEL NUT POUND CAKE + POUND CAKE ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc" style="padding:0.2in 0.42in;">
+    <div class="rh" style="background:var(--orange); margin-bottom:0.08in;">
+      <div class="rt">Caramel Nut Pound Cake</div>
+      <div class="rm">Cake · Tube pan · 1 hour<br>By Rhonda Labat</div>
+    </div>
+    <div class="rbody" style="flex:none; margin-bottom:0.1in;">
+      <div class="icol" style="width:2.3in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 c. butter</li>
+          <li>½ c. shortening</li>
+          <li>1 box light brown sugar</li>
+          <li>1 c. granulated sugar</li>
+          <li>5 eggs</li>
+          <li>1 tsp. vanilla</li>
+          <li>½ tsp. salt</li>
+          <li>½ tsp. baking powder</li>
+          <li>3 c. sifted flour</li>
+          <li>1 c. milk</li>
+          <li>1 c. chopped nuts</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Cream butter, shortening and both sugars until fluffy.</li>
+          <li>Add eggs one at a time, beating well after each.</li>
+          <li>Add vanilla and mix well.</li>
+          <li>Add flour (with salt and baking powder) alternately with milk.</li>
+          <li>Stir in nuts. Pour into a greased and floured tube pan.</li>
+          <li>Bake at 350° for 1 hour. Remove from pan while warm and drizzle with caramel glaze.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Quick glaze: heat 1 c. brown sugar, ¼ c. butter and ¼ c. milk until smooth. Drizzle over warm cake.</div>
+      </div>
+    </div>
+    <div style="height:2px; background:var(--gold); opacity:0.4; margin:0.06in 0;"></div>
+    <div class="rh" style="background:var(--brown); margin-bottom:0.08in; margin-top:0.08in;">
+      <div class="rt">Pound Cake</div>
+      <div class="rm">Cake · Three 9-inch layers · 1 hour<br>By Bernadine Labat</div>
+    </div>
+    <div class="rbody" style="flex:none;">
+      <div class="icol" style="width:2.3in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>2 sticks margarine</li>
+          <li>½ c. Crisco</li>
+          <li>3 c. sugar</li>
+          <li>5 eggs</li>
+          <li>3 c. plain flour</li>
+          <li>1 c. sweet milk</li>
+          <li>2 tsp. lemon extract</li>
+          <li>1 tsp. almond extract</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Cream margarine, Crisco and sugar until fluffy.</li>
+          <li>Add eggs one at a time, beating well after each.</li>
+          <li>Add lemon and almond extracts; mix well.</li>
+          <li>Add flour alternately with milk.</li>
+          <li>Pour into three well-greased, floured 9-inch pans.</li>
+          <li>Bake at 350° for 1 hour or until done. Remove and cool completely on wire rack.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== BUTTER CAKE + BUTTERMILK CAKE ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc" style="padding:0.2in 0.42in;">
+    <div class="rh" style="background:var(--green); margin-bottom:0.08in;">
+      <div class="rt">Butter Cake</div>
+      <div class="rm">Cake · 325° · 1 hr 10 min<br>By Paula Belle</div>
+    </div>
+    <div class="rbody" style="flex:none; margin-bottom:0.1in;">
+      <div class="icol" style="width:2.2in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>3 c. sugar</li>
+          <li>2 sticks butter or margarine</li>
+          <li>6 eggs</li>
+          <li>3 c. plain flour</li>
+          <li>1 (½-pt.) carton whipping cream</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Cream butter and sugar together until light and fluffy.</li>
+          <li>Add the eggs, 2 at a time, beating well after each addition.</li>
+          <li>Add flour and cream alternately, beginning and ending with flour.</li>
+          <li>Pour into a greased and floured tube pan.</li>
+          <li>Bake at 325° for 1 hour and 10 minutes or until toothpick comes out clean.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Simple and perfect. The whipping cream is what makes this cake so rich and tender — no baking powder needed!</div>
+      </div>
+    </div>
+    <div style="height:2px; background:var(--gold); opacity:0.4; margin:0.06in 0;"></div>
+    <div class="rh" style="background:var(--teal); margin-bottom:0.08in; margin-top:0.08in;">
+      <div class="rt">Buttermilk Cake</div>
+      <div class="rm">Cake · 350° · 1 hour<br>By Nadia Fairconnetue</div>
+    </div>
+    <div class="rbody" style="flex:none;">
+      <div class="icol" style="width:2.2in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>2 sticks butter</li>
+          <li>2¾ c. sugar</li>
+          <li>5 eggs, separated</li>
+          <li>1 T. vanilla</li>
+          <li>3 c. flour</li>
+          <li>½ tsp. baking soda</li>
+          <li>1 T. hot water</li>
+          <li>1 c. buttermilk</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Cream sugar and butter together until light.</li>
+          <li>Dissolve baking soda in 1 T. hot water; add to ½ cup of the buttermilk.</li>
+          <li>Separate eggs. Beat egg yolks and add to creamed mixture.</li>
+          <li>Add flour alternately with remaining buttermilk mixture. Add vanilla.</li>
+          <li>Beat egg whites to stiff peaks; fold gently into batter.</li>
+          <li>Pour into greased and floured tube or bundt pan. Bake at 350° for 1 hour.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Folding in the beaten egg whites keeps this cake light as air — be gentle so you don't lose all those beautiful bubbles.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== THREE-STEP CAKE + DUMP CAKE ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc" style="padding:0.2in 0.42in;">
+    <div class="rh" style="background:var(--purple); margin-bottom:0.08in;">
+      <div class="rt">Three-Step Cake</div>
+      <div class="rm">Cake · 9×13 pan · Easy!<br>By Lydia Trotter</div>
+    </div>
+    <div class="rbody" style="flex:none; margin-bottom:0.1in;">
+      <div class="icol" style="width:2.3in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 (18.25-oz.) box German chocolate cake mix</li>
+          <li>1 (12-oz.) container Cool Whip</li>
+          <li>1 can Eagle Brand condensed milk</li>
+          <li>4 regular-size Heath bars, crushed</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Mix and bake cake per box directions in a 9×13-inch pan.</li>
+          <li>While cake is still hot, poke holes all over the top with the handle of a wooden spoon.</li>
+          <li>Spread the condensed milk over the top, letting it sink in. Let cool completely.</li>
+          <li>Spread Cool Whip over cooled cake; sprinkle with crushed Heath bars. Refrigerate until served.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Crush the Heath bars while still in the wrapper — easy and no mess!</div>
+      </div>
+    </div>
+    <div style="height:2px; background:var(--gold); opacity:0.4; margin:0.06in 0;"></div>
+    <div class="rh" style="background:var(--orange); margin-bottom:0.08in; margin-top:0.08in;">
+      <div class="rt">Dump Cake</div>
+      <div class="rm">Cake · 350° · 1 hour · Easy<br>By Janita Lee</div>
+    </div>
+    <div class="rbody" style="flex:none;">
+      <div class="icol" style="width:2.3in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 lg. can crushed pineapple, undrained</li>
+          <li>1 can cherry pie filling</li>
+          <li>1 box yellow cake mix</li>
+          <li>2 sticks butter or margarine</li>
+          <li>½ c. chopped nuts</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Grease an oblong baking pan.</li>
+          <li>Spread crushed pineapple (with juice) across the bottom.</li>
+          <li>Layer cherry pie filling on top.</li>
+          <li>Sprinkle dry yellow cake mix evenly over the filling.</li>
+          <li>Slice butter thinly and lay pieces over the cake mix to cover. Sprinkle with nuts.</li>
+          <li>Bake at 350° for 1 hour. Serve warm with vanilla ice cream.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Don't stir — just dump and layer! That's the whole secret to this one.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== COCONUT CAKES ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc" style="padding:0.2in 0.42in;">
+    <div class="rh" style="background:var(--green); margin-bottom:0.08in;">
+      <div class="rt">Easy Coconut Cake</div>
+      <div class="rm">Cake · 14×9 pan · Refrigerate<br>By Marion Labat</div>
+    </div>
+    <div class="rbody" style="flex:none; margin-bottom:0.1in;">
+      <div class="icol" style="width:2.3in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 box Duncan Hines pudding cake mix (any flavor)</li>
+          <li>1 can sweetened condensed milk</li>
+          <li>1 container Cool Whip</li>
+          <li>1 bag frozen coconut</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Make cake per box directions; pour into a 14×9-inch baking dish. Bake as directed.</li>
+          <li>When cake is done but still hot, prick the entire top with a fork.</li>
+          <li>Pour condensed milk slowly over the top, letting it fill the holes.</li>
+          <li>Once condensed milk has soaked in, spread Cool Whip over the top.</li>
+          <li>Sprinkle generously with frozen coconut. Refrigerate. Super good and easy!</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Marion says: "Super good and easy!" — and she's right. This is one of those recipes everyone asks for at every gathering.</div>
+      </div>
+    </div>
+    <div style="height:2px; background:var(--gold); opacity:0.4; margin:0.06in 0;"></div>
+    <div class="rh" style="background:var(--teal); margin-bottom:0.08in; margin-top:0.08in;">
+      <div class="rt">Sour Cream Coconut Cake</div>
+      <div class="rm">Layer Cake · Ice while warm<br>By Queen Williams</div>
+    </div>
+    <div class="rbody" style="flex:none;">
+      <div class="icol" style="width:2.3in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 box yellow butter cake mix</li>
+          <li>1 (8-oz.) box sour cream</li>
+          <li>2 c. sugar</li>
+          <li>4 (6-oz.) pkgs. frozen coconut</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Bake cake layers per box directions.</li>
+          <li>While layers are still warm, prepare icing: mix sour cream and sugar until well combined.</li>
+          <li>Add half the coconut to the sour cream mixture; stir well.</li>
+          <li>Ice the warm cake layers with the sour cream icing.</li>
+          <li>Press the remaining coconut over the top and sides. Keep refrigerated.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> This cake gets better overnight as the coconut and sour cream flavors meld. Make it the day before a gathering.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== BETTER THAN SEX CAKE + CAJUN SHEATH CAKE ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc" style="padding:0.2in 0.42in;">
+    <div class="rh" style="background:var(--red); margin-bottom:0.08in;">
+      <div class="rt">Better Than Sex Cake</div>
+      <div class="rm">Cake · 350° · 1 hour<br>By Robin Verrett</div>
+    </div>
+    <div class="rbody" style="flex:none; margin-bottom:0.1in;">
+      <div class="icol" style="width:2.3in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 box golden Duncan Hines cake mix</li>
+          <li>1 sm. box instant vanilla pudding</li>
+          <li>4 eggs</li>
+          <li>½ c. cooking oil</li>
+          <li>½ c. water</li>
+          <li>8 oz. cream cheese</li>
+          <li>½ box semi-sweet chocolate chips</li>
+          <li>1 c. chopped nuts</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Mix all ingredients together until well combined.</li>
+          <li>Pour into a well-greased and floured tube or tub pan.</li>
+          <li>Bake at 350° for 1 hour or until toothpick comes out clean.</li>
+          <li>Cool in pan 10 minutes before turning out.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> The cream cheese swirled throughout makes every slice a surprise. Don't overmix — you want little pockets of cream cheese in the finished cake.</div>
+      </div>
+    </div>
+    <div style="height:2px; background:var(--gold); opacity:0.4; margin:0.06in 0;"></div>
+    <div class="rh" style="background:var(--brown); margin-bottom:0.08in; margin-top:0.08in;">
+      <div class="rt">Cajun Sheath Cake</div>
+      <div class="rm">Sheet Cake · 12×8½ pan · 30 min</div>
+    </div>
+    <div class="rbody" style="flex:none;">
+      <div class="icol" style="width:2.3in;">
+        <div class="clabel">Cake</div>
+        <ul class="ilist">
+          <li>2 c. sifted flour</li>
+          <li>2 c. sugar</li>
+          <li>2 sticks oleo (butter)</li>
+          <li>4 T. cocoa</li>
+          <li>2 eggs, slightly beaten</li>
+          <li>1 c. water</li>
+          <li>½ c. buttermilk</li>
+          <li>1 tsp. baking soda</li>
+          <li>1 tsp. cinnamon</li>
+          <li>1 tsp. vanilla</li>
+        </ul>
+        <div class="clabel" style="margin-top:0.07in;">Icing</div>
+        <ul class="ilist">
+          <li>1 stick oleo</li>
+          <li>½ c. buttermilk</li>
+          <li>1 box confectioners' sugar</li>
+          <li>1 tsp. vanilla</li>
+          <li>1 c. chopped pecans</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Sift flour and sugar together in a large bowl.</li>
+          <li>In a saucepan, bring oleo, cocoa and water to a boil. Pour over flour mixture; mix well.</li>
+          <li>Add buttermilk, baking soda, cinnamon, beaten eggs and vanilla. Mix well.</li>
+          <li>Pour into a greased 12×8½-inch flat pan. Bake at 350° for 30 minutes.</li>
+          <li>Start icing about 5 minutes before cake is done. Melt oleo with buttermilk, add powdered sugar, vanilla and pecans; stir smooth.</li>
+          <li>Pour icing over hot cake as soon as it comes out of the oven.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> This is the Louisiana answer to Texas Sheet Cake. The warm icing soaks right into the hot cake for a fudgy-rich top.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== APPLESAUCE PINEAPPLE CAKE + BREAD PUDDING ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc" style="padding:0.2in 0.42in;">
+    <div class="rh" style="background:var(--orange); margin-bottom:0.08in;">
+      <div class="rt">Applesauce Pineapple Cake</div>
+      <div class="rm">Cake · 10-inch tube pan · 1 hr 30 min<br>By Ruth Labat</div>
+    </div>
+    <div class="rbody" style="flex:none; margin-bottom:0.1in;">
+      <div class="icol" style="width:2.3in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>3½ c. cake flour</li>
+          <li>2 tsp. baking powder</li>
+          <li>½ tsp. salt</li>
+          <li>2 tsp. cinnamon</li>
+          <li>2 c. sugar</li>
+          <li>½ c. Crisco</li>
+          <li>2 eggs</li>
+          <li>2 c. applesauce</li>
+          <li>1 (8-oz.) can crushed pineapple, drained</li>
+          <li>1 c. chopped nuts</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Combine flour, baking powder, salt, cinnamon, sugar, Crisco and eggs in a mixing bowl.</li>
+          <li>Add 1 cup of the applesauce; mix thoroughly.</li>
+          <li>Add remaining applesauce and drained pineapple; mix well.</li>
+          <li>Stir in nuts.</li>
+          <li>Pour into a greased and floured 10-inch tube pan.</li>
+          <li>Bake at 350° for 1 hour and 30 minutes. Cool in pan before turning out.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Ruth's cakes always disappear first. The pineapple keeps this moist for days — if it lasts that long!</div>
+      </div>
+    </div>
+    <div style="height:2px; background:var(--gold); opacity:0.4; margin:0.06in 0;"></div>
+    <div class="rh" style="background:var(--brown); margin-bottom:0.08in; margin-top:0.08in;">
+      <div class="rt">Bread Pudding</div>
+      <div class="rm">Dessert · 9×13 pan · 350° · 1 hour</div>
+    </div>
+    <div class="rbody" style="flex:none;">
+      <div class="icol" style="width:2.3in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>16 slices white bread, torn in ¼ sections</li>
+          <li>4 half-pints whipping cream</li>
+          <li>1 pt. half-and-half</li>
+          <li>2 eggs</li>
+          <li>3 c. sugar</li>
+          <li>3 T. vanilla extract</li>
+          <li>4 dashes each: cinnamon, nutmeg, allspice</li>
+          <li>Extra margarine for pan</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 350°. Generously butter a 9×13-inch pan.</li>
+          <li>Mix together whipping cream, half-and-half, eggs and sugar.</li>
+          <li>Add spices, vanilla and a pat of margarine; stir gently. Do not over stir.</li>
+          <li>Add torn bread pieces last. If mixture appears too dry, add ½ cup milk.</li>
+          <li>Pour into prepared pan. Bake at 350° for 1 hour.</li>
+          <li>Serve warm with a drizzle of bourbon sauce or vanilla cream.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Use day-old bread — it absorbs the custard far better than fresh. The more stale, the better the pudding.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== MONKEY BREAD (VONRETTA'S) ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh" style="background:var(--green);">
+      <div class="rt">Monkey Bread</div>
+      <div class="rm">Breakfast / Dessert · Bundt pan · 30–40 min<br>By Vonretta Singleton</div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>4 cans buttermilk biscuits</li>
+          <li>¾ c. sugar</li>
+          <li>1 tsp. cinnamon</li>
+          <li>½ c. chopped pecans</li>
+        </ul>
+        <div class="clabel" style="margin-top:0.12in;">Topping</div>
+        <ul class="ilist">
+          <li>1 c. sugar</li>
+          <li>1½ tsp. cinnamon</li>
+          <li>1 stick oleo (butter)</li>
+          <li>¼ c. brown sugar</li>
+        </ul>
+        <div class="photo-ph" style="padding:0; overflow:hidden; border:2px solid var(--gold); border-radius:6px; min-height:1.3in; margin-top:0.18in; flex-shrink:0;"><img src="Monkey Bread.jpeg" style="width:100%; height:100%; object-fit:cover; border-radius:4px; display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Cut each biscuit into quarters.</li>
+          <li>Mix ¾ c. sugar and 1 tsp. cinnamon together in a bowl.</li>
+          <li>Grease or spray a bundt pan well.</li>
+          <li>Roll each biscuit piece in the cinnamon-sugar mixture.</li>
+          <li>Layer the coated pieces in the bundt pan, sprinkling pecans throughout the layers.</li>
+          <li>For the topping: combine 1 c. sugar, 1½ tsp. cinnamon, oleo and brown sugar in a small saucepan. Heat to boiling, stirring constantly.</li>
+          <li>Remove topping from heat and let cool slightly.</li>
+          <li>Pour the warm topping over the biscuit pieces in the pan.</li>
+          <li>Bake at 350° for 30–40 minutes until deep golden brown.</li>
+          <li>Cool in pan for 5 minutes only, then invert onto a serving plate while still warm.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Don't let it cool too long in the pan — the caramel will set and stick! Invert quickly after 5 minutes and watch it all come tumbling out.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== MORE FAVORITES SECTION DIVIDER ==================== -->
+<div class="page divider" style="background:var(--teal);">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="div-orn">✦</div>
+    <div class="div-name" style="font-size:48pt;">MORE FROM</div>
+    <div class="div-name" style="font-size:48pt; margin-top:-0.08in;">OUR KITCHEN</div>
+    <div class="div-orn">✦</div>
+    <div class="div-tag">New favorites, handwritten cards, and recipes<br>passed down in every form love takes</div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== BAKED APPLE CINNAMON FT + BAKED EGGNOG FT ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc" style="padding:0.2in 0.42in;">
+    <div class="rh" style="background:var(--orange); margin-bottom:0.08in;">
+      <div class="rt">Baked Apple Cinnamon French Toast</div>
+      <div class="rm">Breakfast · 9×13 · 350° · 50 min · Serves 8</div>
+    </div>
+    <div class="rbody" style="flex:none; margin-bottom:0.1in;">
+      <div class="icol" style="width:2.4in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>2 tbsp butter (to grease pan)</li>
+          <li>6 large eggs</li>
+          <li>1 pint Brown Sugar Oat Creamer</li>
+          <li>1 loaf Apple Cinnamon Sourdough Bread, each slice halved widthwise</li>
+          <li>1 apple (any variety), chopped</li>
+          <li>Caramel sauce, for drizzling</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 350°. Grease a 9×13 baking dish with butter.</li>
+          <li>Whisk eggs and creamer together in a large bowl until combined.</li>
+          <li>Dip each piece of bread into the egg mixture, then place in pan at a slight angle. Lay slices against one another so they're neither flat nor standing straight.</li>
+          <li>Add chopped apple to remaining egg mixture; pour over the bread slices.</li>
+          <li>Bake 35–40 minutes until golden. Drizzle with caramel sauce to serve.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> TJ's Apple Cinnamon Sourdough is the star — the sourdough tang plays beautifully with the caramel. Any apple works but Honeycrisp keeps its shape best.</div>
+      </div>
+    </div>
+    <div style="height:2px; background:var(--gold); opacity:0.4; margin:0.06in 0;"></div>
+    <div class="rh" style="background:var(--green); margin-bottom:0.08in; margin-top:0.08in;">
+      <div class="rt">Baked Egg Nog French Toast</div>
+      <div class="rm">Breakfast · 9×13 · 350° · 50 min · Serves 11</div>
+    </div>
+    <div class="rbody" style="flex:none;">
+      <div class="icol" style="width:2.4in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>2 tbsp butter (to grease pan)</li>
+          <li>6 eggs</li>
+          <li>2 cups egg nog</li>
+          <li>2 tbsp brown sugar</li>
+          <li>1 tsp pure bourbon vanilla extract</li>
+          <li>¼ tsp salt</li>
+          <li>½ tsp ground nutmeg (+ more to serve)</li>
+          <li>1 loaf braided &amp; sliced brioche</li>
+          <li>Maple syrup &amp; whipped cream, to serve</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 350°. Grease a 9×13 baking dish with butter.</li>
+          <li>Whisk eggs, egg nog, brown sugar, vanilla, salt and nutmeg until combined.</li>
+          <li>Dip both sides of each brioche slice in the egg nog mixture. Arrange in pan at an angle, each slice leaning on the next. Pour any remaining mixture over the top.</li>
+          <li>Bake 35–40 minutes until egg nog mixture is set and tops are golden.</li>
+          <li>Serve with maple syrup, whipped cream, and a sprinkle of nutmeg.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> This is the holiday breakfast. Make it Christmas morning with a splash of rum stirred into any leftover egg nog on the side — the adults will appreciate it.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== BAKED BRIE EN CROUTE ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="rh" style="background:var(--gold); color:var(--brown);">
+      <div class="rt" style="color:var(--brown);">Baked Brie en Croûte</div>
+      <div class="rm" style="color:var(--brown); opacity:1;">Appetizer · 350° · 40 min · Serves 2–4</div>
+    </div>
+    <div class="rbody">
+      <div class="icol">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 wheel Double Cream Brie</li>
+          <li>⅓ cup walnuts, roughly chopped</li>
+          <li>1 tbsp fresh thyme, destemmed and chopped</li>
+          <li>1 tbsp honey, plus more for drizzling</li>
+          <li>1 package crescent roll dough</li>
+          <li>Crackers or sliced baguette, for serving</li>
+        </ul>
+        <div class="photo-ph" style="padding:0; overflow:hidden; border:2px solid var(--gold); border-radius:6px; min-height:1.3in; margin-top:0.15in; flex-shrink:0;"><img src="Cheese and wine.jpeg" style="width:100%; height:100%; object-fit:cover; border-radius:4px; display:block;"></div>
+        <div class="tip" style="margin-top:0.1in;"><strong>Variations:</strong> Swap walnuts for pecans. Try fig jam instead of honey. Add a sprinkle of rosemary for a savory note.</div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 350°.</li>
+          <li>Unwrap the Brie. Using a knife, score the top of the rind with a large, shallow "X."</li>
+          <li>In a small bowl, combine walnuts, chopped thyme and honey.</li>
+          <li>Unroll crescent dough and carefully separate the 8 triangles along the perforated seams.</li>
+          <li>On a parchment-lined baking sheet, arrange the triangles in a "star" shape — shortest sides slightly overlapping at the center so the parchment shows through the middle.</li>
+          <li>Place Brie in the center of the star.</li>
+          <li>Top the Brie with the walnut and honey mixture.</li>
+          <li>Fold the crescent triangles up and over the Brie, pressing gently to seal.</li>
+          <li>Bake 30 minutes until the crescent is deep golden on top and bottom.</li>
+          <li>Drizzle generously with more honey. Serve immediately with crackers or warm baguette.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Don't let it sit — the Brie is at its most perfectly oozy and gooey the moment it comes out of the oven. Have your crackers ready and gather everyone around.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== BROCCOLI-ONION CASSEROLE + POTATO SALAD (MOM'S) ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc" style="padding:0.2in 0.42in;">
+    <div class="rh" style="background:var(--green); margin-bottom:0.08in;">
+      <div class="rt">Broccoli-Onion Casserole</div>
+      <div class="rm">Side · 1½-qt casserole · 350° · 40–45 min · Serves 6</div>
+    </div>
+    <div class="rbody" style="flex:none; margin-bottom:0.1in;">
+      <div class="icol" style="width:2.4in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 lb fresh broccoli (or 2 10-oz pkgs frozen cut broccoli)</li>
+          <li>2 cups frozen small whole onions, quartered</li>
+          <li>¼ cup butter or margarine (divided)</li>
+          <li>2 tbsp all-purpose flour</li>
+          <li>¼ tsp salt + dash pepper</li>
+          <li>1 cup milk</li>
+          <li>1 (3-oz) pkg cream cheese</li>
+          <li>½ cup shredded sharp American cheese (2 oz)</li>
+          <li>1 cup soft bread crumbs</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Cook broccoli and drain. Cook onions in boiling salted water until tender; drain.</li>
+          <li>In a saucepan, melt half the butter. Blend in flour, salt and pepper. Add milk. Cook, stirring constantly, until thickened and bubbly.</li>
+          <li>Reduce heat; blend in cream cheese until smooth.</li>
+          <li>Place vegetables in a 1½-quart casserole. Pour sauce over and mix lightly.</li>
+          <li>Top with shredded American cheese.</li>
+          <li>Melt remaining butter; toss with bread crumbs. Sprinkle over the top.</li>
+          <li>Bake at 350° until heated through, 40–45 minutes.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> This is the kind of side dish that disappears before the main course. Make a double batch for big gatherings.</div>
+      </div>
+    </div>
+    <div style="height:2px; background:var(--gold); opacity:0.4; margin:0.06in 0;"></div>
+    <div class="rh" style="background:var(--teal); margin-bottom:0.08in; margin-top:0.08in;">
+      <div class="rt">Mom's Potato Salad</div>
+      <div class="rm">Side · Make ahead · Serves 6–8<br>From Mom's recipe card</div>
+    </div>
+    <div class="rbody" style="flex:none;">
+      <div class="icol" style="width:2.4in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>4 c. cubed cooked potatoes</li>
+          <li>1 c. celery, sliced</li>
+          <li>¼ c. onion, finely chopped</li>
+          <li>2 hard-cooked eggs, chopped</li>
+        </ul>
+        <div class="clabel" style="margin-top:0.08in;">Dressing</div>
+        <ul class="ilist">
+          <li>Mayonnaise, to taste</li>
+          <li>½ tsp. salt</li>
+          <li>1 tbsp. sugar</li>
+          <li>¼ tsp. pepper</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Combine mayonnaise, salt, sugar and pepper together to make the dressing.</li>
+          <li>In a large bowl, combine cubed potatoes, celery, onion and chopped eggs.</li>
+          <li>Stir dressing into the potato mixture until evenly coated.</li>
+          <li>Cover and refrigerate until well chilled before serving.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> This recipe came straight from Mom's handwritten card. The sugar in the dressing is the family secret — it balances everything. Add more mayo until it looks right — that's how Mom did it.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== JACQUELINE'S PIZZA + MOM'S WHITE BREAD ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc" style="padding:0.2in 0.42in;">
+    <div class="rh" style="background:var(--red); margin-bottom:0.08in;">
+      <div class="rt">Jacqueline's Pizza</div>
+      <div class="rm">Mains · Personal size · From the recipe card<br>Written by Jacqueline</div>
+    </div>
+    <div class="rbody" style="flex:none; margin-bottom:0.1in;">
+      <div class="icol" style="width:2.4in;">
+        <div class="clabel">Toppings</div>
+        <ul class="ilist">
+          <li>Pizza dough or ready-made crust</li>
+          <li>2 slices pepperoni, smoked</li>
+          <li>Sausage (crumbled)</li>
+          <li>Cheese (your favorite blend)</li>
+          <li>Mushrooms, sliced</li>
+          <li>A couple of olives</li>
+          <li>2 anchovies, chopped and stirred into 1/3 of the sauce for depth of flavor</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Preheat oven to 425°. Prepare your crust and spread with sauce — stir the finely chopped anchovies into about ⅓ of the sauce before spreading for a rich, savory base (you won't taste them — they just add depth).</li>
+          <li>Layer on sausage, pepperoni, mushrooms and olives.</li>
+          <li>Top generously with cheese.</li>
+          <li>Bake 12–15 minutes until crust is golden and cheese is bubbly and starting to brown at the edges.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Jacqueline's secret weapon is the anchovies stirred into the sauce — they melt away and nobody will ever know, but everyone will say it's the best pizza they've ever had.</div>
+        <div class="photo-ph" style="padding:0; overflow:hidden; border:2px solid var(--gold); border-radius:6px; min-height:0.9in; margin-top:0.1in; flex-shrink:0;"><img src="Jacqueline'sPizza.jpeg" style="width:100%; height:100%; object-fit:cover; border-radius:4px; display:block;"></div>
+      </div>
+    </div>
+    <div style="height:2px; background:var(--gold); opacity:0.4; margin:0.06in 0;"></div>
+    <div class="rh" style="background:var(--brown); margin-bottom:0.08in; margin-top:0.08in;">
+      <div class="rt">Mom's White Sandwich Bread</div>
+      <div class="rm">Bread · Two loaves · 400° · 40–50 min<br>From Mom's handwritten card</div>
+    </div>
+    <div class="rbody" style="flex:none;">
+      <div class="icol" style="width:2.4in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 c. (250ml) warm water</li>
+          <li>1 pkg (¼ oz / 7g) active dry yeast</li>
+          <li>2 tbsp sugar</li>
+          <li>1 tsp salt</li>
+          <li>3½ c. all-purpose flour (plus up to ½ c. more)</li>
+          <li>2 tbsp butter or shortening (softened)</li>
+        </ul>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Dissolve yeast in warm water with sugar. Let stand until foamy, about 5 minutes.</li>
+          <li>Add salt and butter to yeast mixture. Stir in flour gradually, combining to form a soft dough.</li>
+          <li>Turn onto floured surface; knead until smooth and elastic, about 8–10 minutes. If sticky, knead in up to ½ cup more flour.</li>
+          <li>Place in a greased bowl, turning once to coat. Cover; let rise in warm place about 1 hour, until doubled.</li>
+          <li>Punch down dough. Divide in 2 equal parts; shape into smooth balls. Let rest 10 minutes.</li>
+          <li>Shape into 2 loaves; place in greased 9×5-inch pans. Cover; let rise 45 min in warm place.</li>
+          <li>Preheat oven to 400° (200°C). Bake 40–50 minutes until golden. Cool on rack.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> From Mom's handwritten card — her simple everyday bread. Perfect toasted with butter, or as the base for a spectacular French toast.</div>
+      </div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== STEPHEN + WEND'S OATMEAL RAISIN COOKIES ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc" style="padding:0.2in 0.42in;">
+    <div class="rh" style="background:var(--orange); margin-bottom:0.08in;">
+      <div class="rt">Stephen &amp; Wend's Oatmeal-Raisin Cookies</div>
+      <div class="rm">Cookies · Classic family recipe<br>From the handwritten recipe card</div>
+    </div>
+    <div class="rbody" style="flex:none; margin-bottom:0.15in;">
+      <div class="icol" style="width:2.4in;">
+        <div class="clabel">Ingredients</div>
+        <ul class="ilist">
+          <li>1 c. shortening</li>
+          <li>1 c. sugar</li>
+          <li>1 c. brown sugar</li>
+          <li>2 eggs</li>
+          <li>1 tsp. vanilla</li>
+          <li>1½ c. flour</li>
+          <li>1 tsp. baking soda</li>
+          <li>1 tsp. salt</li>
+          <li>3 c. rolled oats</li>
+          <li>1 c. raisins</li>
+        </ul>
+        <div class="photo-ph" style="padding:0; overflow:hidden; border:2px solid var(--gold); border-radius:6px; min-height:0.9in; margin-top:0.12in; flex-shrink:0;"><img src="Stephen and Wendy'sOatmealRaisingCookies.jpeg" style="width:100%; height:100%; object-fit:cover; border-radius:4px; display:block;"></div>
+      </div>
+      <div class="ocol">
+        <div class="clabel">Instructions</div>
+        <ol class="slist">
+          <li>Cream together shortening, sugar and brown sugar until light and fluffy.</li>
+          <li>Mix in 2 eggs and vanilla.</li>
+          <li>Sift together flour, baking soda and salt; fold the flour mixture into the creamed mixture until just combined.</li>
+          <li>Stir in oats and raisins.</li>
+          <li>Roll into small balls and place on a greased cookie sheet, spacing evenly.</li>
+          <li>Bake at 350° for 10–12 minutes until edges are set and centers are just barely done. Do not overbake — they firm as they cool.</li>
+          <li>Cool on the pan 5 minutes before transferring to a rack.</li>
+        </ol>
+        <div class="tip"><strong>Greer Tip:</strong> Stephen and Wend's secret is in the shortening — it keeps these cookies thick and chewy rather than crisp and flat. A family staple for a reason.</div>
+      </div>
+    </div>
+    <!-- NASA MEMENTO NOTE -->
+    <div style="background:var(--brown); border-radius:8px; padding:0.12in 0.18in; color:var(--gold); font-size:9pt; line-height:1.6; margin-top:0.05in;">
+      <strong style="color:var(--lgold); font-size:9.5pt;">✦ A Family Keepsake</strong><br>
+      Among the recipe cards in our collection lives a Kennedy Space Center postcard — a small reminder that our family has always looked up, reached far, and kept wonder close. Just like the recipes in this book, it was saved because it meant something to someone we love.
+      <div style="margin-top:0.06in; color:var(--lgold); font-style:italic;">Add the postcard photo here when printing your copy.</div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+
+<!-- ==================== PHOTO COLLAGE 8 — Around the Table ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">Around the Table ✦ The Food We Love</div>
+    <div class="pgrid g2x3">
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="Charceuterie.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Charcuterie Spread</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="Crabs.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Crabs</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="JAGwithCrabs.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">JAG with Crabs</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="Cousins.Donuts.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Cousins &amp; Donuts</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="BrunchCakes.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Brunch Cakes</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="BrunchCandy.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Brunch Candy</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 9 — Holiday Traditions ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">Holiday Traditions ✦ Every Year, Without Fail</div>
+    <div class="pgrid g2x3">
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="GreerTurkeyDay.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Greer Turkey Day</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="PhillTurkey.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Phill &amp; the Turkey</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="ChristmasTitus.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Christmas with Titus</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="ElfLibations.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Elf Libations</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="EllingtonMinion.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Ellington the Minion</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="GoldRumCupcakes.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Gold Rum Cupcakes</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 10 — Family Portraits ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">Family Portraits ✦ The Ones We Love</div>
+    <div class="pgrid g2x3">
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="Stephen&amp;Fam.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Stephen &amp; Family</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="ERika+ellington.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Erika &amp; Ellington</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="BiggerPhill.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Phill</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="Phill+Knox.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Phill &amp; Knox</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="Cuzzo+AuntJo.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Cuzzo &amp; Aunt Jo</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="ErikasGarden.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Erika's Garden</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 11 — From the Kitchen ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">From the Kitchen ✦ Food &amp; Flavor</div>
+    <div class="pgrid g2x3">
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="Peach Cobbler.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Peach Cobbler</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="Grits.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Grits</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="HomegrownTomatoes.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Homegrown Tomatoes</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="BrusselSproutsofLife.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Brussels Sprouts of Life</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="OaxacaOmelet.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Oaxaca Omelet</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="SeattleSoup.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Seattle Soup</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 12 — Drinks & Sweets ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">Drinks &amp; Sweets ✦ Because We Deserve It</div>
+    <div class="pgrid g2x3">
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="Wendy'sPinaColada.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Wendy's Piña Colada</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="AlcoholMuffins.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Alcohol Muffins</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="RumCupcakes.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Rum Cupcakes</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="CherryCheesecake.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Cherry Cheesecake</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="CutiePies.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Cutie Pies</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="BrunchTurtle.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Brunch Turtle</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 13 — More Family ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">More of Us ✦ Always More to Love</div>
+    <div class="pgrid g2x3">
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_9679.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_9689.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_9690.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_9691.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_9692.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_9693.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 14 — Even More ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">Even More ✦ Our Story Keeps Going</div>
+    <div class="pgrid g2x3">
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_9694.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_9695.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_9696.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_9697.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_9698.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_9774.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== PHOTO COLLAGE 15 — Archives ==================== -->
+<div class="page">
+  <div class="kente"></div>
+  <div class="pc">
+    <div class="collage-title">Archives ✦ Where We Started</div>
+    <div class="pgrid g2x3">
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_4418.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_4486.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_4845.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_5728.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_6297.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+      <div class="pcard" style="padding:0; overflow:hidden;"><img src="IMG_7070.jpeg" style="width:100%;height:85%;object-fit:cover;border-radius:6px 6px 0 0;"><div style="padding:3px 6px;font-size:7.5pt;color:#7a6230;font-style:italic;text-align:center;">Add caption</div></div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+<!-- ==================== BACK COVER ==================== -->
+<div class="page cover bg-brown">
+  <div class="kente"></div>
+  <div class="pc">
+    <div style="text-align:center; color:var(--cream); display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%;">
+      <div style="font-size:28pt; color:var(--gold); margin-bottom:0.2in;">✦</div>
+      <div style="font-size:18pt; color:var(--gold); margin-bottom:0.15in; font-style:italic;">From Our Kitchens to Yours</div>
+      <div style="width:4in; height:3px; background:var(--gold); margin:0.15in auto;"></div>
+      <div style="font-size:11pt; color:#ccc; max-width:5.5in; line-height:1.9; margin-bottom:0.2in;">
+        These recipes carry the flavors of our homes, our holidays, and our history.
+        Some came from church cookbooks and holiday cards. Some were emailed between sisters.
+        Some were passed down without measurements, made by feel and memory.
+        All of them belong to us now. Keep cooking. Keep gathering. Keep feeding each other.
+      </div>
+      <div style="width:4in; height:3px; background:var(--gold); margin:0.15in auto;"></div>
+      <div style="font-size:13pt; color:var(--gold); letter-spacing:3px; text-transform:uppercase; margin-top:0.1in;">The Greer Family</div>
+      <div style="font-size:28pt; color:var(--gold); margin-top:0.2in; opacity:0.6;">✦ ✦ ✦</div>
+    </div>
+  </div>
+  <div class="kente"></div>
+</div>
+
+</body>
+</html>
