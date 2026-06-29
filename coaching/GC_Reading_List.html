@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Greer Collective · Reading List + Framework Notes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--plum:#2C1A2E;--gold:#B8922A;--cream:#FAF6EF;--mauve:#8A7A8E;--midplum:#4A2455;--ltplum:#EDE6F0;--ltgold:#F5EDD8;--green:#1B6B2A;--green-light:#EAF4EC;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--cream);color:var(--plum);font-family:'Cormorant Garamond',Georgia,serif;font-size:17px;line-height:1.7;}
+    header{background:var(--plum);padding:48px 48px 36px;border-bottom:4px solid var(--gold);}
+    .eyebrow{font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+    header h1{font-weight:300;font-size:42px;color:var(--cream);line-height:1.1;margin-bottom:8px;}
+    .header-sub{font-family:'Jost',sans-serif;font-size:12px;color:var(--mauve);letter-spacing:2px;}
+    .nav-tabs{background:var(--midplum);display:flex;gap:0;overflow-x:auto;border-bottom:3px solid var(--gold);}
+    .tab{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--mauve);padding:13px 18px;cursor:pointer;border:none;background:none;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-3px;transition:color .15s;}
+    .tab:hover{color:var(--cream);}
+    .tab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(184,146,42,0.06);}
+    main{max-width:1060px;margin:0 auto;padding:40px 40px 80px;}
+    .panel{display:none;}.panel.active{display:block;}
+    .sec-head{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin:36px 0 6px;padding-bottom:8px;border-bottom:3px solid var(--gold);}
+    .sec-head:first-of-type{margin-top:0;}
+    .panel-intro{font-size:17px;color:var(--mauve);max-width:740px;line-height:1.7;margin-bottom:28px;}
+    /* BOOK CARDS */
+    .book-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px;}
+    .book{background:#fff;border:1px solid #E2DAE4;border-left:4px solid var(--gold);border-radius:0 3px 3px 0;padding:18px 20px;}
+    .book.retreat{border-left-color:var(--midplum);}
+    .book.new{border-left-color:var(--green);}
+    .book-source{font-family:'Jost',sans-serif;font-size:9px;font-weight:500;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:6px;}
+    .book.retreat .book-source{color:var(--midplum);}
+    .book.new .book-source{color:var(--green);}
+    .book-title{font-size:18px;font-weight:600;color:var(--plum);margin-bottom:4px;line-height:1.3;}
+    .book-author{font-family:'Jost',sans-serif;font-size:12px;color:var(--mauve);margin-bottom:8px;letter-spacing:1px;}
+    .book-note{font-size:15px;color:#555;line-height:1.6;}
+    .book-tag{display:inline-block;font-family:'Jost',sans-serif;font-size:9px;font-weight:500;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-top:8px;margin-right:4px;}
+    .tag-gold{background:var(--ltgold);color:#5A4010;}
+    .tag-plum{background:var(--ltplum);color:var(--midplum);}
+    .tag-green{background:var(--green-light);color:var(--green);}
+    /* FRAMEWORK AUDIT TABLE */
+    table{width:100%;border-collapse:collapse;margin-bottom:24px;}
+    th{background:var(--plum);color:var(--cream);font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:10px 14px;text-align:left;}
+    td{border-bottom:1px solid #E2DAE4;padding:11px 14px;vertical-align:top;font-size:15px;line-height:1.5;}
+    tr:nth-child(even) td{background:rgba(44,26,46,0.02);}
+    .status-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;}
+    .dot-gold{background:var(--gold);}
+    .dot-green{background:var(--green);}
+    .dot-plum{background:var(--midplum);}
+    /* ARTICLE ITEMS */
+    .article-list{margin-bottom:24px;}
+    .article{padding:14px 18px;border-bottom:1px solid #E2DAE4;background:#fff;display:flex;gap:16px;align-items:flex-start;}
+    .article:first-child{border-top:1px solid #E2DAE4;}
+    .article-num{font-family:'Jost',sans-serif;font-size:18px;font-weight:500;color:var(--gold);min-width:36px;}
+    .article-body{}
+    .article-title{font-size:17px;font-weight:600;color:var(--plum);margin-bottom:2px;}
+    .article-meta{font-family:'Jost',sans-serif;font-size:11px;color:var(--mauve);margin-bottom:5px;letter-spacing:1px;}
+    .article-note{font-size:15px;color:#555;line-height:1.5;}
+    footer{background:var(--plum);border-top:3px solid var(--gold);padding:20px 40px;text-align:center;font-family:'Jost',sans-serif;font-size:11px;color:var(--mauve);letter-spacing:2px;}
+    @media(max-width:680px){.book-grid{grid-template-columns:1fr;}.nav-tabs{flex-wrap:nowrap;overflow-x:scroll;}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Greer Collective · Coaching Practice</div>
+  <h1>Reading List + Framework Notes</h1>
+  <div class="header-sub">Sourced from Retreat Materials · Practice Library · Coaching Canon</div>
+</header>
+<div class="nav-tabs">
+  <button class="tab active" onclick="showTab('audit')">Framework Audit</button>
+  <button class="tab" onclick="showTab('team')">Team + Org Health</button>
+  <button class="tab" onclick="showTab('change')">Change + Complexity</button>
+  <button class="tab" onclick="showTab('equity')">Equity + Design</button>
+  <button class="tab" onclick="showTab('talent')">Talent + HC</button>
+  <button class="tab" onclick="showTab('narrative')">Narrative + Brand</button>
+  <button class="tab" onclick="showTab('energy')">Energy + Sustainability</button>
+  <button class="tab" onclick="showTab('canon')">Coaching Canon</button>
+</div>
+<main>
+
+<!-- ==================== AUDIT ==================== -->
+<div class="panel active" id="panel-audit">
+  <p class="panel-intro">Document audit of uploaded retreat materials, retreat reading packs, and coaching documents. This table maps every framework found against what is already captured in the Coaching Models Reference and Learning Plan.</p>
+
+  <div class="sec-head">Already in Models Reference + Learning Plan</div>
+  <table>
+    <thead><tr><th>Framework</th><th>Source/Author</th><th>Where Captured</th></tr></thead>
+    <tbody>
+      <tr><td><span class="status-dot dot-gold"></span><strong>GROW Model</strong></td><td>Graham Alexander, John Whitmore</td><td>Coaching Models Reference — Tab 1</td></tr>
+      <tr><td><span class="status-dot dot-gold"></span><strong>CLEAR Model</strong></td><td>Peter Hawkins</td><td>Coaching Models Reference — Tab 2</td></tr>
+      <tr><td><span class="status-dot dot-gold"></span><strong>OSKAR Model</strong></td><td>McKergow + Jackson</td><td>Coaching Models Reference — Tab 3</td></tr>
+      <tr><td><span class="status-dot dot-gold"></span><strong>Radical Candor</strong></td><td>Kim Scott</td><td>Coaching Models Reference — Tab 4</td></tr>
+      <tr><td><span class="status-dot dot-gold"></span><strong>Five Dysfunctions of a Team</strong></td><td>Patrick Lencioni</td><td>Coaching Models Reference — Tab 5 · Retreat Reading (2013 + 2014)</td></tr>
+      <tr><td><span class="status-dot dot-gold"></span><strong>Everything DiSC</strong></td><td>Wiley / Marston</td><td>Coaching Models Reference — Tab 6</td></tr>
+      <tr><td><span class="status-dot dot-gold"></span><strong>CliftonStrengths</strong></td><td>Gallup / Clifton</td><td>Coaching Models Reference — Tab 7</td></tr>
+      <tr><td><span class="status-dot dot-gold"></span><strong>Immunity to Change</strong></td><td>Kegan + Lahey</td><td>Coaching Models Reference — Tab 8</td></tr>
+      <tr><td><span class="status-dot dot-gold"></span><strong>Conditions of Belonging</strong></td><td>National Equity Project</td><td>Coaching Models Reference — Tab 9</td></tr>
+      <tr><td><span class="status-dot dot-gold"></span><strong>ICF Core Competencies</strong></td><td>ICF</td><td>Coaching Models Reference — Tab 10</td></tr>
+      <tr><td><span class="status-dot dot-gold"></span><strong>Ripple Effect Mapping</strong></td><td>Evaluative inquiry practice</td><td>Learning Plan + Session Guides</td></tr>
+      <tr><td><span class="status-dot dot-gold"></span><strong>Stakeholder-Centered Coaching</strong></td><td>Marshall Goldsmith</td><td>Learning Plan</td></tr>
+      <tr><td><span class="status-dot dot-gold"></span><strong>Leadership Circle Profile</strong></td><td>Robert Anderson</td><td>Learning Plan</td></tr>
+      <tr><td><span class="status-dot dot-gold"></span><strong>EQ-i 2.0 / Hogan</strong></td><td>MHS / Hogan Assessments</td><td>Learning Plan</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec-head">Found in Retreat Materials — Not Yet Captured</div>
+  <table>
+    <thead><tr><th>Framework / Article</th><th>Source/Author</th><th>Recommended Placement</th></tr></thead>
+    <tbody>
+      <tr><td><span class="status-dot dot-green"></span><strong>equityXdesign</strong></td><td>Caroline Hill, Michelle Molitor, Christine Ortiz (2016)</td><td>Add to Models Reference as Equity + Design tab · strong complement to Conditions of Belonging</td></tr>
+      <tr><td><span class="status-dot dot-green"></span><strong>Mutual Learning / Eight Behaviors for Smarter Teams</strong></td><td>Roger Schwarz</td><td>Add to Models Reference or Team Dynamics section · practical complement to Five Dysfunctions</td></tr>
+      <tr><td><span class="status-dot dot-green"></span><strong>Public Narrative — Self / Us / Now</strong></td><td>Marshall Ganz (Harvard Kennedy School)</td><td>Add to Models Reference — especially relevant for coaching thought leadership and voice work</td></tr>
+      <tr><td><span class="status-dot dot-green"></span><strong>The Inconvenient Truth About Change Management</strong></td><td>Scott Keller + Carolyn Aiken (McKinsey, 2008)</td><td>Add to change leadership section of Learning Plan; use in M4/M5 Deep Dive sessions</td></tr>
+      <tr><td><span class="status-dot dot-green"></span><strong>Six Simple Rules (Smart Simplicity)</strong></td><td>BCG / Yves Morieux</td><td>Organizational complexity reference for executive coaching; relevant to system design conversations</td></tr>
+      <tr><td><span class="status-dot dot-green"></span><strong>Management Time: Who's Got the Monkey?</strong></td><td>William Oncken Jr. + Donald Wass (HBR, 1999)</td><td>Delegation + manager development — add to manager-level coaching toolkit</td></tr>
+      <tr><td><span class="status-dot dot-green"></span><strong>On the Folly of Rewarding A, While Hoping for B</strong></td><td>Steven Kerr (1995)</td><td>Incentive alignment — powerful for executive coaching on systems design and organizational behavior</td></tr>
+      <tr><td><span class="status-dot dot-green"></span><strong>Manage Your Energy, Not Your Time</strong></td><td>Tony Schwartz + Catherine McCarthy (HBR, 2007)</td><td>Add to sustainability and energy management section — relevant in M5 Deep Dive sessions</td></tr>
+      <tr><td><span class="status-dot dot-green"></span><strong>Combating the Culture of Can't</strong></td><td>Dan Weisberg / TNTP</td><td>Organizational change for education sector clients — relevant to systems coaching conversations</td></tr>
+      <tr><td><span class="status-dot dot-green"></span><strong>The Tyranny of Success</strong></td><td>Michael Tushman (Fall 2014 Retreat)</td><td>Executive coaching — especially for leaders navigating success that has stopped serving them</td></tr>
+      <tr><td><span class="status-dot dot-green"></span><strong>Possessive Investment in Whiteness</strong></td><td>George Lipsitz</td><td>Deep equity reading — inform your equity coaching lens; not a coaching tool, a foundational text</td></tr>
+      <tr><td><span class="status-dot dot-green"></span><strong>How to Be an Antiracist</strong></td><td>Ibram X. Kendi</td><td>Foundation reading for equity-centered coaching; referenced in ED Retreat 2023</td></tr>
+      <tr><td><span class="status-dot dot-plum"></span><strong>The Brand Called You</strong></td><td>Tom Peters (Fast Company, 1997)</td><td>Personal brand — useful as context for thought leadership coaching with executive clients</td></tr>
+      <tr><td><span class="status-dot dot-plum"></span><strong>Why Nonprofits Need to Be Storytellers</strong></td><td>Andy Goodman</td><td>Narrative coaching — supports thought leadership work in Group Cohort Session 5</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:14px;font-family:'Jost',sans-serif;color:var(--mauve);margin-top:8px;">
+    <span class="status-dot dot-gold"></span> Already captured &nbsp;
+    <span class="status-dot dot-green"></span> Found in retreat materials — add to practice library &nbsp;
+    <span class="status-dot dot-plum"></span> Found — lower priority / context reading
+  </p>
+</div>
+
+<!-- ==================== TEAM + ORG HEALTH ==================== -->
+<div class="panel" id="panel-team">
+  <p class="panel-intro">The books and articles that shaped how you built teams — from your first management roles at Urban Teachers through your ED and CPO work. These are the readings you assigned at retreats and lived out in practice.</p>
+
+  <div class="sec-head">Books</div>
+  <div class="book-grid">
+    <div class="book retreat">
+      <div class="book-source">Retreat Reading · 2013</div>
+      <div class="book-title">The Five Dysfunctions of a Team</div>
+      <div class="book-author">Patrick Lencioni</div>
+      <div class="book-note">Assigned at the 2013 and 2014 UTC site retreats. The pyramid model — trust, conflict, commitment, accountability, results — is already in your coaching practice. The Five Behaviors certification (Wiley) is the next-level credentialing path.</div>
+      <span class="book-tag tag-gold">In Models Reference</span>
+      <span class="book-tag tag-gold">In Learning Plan</span>
+    </div>
+    <div class="book retreat">
+      <div class="book-source">Retreat Reading · 2013 + 2014</div>
+      <div class="book-title">Eight Behaviors for Smarter Teams</div>
+      <div class="book-author">Roger Schwarz</div>
+      <div class="book-note">Assigned twice across retreats. The Mutual Learning mindset — transparency, curiosity, informed choice — is a practical complement to Five Dysfunctions. Eight named behaviors give team coaching clients something concrete to build toward.</div>
+      <span class="book-tag tag-plum">Add to Models Reference</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Core Text</div>
+      <div class="book-title">The Advantage</div>
+      <div class="book-author">Patrick Lencioni</div>
+      <div class="book-note">Organizational health as the ultimate competitive advantage. Makes the case that clarity, overcommunication, and reinforcement are the real drivers of performance — not strategy. Complements your Five Dysfunctions application with an organizational systems lens.</div>
+      <span class="book-tag tag-gold">Suggested</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Core Text</div>
+      <div class="book-title">An Everyone Culture: Becoming a Deliberately Developmental Organization</div>
+      <div class="book-author">Robert Kegan + Lisa Laskow Lahey</div>
+      <div class="book-note">From the authors of Immunity to Change — extends that individual model to the organization. DDOs embed growth into everyday work rather than treating it as a separate initiative. Relevant for executive clients building development cultures.</div>
+      <span class="book-tag tag-gold">Suggested</span>
+    </div>
+  </div>
+
+  <div class="sec-head">Articles</div>
+  <div class="article-list">
+    <div class="article"><div class="article-num">01</div><div class="article-body"><div class="article-title">Management Time: Who's Got the Monkey?</div><div class="article-meta">William Oncken Jr. + Donald Wass · HBR · Nov–Dec 1999</div><div class="article-note">Assigned at 2013 UTC retreat. The central insight: managers unwittingly take on problems that belong to their direct reports. The "monkey" image is memorable and practically actionable. Use in manager-level coaching when the client is chronically overloaded.</div></div></div>
+    <div class="article"><div class="article-num">02</div><div class="article-body"><div class="article-title">On the Folly of Rewarding A, While Hoping for B</div><div class="article-meta">Steven Kerr · Academy of Management Executive · 1995</div><div class="article-note">Classic systems article: organizations consistently reward behaviors they claim not to value. Assign to executive clients who say the culture is one thing and discover the incentives say something else. Powerful in combination with accountability conversations.</div></div></div>
+    <div class="article"><div class="article-num">03</div><div class="article-body"><div class="article-title">Combating the Culture of Can't</div><div class="article-meta">Dan Weisberg · TNTP · Education Sector</div><div class="article-note">On how "it can't be done" becomes institutional default when leaders stop questioning inherited constraints. From your retreat pack, and directly relevant to coaching leaders who are inside systems that say no faster than they say yes. Useful in M3–M4 of Deep Dive work.</div></div></div>
+  </div>
+</div>
+
+<!-- ==================== CHANGE + COMPLEXITY ==================== -->
+<div class="panel" id="panel-change">
+  <p class="panel-intro">You built and changed organizations — Urban Teachers, the Black Educator Initiative, the national expansion work. These are the frameworks that name what you already know about why change fails and how to make it stick.</p>
+
+  <div class="sec-head">Books</div>
+  <div class="book-grid">
+    <div class="book retreat">
+      <div class="book-source">Retreat Reading · 2013</div>
+      <div class="book-title">The Inconvenient Truth About Change Management</div>
+      <div class="book-author">Scott Keller + Carolyn Aiken · McKinsey Quarterly · 2008</div>
+      <div class="book-note">From your 2013 retreat pack. The finding: 70% of change programs fail, and the reasons are predictable and largely irrational. Four counterintuitive insights about how employees actually respond to change. Use with executive clients managing organizational transitions.</div>
+      <span class="book-tag tag-plum">Add to Learning Plan</span>
+    </div>
+    <div class="book retreat">
+      <div class="book-source">Retreat Reading · 2015</div>
+      <div class="book-title">Six Simple Rules: How to Manage Complexity Without Getting Complicated</div>
+      <div class="book-author">Yves Morieux + Peter Tollman · BCG / Harvard Business Review Press</div>
+      <div class="book-note">Smart Simplicity: instead of adding structure and process to manage complexity, give people the autonomy, resources, and judgment to handle it themselves. The six rules reframe how organizations design work. Relevant in executive coaching on organizational design and systems simplification.</div>
+      <span class="book-tag tag-plum">Add to Learning Plan</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Suggested</div>
+      <div class="book-title">Leading Change</div>
+      <div class="book-author">John P. Kotter</div>
+      <div class="book-note">The canonical 8-step change model — referenced in McKinsey's "Inconvenient Truth" as the baseline that only 30% of organizations achieve. Foundational context for any change leadership coaching. Most of your clients will be somewhere in Kotter's model whether they know it or not.</div>
+      <span class="book-tag tag-gold">Suggested</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Suggested</div>
+      <div class="book-title">Switch: How to Change Things When Change Is Hard</div>
+      <div class="book-author">Chip Heath + Dan Heath</div>
+      <div class="book-note">The Rider/Elephant/Path model — rational mind (Rider), emotional mind (Elephant), and environment (Path) must all be aligned for change to happen. Accessible and practically applicable. Use in manager-level coaching on behavior change and team adoption of new practices.</div>
+      <span class="book-tag tag-gold">Suggested</span>
+    </div>
+  </div>
+
+  <div class="sec-head">Articles</div>
+  <div class="article-list">
+    <div class="article"><div class="article-num">01</div><div class="article-body"><div class="article-title">The Tyranny of Success</div><div class="article-meta">Michael Tushman · Fall 2014 Retreat Reading</div><div class="article-note">On how past success becomes the enemy of future adaptation. Organizations and leaders get trapped by what made them good — and resist the exploration that would keep them relevant. Assign to executive clients who sense they need to change but do not know why they keep defaulting to old patterns.</div></div></div>
+  </div>
+</div>
+
+<!-- ==================== EQUITY + DESIGN ==================== -->
+<div class="panel" id="panel-equity">
+  <p class="panel-intro">The equity work is not a lens you add to coaching — it is the foundation you built your career on. These texts name the practice you already carry. They are both intellectual anchors and practitioner references.</p>
+
+  <div class="sec-head">Books + Frameworks</div>
+  <div class="book-grid">
+    <div class="book retreat">
+      <div class="book-source">Document Audit · 2016 Retreat Material</div>
+      <div class="book-title">equityXdesign: A Practice for Transformation</div>
+      <div class="book-author">Caroline Hill, Michelle Molitor, Christine Ortiz</div>
+      <div class="book-note">A framework that merges racial equity consciousness with design thinking methodology. The premise: racism and inequality are products of design — they can be redesigned. Three principles: innovation requires inclusion and intentional design; past and present are indistinguishable; we must live into the future we want to create. Direct complement to Conditions of Belonging in your equity coaching work.</div>
+      <span class="book-tag tag-plum">Add to Models Reference</span>
+      <span class="book-tag tag-green">From your documents</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Equity Foundation</div>
+      <div class="book-title">How to Be an Antiracist</div>
+      <div class="book-author">Ibram X. Kendi</div>
+      <div class="book-note">Referenced in your January 2023 ED Retreat alongside a live conversation with Kendi. Policy vs. antiracist policy as the unit of analysis — not intention, not identity. Reframes the equity conversation from personal belief to structural action. Essential background for equity-centered coaching at senior leadership levels.</div>
+      <span class="book-tag tag-gold">Assigned at Retreat</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Equity Foundation</div>
+      <div class="book-title">The Possessive Investment in Whiteness</div>
+      <div class="book-author">George Lipsitz</div>
+      <div class="book-note">Referenced in the ED Retreat 2023 pre-reading list — described as "long, but worth skimming a few pages a day. I think about it often." On how whiteness operates as an asset that generates structural advantage across generations. Deep context for your organizational equity coaching lens.</div>
+      <span class="book-tag tag-gold">Assigned at Retreat</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Suggested</div>
+      <div class="book-title">Emergent Strategy</div>
+      <div class="book-author">adrienne maree brown</div>
+      <div class="book-note">Organizational change theory rooted in biomimicry and social justice — change happens at the small scale before the large, and relationships are the infrastructure of movements. Directly relevant for equity-centered coaching and facilitation practice, particularly with leaders building culture from the inside out.</div>
+      <span class="book-tag tag-gold">Suggested</span>
+    </div>
+  </div>
+
+  <div class="sec-head">Articles + Frameworks</div>
+  <div class="article-list">
+    <div class="article"><div class="article-num">01</div><div class="article-body"><div class="article-title">Conditions of Belonging — National Equity Project</div><div class="article-meta">National Equity Project · nationalequityproject.org</div><div class="article-note">Already in your coaching practice. Three conditions — Valued, Connected, Contributing — as the diagnostic for organizational belonging. Use with clients who are building or inheriting teams and need a structured equity lens that is data-based, not positional.</div></div></div>
+    <div class="article"><div class="article-num">02</div><div class="article-body"><div class="article-title">Problem Statements on Equity in Organizations</div><div class="article-meta">From your 2013–2023 organizational work</div><div class="article-note">Your own retreat documents contain some of the clearest problem statements on organizational equity in practice — bias in promotion, fear of speaking, unclear performance standards as equity issues. These are not reading material — they are primary source evidence of your equity practice that belongs in case study or thought leadership form.</div></div></div>
+  </div>
+</div>
+
+<!-- ==================== TALENT + HC ==================== -->
+<div class="panel" id="panel-talent">
+  <p class="panel-intro">Human capital strategy was your domain before it was your credential. These are the readings from your practice years — managing teacher pipelines, building the Black Educator Initiative, designing talent systems at scale.</p>
+
+  <div class="sec-head">Books + Articles — From Your Retreat Reading</div>
+  <div class="book-grid">
+    <div class="book retreat">
+      <div class="book-source">Retreat Reading · 2013</div>
+      <div class="book-title">The Job of a Manager / Managing Specific Tasks / Developing People / Retaining Your Best</div>
+      <div class="book-author">Chapters 1, 2, 7, 8 — Nonprofit Management Fundamentals</div>
+      <div class="book-note">Four chapters assigned at your first site retreat covering delegation, developing staff, and retention. These represent the foundational management curriculum you built your team on. The authors' central argument: strong management is the precondition for everything else.</div>
+      <span class="book-tag tag-green">From your documents</span>
+    </div>
+    <div class="book retreat">
+      <div class="book-source">Retreat Reading · 2013</div>
+      <div class="book-title">Manage Human Capital Strategically</div>
+      <div class="book-author">Allan Odden · Phi Delta Kappan · 2011</div>
+      <div class="book-note">On linking human capital management to instructional improvement — not treating HR as a back-bench function. The argument: 85% of education budgets are people costs, making talent strategy the most consequential lever available to leaders. Grounding text for your work at Urban Teachers and in your organizational consulting practice.</div>
+      <span class="book-tag tag-green">From your documents</span>
+    </div>
+    <div class="book retreat">
+      <div class="book-source">Retreat Reading · 2013</div>
+      <div class="book-title">The Human Capital Continuum</div>
+      <div class="book-author">Education Sector Research · 2012</div>
+      <div class="book-note">A model mapping organizational maturity in human capital practices — from reactive staffing to fully integrated talent strategy. Used at your retreats as an organizational diagnostic. The continuum framing is still useful in organizational consulting conversations.</div>
+      <span class="book-tag tag-green">From your documents</span>
+    </div>
+    <div class="book retreat">
+      <div class="book-source">Retreat Reading · 2013</div>
+      <div class="book-title">Principals as Human Capital Managers at Every School</div>
+      <div class="book-author">Steven Kimball · Kappan · 2011</div>
+      <div class="book-note">On the principal as strategic talent manager — not just instructional leader. Shifts the frame from compliance to strategy. Directly relevant to your work developing school leaders and relevant for any coaching client managing people inside a larger institution.</div>
+      <span class="book-tag tag-green">From your documents</span>
+    </div>
+  </div>
+
+  <div class="sec-head">Suggested — For Your Consulting Practice</div>
+  <div class="book-grid">
+    <div class="book">
+      <div class="book-source">Suggested</div>
+      <div class="book-title">Multipliers: How the Best Leaders Make Everyone Smarter</div>
+      <div class="book-author">Liz Wiseman</div>
+      <div class="book-note">The Multiplier vs. Diminisher distinction — already in your Group Cohort curriculum. Worth reading in full. The research: Multipliers get 2x the intelligence from the same team. The coaching question for any leader: what version of your style is currently making the people around you smaller?</div>
+      <span class="book-tag tag-gold">Already in Cohort curriculum</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Suggested</div>
+      <div class="book-title">Talent Is Overrated</div>
+      <div class="book-author">Geoff Colvin</div>
+      <div class="book-note">The case against innate talent — and for deliberate practice as the differentiating variable. Relevant in coaching conversations about development, growth, and what people are actually capable of if the conditions are right. Connects to your instructional coaching roots.</div>
+      <span class="book-tag tag-gold">Suggested</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== NARRATIVE + BRAND ==================== -->
+<div class="panel" id="panel-narrative">
+  <p class="panel-intro">You studied community organizing under Marshall Ganz at Harvard Kennedy School. You know this material from the inside. These frameworks belong in your coaching toolkit — narrative is not optional for leaders, and your biography is proof of it.</p>
+
+  <div class="sec-head">Frameworks + Texts</div>
+  <div class="book-grid">
+    <div class="book retreat">
+      <div class="book-source">Retreat Reading · 2013 · Your HKS Study</div>
+      <div class="book-title">Public Narrative: Self, Us, Now</div>
+      <div class="book-author">Marshall Ganz · Harvard Kennedy School</div>
+      <div class="book-note">The three-part narrative structure for public leadership: the Story of Self (why I was called to this work), the Story of Us (the values we share as a community), and the Story of Now (the challenge we face and the choice it demands). You studied this directly under Ganz. It belongs in your coaching practice, especially for leaders building thought leadership or navigating visible organizational transitions.</div>
+      <span class="book-tag tag-plum">Add to Models Reference</span>
+    </div>
+    <div class="book retreat">
+      <div class="book-source">Retreat Reading · 2013</div>
+      <div class="book-title">Why Nonprofits Need to Be Storytellers</div>
+      <div class="book-author">Andy Goodman</div>
+      <div class="book-note">On how stories operate as mental software — filtering what facts people accept and reject. The coaching application: every leader carries a story about who they are and what is possible, and that story is running whether they know it or not. Use in Group Cohort Session 5 (thought leadership) and in executive coaching narrative work.</div>
+      <span class="book-tag tag-green">From your documents</span>
+    </div>
+    <div class="book retreat">
+      <div class="book-source">Retreat Reading · 2013</div>
+      <div class="book-title">The Brand Called You</div>
+      <div class="book-author">Tom Peters · Fast Company · August 1997</div>
+      <div class="book-note">The original personal brand article — still holds up. The premise: regardless of role, everyone is CEO of Me Inc. Assign to executive clients who are building their profile, transitioning roles, or developing thought leadership. Use as a frame for the leadership brand exercise in Deep Dive Session 4.</div>
+      <span class="book-tag tag-green">From your documents</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Suggested</div>
+      <div class="book-title">Story Driven: You Don't Need to Compete When You Know Who You Are</div>
+      <div class="book-author">Bernadette Jiwa</div>
+      <div class="book-note">On leading from purpose and difference rather than from comparison. The coaching application: what is the story only you can tell, based on the specific path you have walked? Relevant for executive clients building their voice and for your own Greer Collective positioning work.</div>
+      <span class="book-tag tag-gold">Suggested</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ENERGY + SUSTAINABILITY ==================== -->
+<div class="panel" id="panel-energy">
+  <p class="panel-intro">You led organizations through expansion, crisis, and transformation. These texts name what it costs to lead at that level — and what sustainability actually requires.</p>
+
+  <div class="sec-head">Articles + Books</div>
+  <div class="book-grid">
+    <div class="book retreat">
+      <div class="book-source">Retreat Reading · 2015</div>
+      <div class="book-title">Manage Your Energy, Not Your Time</div>
+      <div class="book-author">Tony Schwartz + Catherine McCarthy · HBR · October 2007</div>
+      <div class="book-note">Assigned at the 2015 retreat. The core insight: time is finite and fixed — energy is renewable if managed intentionally. Four energy dimensions: physical, emotional, mental, spiritual. The leadership failure mode is not bad time management — it is unsustainable energy expenditure. Use in Deep Dive Month 5 (sustainability) and in manager coaching on burnout prevention.</div>
+      <span class="book-tag tag-plum">Add to Learning Plan</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Suggested</div>
+      <div class="book-title">The Power of Full Engagement</div>
+      <div class="book-author">Jim Loehr + Tony Schwartz</div>
+      <div class="book-note">The full book behind the HBR article — deeper treatment of physical, emotional, mental, and spiritual energy. Builds the case for deliberate recovery as a performance strategy. Relevant for any executive coaching client whose output is declining while their effort is increasing.</div>
+      <span class="book-tag tag-gold">Suggested</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Suggested</div>
+      <div class="book-title">Burnout: The Secret to Unlocking the Stress Cycle</div>
+      <div class="book-author">Emily Nagoski + Amelia Nagoski</div>
+      <div class="book-note">On the difference between stress and stressors — and the physiological necessity of completing the stress cycle. Particularly relevant for women of color leaders navigating institutional environments that produce chronic activation. Useful as both a personal reference and a client resource.</div>
+      <span class="book-tag tag-gold">Suggested</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Suggested</div>
+      <div class="book-title">Rest: Why You Get More Done When You Work Less</div>
+      <div class="book-author">Alex Soojung-Kim Pang</div>
+      <div class="book-note">The evidence base for deliberate rest as a cognitive and creative strategy — not a reward for productivity but a condition of it. Counterintuitive for high-achievers. Assign to clients who cannot stop, or who conflate output with value.</div>
+      <span class="book-tag tag-gold">Suggested</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== COACHING CANON ==================== -->
+<div class="panel" id="panel-canon">
+  <p class="panel-intro">The texts that form the foundation of the ICF-aligned coaching canon — the frameworks, the philosophy, and the practice literature that serious coaches carry. These are the books behind your certification path.</p>
+
+  <div class="sec-head">Core Coaching Texts</div>
+  <div class="book-grid">
+    <div class="book">
+      <div class="book-source">ICF Foundation</div>
+      <div class="book-title">Coaching for Performance</div>
+      <div class="book-author">Sir John Whitmore</div>
+      <div class="book-note">The book that popularized the GROW model. The philosophy: coaching unlocks a person's potential to maximize their own performance rather than teaching them. ICF coaches cite this text more than almost any other. Read it before ACC credential submission.</div>
+      <span class="book-tag tag-gold">ICF Foundation Text</span>
+    </div>
+    <div class="book">
+      <div class="book-source">ICF Foundation</div>
+      <div class="book-title">Immunity to Change</div>
+      <div class="book-author">Robert Kegan + Lisa Laskow Lahey</div>
+      <div class="book-note">Already in your models reference. The four-column map for understanding why committed, capable people do not change even when they want to. Facilitator certification through Minds at Work is the practitioner path. This text alone will make your Deep Dive work significantly more powerful.</div>
+      <span class="book-tag tag-gold">In Models Reference</span>
+    </div>
+    <div class="book">
+      <div class="book-source">ICF Canon</div>
+      <div class="book-title">Co-Active Coaching</div>
+      <div class="book-author">Henry Kimsey-House, Karen Kimsey-House, Phillip Sandahl, Laura Whitworth</div>
+      <div class="book-note">The foundational text of the CTI coaching model — co-active means both coach and client are active in the relationship. Deep treatment of presence, listening levels, intuition, and action. The most widely referenced coaching methodology text after GROW. Essential reading before PCC pursuit.</div>
+      <span class="book-tag tag-gold">Suggested · Pre-PCC</span>
+    </div>
+    <div class="book">
+      <div class="book-source">ICF Canon</div>
+      <div class="book-title">The Coaching Habit</div>
+      <div class="book-author">Michael Bungay Stanier</div>
+      <div class="book-note">Seven questions that make coaching a daily management practice. The most practical introduction to coaching as a leadership behavior — not just as a formal engagement. The best book to assign to manager-level clients who want to lead with coaching conversations instead of directives.</div>
+      <span class="book-tag tag-gold">Assign to Manager Clients</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Advanced Practice</div>
+      <div class="book-title">The Art and Practice of Leadership Coaching</div>
+      <div class="book-author">Howard Morgan, Phil Harkins, Marshall Goldsmith (eds.)</div>
+      <div class="book-note">50 top executive coaches contribute chapters — Marshall Goldsmith, David Ulrich, James Kouzes, and others. Covers stakeholder-centered coaching, 360 facilitation, executive presence, and organizational dynamics. Reference text as you build toward MCC.</div>
+      <span class="book-tag tag-gold">Suggested · Pre-MCC</span>
+    </div>
+    <div class="book">
+      <div class="book-source">Equity + Coaching</div>
+      <div class="book-title">Diversity Coaching: Working with Clients on Diversity, Inclusion, and Belonging</div>
+      <div class="book-author">Sunny Stout-Rostron</div>
+      <div class="book-note">On coaching through the lens of identity, power, and difference. Explores how coaches must understand their own privilege and position before they can hold space for clients navigating identity-based challenges. Directly relevant to your equity-centered practice with women of color leaders.</div>
+      <span class="book-tag tag-gold">Suggested</span>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>Greer Collective &nbsp;·&nbsp; thegreercollective.com &nbsp;·&nbsp; Reading List + Framework Audit</footer>
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>
