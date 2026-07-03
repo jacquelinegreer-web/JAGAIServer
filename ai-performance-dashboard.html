@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greer Collective — AI Performance Dashboard</title>
+<style>
+  :root {
+    --purple: #6B4C9A;
+    --purple-deep: #4A3270;
+    --cream: #F9F4EE;
+    --gold: #C9A84C;
+    --ink: #2B2230;
+    --line: #E4DCEE;
+    --green: #5A8A6B;
+    --amber: #C98A4C;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--cream);
+    color: var(--ink);
+    padding: 24px 16px 60px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  header h1 {
+    font-size: 21px;
+    color: var(--purple-deep);
+    font-weight: normal;
+  }
+
+  header .motto {
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .month-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 16px;
+  }
+
+  .month-nav button {
+    background: none;
+    border: 1px solid var(--purple);
+    color: var(--purple);
+    font-family: inherit;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .month-nav button:hover { background: var(--purple); color: white; }
+
+  .month-label {
+    font-size: 15px;
+    color: var(--purple-deep);
+  }
+
+  .summary-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .summary-card {
+    flex: 1;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+
+  .summary-card .value {
+    font-size: 20px;
+    color: var(--purple-deep);
+  }
+
+  .summary-card .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #a89bb5;
+    margin-top: 4px;
+  }
+
+  section {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  section h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--purple);
+    margin-bottom: 14px;
+    font-weight: normal;
+  }
+
+  .field-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: center;
+  }
+
+  .field-row:last-child { margin-bottom: 0; }
+
+  .field-row label {
+    flex: 1;
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  .field-row input[type="number"] {
+    width: 90px;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 6px 8px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    text-align: right;
+  }
+
+  .field-row select {
+    width: 130px;
+    font-family: inherit;
+    font-size: 13px;
+    padding: 6px 8px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: white;
+  }
+
+  textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    resize: vertical;
+    min-height: 44px;
+    color: var(--ink);
+  }
+
+  .field-block { margin-bottom: 14px; }
+  .field-block:last-child { margin-bottom: 0; }
+  .field-block label {
+    display: block;
+    font-size: 13px;
+    color: var(--purple-deep);
+    margin-bottom: 6px;
+  }
+
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+  }
+  .checklist-item:last-child { border-bottom: none; }
+
+  .checklist-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--purple);
+  }
+
+  .coverage-bar-track {
+    width: 100%;
+    height: 10px;
+    background: var(--line);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .coverage-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+
+  .coverage-label {
+    font-size: 12px;
+    color: #a89bb5;
+    margin-top: 4px;
+    text-align: right;
+  }
+
+  .review-prompt {
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--cream);
+    border-left: 3px solid var(--gold);
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .save-note {
+    text-align: center;
+    font-size: 11px;
+    color: #a89bb5;
+    margin-top: 4px;
+    min-height: 14px;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 11px;
+    color: #a89bb5;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>AI Performance Dashboard</h1>
+  <div class="motto">Greer Collective</div>
+</header>
+
+<div class="month-nav">
+  <button id="prevMonth">← Prev</button>
+  <span class="month-label" id="monthLabel"></span>
+  <button id="nextMonth">Next →</button>
+</div>
+
+<div class="summary-row">
+  <div class="summary-card">
+    <div class="value" id="summaryHours">–</div>
+    <div class="label">Hrs Saved</div>
+  </div>
+  <div class="summary-card">
+    <div class="value" id="summaryCoverage">–</div>
+    <div class="label">Coverage</div>
+  </div>
+  <div class="summary-card">
+    <div class="value" id="summaryQuality">–</div>
+    <div class="label">Quality</div>
+  </div>
+</div>
+
+<section>
+  <h2>Time Saved</h2>
+  <div class="field-row">
+    <label>Estimated hours saved this month</label>
+    <input type="number" id="hoursSaved" step="0.5" min="0">
+  </div>
+  <div class="field-row">
+    <label>Avg. workflow completion time (vs. last month)</label>
+    <select id="completionTrend">
+      <option value="">—</option>
+      <option value="Faster">Faster</option>
+      <option value="Same">Same</option>
+      <option value="Slower">Slower</option>
+    </select>
+  </div>
+</section>
+
+<section>
+  <h2>Quality & Satisfaction</h2>
+  <div class="field-row">
+    <label>Quality self-rating (1–5, how often review caught an issue before it went out)</label>
+    <input type="number" id="qualityScore" min="1" max="5" step="1">
+  </div>
+  <div class="field-block">
+    <label>Client satisfaction notes (informal, from conversations this month)</label>
+    <textarea id="satisfactionNotes" placeholder="Anything a client said, positive or otherwise, about response time, communication, or delivery..."></textarea>
+  </div>
+</section>
+
+<section>
+  <h2>Operational Cost</h2>
+  <div class="field-row">
+    <label>Automation/tool spend this month ($)</label>
+    <input type="number" id="opCost" step="1" min="0">
+  </div>
+</section>
+
+<section>
+  <h2>Adoption</h2>
+  <div id="adoptionChecklist"></div>
+</section>
+
+<section>
+  <h2>Automation Coverage</h2>
+  <div class="field-row">
+    <label>Of the 15 audited workflows, how many are running automated?</label>
+    <input type="number" id="coverageCount" min="0" max="15" step="1">
+  </div>
+  <div class="coverage-bar-track"><div class="coverage-bar-fill" id="coverageBarFill" style="width:0%"></div></div>
+  <div class="coverage-label" id="coverageBarLabel">0 / 15</div>
+</section>
+
+<section>
+  <h2>Business Outcomes</h2>
+  <div class="field-block">
+    <label>What moved this month (revenue, pipeline, client count)</label>
+    <textarea id="outcomeNotes"></textarea>
+  </div>
+</section>
+
+<section>
+  <h2>Monthly Review</h2>
+  <div class="review-prompt">What's the single biggest opportunity for improvement this month?</div>
+  <textarea id="improvementOpportunity"></textarea>
+</section>
+
+<div class="save-note" id="saveNote"></div>
+
+<footer>Data-driven, not data-obsessed. Review monthly, adjust quarterly.</footer>
+
+<script>
+const adoptionItems = [
+  "HubSpot pipeline updated weekly",
+  "Coaching intake automation used",
+  "Weekly Tracker check-ins completed",
+  "Talent Bench roster current",
+  "Facilitation drafts reviewed before send",
+  "Outreach drafts reviewed before send"
+];
+
+let currentMonthOffset = 0;
+
+function getMonthKey(offset) {
+  const now = new Date();
+  const d = new Date(now.getFullYear(), now.getMonth() + offset, 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+function formatMonthLabel(key) {
+  const [y, m] = key.split('-');
+  const d = new Date(parseInt(y), parseInt(m) - 1, 1);
+  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+}
+
+function renderChecklist() {
+  const container = document.getElementById('adoptionChecklist');
+  container.innerHTML = '';
+  adoptionItems.forEach((item, idx) => {
+    const row = document.createElement('div');
+    row.className = 'checklist-item';
+    row.innerHTML = `<input type="checkbox" id="adopt${idx}"><label for="adopt${idx}">${item}</label>`;
+    container.appendChild(row);
+  });
+}
+
+let saveTimer;
+function flashSaved() {
+  const note = document.getElementById('saveNote');
+  note.textContent = 'Saved';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => { note.textContent = ''; }, 1200);
+}
+
+async function saveField(key, value) {
+  try {
+    await window.storage.set(key, value, false);
+    flashSaved();
+  } catch (e) { console.error('Save failed', e); }
+}
+
+async function loadField(key, fallback = '') {
+  try {
+    const result = await window.storage.get(key);
+    return result ? result.value : fallback;
+  } catch (e) { return fallback; }
+}
+
+function debounce(fn, delay) {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), delay); };
+}
+
+function updateSummaryCards() {
+  const hours = document.getElementById('hoursSaved').value;
+  const coverage = document.getElementById('coverageCount').value;
+  const quality = document.getElementById('qualityScore').value;
+  document.getElementById('summaryHours').textContent = hours ? hours : '–';
+  document.getElementById('summaryCoverage').textContent = coverage ? `${coverage}/15` : '–';
+  document.getElementById('summaryQuality').textContent = quality ? `${quality}/5` : '–';
+
+  const pct = coverage ? Math.min(100, (coverage / 15) * 100) : 0;
+  document.getElementById('coverageBarFill').style.width = pct + '%';
+  document.getElementById('coverageBarLabel').textContent = `${coverage || 0} / 15`;
+}
+
+async function loadMonth(offset) {
+  const key = getMonthKey(offset);
+  document.getElementById('monthLabel').textContent = formatMonthLabel(key);
+
+  document.getElementById('hoursSaved').value = await loadField(`dash-${key}-hours`);
+  document.getElementById('completionTrend').value = await loadField(`dash-${key}-completion`);
+  document.getElementById('qualityScore').value = await loadField(`dash-${key}-quality`);
+  document.getElementById('satisfactionNotes').value = await loadField(`dash-${key}-satisfaction`);
+  document.getElementById('opCost').value = await loadField(`dash-${key}-cost`);
+  document.getElementById('coverageCount').value = await loadField(`dash-${key}-coverage`);
+  document.getElementById('outcomeNotes').value = await loadField(`dash-${key}-outcomes`);
+  document.getElementById('improvementOpportunity').value = await loadField(`dash-${key}-improvement`);
+
+  for (let idx = 0; idx < adoptionItems.length; idx++) {
+    const val = await loadField(`dash-${key}-adopt${idx}`);
+    document.getElementById(`adopt${idx}`).checked = val === 'true';
+  }
+
+  updateSummaryCards();
+}
+
+function wireFields() {
+  const key = () => getMonthKey(currentMonthOffset);
+
+  const textFields = [
+    ['hoursSaved', 'hours'], ['completionTrend', 'completion'], ['qualityScore', 'quality'],
+    ['satisfactionNotes', 'satisfaction'], ['opCost', 'cost'], ['coverageCount', 'coverage'],
+    ['outcomeNotes', 'outcomes'], ['improvementOpportunity', 'improvement']
+  ];
+
+  textFields.forEach(([id, suffix]) => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', debounce(() => {
+      saveField(`dash-${key()}-${suffix}`, el.value);
+      updateSummaryCards();
+    }, 500));
+  });
+
+  adoptionItems.forEach((_, idx) => {
+    document.getElementById(`adopt${idx}`).addEventListener('change', (e) => {
+      saveField(`dash-${key()}-adopt${idx}`, String(e.target.checked));
+    });
+  });
+}
+
+document.getElementById('prevMonth').addEventListener('click', () => {
+  currentMonthOffset -= 1;
+  loadMonth(currentMonthOffset);
+});
+document.getElementById('nextMonth').addEventListener('click', () => {
+  currentMonthOffset += 1;
+  loadMonth(currentMonthOffset);
+});
+
+async function init() {
+  renderChecklist();
+  wireFields();
+  await loadMonth(0);
+}
+
+init();
+</script>
+
+</body>
+</html>
