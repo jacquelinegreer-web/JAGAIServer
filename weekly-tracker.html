@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greer Collective — Weekly Tracker</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Georgia&display=swap');
+
+  :root {
+    --purple: #6B4C9A;
+    --purple-deep: #4A3270;
+    --cream: #F9F4EE;
+    --gold: #C9A84C;
+    --ink: #2B2230;
+    --line: #E4DCEE;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--cream);
+    color: var(--ink);
+    padding: 24px 16px 60px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  header h1 {
+    font-size: 22px;
+    color: var(--purple-deep);
+    letter-spacing: 0.02em;
+    font-weight: normal;
+  }
+
+  header .motto {
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  section {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 18px;
+  }
+
+  section h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--purple);
+    margin-bottom: 14px;
+    font-weight: normal;
+  }
+
+  /* North Star */
+  .metric-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .metric-row input[type="text"] {
+    flex: 1;
+    font-family: inherit;
+    font-size: 15px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--ink);
+  }
+
+  .metric-display {
+    font-size: 19px;
+    color: var(--purple-deep);
+    padding: 6px 2px 2px;
+  }
+
+  /* Ranked workstreams */
+  .workstream {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .workstream:last-child { border-bottom: none; }
+
+  .rank-badge {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--purple);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .workstream input[type="text"] {
+    flex: 1;
+    font-family: inherit;
+    font-size: 15px;
+    border: none;
+    border-bottom: 1px solid transparent;
+    padding: 4px 0;
+    color: var(--ink);
+    background: transparent;
+  }
+
+  .workstream input[type="text"]:focus {
+    outline: none;
+    border-bottom: 1px solid var(--gold);
+  }
+
+  .later-list {
+    margin-top: 10px;
+  }
+
+  .later-list textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 13px;
+    color: #7a7285;
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+    padding: 10px;
+    resize: vertical;
+    min-height: 50px;
+  }
+
+  .later-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #a89bb5;
+    margin-bottom: 6px;
+  }
+
+  /* Weekly check-in */
+  .checkin-field { margin-bottom: 14px; }
+  .checkin-field:last-child { margin-bottom: 0; }
+
+  .checkin-field label {
+    display: block;
+    font-size: 13px;
+    color: var(--purple-deep);
+    margin-bottom: 6px;
+  }
+
+  .checkin-field textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    resize: vertical;
+    min-height: 44px;
+    color: var(--ink);
+  }
+
+  .week-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .week-nav button {
+    background: none;
+    border: 1px solid var(--purple);
+    color: var(--purple);
+    font-family: inherit;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .week-nav button:hover { background: var(--purple); color: white; }
+
+  .week-label {
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 0.04em;
+  }
+
+  .save-note {
+    text-align: center;
+    font-size: 11px;
+    color: #a89bb5;
+    margin-top: 4px;
+    min-height: 14px;
+  }
+
+  .phase-tag {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: white;
+    background: var(--gold);
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 11px;
+    color: #a89bb5;
+    margin-top: 24px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Greer Collective</h1>
+  <div class="motto">Consilium · Ducere · Creare</div>
+</header>
+
+<section>
+  <h2>North Star Metric</h2>
+  <div class="metric-row">
+    <input type="text" id="metricInput" placeholder="e.g. $6,700/month recurring by June 2027">
+  </div>
+</section>
+
+<section>
+  <h2>Top 3, Right Now</h2>
+  <div id="workstreams"></div>
+  <div class="later-list">
+    <div class="later-label">Later (not now, not never)</div>
+    <textarea id="laterList" placeholder="Everything else goes here so it stops taking up headspace..."></textarea>
+  </div>
+</section>
+
+<section>
+  <h2>Weekly Check-In</h2>
+  <div class="week-nav">
+    <button id="prevWeek">← Prev</button>
+    <span class="week-label" id="weekLabel"></span>
+    <button id="nextWeek">Next →</button>
+  </div>
+  <div class="checkin-field">
+    <label>What made money this week</label>
+    <textarea id="madeMoney"></textarea>
+  </div>
+  <div class="checkin-field">
+    <label>What cost energy without paying off</label>
+    <textarea id="costEnergy"></textarea>
+  </div>
+  <div class="checkin-field">
+    <label>What to cut</label>
+    <textarea id="toCut"></textarea>
+  </div>
+</section>
+
+<div class="save-note" id="saveNote"></div>
+
+<footer>Built around your pace and capacity.</footer>
+
+<script>
+const workstreamNames = ['workstream1', 'workstream2', 'workstream3'];
+let currentWeekOffset = 0;
+
+function getWeekKey(offset) {
+  const now = new Date();
+  const monday = new Date(now);
+  const day = now.getDay();
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1) + (offset * 7);
+  monday.setDate(diff);
+  return monday.toISOString().slice(0, 10);
+}
+
+function formatWeekLabel(key) {
+  const start = new Date(key);
+  const end = new Date(start);
+  end.setDate(start.getDate() + 6);
+  const opts = { month: 'short', day: 'numeric' };
+  return `${start.toLocaleDateString('en-US', opts)} – ${end.toLocaleDateString('en-US', opts)}`;
+}
+
+function renderWorkstreams() {
+  const container = document.getElementById('workstreams');
+  container.innerHTML = '';
+  [1,2,3].forEach(n => {
+    const row = document.createElement('div');
+    row.className = 'workstream';
+    row.innerHTML = `<div class="rank-badge">${n}</div><input type="text" id="workstream${n}" placeholder="Priority ${n}">`;
+    container.appendChild(row);
+  });
+}
+
+async function saveField(key, value, shared=false) {
+  try {
+    await window.storage.set(key, value, shared);
+    flashSaved();
+  } catch (e) {
+    console.error('Save failed', e);
+  }
+}
+
+let saveTimer;
+function flashSaved() {
+  const note = document.getElementById('saveNote');
+  note.textContent = 'Saved';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => { note.textContent = ''; }, 1200);
+}
+
+async function loadField(key, fallback='') {
+  try {
+    const result = await window.storage.get(key);
+    return result ? result.value : fallback;
+  } catch (e) {
+    return fallback;
+  }
+}
+
+function debounce(fn, delay) {
+  let t;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...args), delay);
+  };
+}
+
+async function loadStaticFields() {
+  document.getElementById('metricInput').value = await loadField('northstar-metric');
+  for (const w of workstreamNames) {
+    document.getElementById(w.replace('workstream','workstream')).value = '';
+  }
+  document.getElementById('workstream1').value = await loadField('workstream-1');
+  document.getElementById('workstream2').value = await loadField('workstream-2');
+  document.getElementById('workstream3').value = await loadField('workstream-3');
+  document.getElementById('laterList').value = await loadField('later-list');
+}
+
+async function loadWeek(offset) {
+  const key = getWeekKey(offset);
+  document.getElementById('weekLabel').textContent = formatWeekLabel(key);
+  document.getElementById('madeMoney').value = await loadField(`checkin-${key}-money`);
+  document.getElementById('costEnergy').value = await loadField(`checkin-${key}-energy`);
+  document.getElementById('toCut').value = await loadField(`checkin-${key}-cut`);
+}
+
+function wireCheckinFields() {
+  const fields = [
+    ['madeMoney', 'money'],
+    ['costEnergy', 'energy'],
+    ['toCut', 'cut']
+  ];
+  fields.forEach(([id, suffix]) => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', debounce(() => {
+      const key = getWeekKey(currentWeekOffset);
+      saveField(`checkin-${key}-${suffix}`, el.value);
+    }, 600));
+  });
+}
+
+function wireStaticFields() {
+  document.getElementById('metricInput').addEventListener('input', debounce((e) => {
+    saveField('northstar-metric', e.target.value);
+  }, 600));
+
+  ['workstream1','workstream2','workstream3'].forEach((id, idx) => {
+    document.getElementById(id).addEventListener('input', debounce((e) => {
+      saveField(`workstream-${idx+1}`, e.target.value);
+    }, 600));
+  });
+
+  document.getElementById('laterList').addEventListener('input', debounce((e) => {
+    saveField('later-list', e.target.value);
+  }, 600));
+}
+
+document.getElementById('prevWeek').addEventListener('click', () => {
+  currentWeekOffset -= 1;
+  loadWeek(currentWeekOffset);
+});
+document.getElementById('nextWeek').addEventListener('click', () => {
+  currentWeekOffset += 1;
+  loadWeek(currentWeekOffset);
+});
+
+async function init() {
+  renderWorkstreams();
+  await loadStaticFields();
+  wireStaticFields();
+  wireCheckinFields();
+  await loadWeek(0);
+}
+
+init();
+</script>
+
+</body>
+</html>
