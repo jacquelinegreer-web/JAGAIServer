@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JacquieVoice — Colors & Fonts</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=Parisienne&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* ── JacquieVoice palette (Lavender + Taupe signature) ── */
+    --jv-lavender:  #BDB2C3;  /* signature accent — hero, panels, chips */
+    --jv-taupe:     #5C5751;  /* ink — body text, primary buttons, dark surfaces */
+    --jv-cream:     #FDF8F0;  /* warm cream — page background (shared w/ Greer Collective) */
+    --jv-white:     #FFFFFF;  /* cards, clean sections */
+    --jv-nearblack: #1C1410;  /* near-black — headlines, footer (shared w/ Greer Collective) */
+    --jv-hairline:  #EDE4D4;  /* dividers, card borders */
+    --jv-lav-soft:  #D6CFDA;  /* derived lavender tint for soft fills */
+
+    /* ── Greer Collective palette (parent brand) ── */
+    --gc-nearblack: #1C1410;
+    --gc-cream:     #FDF8F0;
+    --gc-rule:      #EDE4D4;
+
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--jv-cream); color: var(--jv-nearblack); line-height: 1.6; }
+
+  /* ── layout ── */
+  .page { max-width: 900px; margin: 0 auto; padding: 48px 32px 80px; }
+
+  /* ── page header ── */
+  .page-header { margin-bottom: 56px; }
+  .page-header .eyebrow {
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--jv-taupe); font-weight: 600; margin-bottom: 10px;
+  }
+  .page-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; font-weight: 300; color: var(--jv-nearblack);
+    line-height: 1.1; margin-bottom: 14px;
+  }
+  .page-header h1 em { font-style: italic; color: var(--jv-taupe); }
+  .page-header p { font-size: 15px; color: var(--jv-taupe); max-width: 560px; line-height: 1.75; }
+
+  /* ── section label ── */
+  .label {
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    font-weight: 600; margin-bottom: 8px;
+  }
+  .label.gold { color: var(--jv-taupe); }
+  .label.gray { color: #b7ada4; }
+  .rule { width: 40px; height: 2px; background: var(--jv-lavender); margin: 12px 0 28px; }
+
+  /* ── comparison banner ── */
+  .compare-banner {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border-radius: 6px; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    margin-bottom: 56px;
+  }
+  .compare-col { padding: 36px 36px; }
+  .compare-col.gc {
+    background: var(--gc-nearblack); color: var(--jv-cream);
+  }
+  .compare-col.jv {
+    background: var(--jv-lavender); color: var(--jv-taupe);
+  }
+  .compare-col .brand-label {
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    font-weight: 600; margin-bottom: 16px; opacity: 0.6;
+  }
+  .compare-col.gc .brand-label { color: var(--jv-cream); }
+  .compare-col.jv .brand-label { color: var(--jv-taupe); }
+  .compare-wordmark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; font-weight: 300; line-height: 1.1; margin-bottom: 12px;
+  }
+  .gc .compare-wordmark { color: var(--jv-cream); }
+  .gc .compare-wordmark em { font-style: italic; color: var(--jv-lavender); }
+  .jv .compare-wordmark { font-family: 'Parisienne', cursive; font-size: 40px; color: var(--jv-taupe); }
+  .jv .compare-wordmark em { font-style: normal; color: var(--jv-nearblack); }
+  .compare-tagline { font-size: 12px; opacity: 0.6; letter-spacing: 0.06em; margin-bottom: 20px; }
+  .compare-hero-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 300; line-height: 1.35; margin-bottom: 14px;
+  }
+  .gc .compare-hero-text { color: var(--jv-cream); }
+  .gc .compare-hero-text em { font-style: italic; color: var(--jv-lavender); }
+  .jv .compare-hero-text { color: var(--jv-nearblack); }
+  .jv .compare-hero-text em { font-style: italic; color: var(--jv-taupe); }
+  .gc .compare-body { font-size: 12px; line-height: 1.75; opacity: 0.6; }
+  .jv .compare-body { font-size: 12px; line-height: 1.75; opacity: 0.85; }
+
+  /* ── color palette ── */
+  .palette-section { margin-bottom: 56px; }
+  .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 24px; }
+  .swatch { border-radius: 4px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .swatch-chip { height: 100px; }
+  .swatch-info { padding: 12px; background: white; }
+  .swatch-name { font-size: 11px; font-weight: 600; color: var(--jv-nearblack); margin-bottom: 3px; }
+  .swatch-hex { font-size: 10px; color: #8a8078; font-family: monospace; margin-bottom: 4px; }
+  .swatch-role { font-size: 10px; color: #b7ada4; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.4; }
+
+  /* usage pills */
+  .usage-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .usage-card { border-radius: 4px; padding: 20px; }
+  .usage-card h4 { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; }
+  .usage-card ul { list-style: none; font-size: 12px; line-height: 1.9; }
+
+  /* ── typography ── */
+  .type-section { margin-bottom: 56px; }
+  .type-card {
+    background: white; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 16px;
+  }
+  .type-card-header {
+    background: var(--jv-cream); padding: 14px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--jv-hairline);
+  }
+  .type-role { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--jv-taupe); }
+  .type-details { font-size: 11px; color: #b7ada4; font-family: monospace; }
+  .type-card-body { padding: 28px; }
+  .type-script {
+    font-family: 'Parisienne', cursive;
+    font-size: 56px; color: var(--jv-taupe); line-height: 1;
+  }
+  .type-display {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px; font-weight: 300; color: var(--jv-nearblack);
+    line-height: 1.05; letter-spacing: -0.01em;
+  }
+  .type-display em { font-style: italic; color: var(--jv-taupe); }
+  .type-body-example {
+    font-family: 'Inter', sans-serif; font-size: 15px;
+    color: var(--jv-taupe); line-height: 1.8; max-width: 520px;
+  }
+  .type-label-example {
+    font-family: 'Inter', sans-serif; font-size: 11px;
+    font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--jv-taupe);
+  }
+
+  /* scale strip */
+  .scale-strip { background: var(--jv-cream); border-radius: 4px; padding: 24px 28px; margin-top: 24px; }
+  .scale-row {
+    display: flex; align-items: baseline; gap: 20px;
+    padding: 10px 0; border-bottom: 1px solid var(--jv-hairline);
+  }
+  .scale-row:last-child { border-bottom: none; }
+  .scale-tag { font-size: 10px; color: #b7ada4; text-transform: uppercase; letter-spacing: 0.08em; min-width: 90px; font-weight: 500; }
+
+  /* ── quick ref card ── */
+  .quick-ref {
+    background: var(--jv-taupe); border-radius: 6px;
+    padding: 40px; color: var(--jv-cream);
+    box-shadow: 0 8px 32px rgba(92,87,81,0.25);
+  }
+  .quick-ref h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300; margin-bottom: 6px;
+  }
+  .quick-ref h2 em { font-style: italic; color: var(--jv-lavender); }
+  .quick-ref .sub { font-size: 12px; color: rgba(253,248,240,0.5); margin-bottom: 32px; }
+  .qr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .qr-group h3 {
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--jv-lavender); opacity: 0.85; margin-bottom: 14px; font-weight: 600;
+  }
+  .qr-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.10);
+    font-size: 13px;
+  }
+  .qr-item:last-child { border-bottom: none; }
+  .qr-dot { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+  .qr-label { color: var(--jv-cream); opacity: 0.9; flex: 1; }
+  .qr-hex { font-family: monospace; font-size: 11px; color: rgba(253,248,240,0.5); }
+  .qr-font-item {
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.10);
+  }
+  .qr-font-item:last-child { border-bottom: none; }
+  .qr-font-name { font-size: 13px; color: var(--jv-cream); opacity: 0.9; margin-bottom: 2px; }
+  .qr-font-use { font-size: 11px; color: rgba(253,248,240,0.5); }
+
+  /* ── responsive ── */
+  @media (max-width: 640px) {
+    .compare-banner, .qr-grid, .usage-grid { grid-template-columns: 1fr; }
+    .palette-grid { grid-template-columns: repeat(3, 1fr); }
+    .page { padding: 32px 20px 60px; }
+    .type-display { font-size: 38px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="eyebrow">JacquieVoice &nbsp;·&nbsp; Brand Tokens</div>
+    <h1>Colors &amp; Fonts<br><em>moving forward</em></h1>
+    <p>A precise, copy-ready reference for every color and typeface JacquieVoice uses — built on The Greer Collective's shared warm cream and near-black, with Lavender and Taupe as the signature that makes JacquieVoice its own.</p>
+  </div>
+
+  <!-- SIDE-BY-SIDE COMPARISON -->
+  <div class="label gold">The Two Brands Side by Side</div>
+  <div class="rule"></div>
+  <div class="compare-banner">
+    <div class="compare-col gc">
+      <div class="brand-label">The Greer Collective</div>
+      <div class="compare-wordmark">The Greer<br><em>Collective</em></div>
+      <div class="compare-tagline">Strategy · Facilitation · Coaching</div>
+      <div class="compare-hero-text">Strategy that moves<br><em>people forward.</em></div>
+      <div class="compare-body">Near-black authority palette (#1C1410) on a warm cream page (#FDF8F0). Minimal nav. One CTA per section. Cormorant Garamond display with a clean Inter body.</div>
+    </div>
+    <div class="compare-col jv">
+      <div class="brand-label">JacquieVoice</div>
+      <div class="compare-wordmark">Jacquie<em>Voice</em></div>
+      <div class="compare-tagline">Say It Loud · Washington D.C.</div>
+      <div class="compare-hero-text">The voice your message<br><em>deserves.</em></div>
+      <div class="compare-body">Lavender and Taupe as the signature — softer and more personal than black. Shares Greer Collective's warm cream (#FDF8F0) and near-black (#1C1410). Same Cormorant Garamond display and Inter body, plus a script wordmark and the line "Say It Loud."</div>
+    </div>
+  </div>
+
+  <!-- ── COLORS ── -->
+  <div class="label gold">Color Palette</div>
+  <div class="rule"></div>
+
+  <div class="palette-section">
+    <div class="palette-grid">
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#BDB2C3;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Lavender</div>
+          <div class="swatch-hex">#BDB2C3</div>
+          <div class="swatch-role">Signature accent · Hero · Panels</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#5C5751;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Taupe</div>
+          <div class="swatch-hex">#5C5751</div>
+          <div class="swatch-role">Ink · Body · Buttons · Nav</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#FDF8F0; border:1px solid #EDE4D4;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Warm Cream</div>
+          <div class="swatch-hex">#FDF8F0</div>
+          <div class="swatch-role">Page background · Light on dark</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#FFFFFF; border:1px solid #EDE4D4;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">White</div>
+          <div class="swatch-hex">#FFFFFF</div>
+          <div class="swatch-role">Cards · Clean sections</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#1C1410;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Near-Black</div>
+          <div class="swatch-hex">#1C1410</div>
+          <div class="swatch-role">Headlines · Footer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- supporting row -->
+    <div class="palette-grid" style="margin-top:8px; grid-template-columns: repeat(5, 1fr);">
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#EDE4D4;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Cream Dark (Hairline)</div>
+          <div class="swatch-hex">#EDE4D4</div>
+          <div class="swatch-role">Dividers · Card borders</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#D6CFDA;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Soft Lavender</div>
+          <div class="swatch-hex">#D6CFDA</div>
+          <div class="swatch-role">Chip fills · Subtle tints</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- usage breakdown -->
+    <div style="margin-top:24px;">
+      <div class="usage-grid">
+        <div class="usage-card" style="background:#5C5751;color:#FDF8F0;">
+          <h4 style="color:#BDB2C3;">Taupe on</h4>
+          <ul style="opacity:.85;">
+            <li>Nav &amp; header backgrounds</li>
+            <li>Primary buttons</li>
+            <li>Body text &amp; eyebrows</li>
+            <li>About &amp; Rates sections</li>
+            <li>Rule lines on light</li>
+          </ul>
+        </div>
+        <div class="usage-card" style="background:#BDB2C3;">
+          <h4 style="color:#5C5751;">Lavender on</h4>
+          <ul style="color:#5C5751;">
+            <li>Hero background (logo field)</li>
+            <li>Testimonial feature panel</li>
+            <li>Icon circles &amp; tag chips</li>
+            <li>Hover states &amp; dividers</li>
+            <li>"Book Now" button</li>
+          </ul>
+        </div>
+        <div class="usage-card" style="background:#EDE4D4;">
+          <h4 style="color:#5C5751;">Cream on</h4>
+          <ul style="color:#5C5751;">
+            <li>Page body background</li>
+            <li>Light text on dark sections</li>
+            <li>Form backgrounds &amp; cards</li>
+            <li>Type specimen backgrounds</li>
+            <li>Alternating sections</li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top:16px;font-size:12px;color:#8a8078;line-height:1.7;">Lavender is light — never use it for small text on white or cream. Use it as a fill, border, or background, and place Taupe or Near-Black text on top. The Lavender + Taupe pairing is the fixed JacquieVoice signature.</p>
+    </div>
+  </div>
+
+  <!-- ── TYPOGRAPHY ── -->
+  <div class="label gold">Typography</div>
+  <div class="rule"></div>
+
+  <div class="type-section">
+
+    <!-- Wordmark -->
+    <div class="type-card">
+      <div class="type-card-header">
+        <div class="type-role">Wordmark — Logo &amp; Script</div>
+        <div class="type-details">Parisienne · Regular (logo lockup)</div>
+      </div>
+      <div class="type-card-body">
+        <div class="type-script">JacquieVoice</div>
+        <div style="margin-top:14px;font-size:11px;font-weight:600;letter-spacing:0.34em;text-transform:uppercase;color:#5C5751;padding-left:0.34em;">Say It Loud</div>
+        <div style="margin-top:16px;font-size:12px;color:#b7ada4;line-height:1.8;">
+          Used for: the logo wordmark and script flourishes only — not for body or headlines.<br>
+          Prefer the supplied logo art (<span style="font-family:monospace;">jacquievoice-logo.png</span>); Parisienne is the type stand-in.<br>
+          Pairs with the "Say It Loud" tagline in spaced, uppercase Inter.
+        </div>
+      </div>
+    </div>
+
+    <!-- Display -->
+    <div class="type-card">
+      <div class="type-card-header">
+        <div class="type-role">Display — Headlines</div>
+        <div class="type-details">Cormorant Garamond · Light 300 + Light Italic</div>
+      </div>
+      <div class="type-card-body">
+        <div class="type-display">The voice your<br>message <em>deserves.</em></div>
+        <div style="margin-top:16px;font-size:12px;color:#b7ada4;line-height:1.8;">
+          Used for: H1, H2, pull quotes.<br>
+          Sizes: 52–88px (hero) &nbsp;/&nbsp; 36–52px (section H2) &nbsp;/&nbsp; 22–28px (pull quotes).<br>
+          Headlines in Near-Black (#1C1410); italic emphasis in Taupe (#5C5751) on light, Lavender (#BDB2C3) on dark.<br>
+          Weight is always Light 300 — never Bold. The elegance lives in the weight, not the mass.
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="type-card">
+      <div class="type-card-header">
+        <div class="type-role">Body — All running text, nav, buttons</div>
+        <div class="type-details">Inter · Light 300 / Regular 400 / Medium 500 / Semibold 600</div>
+      </div>
+      <div class="type-card-body">
+        <div class="type-body-example">With 2,500+ completed projects and clients including Aetna, Marriott International, PepsiCo, and Roc Nation, Jacqueline Greer is a DC-area voice actor known for a warm, soulful, and authoritative sound that builds trust from the first word.</div>
+        <div style="margin-top:16px;font-size:12px;color:#b7ada4;line-height:1.8;">
+          Used for: all body copy, nav links, button labels, captions, form text.<br>
+          Body weight: Regular 400 in Taupe (#5C5751). Long-form reading: Light 300 at 17–18px.<br>
+          Buttons: Semibold 600 at 11px, all-caps, 0.12em tracking.<br>
+          Nav links: Medium 500 at 12px, all-caps, 0.08em tracking.
+        </div>
+      </div>
+    </div>
+
+    <!-- Label -->
+    <div class="type-card">
+      <div class="type-card-header">
+        <div class="type-role">Eyebrow / Section Label</div>
+        <div class="type-details">Inter · Semibold 600 · All-caps · 0.14–0.18em tracking</div>
+      </div>
+      <div class="type-card-body" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="type-label-example">Voice Actor &nbsp;·&nbsp; Washington D.C.</div>
+        <div class="type-label-example">01 &nbsp;/&nbsp; Services</div>
+        <div class="type-label-example">Commercial &nbsp;·&nbsp; E-Learning &nbsp;·&nbsp; Narration</div>
+        <div style="margin-top:8px;font-size:12px;color:#b7ada4;line-height:1.8;">
+          Always Taupe (#5C5751), with a Lavender rule line beneath. Always the first element in a section, before the headline.<br>
+          Size: 10–11px. Never larger. Treat it as a whisper before the voice.
+        </div>
+      </div>
+    </div>
+
+    <!-- Type scale strip -->
+    <div class="scale-strip">
+      <div class="label gray" style="margin-bottom:16px;">Type Scale — Quick Reference</div>
+      <div class="scale-row">
+        <span class="scale-tag">Hero H1</span>
+        <span style="font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;color:#1C1410;line-height:1;">The voice</span>
+      </div>
+      <div class="scale-row">
+        <span class="scale-tag">Section H2</span>
+        <span style="font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:#1C1410;">Every genre. One voice.</span>
+      </div>
+      <div class="scale-row">
+        <span class="scale-tag">Card H3</span>
+        <span style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:#1C1410;">Commercial</span>
+      </div>
+      <div class="scale-row">
+        <span class="scale-tag">Pull Quote</span>
+        <span style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;font-style:italic;color:#5C5751;">"A sure thing — every time."</span>
+      </div>
+      <div class="scale-row">
+        <span class="scale-tag">Body</span>
+        <span style="font-size:15px;font-weight:400;color:#5C5751;">Clear, warm, and on time — every time.</span>
+      </div>
+      <div class="scale-row">
+        <span class="scale-tag">Small body</span>
+        <span style="font-size:13px;font-weight:400;color:#5C5751;">Broadcast-quality studio. Source Connect Standard.</span>
+      </div>
+      <div class="scale-row">
+        <span class="scale-tag">Button</span>
+        <span style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#5C5751;">Book Me</span>
+      </div>
+      <div class="scale-row" style="border:none;">
+        <span class="scale-tag">Label</span>
+        <span style="font-size:10px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#5C5751;">Services &nbsp;/&nbsp; 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── QUICK REFERENCE CARD ── -->
+  <div class="quick-ref">
+    <h2>The one card to <em>keep.</em></h2>
+    <div class="sub">Everything you need when building in Squarespace, Canva, or any design tool.</div>
+
+    <div class="qr-grid">
+      <!-- Colors -->
+      <div class="qr-group">
+        <h3>Colors</h3>
+        <div class="qr-item">
+          <div class="qr-dot" style="background:#BDB2C3;"></div>
+          <span class="qr-label">Lavender (signature accent)</span>
+          <span class="qr-hex">#BDB2C3</span>
+        </div>
+        <div class="qr-item">
+          <div class="qr-dot" style="background:#5C5751;"></div>
+          <span class="qr-label">Taupe (ink, buttons, nav)</span>
+          <span class="qr-hex">#5C5751</span>
+        </div>
+        <div class="qr-item">
+          <div class="qr-dot" style="background:#FDF8F0;border:1px solid rgba(255,255,255,.2);"></div>
+          <span class="qr-label">Warm Cream (page BG)</span>
+          <span class="qr-hex">#FDF8F0</span>
+        </div>
+        <div class="qr-item">
+          <div class="qr-dot" style="background:#FFFFFF;border:1px solid rgba(255,255,255,.2);"></div>
+          <span class="qr-label">White (cards)</span>
+          <span class="qr-hex">#FFFFFF</span>
+        </div>
+        <div class="qr-item">
+          <div class="qr-dot" style="background:#1C1410;border:1px solid rgba(255,255,255,.1);"></div>
+          <span class="qr-label">Near-Black (headlines, footer)</span>
+          <span class="qr-hex">#1C1410</span>
+        </div>
+        <div class="qr-item">
+          <div class="qr-dot" style="background:#EDE4D4;"></div>
+          <span class="qr-label">Cream Dark (hairline)</span>
+          <span class="qr-hex">#EDE4D4</span>
+        </div>
+      </div>
+
+      <!-- Fonts -->
+      <div class="qr-group">
+        <h3>Fonts (Google Fonts — free)</h3>
+        <div class="qr-font-item">
+          <div class="qr-font-name" style="font-family:'Parisienne',cursive;font-size:22px;">JacquieVoice</div>
+          <div class="qr-font-use">Parisienne — logo wordmark only</div>
+        </div>
+        <div class="qr-font-item">
+          <div class="qr-font-name" style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:300;">Cormorant Garamond Light</div>
+          <div class="qr-font-use">H1, H2, pull quotes · weight 300</div>
+        </div>
+        <div class="qr-font-item">
+          <div class="qr-font-name" style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:300;font-style:italic;">Cormorant Garamond Light Italic</div>
+          <div class="qr-font-use">Emphasis in headlines · in taupe / lavender</div>
+        </div>
+        <div class="qr-font-item">
+          <div class="qr-font-name" style="font-size:15px;font-weight:400;">Inter Regular</div>
+          <div class="qr-font-use">Body copy · weight 400</div>
+        </div>
+        <div class="qr-font-item">
+          <div class="qr-font-name" style="font-size:15px;font-weight:500;">Inter Medium</div>
+          <div class="qr-font-use">Nav links, subheadings · weight 500</div>
+        </div>
+        <div class="qr-font-item">
+          <div class="qr-font-name" style="font-size:15px;font-weight:600;">Inter Semibold</div>
+          <div class="qr-font-use">Buttons, labels, eyebrows · weight 600</div>
+        </div>
+        <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);">
+          <div class="qr-font-use" style="color:rgba(253,248,240,.5);line-height:1.8;">
+            Add to Squarespace via Settings → Custom CSS → &lt;link&gt; tag, or use the Style Editor's font picker (search "Cormorant," "Inter," and "Parisienne").<br><br>
+            All three fonts are free on Google Fonts.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Greer Collective · Six-Month Marketing Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --aubergine: #2C1A2E;
+  --plum: #4A2455;
+  --gold: #B8922A;
+  --gold-light: #D4A843;
+  --gold-pale: #F5ECD4;
+  --cream: #FAF6EF;
+  --cream-dark: #EDE4D4;
+  --warm-white: #FDFAF5;
+  --text-mid: #4A3A4E;
+  --text-light: #8A7A8E;
+  --border: rgba(184,146,42,0.2);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--cream); font-family: 'Jost', sans-serif; color: var(--aubergine); }
+.page { max-width: 960px; margin: 0 auto; padding: 4rem 3rem; }
+
+.doc-header {
+  border-bottom: 1px solid var(--border); padding-bottom: 2.5rem; margin-bottom: 3rem;
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.doc-brand { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--aubergine); }
+.doc-brand span { display: block; font-family: 'Jost', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-top: 4px; }
+.doc-meta { text-align: right; font-size: 11px; color: var(--text-light); letter-spacing: 0.06em; line-height: 1.8; }
+
+.section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+h1 { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; line-height: 1.1; color: var(--aubergine); margin-bottom: 1rem; }
+h1 em { font-style: italic; color: var(--gold); }
+h2 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--aubergine); margin-bottom: 1.5rem; line-height: 1.2; }
+h2 em { font-style: italic; }
+
+.intro { font-size: 15px; line-height: 1.85; color: var(--text-mid); max-width: 680px; margin-bottom: 3rem; padding-bottom: 3rem; border-bottom: 1px solid var(--border); }
+
+.north-star { background: var(--aubergine); padding: 2.5rem 3rem; margin-bottom: 3.5rem; position: relative; }
+.north-star::before { content: ''; position: absolute; top: -10px; left: -10px; right: 10px; bottom: 10px; border: 1px solid var(--gold); pointer-events: none; }
+.north-star-label { font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+.north-star-text { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; line-height: 1.55; color: var(--cream); font-style: italic; }
+.north-star-text strong { font-style: normal; color: var(--gold-light); font-weight: 400; }
+
+.brand-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 3.5rem; }
+.brand-card { padding: 2rem 2.25rem; border: 1px solid var(--cream-dark); background: var(--warm-white); }
+.brand-card.primary { border-color: var(--gold); border-left-width: 3px; }
+.brand-card-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; letter-spacing: 0.06em; color: var(--aubergine); margin-bottom: 0.4rem; }
+.brand-card-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+.brand-card-desc { font-size: 13px; line-height: 1.75; color: var(--text-mid); margin-bottom: 1rem; }
+.brand-card-dna { font-size: 11px; color: var(--text-light); border-top: 1px solid var(--cream-dark); padding-top: 0.75rem; margin-top: 0.5rem; font-style: italic; }
+
+.audience-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--cream-dark); border: 1px solid var(--cream-dark); margin-bottom: 3.5rem; }
+.audience-card { background: var(--warm-white); padding: 1.75rem 1.5rem; }
+.audience-type { font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+.audience-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--aubergine); margin-bottom: 0.6rem; }
+.audience-desc { font-size: 12px; line-height: 1.7; color: var(--text-mid); }
+
+.content-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 3rem; }
+.content-pillar { padding: 1.75rem 2rem; background: var(--warm-white); border: 1px solid var(--cream-dark); }
+.cp-label { font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.35rem; }
+.cp-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--aubergine); margin-bottom: 0.75rem; }
+.cp-body { font-size: 12px; line-height: 1.7; color: var(--text-mid); }
+
+.divider { border: none; border-top: 1px solid var(--border); margin: 3rem 0; }
+
+.month-block { margin-bottom: 2.5rem; border-left: 3px solid var(--cream-dark); padding-left: 1.75rem; }
+.month-block.featured { border-color: var(--gold); }
+.month-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1rem; }
+.month-num { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; line-height: 1; color: var(--cream-dark); }
+.month-block.featured .month-num { color: var(--gold-pale); }
+.month-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--aubergine); }
+.month-theme { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; }
+.tactic-group { margin-bottom: 1rem; }
+.tactic-channel { font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.4rem; }
+.tactic-list { list-style: none; }
+.tactic-list li { font-size: 13px; line-height: 1.7; color: var(--text-mid); padding: 0.2rem 0; display: flex; gap: 8px; align-items: flex-start; }
+.tactic-list li::before { content: ''; width: 16px; height: 1px; background: var(--gold); flex-shrink: 0; margin-top: 10px; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--plum); border: 1px solid var(--plum); margin-bottom: 1.5rem; }
+.kpi-card { background: var(--warm-white); padding: 1.5rem 1.25rem; text-align: center; }
+.kpi-val { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; color: var(--plum); line-height: 1; margin-bottom: 0.35rem; }
+.kpi-label { font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-light); }
+
+.closing { background: var(--gold-pale); border: 1px solid rgba(184,146,42,0.3); padding: 2rem 2.5rem; font-size: 13px; line-height: 1.85; color: var(--text-mid); margin-top: 3rem; }
+.closing strong { color: var(--plum); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div>
+      <div class="doc-brand">The Greer Collective<span>A DBA of JacquieVoice LLC</span></div>
+    </div>
+    <div class="doc-meta">Six-Month Marketing Plan<br>July 2026 &ndash; December 2026<br>Prepared: June 2026</div>
+  </div>
+
+  <div class="section-label">Marketing Plan</div>
+  <h1>Showing up<br>with <em>intention.</em></h1>
+
+  <p class="intro">
+    This plan covers July through December 2026 &mdash; a pivotal window as the Deloitte engagement closes and The Greer Collective steps fully into its own market presence. The goal is not volume for its own sake. It is strategic visibility: the right people understanding who Jacqueline Greer is, what The Greer Collective does, and why it is exactly what they need. JacquieVoice, the creative and voice work brand, is a distinct and separate expression of the same person &mdash; same DNA, different room &mdash; and is not the subject of this plan.
+  </p>
+
+  <div class="section-label">Brand Foundation</div>
+  <h2>Two brands. <em>One woman.</em></h2>
+
+  <div class="brand-grid">
+    <div class="brand-card primary">
+      <div class="brand-card-name">The Greer Collective</div>
+      <div class="brand-card-tag">Executive Leadership Practice &mdash; This Plan</div>
+      <div class="brand-card-desc">The consulting, facilitation, and coaching arm. Jacqueline shows up here as a strategist, a thought partner, and a practitioner with over 20 years of VP-level experience in education, nonprofit, and government. This is where organizations come when they are navigating change, building leadership capacity, or developing the next generation of leaders.</div>
+      <div class="brand-card-dna">thegreercollective.com &middot; jacqueline@thegreercollective.com &middot; LinkedIn</div>
+    </div>
+    <div class="brand-card">
+      <div class="brand-card-name">JacquieVoice</div>
+      <div class="brand-card-tag">Creative &amp; Voice Work &mdash; Separate Brand</div>
+      <div class="brand-card-desc">The narration, voice acting, and creative expression arm. Jacqueline shows up here as an artist, bringing purpose-driven content to life through professional voice work. JacquieVoice has its own platforms, its own audience, and its own market positioning. The two brands share DNA &mdash; not space.</div>
+      <div class="brand-card-dna">jacquievoice.com &middot; Voice123 &middot; Voices.com &middot; Not featured in this plan</div>
+    </div>
+  </div>
+
+  <div class="north-star">
+    <div class="north-star-label">North Star</div>
+    <p class="north-star-text">By December 2026, The Greer Collective has a warm post-Deloitte pipeline, an active coaching roster, a clear content presence on LinkedIn and Substack, and is known in its markets as <strong>the practice you call when you want leadership development done with rigor and genuine care.</strong></p>
+  </div>
+
+  <div class="section-label">Target Audiences</div>
+  <h2>Who this is <em>for.</em></h2>
+
+  <div class="audience-grid">
+    <div class="audience-card">
+      <div class="audience-type">Primary</div>
+      <div class="audience-name">Government &amp; Federal Agencies</div>
+      <div class="audience-desc">Program officers, HR leads, and L&amp;D directors at federal agencies and contractors building leadership development programs. The Deloitte/USPS engagement is the proof of concept. These buyers value credentialed facilitators with deep sector fluency.</div>
+    </div>
+    <div class="audience-card">
+      <div class="audience-type">Primary</div>
+      <div class="audience-name">Nonprofit &amp; Education Institutions</div>
+      <div class="audience-desc">Executive directors, chiefs of staff, and board members at education nonprofits, foundations, and mission-driven organizations. Jacqueline's VP-level experience makes her fluent in the complexity and constraints of this sector.</div>
+    </div>
+    <div class="audience-card">
+      <div class="audience-type">Secondary</div>
+      <div class="audience-name">Women Leaders in Transition</div>
+      <div class="audience-desc">Senior professionals navigating pivots, promotions, or purpose shifts who want a coach with real organizational experience. The coaching pillar serves this audience directly through 1:1 engagements and cohort models.</div>
+    </div>
+  </div>
+
+  <div class="section-label">Content Strategy</div>
+  <h2>The <em>Whole Self</em> content arc.</h2>
+
+  <div class="content-pillars">
+    <div class="content-pillar">
+      <div class="cp-label">Pillar One &middot; LinkedIn</div>
+      <div class="cp-title">The Practitioner's View</div>
+      <div class="cp-body">Short-form professional posts rooted in what Jacqueline is actually doing: facilitation insights, leadership patterns she notices in rooms, reflections on the practice. Two to three posts per month. Not thought leadership performance &mdash; real observations from real work.</div>
+    </div>
+    <div class="content-pillar">
+      <div class="cp-label">Pillar Two &middot; Substack / Website</div>
+      <div class="cp-title">The Whole Self Series</div>
+      <div class="cp-body">Monthly long-form essays rotating across The Greer Collective practice, JacquieVoice creative life, and Jacqueline as a person. These are the foundation of the future book on the Thriving Framework. One essay per month, cross-posted to thegreercollective.com and Substack.</div>
+    </div>
+    <div class="content-pillar">
+      <div class="cp-label">Pillar Three &middot; Warm Outreach</div>
+      <div class="cp-title">Personal Relationship Maintenance</div>
+      <div class="cp-body">Direct, personal outreach to existing contacts and warm prospects &mdash; not cold email blasts. Check-ins, coffee conversations, forwarding relevant resources. Fifteen to twenty intentional touches per month across the network.</div>
+    </div>
+    <div class="content-pillar">
+      <div class="cp-label">Pillar Four &middot; Speaking &amp; Presence</div>
+      <div class="cp-title">Visible in the Right Rooms</div>
+      <div class="cp-body">Panels, conference appearances, IAF community participation, board engagement. Physical and professional presence in spaces where the right people gather. One to two visibility moments per quarter minimum.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-label">Month-by-Month</div>
+  <h2>Six months, <em>deliberately paced.</em></h2>
+
+  <div class="month-block featured">
+    <div class="month-header">
+      <div class="month-num">01</div>
+      <div>
+        <div class="month-title">July 2026 &mdash; Open Month: Deep Work</div>
+        <div class="month-theme">Theme: Foundation &amp; Pipeline</div>
+      </div>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">LinkedIn</div>
+      <ul class="tactic-list">
+        <li>Publish a short reflection on launching The Greer Collective &mdash; grounded, personal, not a manifesto</li>
+        <li>Update the LinkedIn profile to reflect The Greer Collective brand clearly, with separate language from JacquieVoice</li>
+        <li>Begin posting 2x per month: first post on what executive facilitation actually looks like from inside the room</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Website</div>
+      <ul class="tactic-list">
+        <li>Finalize and publish thegreercollective.com with updated messaging; consulting and coaching as the two pillars, JacquieVoice referenced as sister brand with its own site</li>
+        <li>Add a current work section showing what Jacqueline is actively doing</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Outreach</div>
+      <ul class="tactic-list">
+        <li>Personal outreach to 10 warm contacts: former colleagues, sector peers, past collaborators &mdash; sharing what's new, not asking for work</li>
+        <li>Reach out to Hannah Mont at Deloitte about next cohort cycle</li>
+        <li>Begin the post-Deloitte prospect list: government contractors, federal L&amp;D programs, education nonprofits</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Substack / Writing</div>
+      <ul class="tactic-list">
+        <li>Launch The Whole Self: Essay 1 sets the frame. Who Jacqueline is, what the two brands mean, and why thriving comes first.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="month-block">
+    <div class="month-header">
+      <div class="month-num">02</div>
+      <div>
+        <div class="month-title">August 2026 &mdash; Deloitte Closes; Activate Pipeline</div>
+        <div class="month-theme">Theme: Transition &amp; Momentum</div>
+      </div>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">LinkedIn</div>
+      <ul class="tactic-list">
+        <li>Post a thoughtful close to the USPS engagement &mdash; what it was, what it produced, what it meant (with permission as appropriate)</li>
+        <li>Share a lesson from inside a leadership cohort: something specific and useful, not generic inspiration content</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Business Development</div>
+      <ul class="tactic-list">
+        <li>Convert warm prospects from July outreach into discovery calls; target three to five conversations</li>
+        <li>Finalize the USPS engagement case study for use in proposals (internal document; not yet public)</li>
+        <li>Send proposals to any active leads</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Substack / Writing</div>
+      <ul class="tactic-list">
+        <li>Essay 2: On facilitation &mdash; what it actually means to hold a room without centering yourself in it</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Coaching</div>
+      <ul class="tactic-list">
+        <li>Launch paid 1:1 coaching engagements; three to five clients at introductory rate</li>
+        <li>Share coaching availability through LinkedIn and the warm network</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="month-block">
+    <div class="month-header">
+      <div class="month-num">03</div>
+      <div>
+        <div class="month-title">September 2026 &mdash; Establish Rhythm</div>
+        <div class="month-theme">Theme: Visibility &amp; Relationships</div>
+      </div>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">LinkedIn</div>
+      <ul class="tactic-list">
+        <li>Post on the Thriving Framework &mdash; introduce the philosophy without pitching it; let people find themselves in it</li>
+        <li>Share a coaching insight: what leaders get wrong about presence, and how it shifts</li>
+        <li>Begin engaging in IAF community conversations</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Speaking &amp; Events</div>
+      <ul class="tactic-list">
+        <li>Submit to speak at one sector-relevant conference or panel in education, government L&amp;D, or nonprofit leadership</li>
+        <li>Attend at least one IAF or sector event where prospects gather</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Substack / Writing</div>
+      <ul class="tactic-list">
+        <li>Essay 3: The creative life alongside the professional life &mdash; what JacquieVoice means, and why two rooms make her better in both</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Business Development</div>
+      <ul class="tactic-list">
+        <li>Land first post-Deloitte consulting engagement; target a signed SOW by end of month</li>
+        <li>Follow up with Fractional Ed collaborators on course development possibilities</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="month-block">
+    <div class="month-header">
+      <div class="month-num">04</div>
+      <div>
+        <div class="month-title">October 2026 &mdash; Deepen the Practice</div>
+        <div class="month-theme">Theme: Thought Leadership &amp; Credential</div>
+      </div>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">LinkedIn</div>
+      <ul class="tactic-list">
+        <li>Post on the ICF coaching credential journey: what it is, why it matters, what the process looks like from inside</li>
+        <li>Share a reflection on equity in the leadership development room: what is present and what isn't</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Substack / Writing</div>
+      <ul class="tactic-list">
+        <li>Essay 4: On thriving as a design principle &mdash; why she built the practice backward from joy, not forward from achievement</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Coaching</div>
+      <ul class="tactic-list">
+        <li>Pilot a small group coaching cohort of four to six women leaders, by invitation from the warm network</li>
+        <li>Develop the cohort model into a replicable offering</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Business Development</div>
+      <ul class="tactic-list">
+        <li>Outreach to 10 additional prospects in government and education L&amp;D sectors</li>
+        <li>Build a one-page capabilities brief for The Greer Collective, consulting-focused</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="month-block">
+    <div class="month-header">
+      <div class="month-num">05</div>
+      <div>
+        <div class="month-title">November 2026 &mdash; Brand Fully Live</div>
+        <div class="month-theme">Theme: Credibility &amp; Presence</div>
+      </div>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">LinkedIn</div>
+      <ul class="tactic-list">
+        <li>Post on the IAF/CPF credential milestone &mdash; what professional certification means for facilitation practice</li>
+        <li>Share something personal from the board work at Higher Achievement or Sojourner Truth: what showing up as a leader looks like outside the client engagement</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Website / Profile</div>
+      <ul class="tactic-list">
+        <li>Full LinkedIn profile and bio refresh to reflect the complete 2026 body of work</li>
+        <li>Add case studies or testimonials as they become available, with client consent</li>
+        <li>Finalize Maryland DBA registration for The Greer Collective</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Substack / Writing</div>
+      <ul class="tactic-list">
+        <li>Essay 5: On the practice of leading oneself first &mdash; what she has learned from coaching others about her own leadership</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">ICF Credential</div>
+      <ul class="tactic-list">
+        <li>Apply for ICF ACC credential; November target with 60+ training hours complete</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="month-block">
+    <div class="month-header">
+      <div class="month-num">06</div>
+      <div>
+        <div class="month-title">December 2026 &mdash; Year-End &amp; Q1 Positioning</div>
+        <div class="month-theme">Theme: Reflection &amp; Forward Planning</div>
+      </div>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">LinkedIn</div>
+      <ul class="tactic-list">
+        <li>Year-end reflection post: what 2026 was, what The Greer Collective built, what's coming next</li>
+        <li>A real, grounded account of the year &mdash; not a performance of gratitude</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Substack / Writing</div>
+      <ul class="tactic-list">
+        <li>Essay 6: The midpoint of the year-one arc &mdash; what she knows now that she didn't know in January</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Planning</div>
+      <ul class="tactic-list">
+        <li>Set 2027 revenue targets, capacity limits, and pricing by pillar</li>
+        <li>Map Q1 2027 prospect pipeline and outreach calendar</li>
+        <li>Review the coaching cohort model: what to repeat, what to redesign</li>
+      </ul>
+    </div>
+    <div class="tactic-group">
+      <div class="tactic-channel">Relationships</div>
+      <ul class="tactic-list">
+        <li>Personal end-of-year notes to 10 to 15 key people in the network: warm, brief, genuine</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-label">Success Metrics</div>
+  <h2>What <em>good</em> looks like.</h2>
+
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-val">2</div><div class="kpi-label">New Consulting Engagements by Dec</div></div>
+    <div class="kpi-card"><div class="kpi-val">5+</div><div class="kpi-label">Active Coaching Clients</div></div>
+    <div class="kpi-card"><div class="kpi-val">6</div><div class="kpi-label">Whole Self Essays Published</div></div>
+    <div class="kpi-card"><div class="kpi-val">ACC</div><div class="kpi-label">ICF Credential Applied</div></div>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-val">12+</div><div class="kpi-label">LinkedIn Posts Published</div></div>
+    <div class="kpi-card"><div class="kpi-val">60+</div><div class="kpi-label">Network Touches (Warm)</div></div>
+    <div class="kpi-card"><div class="kpi-val">2+</div><div class="kpi-label">Speaking or Visibility Moments</div></div>
+    <div class="kpi-card"><div class="kpi-val">CPF</div><div class="kpi-label">IAF Credential Stage Advanced</div></div>
+  </div>
+
+  <div class="closing">
+    <strong>A note on pace and sustainability.</strong> This plan is designed to be executable by one person without a team &mdash; because the work itself is the priority. No tactic here requires more than a few hours per week. The rhythm is consistent, not exhausting. Content emerges from the work that is already happening. Outreach comes from real relationships, not cold lists. The goal is a practice that grows because of who Jacqueline is and what The Greer Collective delivers, not because of volume or performance.
+    <br><br>
+    The Thriving Framework is not just the subject of a future book. It is the filter this plan runs through. Every decision here was checked against one question: does this protect the thriving, or does it trade it for something else?
+    <br><br>
+    <em>Sincerely, prepared with care for The Greer Collective &mdash; June 2026.</em>
+  </div>
+
+</div>
+</body>
+</html>

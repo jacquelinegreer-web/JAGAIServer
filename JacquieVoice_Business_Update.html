@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JacquieVoice LLC — Business Update</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --plum: #5B2D8E;
+    --plum-dark: #3E1B65;
+    --gold: #9A6F00;
+    --gold-light: #C4950A;
+    --pale-gold: #F5E6B8;
+    --cream: #FDF8F0;
+    --warm-gray: #6B5E52;
+    --ink: #1C1410;
+    --success: #2D7A4F;
+    --success-bg: #EAF5EE;
+    --pending: #7A5200;
+    --pending-bg: #FFF8E6;
+    --todo: #3E1B65;
+    --todo-bg: #F3EEF9;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    border-bottom: 1.5px solid var(--plum);
+    padding-bottom: 1.25rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .wordmark {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 2rem;
+    color: var(--plum-dark);
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+
+  .wordmark span {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .date-badge {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  /* Section headers */
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 0.5px solid var(--pale-gold);
+  }
+
+  .section {
+    margin-bottom: 2rem;
+  }
+
+  /* Stat cards */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: white;
+    border: 0.5px solid #E8DDD0;
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--plum);
+  }
+
+  .stat-card.gold::before { background: var(--gold); }
+
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 2rem;
+    color: var(--plum-dark);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-card.gold .stat-value { color: var(--gold); }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--warm-gray);
+    letter-spacing: 0.04em;
+  }
+
+  /* Checklist */
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 6px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    border: 0.5px solid transparent;
+    user-select: none;
+  }
+
+  .check-item:hover { opacity: 0.85; }
+
+  .check-item.done {
+    background: var(--success-bg);
+    border-color: #C3E0CE;
+    color: var(--success);
+  }
+
+  .check-item.pending {
+    background: var(--pending-bg);
+    border-color: #F0DFA0;
+    color: var(--pending);
+  }
+
+  .check-item.todo {
+    background: var(--todo-bg);
+    border-color: #D8CCE8;
+    color: var(--todo);
+  }
+
+  .check-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .check-text { flex: 1; }
+  .check-text strong { font-weight: 600; }
+  .check-note {
+    font-size: 11.5px;
+    opacity: 0.75;
+    margin-top: 2px;
+    display: block;
+  }
+
+  /* Platform table */
+  .platform-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .platform-row {
+    display: grid;
+    grid-template-columns: 1fr 90px 90px;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.55rem 0.85rem;
+    background: white;
+    border: 0.5px solid #E8DDD0;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+
+  .platform-row.header-row {
+    background: var(--plum-dark);
+    color: white;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-color: var(--plum-dark);
+  }
+
+  .platform-name { font-weight: 500; color: var(--ink); }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .pill.done { background: var(--success-bg); color: var(--success); }
+  .pill.todo { background: var(--todo-bg); color: var(--todo); }
+  .pill.na { background: #F0EDE8; color: var(--warm-gray); }
+
+  /* SSDI section */
+  .ssdi-banner {
+    background: linear-gradient(135deg, var(--plum-dark) 0%, var(--plum) 100%);
+    border-radius: 10px;
+    padding: 1.25rem 1.4rem;
+    color: white;
+    margin-bottom: 2rem;
+  }
+
+  .ssdi-banner h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    color: var(--pale-gold);
+    font-style: italic;
+  }
+
+  .ssdi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .ssdi-item {
+    background: rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .ssdi-item-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pale-gold);
+    margin-bottom: 0.2rem;
+  }
+
+  .ssdi-item-value {
+    font-size: 13px;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.4;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    height: 6px;
+    margin-top: 1rem;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: var(--pale-gold);
+    border-radius: 20px;
+    transition: width 0.6s ease;
+  }
+
+  .progress-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 0.4rem;
+    text-align: right;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 0.5px solid #E8DDD0;
+    font-size: 11px;
+    color: var(--warm-gray);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 520px) {
+    .wordmark { font-size: 1.5rem; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .platform-row { grid-template-columns: 1fr 80px 80px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="wordmark">Jacquie<span>Voice</span>, LLC</div>
+    <div class="date-badge" id="live-date">Loading...</div>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value">✓</div>
+      <div class="stat-label">LLC Active in Maryland</div>
+    </div>
+    <div class="stat-card gold">
+      <div class="stat-value">EIN</div>
+      <div class="stat-label">42-2682671 · Confirmed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">800+</div>
+      <div class="stat-label">Completed VO Projects</div>
+    </div>
+    <div class="stat-card gold">
+      <div class="stat-value">5+</div>
+      <div class="stat-label">Active VO Platforms</div>
+    </div>
+  </div>
+
+  <!-- LLC Setup Checklist -->
+  <div class="section">
+    <div class="section-label">LLC Formation Checklist</div>
+    <div class="checklist" id="llc-checklist"></div>
+  </div>
+
+  <!-- Platform Update Status -->
+  <div class="section">
+    <div class="section-label">Platform Payment & Tax Updates</div>
+    <div class="platform-grid">
+      <div class="platform-row header-row">
+        <div>Platform</div>
+        <div>Payout Routed</div>
+        <div>EIN Updated</div>
+      </div>
+    </div>
+    <div class="platform-grid" id="platform-grid" style="margin-top: 0.4rem;"></div>
+  </div>
+
+  <!-- SSDI Banner -->
+  <div class="ssdi-banner">
+    <h3>Benefits Transition Awareness</h3>
+    <div class="ssdi-grid">
+      <div class="ssdi-item">
+        <div class="ssdi-item-label">SGA Threshold</div>
+        <div class="ssdi-item-value">~$1,550/mo net (2026)</div>
+      </div>
+      <div class="ssdi-item">
+        <div class="ssdi-item-label">Trial Work Period</div>
+        <div class="ssdi-item-value">9 months available</div>
+      </div>
+      <div class="ssdi-item">
+        <div class="ssdi-item-label">EPE Safety Net</div>
+        <div class="ssdi-item-value">36 months post-TWP</div>
+      </div>
+      <div class="ssdi-item">
+        <div class="ssdi-item-label">SSA Report Due</div>
+        <div class="ssdi-item-value">As soon as possible</div>
+      </div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="transition-bar" style="width: 15%"></div>
+    </div>
+    <div class="progress-label">Phase 1 of 3 — Build</div>
+  </div>
+
+  <!-- SSDI Action Items -->
+  <div class="section">
+    <div class="section-label">Benefits Transition Actions</div>
+    <div class="checklist" id="ssdi-checklist"></div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>JacquieVoice, LLC · EIN 42-2682671 · Bladensburg, MD 20710</span>
+    <span><a href="mailto:jacqueline@jacquievoice.com">jacqueline@jacquievoice.com</a></span>
+  </div>
+
+</div>
+
+<script>
+// Live date
+function updateDate() {
+  const now = new Date();
+  const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('live-date').textContent = now.toLocaleDateString('en-US', opts);
+}
+updateDate();
+setInterval(updateDate, 60000);
+
+// Persistent state via localStorage
+function getState(key, defaultVal) {
+  try {
+    const stored = localStorage.getItem(key);
+    return stored !== null ? JSON.parse(stored) : defaultVal;
+  } catch(e) { return defaultVal; }
+}
+
+function setState(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+}
+
+// LLC Checklist
+const llcItems = [
+  { id: 'llc1', text: 'Maryland Articles of Organization filed', note: 'Dept ID W27239854 · Effective April 16, 2026', default: true },
+  { id: 'llc2', text: 'EIN obtained from IRS', note: 'EIN 42-2682671 · Notice CP575G saved', default: true },
+  { id: 'llc3', text: 'Acknowledgement letter downloaded and saved', note: 'Keep with business records', default: true },
+  { id: 'llc4', text: 'Business checking account opened', note: 'Under JacquieVoice, LLC using EIN — BofA, Navy Federal, or Relay', default: false },
+  { id: 'llc5', text: 'Wave connected to business bank account', note: 'Update business name to JacquieVoice, LLC in Wave', default: false },
+  { id: 'llc6', text: 'Invoice templates updated with LLC name and EIN', note: null, default: false },
+  { id: 'llc7', text: 'Operating Agreement drafted', note: 'Simple single-member template is fine', default: false },
+  { id: 'llc8', text: 'Trade name filed for The Greer Collective', note: 'Separate SDAT filing at dat.maryland.gov', default: false },
+  { id: 'llc9', text: "Prince George's County business license checked", note: 'Home-based service business in Bladensburg, PG County', default: false },
+  { id: 'llc10', text: 'Maryland Annual Report reminder set', note: 'Due April 15 annually · $300 fee', default: false },
+  { id: 'llc11', text: 'Quarterly estimated tax payments begun', note: 'Consult tax professional for amounts', default: false },
+];
+
+function buildChecklist(containerId, items) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  items.forEach(item => {
+    const checked = getState(item.id, item.default);
+    const div = document.createElement('div');
+    div.className = 'check-item ' + (checked ? 'done' : 'todo');
+    div.innerHTML = `
+      <div class="check-icon">${checked ? '✓' : '○'}</div>
+      <div class="check-text">
+        <strong>${item.text}</strong>
+        ${item.note ? `<span class="check-note">${item.note}</span>` : ''}
+      </div>`;
+    div.addEventListener('click', () => {
+      const newVal = !getState(item.id, item.default);
+      setState(item.id, newVal);
+      buildChecklist(containerId, items);
+    });
+    container.appendChild(div);
+  });
+}
+
+buildChecklist('llc-checklist', llcItems);
+
+// Platform grid
+const platforms = [
+  { name: 'Fiverr', id: 'fiverr' },
+  { name: 'Voice123', id: 'v123' },
+  { name: 'Voices.com', id: 'voices' },
+  { name: 'Voquent', id: 'voquent' },
+  { name: 'Voice Realm', id: 'vrealm' },
+  { name: 'ACX', id: 'acx' },
+];
+
+function buildPlatformGrid() {
+  const grid = document.getElementById('platform-grid');
+  grid.innerHTML = '';
+  platforms.forEach(p => {
+    const payout = getState(p.id + '_payout', false);
+    const ein = getState(p.id + '_ein', false);
+    const row = document.createElement('div');
+    row.className = 'platform-row';
+    row.innerHTML = `
+      <div class="platform-name">${p.name}</div>
+      <div><span class="pill ${payout ? 'done' : 'todo'}" style="cursor:pointer" data-id="${p.id}_payout">${payout ? 'Done' : 'Pending'}</span></div>
+      <div><span class="pill ${ein ? 'done' : 'todo'}" style="cursor:pointer" data-id="${p.id}_ein">${ein ? 'Done' : 'Pending'}</span></div>`;
+    grid.appendChild(row);
+  });
+
+  grid.querySelectorAll('.pill[data-id]').forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const key = pill.dataset.id;
+      setState(key, !getState(key, false));
+      buildPlatformGrid();
+    });
+  });
+}
+
+buildPlatformGrid();
+
+// SSDI Checklist
+const ssdiItems = [
+  { id: 'ssdi1', text: 'Report new LLC to SSA', note: 'Call 1-800-772-1213 · Ask about current TWP status', default: false },
+  { id: 'ssdi2', text: 'Book WIPA counselor session', note: 'Free at choosework.ssa.gov · Map out income transition plan', default: false },
+  { id: 'ssdi3', text: 'Set up expense tracking for IRWE deductions', note: 'Studio equipment, software, platform fees, home studio %', default: false },
+  { id: 'ssdi4', text: 'SSDI and business accounts fully separated', note: 'No business income routed to BofA savings (SSDI account)', default: false },
+];
+
+buildChecklist('ssdi-checklist', ssdiItems);
+</script>
+</body>
+</html>

@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greer Collective</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --aubergine: #2C1A2E;
+  --plum: #4A2455;
+  --plum-mid: #6B3D7A;
+  --gold: #B8922A;
+  --gold-light: #D4A843;
+  --gold-pale: #F5ECD4;
+  --cream: #FAF6EF;
+  --cream-dark: #EDE4D4;
+  --warm-white: #FDFAF5;
+  --text-dark: #1C1016;
+  --text-mid: #4A3A4E;
+  --text-light: #8A7A8E;
+  --border: rgba(184,146,42,0.2);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  font-family: 'Jost', sans-serif;
+  color: var(--text-dark);
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.5rem 4rem;
+  background: rgba(250,246,239,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+
+/* SVG LOGO */
+.logo-mark {
+  width: 38px; height: 38px; flex-shrink: 0;
+}
+
+.nav-wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--aubergine);
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex; gap: 2.5rem; list-style: none;
+}
+.nav-links a {
+  font-size: 12px; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase; text-decoration: none;
+  color: var(--text-mid);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+
+.nav-cta {
+  font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+  text-decoration: none; padding: 10px 22px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  transition: all 0.2s;
+}
+.nav-cta:hover { background: var(--gold); color: white; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--aubergine);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+
+/* decorative grain texture overlay */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* gold geometric accent */
+.hero-accent {
+  position: absolute;
+  top: 0; right: 0;
+  width: 50%; height: 100%;
+  background: linear-gradient(135deg, transparent 0%, rgba(184,146,42,0.06) 100%);
+  border-left: 1px solid rgba(184,146,42,0.15);
+  z-index: 1;
+}
+
+.hero-left {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 8rem 4rem 6rem 8rem;
+  position: relative; z-index: 2;
+}
+
+.hero-eyebrow {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 1.75rem;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block; width: 32px; height: 1px;
+  background: var(--gold-light);
+}
+
+.hero-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(48px, 5vw, 72px);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--cream);
+  margin-bottom: 0.25rem;
+}
+.hero-headline em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+.hero-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(250,246,239,0.65);
+  margin: 1.5rem 0 2.5rem;
+  max-width: 480px;
+}
+
+.hero-ctas {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+}
+.btn-primary {
+  font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  text-decoration: none; padding: 14px 32px;
+  background: var(--gold);
+  color: var(--aubergine);
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-primary:hover { background: var(--gold-light); }
+.btn-ghost {
+  font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  text-decoration: none; padding: 14px 32px;
+  border: 1px solid rgba(250,246,239,0.3);
+  color: rgba(250,246,239,0.75);
+  transition: all 0.2s; display: inline-block;
+}
+.btn-ghost:hover { border-color: var(--gold-light); color: var(--gold-light); }
+
+.hero-right {
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 8rem 6rem 0 2rem;
+  position: relative; z-index: 2;
+}
+
+/* large decorative G monogram */
+.hero-monogram {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 340px;
+  font-weight: 600;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(184,146,42,0.2);
+  user-select: none;
+  pointer-events: none;
+  position: absolute;
+  right: 4rem; bottom: -2rem;
+  letter-spacing: -0.05em;
+}
+
+.hero-pillars {
+  position: absolute;
+  bottom: 3rem; right: 5rem; z-index: 3;
+  display: flex; gap: 2rem;
+}
+.hero-pillar {
+  text-align: center;
+}
+.pillar-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px; font-weight: 300;
+  color: var(--gold-light);
+  line-height: 1;
+}
+.pillar-label {
+  font-size: 9px; font-weight: 500; letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(250,246,239,0.4);
+  margin-top: 4px;
+}
+
+/* ── ABOUT STRIP ── */
+.about-strip {
+  background: var(--gold-pale);
+  padding: 1.5rem 8rem;
+  display: flex; align-items: center; gap: 4rem;
+  border-top: 1px solid rgba(184,146,42,0.3);
+  border-bottom: 1px solid rgba(184,146,42,0.3);
+}
+.strip-item {
+  font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--plum);
+  display: flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.strip-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); }
+
+/* ── ABOUT SECTION ── */
+.about {
+  padding: 8rem 8rem;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6rem; align-items: center;
+  background: var(--warm-white);
+}
+
+.about-label {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1.25rem;
+}
+
+.about-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4vw, 54px);
+  font-weight: 300; line-height: 1.15;
+  color: var(--aubergine); margin-bottom: 2rem;
+}
+.about-headline em { font-style: italic; }
+
+.about-body {
+  font-size: 15px; line-height: 1.8; color: var(--text-mid);
+  margin-bottom: 1.5rem;
+}
+
+.about-sig {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-style: italic; font-weight: 300;
+  color: var(--plum-mid); margin-top: 2rem;
+}
+
+.about-right {
+  position: relative;
+}
+
+.about-card {
+  background: var(--aubergine);
+  padding: 3rem;
+  position: relative;
+}
+.about-card::before {
+  content: '';
+  position: absolute; top: -12px; left: -12px; right: 12px; bottom: 12px;
+  border: 1px solid var(--gold);
+  pointer-events: none;
+}
+
+.credential-list {
+  list-style: none;
+}
+.credential-item {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid rgba(184,146,42,0.2);
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.credential-item:last-child { border-bottom: none; }
+.cred-icon {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border: 1px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px; color: var(--gold);
+  margin-top: 2px;
+}
+.cred-title {
+  font-size: 13px; font-weight: 500; letter-spacing: 0.04em;
+  color: var(--cream); margin-bottom: 3px;
+}
+.cred-sub {
+  font-size: 12px; color: rgba(250,246,239,0.5); line-height: 1.5;
+}
+
+/* ── SERVICES ── */
+.services {
+  padding: 8rem 8rem;
+  background: var(--cream);
+}
+
+.services-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 4rem;
+}
+
+.services-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4vw, 54px);
+  font-weight: 300; line-height: 1.1;
+  color: var(--aubergine);
+}
+.services-title em { font-style: italic; }
+
+.services-desc {
+  max-width: 360px;
+  font-size: 14px; line-height: 1.75; color: var(--text-light);
+}
+
+.pillar-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--cream-dark);
+  border: 1px solid var(--cream-dark);
+}
+
+.pillar-card {
+  background: var(--warm-white);
+  padding: 3rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: default;
+}
+.pillar-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: var(--gold);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s;
+}
+.pillar-card:hover { background: var(--aubergine); }
+.pillar-card:hover::after { transform: scaleX(1); }
+.pillar-card:hover .pillar-card-num,
+.pillar-card:hover .pillar-card-title,
+.pillar-card:hover .pillar-card-body,
+.pillar-card:hover .pillar-service { color: rgba(250,246,239,0.7); }
+.pillar-card:hover .pillar-card-title { color: var(--gold-light); }
+.pillar-card:hover .pillar-card-num { color: rgba(184,146,42,0.4); }
+
+.pillar-card-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 64px; font-weight: 300; line-height: 1;
+  color: var(--cream-dark);
+  position: absolute; top: 1.5rem; right: 2rem;
+  transition: color 0.3s;
+  user-select: none;
+}
+
+.pillar-card-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.pillar-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 400; line-height: 1.2;
+  color: var(--aubergine); margin-bottom: 1rem;
+  transition: color 0.3s;
+}
+
+.pillar-card-body {
+  font-size: 13px; line-height: 1.8; color: var(--text-mid);
+  margin-bottom: 1.75rem; transition: color 0.3s;
+}
+
+.pillar-services {
+  list-style: none; display: flex; flex-direction: column; gap: 6px;
+}
+.pillar-service {
+  font-size: 12px; color: var(--text-light);
+  display: flex; align-items: center; gap: 8px;
+  transition: color 0.3s;
+}
+.pillar-service::before {
+  content: '';
+  width: 16px; height: 1px; background: var(--gold); flex-shrink: 0;
+}
+
+/* ── QUOTE BREAK ── */
+.quote-break {
+  background: var(--plum);
+  padding: 7rem 12rem;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.quote-break::before {
+  content: '\201C';
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 300px; line-height: 1;
+  color: rgba(255,255,255,0.04);
+  position: absolute; top: -1rem; left: 4rem;
+  user-select: none;
+}
+
+.quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: 300; font-style: italic;
+  line-height: 1.4; color: var(--cream);
+  position: relative; z-index: 1;
+  margin-bottom: 2rem;
+}
+.quote-text strong { font-style: normal; color: var(--gold-light); font-weight: 400; }
+
+.quote-attr {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.15em;
+  text-transform: uppercase; color: rgba(250,246,239,0.4);
+}
+
+/* ── EXPERIENCE ── */
+.experience {
+  padding: 8rem 8rem;
+  background: var(--warm-white);
+  display: grid; grid-template-columns: 1fr 2fr;
+  gap: 6rem;
+}
+
+.exp-left .exp-label { font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; }
+.exp-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 3.5vw, 48px);
+  font-weight: 300; line-height: 1.15;
+  color: var(--aubergine);
+}
+.exp-headline em { font-style: italic; }
+
+.exp-right { display: flex; flex-direction: column; gap: 0; }
+
+.exp-item {
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--cream-dark);
+  display: grid; grid-template-columns: 140px 1fr;
+  gap: 2rem; align-items: baseline;
+}
+.exp-item:first-child { border-top: 1px solid var(--cream-dark); }
+
+.exp-period {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--gold);
+}
+.exp-org {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 400;
+  color: var(--aubergine); margin-bottom: 4px;
+}
+.exp-role {
+  font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--text-light);
+  margin-bottom: 8px;
+}
+.exp-desc {
+  font-size: 13px; line-height: 1.75; color: var(--text-mid);
+}
+
+/* ── APPROACH ── */
+.approach {
+  padding: 8rem 8rem;
+  background: var(--aubergine);
+}
+
+.approach-header {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 4rem; margin-bottom: 5rem;
+}
+.approach-label { font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; }
+.approach-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4vw, 54px); font-weight: 300; line-height: 1.15;
+  color: var(--cream);
+}
+.approach-title em { font-style: italic; color: var(--gold-light); }
+.approach-intro { font-size: 15px; line-height: 1.85; color: rgba(250,246,239,0.6); padding-top: 2.5rem; }
+
+.approach-values {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 1px; background: rgba(184,146,42,0.15);
+}
+.value-card {
+  background: rgba(44,26,46,0.6);
+  padding: 2.5rem 2rem;
+  border-top: 2px solid transparent;
+  transition: border-color 0.3s;
+}
+.value-card:hover { border-color: var(--gold); }
+.value-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px; font-weight: 300;
+  color: rgba(184,146,42,0.3); line-height: 1; margin-bottom: 1.25rem;
+}
+.value-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 400;
+  color: var(--gold-light); margin-bottom: 0.75rem;
+}
+.value-body { font-size: 13px; line-height: 1.75; color: rgba(250,246,239,0.5); }
+
+/* ── CONTACT ── */
+.contact {
+  padding: 8rem 8rem;
+  background: var(--cream);
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6rem; align-items: start;
+}
+
+.contact-label { font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; }
+.contact-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4vw, 54px); font-weight: 300; line-height: 1.15;
+  color: var(--aubergine); margin-bottom: 1.5rem;
+}
+.contact-title em { font-style: italic; }
+.contact-body { font-size: 15px; line-height: 1.8; color: var(--text-mid); margin-bottom: 2rem; }
+
+.contact-links { display: flex; flex-direction: column; gap: 1rem; }
+.contact-link {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 13px; color: var(--text-mid); text-decoration: none;
+  transition: color 0.2s;
+}
+.contact-link:hover { color: var(--gold); }
+.contact-link-icon {
+  width: 36px; height: 36px;
+  border: 1px solid var(--cream-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--gold); flex-shrink: 0;
+  transition: all 0.2s;
+}
+.contact-link:hover .contact-link-icon { border-color: var(--gold); background: var(--gold-pale); }
+
+.contact-form { display: flex; flex-direction: column; gap: 1rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-light); }
+.form-input, .form-select, .form-textarea {
+  border: 1px solid var(--cream-dark);
+  background: white;
+  padding: 12px 16px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px; color: var(--text-dark);
+  outline: none; transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+.form-textarea { min-height: 120px; resize: vertical; }
+.form-submit {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--aubergine); color: var(--cream);
+  border: none; padding: 16px 32px;
+  cursor: pointer; transition: background 0.2s;
+  align-self: flex-start; margin-top: 0.5rem;
+}
+.form-submit:hover { background: var(--plum); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--aubergine);
+  padding: 4rem 8rem;
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid rgba(184,146,42,0.2);
+}
+.footer-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--cream);
+}
+.footer-tagline {
+  font-size: 11px; letter-spacing: 0.08em;
+  color: rgba(250,246,239,0.35); margin-top: 4px;
+}
+.footer-nav { display: flex; gap: 2rem; }
+.footer-nav a {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase; text-decoration: none;
+  color: rgba(250,246,239,0.4); transition: color 0.2s;
+}
+.footer-nav a:hover { color: var(--gold-light); }
+.footer-copy { font-size: 11px; color: rgba(250,246,239,0.25); }
+
+/* ── LOGO SHOWCASE ── */
+.logo-section {
+  padding: 6rem 8rem;
+  background: var(--cream);
+  border-top: 1px solid var(--cream-dark);
+}
+.logo-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px; font-weight: 400; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--text-light);
+  text-align: center; margin-bottom: 3rem;
+}
+.logo-variants {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 2px; background: var(--cream-dark);
+}
+.logo-variant {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 3rem;
+  gap: 1rem;
+}
+.logo-variant:nth-child(1) { background: var(--warm-white); }
+.logo-variant:nth-child(2) { background: var(--aubergine); }
+.logo-variant:nth-child(3) { background: var(--gold-pale); }
+.variant-label {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.logo-variant:nth-child(1) .variant-label { color: var(--text-light); }
+.logo-variant:nth-child(2) .variant-label { color: rgba(250,246,239,0.35); }
+.logo-variant:nth-child(3) .variant-label { color: var(--gold); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-eyebrow { animation: fadeUp 0.6s ease both 0.2s; }
+.hero-headline { animation: fadeUp 0.6s ease both 0.35s; }
+.hero-sub { animation: fadeUp 0.6s ease both 0.5s; }
+.hero-ctas { animation: fadeUp 0.6s ease both 0.65s; }
+
+@media (max-width: 1024px) {
+  nav { padding: 1.25rem 2rem; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-left { padding: 8rem 2rem 4rem; }
+  .hero-monogram { font-size: 200px; right: 1rem; }
+  .hero-right { display: none; }
+  .about-strip { padding: 1.5rem 2rem; overflow-x: auto; }
+  .about, .services, .experience, .approach-header, .contact { padding: 5rem 2rem; }
+  .about { grid-template-columns: 1fr; }
+  .pillar-grid { grid-template-columns: 1fr; }
+  .approach-header { grid-template-columns: 1fr; }
+  .approach-values { grid-template-columns: 1fr 1fr; }
+  .experience { grid-template-columns: 1fr; gap: 2rem; }
+  .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+  .contact { grid-template-columns: 1fr; }
+  .quote-break { padding: 5rem 2rem; }
+  footer { padding: 3rem 2rem; flex-direction: column; gap: 1.5rem; text-align: center; }
+  .logo-section { padding: 4rem 2rem; }
+  .logo-variants { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <!-- LOGO MARK: interlocking G·C monogram -->
+    <svg class="logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1" y="1" width="36" height="36" stroke="#B8922A" stroke-width="0.75"/>
+      <!-- G -->
+      <path d="M10 12 C10 8 14 6 18 7 C22 8 23 11 23 11 L21 12 C21 12 20 10 18 9.5 C15 9 12 10.5 12 14 C12 17.5 14 19.5 18 19.5 L18 17 L16 17 L16 15 L20 15 L20 20 C20 20 17 21 15 20.5 C11 19 10 16 10 12Z" fill="#2C1A2E"/>
+      <!-- C -->
+      <path d="M28 14 C28 14 26 12 24 12.5 C21.5 13 20.5 15 20.5 17.5 C20.5 20 22 22 24.5 22 C26.5 22 28 20.5 28 20.5 L29 22 C29 22 27 24 24 23.5 C20 23 18.5 20 18.5 17.5 C18.5 14.5 20.5 11 24 11 C27 11 29 13 29 13 Z" fill="#B8922A"/>
+    </svg>
+    <span class="nav-wordmark">The Greer Collective</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#approach">Approach</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Work Together</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-accent"></div>
+  <div class="hero-left">
+    <div class="hero-eyebrow">Executive Leadership · Consulting · Coaching</div>
+    <h1 class="hero-headline">
+      Leadership<br>that moves<br><em>people forward.</em>
+    </h1>
+    <p class="hero-sub">
+      Executive leadership consulting, facilitation, and coaching for the leaders and institutions ready to do their most meaningful work.
+    </p>
+    <div class="hero-ctas">
+      <a href="#services" class="btn-primary">Explore Services</a>
+      <a href="#about" class="btn-ghost">About Jacqueline</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-monogram">G</div>
+    <div class="hero-pillars">
+      <div class="hero-pillar">
+        <div class="pillar-num">03</div>
+        <div class="pillar-label">Pillars</div>
+      </div>
+      <div class="hero-pillar">
+        <div class="pillar-num">15+</div>
+        <div class="pillar-label">Years</div>
+      </div>
+      <div class="hero-pillar">
+        <div class="pillar-num">DC</div>
+        <div class="pillar-label">Based</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT STRIP -->
+<div class="about-strip">
+  <div class="strip-item"><span class="strip-dot"></span>IAF Member · CPF Candidate 2026</div>
+  <div class="strip-item"><span class="strip-dot"></span>Deloitte Facilitator — USPS LDP</div>
+  <div class="strip-item"><span class="strip-dot"></span>Education Pioneers Fellow</div>
+  <div class="strip-item"><span class="strip-dot"></span>Harvard Kennedy School · University of Chicago</div>
+  <div class="strip-item"><span class="strip-dot"></span>EHCLI Alumna</div>
+  <div class="strip-item"><span class="strip-dot"></span>ICF ACC Coaching Credential (In Progress)</div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-left">
+    <div class="about-label">About</div>
+    <h2 class="about-headline">The work is<br>always about<br><em>the people.</em></h2>
+    <p class="about-body">
+      Greer Collective is the executive leadership consulting and coaching practice of Jacqueline Greer — a leadership development strategist with over 20 years of VP-level experience in education, nonprofit, and government sectors.
+    </p>
+    <p class="about-body">
+      Whether facilitating a leadership cohort of USPS executives at the Bolger Center, coaching a leader navigating a pivotal career transition, or designing a flagship program from the ground up, the approach is always the same: build the conditions for people to do their best collective work.
+    </p>
+    <p class="about-body">
+      Jacqueline's practice is grounded in adaptive leadership, adult learning theory, and equity-centered facilitation — and shaped by VP-level experience at Equal Opportunity Schools and Urban Teachers (City Teaching Alliance), where she co-built and led programs that changed lives at scale.
+    </p>
+    <p class="about-body" style="font-size:13px; color: var(--text-light); font-style: italic;">
+      Jacqueline also works as a professional narrator and voice artist under <a href="https://www.jacquievoice.com" target="_blank" style="color: var(--gold); text-decoration: none;">JacquieVoice</a> — a separate creative brand. Same woman, same DNA, a different room entirely.
+    </p>
+    <div class="about-sig">— Jacqueline Greer</div>
+  </div>
+  <div class="about-right">
+    <div class="about-card">
+      <ul class="credential-list">
+        <li class="credential-item">
+          <div class="cred-icon">M</div>
+          <div>
+            <div class="cred-title">Harvard Kennedy School</div>
+            <div class="cred-sub">Master of Public Policy · 2007 · Organizing under Marshall Ganz</div>
+          </div>
+        </li>
+        <li class="credential-item">
+          <div class="cred-icon">B</div>
+          <div>
+            <div class="cred-title">University of Chicago</div>
+            <div class="cred-sub">BS · Public Policy Studies</div>
+          </div>
+        </li>
+        <li class="credential-item">
+          <div class="cred-icon">ICF</div>
+          <div>
+            <div class="cred-title">ICF ACC Credential · In Progress</div>
+            <div class="cred-sub">International Coaching Federation · Target November 2026</div>
+          </div>
+        </li>
+        <li class="credential-item">
+          <div class="cred-icon">F</div>
+          <div>
+            <div class="cred-title">Education Pioneers Fellow</div>
+            <div class="cred-sub">Selective leadership fellowship in education innovation</div>
+          </div>
+        </li>
+        <li class="credential-item">
+          <div class="cred-icon">E</div>
+          <div>
+            <div class="cred-title">EHCLI Alumna</div>
+            <div class="cred-sub">Emerging Human Capital Leaders Initiative</div>
+          </div>
+        </li>
+        <li class="credential-item">
+          <div class="cred-icon">IAF</div>
+          <div>
+            <div class="cred-title">IAF Member · CPF Candidate</div>
+            <div class="cred-sub">International Association of Facilitators · 2026</div>
+          </div>
+        </li>
+        <li class="credential-item">
+          <div class="cred-icon">D</div>
+          <div>
+            <div class="cred-title">Deloitte Consulting Subcontractor</div>
+            <div class="cred-sub">USPS Leadership Development Program · 2025–2026</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-header">
+    <h2 class="services-title">Two pillars.<br><em>One practice.</em></h2>
+    <p class="services-desc">The Greer Collective operates across two interconnected service areas — each distinct in scope, unified by a commitment to human-centered leadership and organizational excellence.</p>
+  </div>
+  <div class="pillar-grid" style="grid-template-columns: repeat(2, 1fr);">
+
+    <div class="pillar-card">
+      <span class="pillar-card-num">01</span>
+      <div class="pillar-card-label">Pillar One</div>
+      <h3 class="pillar-card-title">Consulting</h3>
+      <p class="pillar-card-body">Strategic facilitation and organizational consulting for government, nonprofit, and education institutions navigating complexity, change, and growth. This is the work Jacqueline was built to do.</p>
+      <ul class="pillar-services">
+        <li class="pillar-service">Leadership program design &amp; facilitation</li>
+        <li class="pillar-service">Strategic planning &amp; stakeholder alignment</li>
+        <li class="pillar-service">Organizational development</li>
+        <li class="pillar-service">Multi-stakeholder facilitation</li>
+        <li class="pillar-service">Talent &amp; human capital strategy</li>
+      </ul>
+    </div>
+
+    <div class="pillar-card">
+      <span class="pillar-card-num">02</span>
+      <div class="pillar-card-label">Pillar Two</div>
+      <h3 class="pillar-card-title">Coaching</h3>
+      <p class="pillar-card-body">Executive coaching for women and emerging leaders developing the confidence, clarity, and presence to step into their next chapter — on their own terms. ICF-aligned practice.</p>
+      <ul class="pillar-services">
+        <li class="pillar-service">Executive leadership coaching</li>
+        <li class="pillar-service">Career pivot &amp; transition coaching</li>
+        <li class="pillar-service">Leadership presence &amp; vision</li>
+        <li class="pillar-service">1:1 and cohort coaching engagements</li>
+        <li class="pillar-service">ICF ACC-credentialed practice (in progress)</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div style="margin-top: 2.5rem; padding: 2rem 2.5rem; background: var(--aubergine); display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;">
+    <div>
+      <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem;">Sister Brand</div>
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; color: var(--cream); line-height: 1.3;">Looking for professional narration<br>or voice work?</div>
+    </div>
+    <div style="text-align: right;">
+      <p style="font-size: 13px; color: rgba(250,246,239,0.6); line-height: 1.7; max-width: 320px; margin-bottom: 1.25rem;">JacquieVoice is Jacqueline's creative voice work brand — a separate practice, the same DNA. Corporate narration, e-learning, audiobooks, and mission-driven content.</p>
+      <a href="https://www.jacquievoice.com" target="_blank" style="font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; color: var(--gold); border: 1px solid var(--gold); padding: 10px 20px; display: inline-block;">Visit JacquieVoice ↗</a>
+    </div>
+  </div>
+
+</section>
+
+<!-- QUOTE BREAK -->
+<div class="quote-break">
+  <p class="quote-text">
+    "Groups already hold the insight they need.<br>
+    <strong>The right process is what releases it.</strong>"
+  </p>
+  <p class="quote-attr">— Jacqueline Greer, Principal · Greer Collective</p>
+</div>
+
+<!-- EXPERIENCE -->
+<section class="experience" id="experience">
+  <div class="exp-left">
+    <div class="exp-label">Experience</div>
+    <h2 class="exp-headline">Built at<br>the <em>highest</em><br>levels.</h2>
+  </div>
+  <div class="exp-right">
+    <div class="exp-item">
+      <div class="exp-period">2025–Present</div>
+      <div>
+        <div class="exp-org">Greer Collective</div>
+        <div class="exp-role">Principal & Founder</div>
+        <div class="exp-desc">Independent consulting, coaching, and creative practice. Current engagements include facilitation subcontract with Deloitte Consulting on the USPS Leadership Development Program — facilitating multi-day in-person leadership immersions and virtual checkpoints for USPS supervisory and executive-level cohorts.</div>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-period">2025–2026</div>
+      <div>
+        <div class="exp-org">Deloitte Consulting</div>
+        <div class="exp-role">Facilitation Subcontractor · USPS LDP (Agreement #120047-1)</div>
+        <div class="exp-desc">Lead facilitator for the Advanced Leadership Program (ALP) and Executive Leadership Program, supporting cohorts of USPS leaders through structured in-person and virtual leadership development sessions at the William F. Bolger Center.</div>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-period">Prior</div>
+      <div>
+        <div class="exp-org">Equal Opportunity Schools</div>
+        <div class="exp-role">Vice President (Leadership)</div>
+        <div class="exp-desc">VP-level executive leading program strategy, team development, and stakeholder facilitation across school districts and education systems. Facilitated complex multi-stakeholder alignment processes involving administrators, educators, and funders working on equity-centered education transformation.</div>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-period">Prior</div>
+      <div>
+        <div class="exp-org">Urban Teachers (City Teaching Alliance)</div>
+        <div class="exp-role">Founding / Chief Program Officer</div>
+        <div class="exp-desc">Co-built and led the program infrastructure of one of the nation's leading urban teacher preparation organizations. Oversaw design and delivery of leadership development programming, organizational strategy, and cohort-based learning for teaching professionals across multiple cities.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPROACH -->
+<section class="approach" id="approach">
+  <div class="approach-header">
+    <div>
+      <div class="approach-label">Our Approach</div>
+      <h2 class="approach-title">Process<br>is the<br><em>product.</em></h2>
+    </div>
+    <p class="approach-intro">
+      Greer Collective doesn't arrive with prescribed answers. The work begins by creating the conditions — the right room, the right sequence, the right questions — that allow individuals and organizations to surface what they already know and move toward what they're ready to become.<br><br>
+      This is grounded practice, not theory. Every engagement is designed around the specific group, goal, and moment at hand.
+    </p>
+  </div>
+  <div class="approach-values">
+    <div class="value-card">
+      <div class="value-num">01</div>
+      <div class="value-title">Human-centered</div>
+      <div class="value-body">People are not problems to be managed. They are the source of every organization's greatest capacity. The work starts there.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-num">02</div>
+      <div class="value-title">Equity-grounded</div>
+      <div class="value-body">Power dynamics, access, and lived experience shape every room. Effective facilitation and coaching account for what's in the room — and what isn't.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-num">03</div>
+      <div class="value-title">Rigorously adaptive</div>
+      <div class="value-body">Plans are starting points. What actually happens in the room — the questions that surface, the energy that shifts — is where real work gets done.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-num">04</div>
+      <div class="value-title">Built for transfer</div>
+      <div class="value-body">The measure of any engagement is what participants carry back into their organizations. Everything is designed with sustainable change as the destination.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-left">
+    <div class="contact-label">Get in Touch</div>
+    <h2 class="contact-title">Let's build<br><em>something</em><br>together.</h2>
+    <p class="contact-body">Whether you're looking for a facilitator for your next leadership program, a coach for a pivotal career moment, or a thought partner for your organization's most complex work — The Greer Collective is ready.</p>
+    <div class="contact-links">
+      <a href="mailto:jacqueline@greercollective.com" class="contact-link">
+        <div class="contact-link-icon">@</div>
+        jacqueline@greercollective.com
+      </a>
+      <a href="#" class="contact-link">
+        <div class="contact-link-icon">in</div>
+        LinkedIn · Jacqueline Greer
+      </a>
+      <a href="https://www.jacquievoice.com" target="_blank" class="contact-link">
+        <div class="contact-link-icon">♪</div>
+        JacquieVoice — Voice &amp; Narration (Sister Brand)
+      </a>
+    </div>
+  </div>
+  <div class="contact-right">
+    <form class="contact-form">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">First name</label><input type="text" class="form-input" placeholder="Jacqueline"></div>
+        <div class="form-group"><label class="form-label">Last name</label><input type="text" class="form-input" placeholder="Greer"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="you@organization.com"></div>
+      <div class="form-group"><label class="form-label">Organization</label><input type="text" class="form-input" placeholder="Your organization"></div>
+      <div class="form-group">
+        <label class="form-label">I'm interested in</label>
+        <select class="form-select">
+          <option value="">Select a service area</option>
+          <option>Consulting — Facilitation or Org Development</option>
+          <option>Coaching — Executive or Career Transition</option>
+          <option>Both — Consulting and Coaching</option>
+          <option>Something else — let's talk</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Tell me about your project</label><textarea class="form-textarea" placeholder="Share a bit about what you're working on, the timeline, and what kind of support would be most helpful."></textarea></div>
+      <button type="submit" class="form-submit">Send Message →</button>
+    </form>
+  </div>
+</section>
+
+<!-- LOGO VARIANTS SHOWCASE -->
+<section class="logo-section">
+  <div class="logo-section-title">Logo system · Three colorways for Squarespace</div>
+  <div class="logo-variants">
+
+    <!-- Light -->
+    <div class="logo-variant">
+      <svg width="180" height="64" viewBox="0 0 180 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- mark -->
+        <rect x="0.5" y="0.5" width="47" height="47" stroke="#B8922A" stroke-width="0.75"/>
+        <path d="M10 16 C10 11 15 8.5 20 9.5 C25 11 26.5 15 26.5 15 L24 16.5 C24 16.5 22.5 13.5 20 13 C16.5 12 13 14 13 18 C13 22 15.5 24.5 20.5 24.5 L20.5 21.5 L18 21.5 L18 19 L23 19 L23 25.5 C23 25.5 19.5 27 17 26.5 C12 25 10 21.5 10 16Z" fill="#2C1A2E"/>
+        <path d="M37 18 C37 18 35 15.5 32.5 16 C29.5 16.7 28 19 28 22 C28 25 30 27.5 33 27.5 C35.5 27.5 37.5 25.5 37.5 25.5 L38.5 27.5 C38.5 27.5 36 30 32.5 29.5 C27.5 28.5 25.5 25 25.5 22 C25.5 18.5 28 14.5 32.5 14.5 C36.5 14.5 39 17 39 17 Z" fill="#B8922A"/>
+        <!-- wordmark -->
+        <text x="58" y="22" font-family="'Cormorant Garamond', Georgia, serif" font-size="16" font-weight="600" letter-spacing="2" fill="#2C1A2E" text-anchor="start">GREER</text>
+        <text x="58" y="38" font-family="'Cormorant Garamond', Georgia, serif" font-size="16" font-weight="600" letter-spacing="2" fill="#2C1A2E" text-anchor="start">COLLECTIVE</text>
+        <line x1="58" y1="44" x2="175" y2="44" stroke="#B8922A" stroke-width="0.75"/>
+        <text x="58" y="55" font-family="'Jost', sans-serif" font-size="8" letter-spacing="3" fill="#8A7A8E" text-anchor="start">CONSULTING · COACHING · WASHINGTON DC</text>
+      </svg>
+      <div class="variant-label">Light / Primary</div>
+    </div>
+
+    <!-- Dark -->
+    <div class="logo-variant">
+      <svg width="180" height="64" viewBox="0 0 180 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0.5" y="0.5" width="47" height="47" stroke="#D4A843" stroke-width="0.75"/>
+        <path d="M10 16 C10 11 15 8.5 20 9.5 C25 11 26.5 15 26.5 15 L24 16.5 C24 16.5 22.5 13.5 20 13 C16.5 12 13 14 13 18 C13 22 15.5 24.5 20.5 24.5 L20.5 21.5 L18 21.5 L18 19 L23 19 L23 25.5 C23 25.5 19.5 27 17 26.5 C12 25 10 21.5 10 16Z" fill="#FAF6EF"/>
+        <path d="M37 18 C37 18 35 15.5 32.5 16 C29.5 16.7 28 19 28 22 C28 25 30 27.5 33 27.5 C35.5 27.5 37.5 25.5 37.5 25.5 L38.5 27.5 C38.5 27.5 36 30 32.5 29.5 C27.5 28.5 25.5 25 25.5 22 C25.5 18.5 28 14.5 32.5 14.5 C36.5 14.5 39 17 39 17 Z" fill="#D4A843"/>
+        <text x="58" y="22" font-family="'Cormorant Garamond', Georgia, serif" font-size="16" font-weight="600" letter-spacing="2" fill="#FAF6EF" text-anchor="start">GREER</text>
+        <text x="58" y="38" font-family="'Cormorant Garamond', Georgia, serif" font-size="16" font-weight="600" letter-spacing="2" fill="#FAF6EF" text-anchor="start">COLLECTIVE</text>
+        <line x1="58" y1="44" x2="175" y2="44" stroke="#D4A843" stroke-width="0.75"/>
+        <text x="58" y="55" font-family="'Jost', sans-serif" font-size="8" letter-spacing="3" fill="rgba(250,246,239,0.4)" text-anchor="start">CONSULTING · COACHING · WASHINGTON DC</text>
+      </svg>
+      <div class="variant-label">Dark / Reversed</div>
+    </div>
+
+    <!-- Gold -->
+    <div class="logo-variant">
+      <svg width="180" height="64" viewBox="0 0 180 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0.5" y="0.5" width="47" height="47" stroke="#2C1A2E" stroke-width="0.75"/>
+        <path d="M10 16 C10 11 15 8.5 20 9.5 C25 11 26.5 15 26.5 15 L24 16.5 C24 16.5 22.5 13.5 20 13 C16.5 12 13 14 13 18 C13 22 15.5 24.5 20.5 24.5 L20.5 21.5 L18 21.5 L18 19 L23 19 L23 25.5 C23 25.5 19.5 27 17 26.5 C12 25 10 21.5 10 16Z" fill="#2C1A2E"/>
+        <path d="M37 18 C37 18 35 15.5 32.5 16 C29.5 16.7 28 19 28 22 C28 25 30 27.5 33 27.5 C35.5 27.5 37.5 25.5 37.5 25.5 L38.5 27.5 C38.5 27.5 36 30 32.5 29.5 C27.5 28.5 25.5 25 25.5 22 C25.5 18.5 28 14.5 32.5 14.5 C36.5 14.5 39 17 39 17 Z" fill="#2C1A2E"/>
+        <text x="58" y="22" font-family="'Cormorant Garamond', Georgia, serif" font-size="16" font-weight="600" letter-spacing="2" fill="#2C1A2E" text-anchor="start">GREER</text>
+        <text x="58" y="38" font-family="'Cormorant Garamond', Georgia, serif" font-size="16" font-weight="600" letter-spacing="2" fill="#2C1A2E" text-anchor="start">COLLECTIVE</text>
+        <line x1="58" y1="44" x2="175" y2="44" stroke="#2C1A2E" stroke-width="0.75"/>
+        <text x="58" y="55" font-family="'Jost', sans-serif" font-size="8" letter-spacing="3" fill="#4A2455" text-anchor="start">CONSULTING · COACHING · WASHINGTON DC</text>
+      </svg>
+      <div class="variant-label">Gold / Accent background</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">The Greer Collective</div>
+    <div class="footer-tagline">Consulting · Coaching · Executive Leadership · Washington, DC</div>
+  </div>
+  <nav class="footer-nav">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#experience">Experience</a>
+    <a href="#contact">Contact</a>
+    <a href="https://www.jacquelinevoice.com" target="_blank">JacquieVoice ↗</a>
+  </nav>
+  <div class="footer-copy">© 2026 The Greer Collective · A DBA of JacquieVoice LLC · All rights reserved</div>
+</footer>
+
+</body>
+</html>
