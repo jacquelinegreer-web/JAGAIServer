@@ -13,249 +13,312 @@
       --pale: #f3f0fa;
       --card: #fff;
       --text: #2d2d2d;
-      --muted: #888;
+      --muted: #857e93;
       --border: #e0dae8;
       --green: #2e7d32;
+      --gold: #b8922a;
       --italy: #008c45;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    .hdr {
-      background: var(--purple);
-      color: white;
-      padding: 28px 32px 24px;
-      text-align: center;
-    }
+    .hdr { background: var(--purple); color: #fff; padding: 30px 32px 26px; text-align: center; }
     .hdr h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: .01em; }
-    .hdr p  { font-size: .85rem; opacity: .7; margin-top: 5px; }
-    .hdr-meta { margin-top: 14px; display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
-    .hdr-stat { background: rgba(255,255,255,.12); border-radius: 9px; padding: 7px 16px; font-size: .8rem; }
-    .hdr-stat b { font-size: 1.05rem; display: block; }
+    .hdr p  { font-size: .85rem; opacity: .72; margin-top: 6px; }
+    .hdr-meta { margin-top: 16px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .hdr-stat { background: rgba(255,255,255,.12); border-radius: 9px; padding: 8px 16px; font-size: .78rem; min-width: 96px; }
+    .hdr-stat b { font-size: 1.05rem; display: block; margin-bottom: 2px; }
 
-    .wrap { max-width: 1000px; margin: 0 auto; padding: 28px 20px 48px; }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 22px 20px 52px; }
+
+    .searchbar { position: relative; margin-bottom: 6px; }
+    .searchbar input {
+      width: 100%; padding: 12px 15px 12px 40px;
+      border: 1px solid var(--border); border-radius: 11px;
+      font-size: .92rem; font-family: inherit; color: var(--text);
+      background: var(--card);
+    }
+    .searchbar input:focus { outline: none; border-color: var(--mid); box-shadow: 0 0 0 3px rgba(124,92,191,.13); }
+    .searchbar::before { content: '🔍'; position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: .85rem; opacity: .5; }
+    .noresult { display: none; text-align: center; padding: 40px 20px; color: var(--muted); font-size: .9rem; }
 
     .section-title {
-      font-size: .68rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: var(--muted);
-      margin: 28px 0 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--muted); margin: 30px 0 12px; display: flex; align-items: center; gap: 10px;
     }
     .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(272px, 1fr)); gap: 12px; }
 
     .tool-card {
-      background: var(--card);
-      border-radius: 14px;
-      padding: 18px 20px;
-      box-shadow: 0 1px 4px rgba(0,0,0,.06);
-      border: 2px solid transparent;
-      text-decoration: none;
-      color: inherit;
-      display: block;
+      background: var(--card); border-radius: 14px; padding: 18px 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06); border: 2px solid transparent;
+      text-decoration: none; color: inherit; display: block;
       transition: border-color .15s, box-shadow .15s, transform .1s;
-      position: relative;
     }
-    .tool-card:hover { border-color: var(--mid); box-shadow: 0 4px 16px rgba(124,92,191,.12); transform: translateY(-2px); }
-    .tool-card.featured { border-color: var(--light); background: linear-gradient(135deg, #fff 80%, var(--pale)); }
+    .tool-card:hover { border-color: var(--mid); box-shadow: 0 4px 16px rgba(124,92,191,.14); transform: translateY(-2px); }
+    .tool-card.featured { border-color: var(--light); background: linear-gradient(135deg, #fff 78%, var(--pale)); }
     .tool-card.featured:hover { border-color: var(--mid); }
 
     .tc-icon { font-size: 1.7rem; margin-bottom: 10px; display: block; }
     .tc-name { font-size: .97rem; font-weight: 700; color: var(--purple); }
-    .tc-desc { font-size: .8rem; color: var(--muted); margin-top: 4px; line-height: 1.45; }
+    .tc-desc { font-size: .8rem; color: var(--muted); margin-top: 5px; line-height: 1.5; }
     .tc-badge {
-      display: inline-block;
-      font-size: .65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      padding: 2px 8px;
-      border-radius: 9px;
-      margin-top: 9px;
-      background: var(--light);
-      color: var(--purple);
+      display: inline-block; font-size: .63rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      padding: 3px 9px; border-radius: 9px; margin-top: 11px;
+      background: var(--light); color: var(--purple);
     }
-    .tc-badge.live { background: #e8f5e9; color: var(--green); }
-    .tc-badge.new  { background: #fff3e0; color: #d84c00; }
+    .tc-badge.live  { background: #e8f5e9; color: var(--green); }
+    .tc-badge.new   { background: #fdf3dd; color: #8a6a10; }
+    .tc-badge.hub   { background: #efe9fb; color: #56399c; }
     .tc-badge.italy { background: #e8f5ee; color: var(--italy); }
 
-    .coming-card {
-      background: #fafafa;
-      border-radius: 14px;
-      padding: 18px 20px;
-      border: 2px dashed var(--border);
-      opacity: .75;
-      cursor: default;
-    }
-    .coming-card .tc-name { color: var(--muted); }
-
-    .footer {
-      text-align: center;
-      padding: 24px;
-      font-size: .78rem;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
-    }
+    .footer { text-align: center; padding: 26px 20px 8px; font-size: .76rem; color: var(--muted); border-top: 1px solid var(--border); line-height: 1.9; }
     .footer a { color: var(--mid); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    @media (max-width: 560px) { .hdr { padding: 24px 18px 20px; } .hdr h1 { font-size: 1.28rem; } }
   </style>
 </head>
 <body>
 
 <div class="hdr">
   <h1>Greer Collective</h1>
-  <p>jacqueline.greer@gmail.com &nbsp;·&nbsp; Your personal business OS</p>
+  <p>Jacqueline Greer &nbsp;·&nbsp; The Greer Collective and JacquieVoice, in one place</p>
   <div class="hdr-meta">
-    <div class="hdr-stat"><b id="h-days">—</b>Days to Italy</div>
+    <div class="hdr-stat"><b id="h-count">—</b><span id="h-count-lab">Countdown</span></div>
     <div class="hdr-stat"><b id="h-date">—</b>Today</div>
-    <div class="hdr-stat"><b id="h-tools">—</b>Live tools</div>
+    <div class="hdr-stat"><b id="h-tools">—</b>Tools</div>
   </div>
 </div>
 
 <div class="wrap">
 
+  <div class="searchbar">
+    <input type="search" id="q" placeholder="Search the tools" autocomplete="off" aria-label="Search the tools">
+  </div>
+  <div class="noresult" id="noresult">Nothing matches that. Try a shorter word.</div>
+
   <div class="section-title">🏠 Home Base</div>
   <div class="grid">
-    <a class="tool-card featured" href="command-center.html">
+    <a class="tool-card featured" data-tags="dashboard tasks calendar pipeline home" href="command-center.html">
       <span class="tc-icon">⚡</span>
       <div class="tc-name">Command Center</div>
-      <div class="tc-desc">Live dashboard — tasks, calendar, pipeline, auditions, wellness, Italy prep, and budget all in one place.</div>
+      <div class="tc-desc">Tasks, calendar, pipeline, auditions, wellness, Italy prep, and budget in one live view.</div>
       <span class="tc-badge live">Live · Supabase</span>
     </a>
-    <a class="tool-card" href="ai-performance-dashboard.html">
+    <a class="tool-card" data-tags="ai automation metrics" href="ai-performance-dashboard.html">
       <span class="tc-icon">🤖</span>
       <div class="tc-name">AI Performance Dashboard</div>
-      <div class="tc-desc">Track how your AI tools and automations are performing across the business at a glance.</div>
-      <span class="tc-badge new">New</span>
+      <div class="tc-desc">How the AI tools and automations across the business are actually performing.</div>
+      <span class="tc-badge">Reference</span>
+    </a>
+  </div>
+
+  <div class="section-title">💰 Money &amp; Household</div>
+  <div class="grid">
+    <a class="tool-card featured" data-tags="uber eats doordash delivery restaurant food budget curtis dining takeout" href="dining-tracker.html">
+      <span class="tc-icon">🍜</span>
+      <div class="tc-name">Eating Out Tracker</div>
+      <div class="tc-desc">Delivery and restaurants logged with Curtis each week. Twice-a-week count and the $450 monthly target, through December 31.</div>
+      <span class="tc-badge new">New · Supabase</span>
+    </a>
+    <a class="tool-card" data-tags="wave receipts categories schedule c budget" href="expense-tracker.html">
+      <span class="tc-icon">🧾</span>
+      <div class="tc-name">Expense Tracker</div>
+      <div class="tc-desc">Business, medical, and personal expenses by category. Takes a Wave CSV import.</div>
+      <span class="tc-badge live">Live</span>
+    </a>
+    <a class="tool-card" data-tags="debt apr avalanche delta chase amex budget" href="credit-card-payoff.html">
+      <span class="tc-icon">💳</span>
+      <div class="tc-name">Credit Card Payoff</div>
+      <div class="tc-desc">Payoff timeline and avalanche planner. Never let the payment fall below the interest.</div>
+      <span class="tc-badge live">Live</span>
+    </a>
+  </div>
+
+  <div class="section-title">🧭 The Greer Collective</div>
+  <div class="grid">
+    <a class="tool-card featured" data-tags="clients consulting facilitation prospects leads crm greer collective" href="gc-pipeline.html">
+      <span class="tc-icon">📈</span>
+      <div class="tc-name">Client Pipeline</div>
+      <div class="tc-desc">Consulting and facilitation engagements from lead to complete, with rates and notes on each card.</div>
+      <span class="tc-badge live">Live · Supabase</span>
+    </a>
+    <a class="tool-card featured" data-tags="coaching icf simply.coach session guides grow clarity intensive deep dive cohort greer collective" href="coaching/">
+      <span class="tc-icon">🌿</span>
+      <div class="tc-name">Coaching Hub</div>
+      <div class="tc-desc">Session guides for all four packages, the models reference, the ICF learning plan, Simply.Coach setup, and the coaching command center.</div>
+      <span class="tc-badge hub">Hub · 12 resources</span>
+    </a>
+    <a class="tool-card" data-tags="brand messaging voice offer greer collective" href="greer_collective_positioning.html">
+      <span class="tc-icon">🧭</span>
+      <div class="tc-name">Positioning &amp; Offer</div>
+      <div class="tc-desc">The positioning statement and coaching offer, in Jacqueline's voice.</div>
+      <span class="tc-badge">Reference</span>
+    </a>
+    <a class="tool-card" data-tags="marketing channels cadence greer collective" href="greer_collective_marketing_plan.html">
+      <span class="tc-icon">📣</span>
+      <div class="tc-name">Six-Month Marketing Plan</div>
+      <div class="tc-desc">Priorities, cadence, and channels for the next six months.</div>
+      <span class="tc-badge">Reference</span>
+    </a>
+    <a class="tool-card" data-tags="website copy thegreercollective greer collective" href="greer_collective_website_updated.html">
+      <span class="tc-icon">🌐</span>
+      <div class="tc-name">Website Preview</div>
+      <div class="tc-desc">Working preview of the updated thegreercollective.com copy and layout.</div>
+      <span class="tc-badge">Draft</span>
+    </a>
+    <a class="tool-card" data-tags="iaf facilitation certification portfolio greer collective" href="cpf-portfolio-tracker.html">
+      <span class="tc-icon">🗂️</span>
+      <div class="tc-name">CPF Portfolio Tracker</div>
+      <div class="tc-desc">Evidence and progress for the IAF Certified Professional Facilitator portfolio.</div>
+      <span class="tc-badge live">Live</span>
     </a>
   </div>
 
   <div class="section-title">🎙️ JacquieVoice</div>
   <div class="grid">
-    <a class="tool-card" href="jacquievoice.html">
-      <span class="tc-icon">🎙️</span>
+    <a class="tool-card featured" data-tags="voiceover vo auditions casting jacquievoice voice123 fiverr" href="jacquievoice.html">
+      <span class="tc-icon">🎧</span>
       <div class="tc-name">Audition Tracker</div>
-      <div class="tc-desc">Log submissions, track callbacks and bookings, update status inline, and monitor your earnings pipeline.</div>
+      <div class="tc-desc">Submissions, callbacks, and bookings with status updated inline.</div>
       <span class="tc-badge live">Live · Supabase</span>
     </a>
-    <a class="tool-card" href="vo-marketing-log.html">
+    <a class="tool-card featured" data-tags="voiceover vo jobs bookings fiverr voice123 jacquievoice" href="vo-pipeline.html">
+      <span class="tc-icon">🎚️</span>
+      <div class="tc-name">Project Pipeline</div>
+      <div class="tc-desc">Booked work from recording through revision, delivery, and payment. Flags what is overdue and what is still owed.</div>
+      <span class="tc-badge live">Live · Supabase</span>
+    </a>
+    <a class="tool-card" data-tags="voiceover vo income earnings rates wave jacquievoice money" href="rate-earnings.html">
+      <span class="tc-icon">💵</span>
+      <div class="tc-name">Rate &amp; Earnings Report</div>
+      <div class="tc-desc">Booked income plus Wave imports, by month, platform, and project type, against the $5K month goal.</div>
+      <span class="tc-badge live">Live · Supabase</span>
+    </a>
+    <a class="tool-card" data-tags="voiceover vo outreach casting directors jacquievoice" href="vo-marketing-log.html">
       <span class="tc-icon">📢</span>
       <div class="tc-name">VO Marketing Log</div>
-      <div class="tc-desc">Track outreach to casting directors and direct clients, with follow-up status across platforms.</div>
+      <div class="tc-desc">Outreach to casting directors and direct clients, with follow-up status by platform.</div>
       <span class="tc-badge live">Live</span>
     </a>
-    <a class="tool-card" href="JacquieVoice_Business_Update.html">
+    <a class="tool-card" data-tags="voiceover vo llc banking invoicing jacquievoice" href="JacquieVoice_Business_Update.html">
       <span class="tc-icon">📄</span>
       <div class="tc-name">Business Update</div>
-      <div class="tc-desc">JacquieVoice LLC status snapshot — formation, banking, invoicing, and platform payouts.</div>
-      <span class="tc-badge new">New</span>
+      <div class="tc-desc">JacquieVoice LLC status: formation, banking, invoicing, and platform payouts.</div>
+      <span class="tc-badge">Reference</span>
     </a>
-    <a class="tool-card" href="jacquievoice_colors_fonts.html">
+    <a class="tool-card" data-tags="voiceover vo brand palette typography jacquievoice" href="jacquievoice_colors_fonts.html">
       <span class="tc-icon">🎨</span>
-      <div class="tc-name">Colors & Fonts</div>
-      <div class="tc-desc">JacquieVoice brand reference — the lavender and taupe palette and typography, kept distinct from Greer Collective.</div>
-      <span class="tc-badge new">New</span>
+      <div class="tc-name">Colors &amp; Fonts</div>
+      <div class="tc-desc">The JacquieVoice palette and typography, kept deliberately distinct from Greer Collective.</div>
+      <span class="tc-badge">Reference</span>
     </a>
   </div>
 
-  <div class="section-title">🧭 Greer Collective Client Work</div>
+  <div class="section-title">💜 Rhythm &amp; Wellness</div>
   <div class="grid">
-    <a class="tool-card" href="greer_collective_positioning.html">
-      <span class="tc-icon">🧭</span>
-      <div class="tc-name">Positioning & Offer</div>
-      <div class="tc-desc">The Greer Collective positioning statement and coaching offer, in Jacqueline's voice.</div>
-      <span class="tc-badge live">Live</span>
-    </a>
-    <a class="tool-card" href="greer_collective_marketing_plan.html">
-      <span class="tc-icon">📣</span>
-      <div class="tc-name">Six-Month Marketing Plan</div>
-      <div class="tc-desc">The full six-month Greer Collective marketing plan — priorities, cadence, and channels.</div>
-      <span class="tc-badge new">New</span>
-    </a>
-    <a class="tool-card" href="greer_collective_website_updated.html">
-      <span class="tc-icon">🌐</span>
-      <div class="tc-name">Website Preview</div>
-      <div class="tc-desc">Working preview of the updated Greer Collective website copy and layout.</div>
-      <span class="tc-badge new">New</span>
-    </a>
-    <a class="tool-card" href="cpf-portfolio-tracker.html">
-      <span class="tc-icon">🗂️</span>
-      <div class="tc-name">CPF Portfolio Tracker</div>
-      <div class="tc-desc">Evidence and progress tracker for the IAF Certified Professional Facilitator portfolio.</div>
-      <span class="tc-badge live">Live</span>
-    </a>
-  </div>
-
-  <div class="section-title">💜 Wellness & Productivity</div>
-  <div class="grid">
-    <a class="tool-card" href="wellness-tracker.html">
+    <a class="tool-card" data-tags="health mood energy sleep exercise thrive" href="wellness-tracker.html">
       <span class="tc-icon">💜</span>
       <div class="tc-name">Wellness Tracker</div>
-      <div class="tc-desc">Daily mood, energy, sleep, exercise, and mental health log — synced to the cloud.</div>
+      <div class="tc-desc">Daily mood, energy, sleep, movement, and mental health, synced to the cloud.</div>
       <span class="tc-badge live">Live · Supabase</span>
     </a>
-    <a class="tool-card" href="weekly-tracker.html">
+    <a class="tool-card" data-tags="planning priorities north star check-in" href="weekly-tracker.html">
       <span class="tc-icon">🗓️</span>
       <div class="tc-name">Weekly Tracker</div>
-      <div class="tc-desc">Plan and review the week — priorities, commitments, and progress in one view.</div>
-      <span class="tc-badge new">New</span>
-    </a>
-    <a class="tool-card" href="july-calendar.html">
-      <span class="tc-icon">📅</span>
-      <div class="tc-name">July Calendar</div>
-      <div class="tc-desc">Month-at-a-glance calendar for scheduling and deadlines.</div>
+      <div class="tc-desc">North star metric, top three workstreams, and the weekly check-in on revenue, energy, and what to cut.</div>
       <span class="tc-badge live">Live</span>
     </a>
-    <a class="tool-card" href="meeting-notes-tracker.html">
+    <a class="tool-card" data-tags="schedule month deadlines" href="july-calendar.html">
+      <span class="tc-icon">📅</span>
+      <div class="tc-name">Calendar</div>
+      <div class="tc-desc">Month at a glance for scheduling and deadlines.</div>
+      <span class="tc-badge live">Live</span>
+    </a>
+    <a class="tool-card" data-tags="zoom transcript action items notes" href="meeting-notes-tracker.html">
       <span class="tc-icon">📝</span>
       <div class="tc-name">Meeting Notes Tracker</div>
-      <div class="tc-desc">Capture meeting notes, decisions, and action items in a running log.</div>
+      <div class="tc-desc">Paste notes or a Zoom transcript and pull out attendees, recommendations, and action items.</div>
       <span class="tc-badge live">Live</span>
     </a>
   </div>
 
-  <div class="section-title">🇮🇹 Italy Trip · Sept 15</div>
+  <div class="section-title">🇮🇹 Italy · September 15 to 25</div>
   <div class="grid">
-    <a class="tool-card" href="command-center.html#italy">
+    <a class="tool-card" data-tags="italy rome travel trip packing september" href="command-center.html#italy">
       <span class="tc-icon">🇮🇹</span>
       <div class="tc-name">Italy Prep Checklist</div>
-      <div class="tc-desc">Medical, exercise, logistics, and packing tasks with progress tracking. Lives inside the Command Center.</div>
+      <div class="tc-desc">Medical, exercise, logistics, and packing, with progress tracking. Lives inside the Command Center.</div>
       <span class="tc-badge italy">Live · Supabase</span>
     </a>
   </div>
 
-  <div class="section-title">💰 Finance & Budget</div>
+  <div class="section-title">🏡 Home</div>
   <div class="grid">
-    <a class="tool-card" href="expense-tracker.html">
-      <span class="tc-icon">🧾</span>
-      <div class="tc-name">Expense Tracker</div>
-      <div class="tc-desc">Log and categorize business, medical, and personal expenses. Supports Wave CSV import.</div>
-      <span class="tc-badge live">Live</span>
-    </a>
-    <a class="tool-card" href="credit-card-payoff.html">
-      <span class="tc-icon">💳</span>
-      <div class="tc-name">Credit Card Payoff</div>
-      <div class="tc-desc">Payoff timeline calculator and debt reduction planner.</div>
-      <span class="tc-badge live">Live</span>
+    <a class="tool-card" data-tags="recipes food family home cooking" href="Greer%20Family%20Cookbook.html">
+      <span class="tc-icon">🥘</span>
+      <div class="tc-name">Greer Family Cookbook</div>
+      <div class="tc-desc">The family recipes, gathered and kept.</div>
+      <span class="tc-badge">Reference</span>
     </a>
   </div>
 
 </div>
 
 <div class="footer">
-  Greer Collective Business OS &nbsp;·&nbsp; Built on <a href="https://supabase.com" target="_blank">Supabase</a> &nbsp;·&nbsp; Hosted on <a href="https://github.com/jacquelinegreer-web/JAGAIServer" target="_blank">GitHub Pages</a>
+  Greer Collective Business OS &nbsp;·&nbsp; Built on <a href="https://supabase.com" target="_blank" rel="noopener">Supabase</a> &nbsp;·&nbsp; Hosted on <a href="https://github.com/jacquelinegreer-web/JAGAIServer" target="_blank" rel="noopener">GitHub Pages</a><br>
+  Last edited September 5, 2026 &nbsp;·&nbsp; v2 &nbsp;·&nbsp; Page 1 of 1
 </div>
 
 <script>
-  const days = Math.ceil((new Date('2026-09-15') - new Date().setHours(0,0,0,0)) / 86400000);
-  document.getElementById('h-days').textContent = days;
-  document.getElementById('h-date').textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  document.getElementById('h-tools').textContent = document.querySelectorAll('a.tool-card').length;
+  // Header stats
+  (function () {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const depart = new Date(2026, 8, 15);   // September 15, 2026
+    const home   = new Date(2026, 8, 25);   // September 25, 2026
+    const days = Math.round((depart - today) / 86400000);
+    const cnt = document.getElementById('h-count');
+    const lab = document.getElementById('h-count-lab');
+
+    if (days > 0) { cnt.textContent = days; lab.textContent = days === 1 ? 'Day to Italy' : 'Days to Italy'; }
+    else if (today <= home) { cnt.textContent = '🇮🇹'; lab.textContent = 'In Italy'; }
+    else {
+      const endOfYear = new Date(today.getFullYear(), 11, 31);
+      const left = Math.max(0, Math.round((endOfYear - today) / 86400000));
+      cnt.textContent = left; lab.textContent = 'Days left in ' + today.getFullYear();
+    }
+
+    document.getElementById('h-date').textContent = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    document.getElementById('h-tools').textContent = document.querySelectorAll('a.tool-card').length;
+  })();
+
+  // Search filter
+  (function () {
+    const q = document.getElementById('q');
+    const cards = Array.from(document.querySelectorAll('a.tool-card'));
+    const grids = Array.from(document.querySelectorAll('.grid'));
+    const titles = Array.from(document.querySelectorAll('.section-title'));
+    const none = document.getElementById('noresult');
+
+    q.addEventListener('input', function () {
+      const term = q.value.trim().toLowerCase();
+      let shown = 0;
+      cards.forEach(c => {
+        const hay = (c.textContent + ' ' + (c.dataset.tags || '')).toLowerCase();
+        const hit = !term || hay.includes(term);
+        c.style.display = hit ? '' : 'none';
+        if (hit) shown++;
+      });
+      grids.forEach((g, i) => {
+        const any = Array.from(g.querySelectorAll('a.tool-card')).some(c => c.style.display !== 'none');
+        g.style.display = any ? '' : 'none';
+        if (titles[i]) titles[i].style.display = any ? '' : 'none';
+      });
+      none.style.display = shown ? 'none' : 'block';
+    });
+  })();
 </script>
 </body>
 </html>
