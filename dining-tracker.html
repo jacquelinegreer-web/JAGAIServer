@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eating Out Tracker | Greer Collective</title>
+<style>
+:root{
+  --purple:#2c1a6e; --mid:#7c5cbf; --pale:#f3f0fa; --line:#ede8f7;
+  --bg:#faf8f5; --card:#fff; --ink:#1a1a1a; --muted:#8a8296;
+  --gold:#b8922a; --good:#2e7d32; --over:#b03a2e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+a{color:var(--mid)}
+
+.header{background:var(--purple);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.header h1{font-size:15px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.header .sub{font-size:11px;color:#b8a8e8;margin-top:3px}
+.header .home{font-size:11px;color:#d6ccf5;text-decoration:none}
+.sync{font-size:11px;background:rgba(255,255,255,.14);border-radius:20px;padding:4px 11px}
+.sync.offline{background:rgba(255,180,120,.25);color:#ffd9b3}
+
+.wrap{max-width:1000px;margin:0 auto;padding:18px 16px 60px}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.kpi .label{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.kpi .val{font-size:23px;font-weight:600;color:var(--purple);margin-top:5px;line-height:1.1}
+.kpi .val.good{color:var(--good)} .kpi .val.over{color:var(--over)}
+.kpi .note{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:14px}
+.card h2{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--purple);margin-bottom:4px}
+.card .hint{font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:10px}
+label.f{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6b6478;margin-bottom:4px}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid #ddd8e4;border-radius:7px;font-size:13px;font-family:inherit;color:var(--ink);background:#fcfbfe}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--mid)}
+.btn{background:var(--purple);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:13px;font-weight:600;cursor:pointer}
+.btn:hover{background:#3d2a8e}
+.btn[disabled]{opacity:.5;cursor:default}
+.btn-sec{background:var(--pale);color:var(--purple);border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer}
+.btn-sec:hover{background:#e2daf5}
+.btn-link{background:none;border:none;color:var(--over);cursor:pointer;font-size:12px;padding:2px 5px}
+
+/* weekly chart */
+.chart{display:flex;align-items:flex-end;gap:6px;height:150px;padding-top:22px;position:relative;overflow-x:auto}
+.target-line{position:absolute;left:0;right:0;border-top:2px dashed var(--gold);pointer-events:none}
+.target-tag{position:absolute;right:0;transform:translateY(-100%);font-size:10px;font-weight:700;color:var(--gold);background:var(--card);padding:0 4px}
+.bar-wrap{flex:1 0 34px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative}
+.bar{width:100%;max-width:34px;background:var(--mid);border-radius:4px 4px 0 0;min-height:2px;transition:height .2s;border-bottom:2px solid var(--card)}
+.bar.over{background:var(--over)}
+.bar.now{box-shadow:0 0 0 2px var(--card), 0 0 0 4px var(--gold)}
+.bar-val{font-size:10px;color:#5c5470;margin-bottom:3px;white-space:nowrap}
+.bar-lab{font-size:9px;color:var(--muted);margin-top:5px;white-space:nowrap}
+.bar-lab.now{color:var(--gold);font-weight:700}
+.tip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#231540;color:#fff;font-size:11px;line-height:1.5;padding:6px 9px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:5}
+.bar-wrap:hover .tip{opacity:1}
+.axis{display:flex;gap:6px;overflow-x:auto}
+
+table{width:100%;border-collapse:collapse}
+th{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mid);background:#f7f4fd;padding:9px 10px;text-align:left}
+td{padding:8px 10px;font-size:12.5px;border-top:1px solid var(--line)}
+tbody tr:hover td{background:#fbf9ff}
+td.num,th.num{text-align:right}
+.pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;background:var(--pale);color:var(--purple)}
+.pill.rest{background:#faeeda;color:#7d4f0b}
+.empty{text-align:center;padding:34px 16px;color:#a8a2b5;font-size:13px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.filters select,.filters input{width:auto;font-size:12px;padding:6px 9px}
+.foot{text-align:center;font-size:11px;color:var(--muted);padding:10px 16px 0;line-height:1.7}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#231540;color:#fff;padding:11px 20px;border-radius:9px;font-size:13px;opacity:0;transition:.25s;z-index:20}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{background:var(--over)}
+@media(max-width:620px){.header h1{font-size:13px}.kpi .val{font-size:20px}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Eating Out Tracker</h1>
+    <div class="sub">Jacqueline &amp; Curtis &nbsp;·&nbsp; Sept 1 through Dec 31, 2026 &nbsp;·&nbsp; <a class="home" href="index.html">&larr; Tools</a></div>
+  </div>
+  <div class="sync" id="sync">● Connecting</div>
+</div>
+
+<div class="wrap">
+
+  <div class="kpis">
+    <div class="kpi">
+      <div class="label">This week</div>
+      <div class="val" id="k-week-n">—</div>
+      <div class="note" id="k-week-note">orders</div>
+    </div>
+    <div class="kpi">
+      <div class="label">This week spent</div>
+      <div class="val" id="k-week-amt">—</div>
+      <div class="note" id="k-week-range">—</div>
+    </div>
+    <div class="kpi">
+      <div class="label">This month</div>
+      <div class="val" id="k-month-amt">—</div>
+      <div class="note" id="k-month-note">—</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Left this month</div>
+      <div class="val" id="k-left">—</div>
+      <div class="note" id="k-left-note">—</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Sept–Dec to date</div>
+      <div class="val" id="k-total">—</div>
+      <div class="note" id="k-total-note">—</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Log a meal</h2>
+    <div class="hint">One line per order or per restaurant visit. Log it the night it happens and Saturday takes two minutes instead of twenty.</div>
+    <div class="row">
+      <div><label class="f" for="f-date">Date</label><input type="date" id="f-date"></div>
+      <div><label class="f" for="f-who">Who</label>
+        <select id="f-who"><option>Both</option><option>Jacqueline</option><option>Curtis</option><option>Guests</option></select>
+      </div>
+      <div><label class="f" for="f-source">Where from</label>
+        <select id="f-source"><option>Uber Eats</option><option>DoorDash</option><option>Restaurant</option><option>Carryout</option><option>Other</option></select>
+      </div>
+      <div><label class="f" for="f-kind">Type</label>
+        <select id="f-kind"><option>Delivery</option><option>Dine-in</option><option>Pickup</option></select>
+      </div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="f-vendor">Restaurant</label><input id="f-vendor" placeholder="Busboys, Ledo, etc."></div>
+      <div><label class="f" for="f-amount">Amount ($)</label><input type="number" id="f-amount" step="0.01" min="0" placeholder="0.00"></div>
+      <div style="grid-column:span 2"><label class="f" for="f-note">Note (optional)</label><input id="f-note" placeholder="Late night after the Lab"></div>
+    </div>
+    <button class="btn" id="save-btn" onclick="saveEntry()">Add to the log</button>
+  </div>
+
+  <div class="card">
+    <h2>Week by week</h2>
+    <div class="hint" id="chart-hint">Each bar is one week's total. The gold line is the weekly share of your monthly target.</div>
+    <div class="chart" id="chart"></div>
+  </div>
+
+  <div class="card">
+    <h2>Month by month</h2>
+    <div class="hint">Target is <b id="t-echo">$450</b> a month, against a combined dining baseline of $1,285 from the September snapshot.</div>
+    <table>
+      <thead><tr><th>Month</th><th class="num">Orders</th><th class="num">Spent</th><th class="num">Target</th><th class="num">Difference</th></tr></thead>
+      <tbody id="month-body"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>The log</h2>
+    <div class="filters">
+      <select id="fil-month" onchange="render()"><option value="all">All months</option></select>
+      <select id="fil-source" onchange="render()"><option value="all">All sources</option><option>Uber Eats</option><option>DoorDash</option><option>Restaurant</option><option>Carryout</option><option>Other</option></select>
+      <select id="fil-who" onchange="render()"><option value="all">Everyone</option><option>Both</option><option>Jacqueline</option><option>Curtis</option><option>Guests</option></select>
+      <button class="btn-sec" onclick="exportCsv()">Export CSV</button>
+    </div>
+    <table>
+      <thead><tr><th>Date</th><th>Who</th><th>Where</th><th>Restaurant</th><th class="num">Amount</th><th></th></tr></thead>
+      <tbody id="log-body"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Settings</h2>
+    <div class="row">
+      <div><label class="f" for="s-target">Monthly target ($)</label><input type="number" id="s-target" step="10" min="0"></div>
+      <div><label class="f" for="s-cap">Orders per week</label><input type="number" id="s-cap" step="1" min="0"></div>
+      <div style="display:flex;align-items:flex-end"><button class="btn-sec" onclick="saveSettings()">Save settings</button></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    Agreed August 30, 2026: eat out or order in no more than twice a week combined, dining to about $450 a month.<br>
+    Groceries and Wegmans pickup are tracked separately and do not belong here.<br>
+    <span id="edited">Last edited September 3, 2026 · v1</span> · Page 1 of 1
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = 'https://vkwhoicqasotanlkquoa.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2hvaWNxYXNvdGFubGtxdW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NjA1OTIsImV4cCI6MjA5MDEzNjU5Mn0.5LRCWzg2Bj6cMQCHgbNAXcJlm4Po97CbLl3v8PnPP-A';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const CACHE = 'dining_cache_v1';
+const START = '2026-09-01', END = '2026-12-31';
+let rows = [];
+let cfg = { monthly_target: 450, weekly_cap: 2 };
+
+const money = n => '$' + Number(n||0).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+const money2 = n => '$' + Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const todayStr = () => new Date().toLocaleDateString('en-CA');
+const parseD = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const fmtD = d => d.toLocaleDateString('en-CA');
+const shortD = s => parseD(s).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+
+function mondayOf(dateStr){
+  const d = parseD(dateStr);
+  const back = (d.getDay() + 6) % 7;
+  d.setDate(d.getDate() - back);
+  return fmtD(d);
+}
+function addDays(dateStr, n){ const d = parseD(dateStr); d.setDate(d.getDate()+n); return fmtD(d); }
+
+function toast(msg, err){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.toggle('err', !!err); t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2600);
+}
+function setSync(on){
+  const el = document.getElementById('sync');
+  el.textContent = on ? '● Cloud sync' : '● Offline copy';
+  el.className = on ? 'sync' : 'sync offline';
+}
+
+async function load(){
+  document.getElementById('f-date').value = todayStr();
+  try{
+    const s = await sb.from('dining_settings').select('*').eq('id',1).single();
+    if (s.data) cfg = { monthly_target: Number(s.data.monthly_target), weekly_cap: Number(s.data.weekly_cap) };
+    const r = await sb.from('dining_log').select('*').order('order_date',{ascending:false});
+    if (r.error) throw r.error;
+    rows = r.data || [];
+    localStorage.setItem(CACHE, JSON.stringify({rows, cfg}));
+    setSync(true);
+  }catch(e){
+    console.error(e);
+    const c = localStorage.getItem(CACHE);
+    if (c){ const p = JSON.parse(c); rows = p.rows||[]; cfg = p.cfg||cfg; }
+    setSync(false);
+  }
+  document.getElementById('s-target').value = cfg.monthly_target;
+  document.getElementById('s-cap').value = cfg.weekly_cap;
+  buildMonthFilter();
+  render();
+}
+
+async function saveEntry(){
+  const amt = parseFloat(document.getElementById('f-amount').value);
+  const date = document.getElementById('f-date').value;
+  if (!date) return toast('Pick a date first', true);
+  if (isNaN(amt) || amt < 0) return toast('Enter an amount', true);
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  const row = {
+    order_date: date,
+    who: document.getElementById('f-who').value,
+    source: document.getElementById('f-source').value,
+    kind: document.getElementById('f-kind').value,
+    vendor: document.getElementById('f-vendor').value || null,
+    amount: amt,
+    note: document.getElementById('f-note').value || null,
+    updated_at: new Date().toISOString()
+  };
+  const { data, error } = await sb.from('dining_log').insert(row).select();
+  btn.disabled = false; btn.textContent = 'Add to the log';
+  if (error){ console.error(error); setSync(false); return toast('Could not save. Check the connection.', true); }
+  rows.unshift(data[0]);
+  localStorage.setItem(CACHE, JSON.stringify({rows, cfg}));
+  setSync(true);
+  document.getElementById('f-amount').value = '';
+  document.getElementById('f-vendor').value = '';
+  document.getElementById('f-note').value = '';
+  buildMonthFilter();
+  render();
+  toast('Logged');
+}
+
+async function removeEntry(id){
+  const { error } = await sb.from('dining_log').delete().eq('id', id);
+  if (error){ console.error(error); return toast('Could not delete', true); }
+  rows = rows.filter(r => r.id !== id);
+  localStorage.setItem(CACHE, JSON.stringify({rows, cfg}));
+  render();
+  toast('Removed');
+}
+
+async function saveSettings(){
+  const t = parseFloat(document.getElementById('s-target').value);
+  const c = parseInt(document.getElementById('s-cap').value);
+  if (isNaN(t) || isNaN(c)) return toast('Numbers only', true);
+  cfg = { monthly_target: t, weekly_cap: c };
+  const { error } = await sb.from('dining_settings').update({ monthly_target: t, weekly_cap: c, updated_at: new Date().toISOString() }).eq('id',1);
+  if (error){ console.error(error); return toast('Could not save settings', true); }
+  localStorage.setItem(CACHE, JSON.stringify({rows, cfg}));
+  render();
+  toast('Settings saved');
+}
+
+function inRange(d){ return d >= START && d <= END; }
+
+function weeks(){
+  const out = [];
+  let w = mondayOf(START);
+  while (w <= END){ out.push(w); w = addDays(w, 7); }
+  return out;
+}
+
+function buildMonthFilter(){
+  const sel = document.getElementById('fil-month');
+  const cur = sel.value;
+  const months = ['2026-09','2026-10','2026-11','2026-12'];
+  sel.innerHTML = '<option value="all">All months</option>' + months.map(m => {
+    const [y,mm] = m.split('-');
+    const nm = new Date(+y, +mm-1, 1).toLocaleDateString('en-US',{month:'long', year:'numeric'});
+    return `<option value="${m}">${nm}</option>`;
+  }).join('');
+  sel.value = cur || 'all';
+}
+
+function render(){
+  const target = cfg.monthly_target;
+  const cap = cfg.weekly_cap;
+  document.getElementById('t-echo').textContent = money(target);
+  const weeklyTarget = target * 12 / 52;
+  document.getElementById('chart-hint').textContent =
+    `Each bar is one week's total. The gold line is ${money(weeklyTarget)}, the weekly share of a ${money(target)} month. Hover a bar for the detail.`;
+
+  const today = todayStr();
+  const wStart = mondayOf(today), wEnd = addDays(wStart, 6);
+  const thisWeek = rows.filter(r => r.order_date >= wStart && r.order_date <= wEnd);
+  const wAmt = thisWeek.reduce((s,r)=>s+Number(r.amount),0);
+
+  const mPrefix = today.slice(0,7);
+  const thisMonth = rows.filter(r => r.order_date.slice(0,7) === mPrefix);
+  const mAmt = thisMonth.reduce((s,r)=>s+Number(r.amount),0);
+
+  const kn = document.getElementById('k-week-n');
+  kn.textContent = thisWeek.length + ' of ' + cap;
+  kn.className = 'val ' + (thisWeek.length > cap ? 'over' : 'good');
+  document.getElementById('k-week-note').textContent =
+    thisWeek.length > cap ? (thisWeek.length - cap) + ' over the twice-a-week rule' : (cap - thisWeek.length) + ' left this week';
+  document.getElementById('k-week-amt').textContent = money2(wAmt);
+  document.getElementById('k-week-range').textContent = shortD(wStart) + ' to ' + shortD(wEnd);
+
+  document.getElementById('k-month-amt').textContent = money2(mAmt);
+  document.getElementById('k-month-note').textContent = thisMonth.length + ' meals · target ' + money(target);
+
+  const left = target - mAmt;
+  const kl = document.getElementById('k-left');
+  kl.textContent = money2(Math.abs(left));
+  kl.className = 'val ' + (left < 0 ? 'over' : 'good');
+  document.getElementById('k-left-note').textContent = left < 0 ? 'over target' : 'still available';
+
+  const season = rows.filter(r => inRange(r.order_date));
+  const sAmt = season.reduce((s,r)=>s+Number(r.amount),0);
+  document.getElementById('k-total').textContent = money2(sAmt);
+  document.getElementById('k-total-note').textContent = season.length + ' meals since September 1';
+
+  drawChart(weeklyTarget, wStart);
+  drawMonths(target);
+  drawLog();
+}
+
+function drawChart(weeklyTarget, currentWeek){
+  const el = document.getElementById('chart');
+  const ws = weeks();
+  const data = ws.map(w => {
+    const end = addDays(w, 6);
+    const set = rows.filter(r => r.order_date >= w && r.order_date <= end);
+    return { w, end, n: set.length, amt: set.reduce((s,r)=>s+Number(r.amount),0) };
+  });
+  const max = Math.max(weeklyTarget * 1.35, ...data.map(d => d.amt), 10);
+  const plot = 128;
+  el.innerHTML = data.map(d => {
+    const h = Math.round((d.amt / max) * plot);
+    const cls = d.amt > weeklyTarget ? 'over' : '';
+    const now = d.w === currentWeek;
+    const lab = parseD(d.w).toLocaleDateString('en-US',{month:'numeric',day:'numeric'});
+    return `<div class="bar-wrap">
+      <div class="tip"><b>${shortD(d.w)} to ${shortD(d.end)}</b><br>${d.n} meal${d.n===1?'':'s'} · ${money2(d.amt)}${now?'<br>this week':''}</div>
+      <div class="bar-val">${d.amt ? money(d.amt) : ''}</div>
+      <div class="bar ${cls}${now?' now':''}" style="height:${h}px"></div>
+      <div class="bar-lab${now?' now':''}">${now ? 'This wk' : lab}</div>
+    </div>`;
+  }).join('');
+  const line = document.createElement('div');
+  line.className = 'target-line';
+  line.style.bottom = (16 + Math.round((weeklyTarget / max) * plot)) + 'px';
+  const tag = document.createElement('div');
+  tag.className = 'target-tag';
+  tag.textContent = money(weeklyTarget) + '/wk';
+  tag.style.bottom = (16 + Math.round((weeklyTarget / max) * plot)) + 'px';
+  el.appendChild(line);
+  el.appendChild(tag);
+}
+
+function drawMonths(target){
+  const months = ['2026-09','2026-10','2026-11','2026-12'];
+  document.getElementById('month-body').innerHTML = months.map(m => {
+    const set = rows.filter(r => r.order_date.slice(0,7) === m);
+    const amt = set.reduce((s,r)=>s+Number(r.amount),0);
+    const diff = target - amt;
+    const [y,mm] = m.split('-');
+    const nm = new Date(+y, +mm-1, 1).toLocaleDateString('en-US',{month:'long'});
+    const col = diff < 0 ? 'var(--over)' : 'var(--good)';
+    const txt = diff < 0 ? money2(-diff) + ' over' : money2(diff) + ' under';
+    return `<tr><td><b>${nm}</b></td><td class="num">${set.length}</td><td class="num">${money2(amt)}</td>
+      <td class="num">${money(target)}</td><td class="num" style="color:${col};font-weight:600">${amt ? txt : '—'}</td></tr>`;
+  }).join('');
+}
+
+function filtered(){
+  const m = document.getElementById('fil-month').value;
+  const s = document.getElementById('fil-source').value;
+  const w = document.getElementById('fil-who').value;
+  return rows.filter(r =>
+    (m === 'all' || r.order_date.slice(0,7) === m) &&
+    (s === 'all' || r.source === s) &&
+    (w === 'all' || r.who === w));
+}
+
+function drawLog(){
+  const list = filtered();
+  const body = document.getElementById('log-body');
+  if (!list.length){
+    body.innerHTML = '<tr><td colspan="6" class="empty">Nothing logged yet. Add the first meal above.</td></tr>';
+    return;
+  }
+  body.innerHTML = list.map(r => {
+    const rest = (r.source === 'Restaurant' || r.source === 'Carryout');
+    return `<tr>
+      <td>${parseD(r.order_date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</td>
+      <td>${r.who}</td>
+      <td><span class="pill ${rest?'rest':''}">${r.source}</span></td>
+      <td>${r.vendor ? r.vendor : '<span style="color:#b5aec2">—</span>'}${r.note ? '<div style="font-size:11px;color:#8a8296">'+r.note+'</div>' : ''}</td>
+      <td class="num">${money2(r.amount)}</td>
+      <td class="num"><button class="btn-link" onclick="removeEntry('${r.id}')">Remove</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function exportCsv(){
+  const list = filtered();
+  const head = ['Date','Who','Source','Type','Restaurant','Amount','Note'];
+  const lines = [head.join(',')].concat(list.map(r =>
+    [r.order_date, r.who, r.source, r.kind, r.vendor||'', Number(r.amount).toFixed(2), (r.note||'').replace(/"/g,'""')]
+      .map(v => `"${v}"`).join(',')));
+  const blob = new Blob([lines.join('\n')], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'eating-out-' + todayStr() + '.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+load();
+</script>
+</body>
+</html>
